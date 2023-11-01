@@ -1,6 +1,5 @@
 import { ActiveDescendantKeyManager } from '@angular/cdk/a11y';
 import { AfterContentInit } from '@angular/core';
-import { BooleanInput } from '@angular/cdk/coercion';
 import { ChangeDetectorRef } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 import { Highlightable } from '@angular/cdk/a11y';
@@ -30,15 +29,11 @@ export declare class CdkListbox<T = unknown> implements AfterContentInit, OnDest
      * to `false`, and more than one option is selected, all options are deselected.
      */
     get multiple(): boolean;
-    set multiple(value: BooleanInput);
+    set multiple(value: boolean);
     /** Whether the listbox is disabled. */
-    get disabled(): boolean;
-    set disabled(value: BooleanInput);
-    private _disabled;
+    disabled: boolean;
     /** Whether the listbox will use active descendant or will move focus onto the options. */
-    get useActiveDescendant(): boolean;
-    set useActiveDescendant(shouldUseActiveDescendant: BooleanInput);
-    private _useActiveDescendant;
+    useActiveDescendant: boolean;
     /** The orientation of the listbox. Only affects keyboard interaction, not visual layout. */
     get orientation(): 'horizontal' | 'vertical';
     set orientation(value: 'horizontal' | 'vertical');
@@ -50,12 +45,12 @@ export declare class CdkListbox<T = unknown> implements AfterContentInit, OnDest
      * Whether the keyboard navigation should wrap when the user presses arrow down on the last item
      * or arrow up on the first item.
      */
-    get navigationWrapDisabled(): BooleanInput;
-    set navigationWrapDisabled(wrap: BooleanInput);
+    get navigationWrapDisabled(): boolean;
+    set navigationWrapDisabled(wrap: boolean);
     private _navigationWrapDisabled;
     /** Whether keyboard navigation should skip over disabled items. */
-    get navigateDisabledOptions(): BooleanInput;
-    set navigateDisabledOptions(skip: BooleanInput);
+    get navigateDisabledOptions(): boolean;
+    set navigateDisabledOptions(skip: boolean);
     private _navigateDisabledOptions;
     /** Emits when the selected value(s) in the listbox change. */
     readonly valueChange: Subject<ListboxValueChangeEvent<T>>;
@@ -258,6 +253,11 @@ export declare class CdkListbox<T = unknown> implements AfterContentInit, OnDest
     private _setPreviousActiveOptionAsActiveOptionOnWindowBlur;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkListbox<any>, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkListbox<any>, "[cdkListbox]", ["cdkListbox"], { "id": { "alias": "id"; "required": false; }; "enabledTabIndex": { "alias": "tabindex"; "required": false; }; "value": { "alias": "cdkListboxValue"; "required": false; }; "multiple": { "alias": "cdkListboxMultiple"; "required": false; }; "disabled": { "alias": "cdkListboxDisabled"; "required": false; }; "useActiveDescendant": { "alias": "cdkListboxUseActiveDescendant"; "required": false; }; "orientation": { "alias": "cdkListboxOrientation"; "required": false; }; "compareWith": { "alias": "cdkListboxCompareWith"; "required": false; }; "navigationWrapDisabled": { "alias": "cdkListboxNavigationWrapDisabled"; "required": false; }; "navigateDisabledOptions": { "alias": "cdkListboxNavigatesDisabledOptions"; "required": false; }; }, { "valueChange": "cdkListboxValueChange"; }, ["options"], never, true, never>;
+    static ngAcceptInputType_multiple: unknown;
+    static ngAcceptInputType_disabled: unknown;
+    static ngAcceptInputType_useActiveDescendant: unknown;
+    static ngAcceptInputType_navigationWrapDisabled: unknown;
+    static ngAcceptInputType_navigateDisabledOptions: unknown;
 }
 
 export declare class CdkListboxModule {
@@ -282,7 +282,7 @@ export declare class CdkOption<T = unknown> implements ListKeyManagerOption, Hig
     typeaheadLabel: string;
     /** Whether this option is disabled. */
     get disabled(): boolean;
-    set disabled(value: BooleanInput);
+    set disabled(value: boolean);
     private _disabled;
     /** The tabindex of the option when it is enabled. */
     get enabledTabIndex(): number | null;
@@ -327,6 +327,7 @@ export declare class CdkOption<T = unknown> implements ListKeyManagerOption, Hig
     protected _getTabIndex(): number | null;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkOption<any>, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkOption<any>, "[cdkOption]", ["cdkOption"], { "id": { "alias": "id"; "required": false; }; "value": { "alias": "cdkOption"; "required": false; }; "typeaheadLabel": { "alias": "cdkOptionTypeaheadLabel"; "required": false; }; "disabled": { "alias": "cdkOptionDisabled"; "required": false; }; "enabledTabIndex": { "alias": "tabindex"; "required": false; }; }, {}, never, never, true, never>;
+    static ngAcceptInputType_disabled: unknown;
 }
 
 declare namespace i1 {
