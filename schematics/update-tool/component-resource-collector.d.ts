@@ -40,5 +40,4 @@ export declare class ComponentResourceCollector {
     private _visitClassDeclaration;
     /** Resolves an external stylesheet by reading its content and computing line mappings. */
     resolveExternalStylesheet(filePath: WorkspacePath, container: ts.ClassDeclaration | null): ResolvedResource | null;
-    private _trackExternalStylesheet;
 }
