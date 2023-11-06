@@ -1813,20 +1813,6 @@ const DROP_PROXIMITY_THRESHOLD = 0.05;
  * viewport. The value comes from trying it out manually until it feels right.
  */
 const SCROLL_PROXIMITY_THRESHOLD = 0.05;
-/** Vertical direction in which we can auto-scroll. */
-var AutoScrollVerticalDirection;
-(function (AutoScrollVerticalDirection) {
-    AutoScrollVerticalDirection[AutoScrollVerticalDirection["NONE"] = 0] = "NONE";
-    AutoScrollVerticalDirection[AutoScrollVerticalDirection["UP"] = 1] = "UP";
-    AutoScrollVerticalDirection[AutoScrollVerticalDirection["DOWN"] = 2] = "DOWN";
-})(AutoScrollVerticalDirection || (AutoScrollVerticalDirection = {}));
-/** Horizontal direction in which we can auto-scroll. */
-var AutoScrollHorizontalDirection;
-(function (AutoScrollHorizontalDirection) {
-    AutoScrollHorizontalDirection[AutoScrollHorizontalDirection["NONE"] = 0] = "NONE";
-    AutoScrollHorizontalDirection[AutoScrollHorizontalDirection["LEFT"] = 1] = "LEFT";
-    AutoScrollHorizontalDirection[AutoScrollHorizontalDirection["RIGHT"] = 2] = "RIGHT";
-})(AutoScrollHorizontalDirection || (AutoScrollHorizontalDirection = {}));
 /**
  * Reference to a drop list. Used to manipulate or dispose of the container.
  */
@@ -1883,9 +1869,9 @@ class DropListRef {
         /** Subscription to the window being scrolled. */
         this._viewportScrollSubscription = Subscription.EMPTY;
         /** Vertical direction in which the list is currently scrolling. */
-        this._verticalScrollDirection = AutoScrollVerticalDirection.NONE;
+        this._verticalScrollDirection = 0 /* AutoScrollVerticalDirection.NONE */;
         /** Horizontal direction in which the list is currently scrolling. */
-        this._horizontalScrollDirection = AutoScrollHorizontalDirection.NONE;
+        this._horizontalScrollDirection = 0 /* AutoScrollHorizontalDirection.NONE */;
         /** Used to signal to the current auto-scroll sequence when to stop. */
         this._stopScrollTimers = new Subject();
         /** Shadow root of the current element. Necessary for `elementFromPoint` to resolve correctly. */
@@ -1898,16 +1884,16 @@ class DropListRef {
                 .subscribe(() => {
                 const node = this._scrollNode;
                 const scrollStep = this.autoScrollStep;
-                if (this._verticalScrollDirection === AutoScrollVerticalDirection.UP) {
+                if (this._verticalScrollDirection === 1 /* AutoScrollVerticalDirection.UP */) {
                     node.scrollBy(0, -scrollStep);
                 }
-                else if (this._verticalScrollDirection === AutoScrollVerticalDirection.DOWN) {
+                else if (this._verticalScrollDirection === 2 /* AutoScrollVerticalDirection.DOWN */) {
                     node.scrollBy(0, scrollStep);
                 }
-                if (this._horizontalScrollDirection === AutoScrollHorizontalDirection.LEFT) {
+                if (this._horizontalScrollDirection === 1 /* AutoScrollHorizontalDirection.LEFT */) {
                     node.scrollBy(-scrollStep, 0);
                 }
-                else if (this._horizontalScrollDirection === AutoScrollHorizontalDirection.RIGHT) {
+                else if (this._horizontalScrollDirection === 2 /* AutoScrollHorizontalDirection.RIGHT */) {
                     node.scrollBy(scrollStep, 0);
                 }
             });
@@ -2116,8 +2102,8 @@ class DropListRef {
             return;
         }
         let scrollNode;
-        let verticalScrollDirection = AutoScrollVerticalDirection.NONE;
-        let horizontalScrollDirection = AutoScrollHorizontalDirection.NONE;
+        let verticalScrollDirection = 0 /* AutoScrollVerticalDirection.NONE */;
+        let horizontalScrollDirection = 0 /* AutoScrollHorizontalDirection.NONE */;
         // Check whether we should start scrolling any of the parent containers.
         this._parentPositions.positions.forEach((position, element) => {
             // We have special handling for the `document` below. Also this would be
@@ -2327,12 +2313,12 @@ function getVerticalScrollDirection(clientRect, pointerY) {
     const { top, bottom, height } = clientRect;
     const yThreshold = height * SCROLL_PROXIMITY_THRESHOLD;
     if (pointerY >= top - yThreshold && pointerY <= top + yThreshold) {
-        return AutoScrollVerticalDirection.UP;
+        return 1 /* AutoScrollVerticalDirection.UP */;
     }
     else if (pointerY >= bottom - yThreshold && pointerY <= bottom + yThreshold) {
-        return AutoScrollVerticalDirection.DOWN;
+        return 2 /* AutoScrollVerticalDirection.DOWN */;
     }
-    return AutoScrollVerticalDirection.NONE;
+    return 0 /* AutoScrollVerticalDirection.NONE */;
 }
 /**
  * Gets whether the horizontal auto-scroll direction of a node.
@@ -2343,12 +2329,12 @@ function getHorizontalScrollDirection(clientRect, pointerX) {
     const { left, right, width } = clientRect;
     const xThreshold = width * SCROLL_PROXIMITY_THRESHOLD;
     if (pointerX >= left - xThreshold && pointerX <= left + xThreshold) {
-        return AutoScrollHorizontalDirection.LEFT;
+        return 1 /* AutoScrollHorizontalDirection.LEFT */;
     }
     else if (pointerX >= right - xThreshold && pointerX <= right + xThreshold) {
-        return AutoScrollHorizontalDirection.RIGHT;
+        return 2 /* AutoScrollHorizontalDirection.RIGHT */;
     }
-    return AutoScrollHorizontalDirection.NONE;
+    return 0 /* AutoScrollHorizontalDirection.NONE */;
 }
 /**
  * Gets the directions in which an element node should be scrolled,
@@ -2361,32 +2347,32 @@ function getHorizontalScrollDirection(clientRect, pointerX) {
 function getElementScrollDirections(element, clientRect, pointerX, pointerY) {
     const computedVertical = getVerticalScrollDirection(clientRect, pointerY);
     const computedHorizontal = getHorizontalScrollDirection(clientRect, pointerX);
-    let verticalScrollDirection = AutoScrollVerticalDirection.NONE;
-    let horizontalScrollDirection = AutoScrollHorizontalDirection.NONE;
+    let verticalScrollDirection = 0 /* AutoScrollVerticalDirection.NONE */;
+    let horizontalScrollDirection = 0 /* AutoScrollHorizontalDirection.NONE */;
     // Note that we here we do some extra checks for whether the element is actually scrollable in
     // a certain direction and we only assign the scroll direction if it is. We do this so that we
     // can allow other elements to be scrolled, if the current element can't be scrolled anymore.
     // This allows us to handle cases where the scroll regions of two scrollable elements overlap.
     if (computedVertical) {
         const scrollTop = element.scrollTop;
-        if (computedVertical === AutoScrollVerticalDirection.UP) {
+        if (computedVertical === 1 /* AutoScrollVerticalDirection.UP */) {
             if (scrollTop > 0) {
-                verticalScrollDirection = AutoScrollVerticalDirection.UP;
+                verticalScrollDirection = 1 /* AutoScrollVerticalDirection.UP */;
             }
         }
         else if (element.scrollHeight - scrollTop > element.clientHeight) {
-            verticalScrollDirection = AutoScrollVerticalDirection.DOWN;
+            verticalScrollDirection = 2 /* AutoScrollVerticalDirection.DOWN */;
         }
     }
     if (computedHorizontal) {
         const scrollLeft = element.scrollLeft;
-        if (computedHorizontal === AutoScrollHorizontalDirection.LEFT) {
+        if (computedHorizontal === 1 /* AutoScrollHorizontalDirection.LEFT */) {
             if (scrollLeft > 0) {
-                horizontalScrollDirection = AutoScrollHorizontalDirection.LEFT;
+                horizontalScrollDirection = 1 /* AutoScrollHorizontalDirection.LEFT */;
             }
         }
         else if (element.scrollWidth - scrollLeft > element.clientWidth) {
-            horizontalScrollDirection = AutoScrollHorizontalDirection.RIGHT;
+            horizontalScrollDirection = 2 /* AutoScrollHorizontalDirection.RIGHT */;
         }
     }
     return [verticalScrollDirection, horizontalScrollDirection];

@@ -579,7 +579,7 @@ export declare interface FocusableElement {
 }
 
 /** The relative item in the inline menu to focus after closing all popup menus. */
-export declare enum FocusNext {
+export declare const enum FocusNext {
     nextItem = 0,
     previousItem = 1,
     currentItem = 2
