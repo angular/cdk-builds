@@ -1,5 +1,6 @@
 import { AfterContentChecked } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { BooleanInput } from '@angular/cdk/coercion';
 import { ChangeDetectorRef } from '@angular/core';
 import { CollectionViewer } from '@angular/cdk/collections';
 import { DataSource } from '@angular/cdk/collections';
@@ -196,7 +197,7 @@ export declare class CdkColumnDef extends _CdkColumnDefBase implements CanStick 
      * has been changed.
      */
     get stickyEnd(): boolean;
-    set stickyEnd(value: boolean);
+    set stickyEnd(v: BooleanInput);
     _stickyEnd: boolean;
     /** @docs-private */
     cell: CdkCellDef;
@@ -233,7 +234,6 @@ export declare class CdkColumnDef extends _CdkColumnDefBase implements CanStick 
     protected _setNameInput(value: string): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkColumnDef, [{ optional: true; }]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkColumnDef, "[cdkColumnDef]", never, { "sticky": { "alias": "sticky"; "required": false; }; "name": { "alias": "cdkColumnDef"; "required": false; }; "stickyEnd": { "alias": "stickyEnd"; "required": false; }; }, {}, ["cell", "headerCell", "footerCell"], never, false, never>;
-    static ngAcceptInputType_stickyEnd: unknown;
 }
 
 /** @docs-private */
@@ -550,14 +550,14 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * defined in the table, or otherwise the default row which does not have a when predicate.
      */
     get multiTemplateDataRows(): boolean;
-    set multiTemplateDataRows(value: boolean);
+    set multiTemplateDataRows(v: BooleanInput);
     _multiTemplateDataRows: boolean;
     /**
      * Whether to use a fixed table layout. Enabling this option will enforce consistent column widths
      * and optimize rendering sticky styles for native tables. No-op for flex tables.
      */
     get fixedLayout(): boolean;
-    set fixedLayout(value: boolean);
+    set fixedLayout(v: BooleanInput);
     private _fixedLayout;
     /**
      * Emits when the table completes rendering a set of data rows based on the latest data from the
@@ -750,8 +750,6 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     private _updateNoDataRow;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTable<any>, [null, null, null, { attribute: "role"; }, { optional: true; }, null, null, null, null, null, { optional: true; skipSelf: true; }, { optional: true; }]>;
     static ɵcmp: i0.ɵɵComponentDeclaration<CdkTable<any>, "cdk-table, table[cdk-table]", ["cdkTable"], { "trackBy": { "alias": "trackBy"; "required": false; }; "dataSource": { "alias": "dataSource"; "required": false; }; "multiTemplateDataRows": { "alias": "multiTemplateDataRows"; "required": false; }; "fixedLayout": { "alias": "fixedLayout"; "required": false; }; }, { "contentChanged": "contentChanged"; }, ["_noDataRow", "_contentColumnDefs", "_contentRowDefs", "_contentHeaderRowDefs", "_contentFooterRowDefs"], ["caption", "colgroup, col"], false, never>;
-    static ngAcceptInputType_multiTemplateDataRows: unknown;
-    static ngAcceptInputType_fixedLayout: unknown;
 }
 
 /** Possible types that can be set as the data source for a `CdkTable`. */
