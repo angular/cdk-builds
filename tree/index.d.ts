@@ -1,7 +1,6 @@
 import { AfterContentChecked } from '@angular/core';
 import { AfterContentInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { BooleanInput } from '@angular/cdk/coercion';
 import { ChangeDetectorRef } from '@angular/core';
 import { CollectionViewer } from '@angular/cdk/collections';
 import { DataSource } from '@angular/cdk/collections';
@@ -12,7 +11,6 @@ import * as i0 from '@angular/core';
 import { InjectionToken } from '@angular/core';
 import { IterableDiffer } from '@angular/core';
 import { IterableDiffers } from '@angular/core';
-import { NumberInput } from '@angular/cdk/coercion';
 import { Observable } from 'rxjs';
 import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
@@ -100,7 +98,7 @@ export declare class CdkNestedTreeNode<T, K = T> extends CdkTreeNode<T, K> imple
     /** Gets the outlet for the current node. */
     private _getNodeOutlet;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkNestedTreeNode<any, any>, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkNestedTreeNode<any, any>, "cdk-nested-tree-node", ["cdkNestedTreeNode"], { "role": { "alias": "role"; "required": false; }; "disabled": { "alias": "disabled"; "required": false; }; "tabIndex": { "alias": "tabIndex"; "required": false; }; }, {}, ["nodeOutlet"], never, false, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkNestedTreeNode<any, any>, "cdk-nested-tree-node", ["cdkNestedTreeNode"], {}, {}, ["nodeOutlet"], never, false, never>;
 }
 
 /**
@@ -286,7 +284,7 @@ export declare class CdkTreeNodePadding<T, K = T> implements OnDestroy {
     indentUnits: string;
     /** The level of depth of the tree node. The padding will be `level * indent` pixels. */
     get level(): number;
-    set level(value: NumberInput);
+    set level(value: number);
     _level: number;
     /**
      * The indent for each level. Can be a number or a CSS string.
@@ -306,7 +304,7 @@ export declare class CdkTreeNodePadding<T, K = T> implements OnDestroy {
      * TS 4.0 doesn't allow properties to override accessors or vice-versa.
      * @docs-private
      */
-    protected _setLevelInput(value: NumberInput): void;
+    protected _setLevelInput(value: number): void;
     /**
      * This has been extracted to a util because of TS 4 and VE.
      * View Engine doesn't support property rename inheritance.
@@ -316,6 +314,7 @@ export declare class CdkTreeNodePadding<T, K = T> implements OnDestroy {
     protected _setIndentInput(indent: number | string): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNodePadding<any, any>, [null, null, null, { optional: true; }]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodePadding<any, any>, "[cdkTreeNodePadding]", never, { "level": { "alias": "cdkTreeNodePadding"; "required": false; }; "indent": { "alias": "cdkTreeNodePaddingIndent"; "required": false; }; }, {}, never, never, false, never>;
+    static ngAcceptInputType_level: unknown;
 }
 
 /**
@@ -325,13 +324,12 @@ export declare class CdkTreeNodeToggle<T, K = T> {
     protected _tree: CdkTree<T, K>;
     protected _treeNode: CdkTreeNode<T, K>;
     /** Whether expand/collapse the node recursively. */
-    get recursive(): boolean;
-    set recursive(value: BooleanInput);
-    protected _recursive: boolean;
+    recursive: boolean;
     constructor(_tree: CdkTree<T, K>, _treeNode: CdkTreeNode<T, K>);
     _toggle(event: Event): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNodeToggle<any, any>, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodeToggle<any, any>, "[cdkTreeNodeToggle]", never, { "recursive": { "alias": "cdkTreeNodeToggleRecursive"; "required": false; }; }, {}, never, never, false, never>;
+    static ngAcceptInputType_recursive: unknown;
 }
 
 /** Flat tree control. Able to expand/collapse a subtree recursively for flattened tree. */

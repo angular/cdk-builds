@@ -1,6 +1,5 @@
 import { AfterContentInit } from '@angular/core';
 import { AfterViewInit } from '@angular/core';
-import { BooleanInput } from '@angular/cdk/coercion';
 import { ChangeDetectorRef } from '@angular/core';
 import { Directionality } from '@angular/cdk/bidi';
 import { ElementRef } from '@angular/core';
@@ -9,7 +8,6 @@ import { FocusableOption } from '@angular/cdk/a11y';
 import * as i0 from '@angular/core';
 import * as i5 from '@angular/cdk/bidi';
 import { InjectionToken } from '@angular/core';
-import { NumberInput } from '@angular/cdk/coercion';
 import { Observable } from 'rxjs';
 import { OnChanges } from '@angular/core';
 import { OnDestroy } from '@angular/core';
@@ -100,21 +98,17 @@ export declare class CdkStep implements OnChanges {
     /** State of the step. */
     state: StepState;
     /** Whether the user can return to this step once it has been marked as completed. */
-    get editable(): boolean;
-    set editable(value: BooleanInput);
-    private _editable;
+    editable: boolean;
     /** Whether the completion of step is optional. */
-    get optional(): boolean;
-    set optional(value: BooleanInput);
-    private _optional;
+    optional: boolean;
     /** Whether step is marked as completed. */
     get completed(): boolean;
-    set completed(value: BooleanInput);
+    set completed(value: boolean);
     _completedOverride: boolean | null;
     private _getDefaultCompleted;
     /** Whether step has an error. */
     get hasError(): boolean;
-    set hasError(value: BooleanInput);
+    set hasError(value: boolean);
     private _customError;
     private _getDefaultError;
     constructor(_stepper: CdkStepper, stepperOptions?: StepperOptions);
@@ -128,6 +122,10 @@ export declare class CdkStep implements OnChanges {
     _showError(): boolean;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkStep, [null, { optional: true; }]>;
     static ɵcmp: i0.ɵɵComponentDeclaration<CdkStep, "cdk-step", ["cdkStep"], { "stepControl": { "alias": "stepControl"; "required": false; }; "label": { "alias": "label"; "required": false; }; "errorMessage": { "alias": "errorMessage"; "required": false; }; "ariaLabel": { "alias": "aria-label"; "required": false; }; "ariaLabelledby": { "alias": "aria-labelledby"; "required": false; }; "state": { "alias": "state"; "required": false; }; "editable": { "alias": "editable"; "required": false; }; "optional": { "alias": "optional"; "required": false; }; "completed": { "alias": "completed"; "required": false; }; "hasError": { "alias": "hasError"; "required": false; }; }, { "interactedStream": "interacted"; }, ["stepLabel"], ["*"], false, never>;
+    static ngAcceptInputType_editable: unknown;
+    static ngAcceptInputType_optional: unknown;
+    static ngAcceptInputType_completed: unknown;
+    static ngAcceptInputType_hasError: unknown;
 }
 
 export declare class CdkStepHeader implements FocusableOption {
@@ -163,12 +161,10 @@ export declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDe
     /** List of step headers sorted based on their DOM order. */
     private _sortedHeaders;
     /** Whether the validity of previous steps should be checked or not. */
-    get linear(): boolean;
-    set linear(value: BooleanInput);
-    private _linear;
+    linear: boolean;
     /** The index of the selected step. */
     get selectedIndex(): number;
-    set selectedIndex(index: NumberInput);
+    set selectedIndex(index: number);
     private _selectedIndex;
     /** The step that is selected. */
     get selected(): CdkStep | undefined;
@@ -218,6 +214,8 @@ export declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDe
     private _isValidIndex;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkStepper, [{ optional: true; }, null, null]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepper, "[cdkStepper]", ["cdkStepper"], { "linear": { "alias": "linear"; "required": false; }; "selectedIndex": { "alias": "selectedIndex"; "required": false; }; "selected": { "alias": "selected"; "required": false; }; "orientation": { "alias": "orientation"; "required": false; }; }, { "selectionChange": "selectionChange"; "selectedIndexChange": "selectedIndexChange"; }, ["_steps", "_stepHeader"], never, false, never>;
+    static ngAcceptInputType_linear: unknown;
+    static ngAcceptInputType_selectedIndex: unknown;
 }
 
 export declare class CdkStepperModule {
