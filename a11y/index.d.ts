@@ -483,7 +483,7 @@ export declare class FocusMonitor implements OnDestroy {
 }
 
 /** Detection mode used for attributing the origin of a focus event. */
-export declare const enum FocusMonitorDetectionMode {
+export declare enum FocusMonitorDetectionMode {
     /**
      * Any mousedown, keydown, or touchstart event that happened in the previous
      * tick or the current tick will be used to assign a focus event's origin (to
@@ -671,7 +671,7 @@ declare class FocusTrapManager {
 export declare function getAriaReferenceIds(el: Element, attr: string): string[];
 
 /** Set of possible high-contrast mode backgrounds. */
-export declare const enum HighContrastMode {
+export declare enum HighContrastMode {
     NONE = 0,
     BLACK_ON_WHITE = 1,
     WHITE_ON_BLACK = 2

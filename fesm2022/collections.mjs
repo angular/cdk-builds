@@ -1,6 +1,6 @@
 import { ConnectableObservable, isObservable, of, Subject } from 'rxjs';
 import * as i0 from '@angular/core';
-import { Injectable, InjectionToken } from '@angular/core';
+import { InjectionToken, Injectable } from '@angular/core';
 
 class DataSource {
 }
@@ -25,6 +25,24 @@ class ArrayDataSource extends DataSource {
     disconnect() { }
 }
 
+/** Indicates how a view was changed by a {@link _ViewRepeater}. */
+var _ViewRepeaterOperation;
+(function (_ViewRepeaterOperation) {
+    /** The content of an existing view was replaced with another item. */
+    _ViewRepeaterOperation[_ViewRepeaterOperation["REPLACED"] = 0] = "REPLACED";
+    /** A new view was created with `createEmbeddedView`. */
+    _ViewRepeaterOperation[_ViewRepeaterOperation["INSERTED"] = 1] = "INSERTED";
+    /** The position of a view changed, but the content remains the same. */
+    _ViewRepeaterOperation[_ViewRepeaterOperation["MOVED"] = 2] = "MOVED";
+    /** A view was detached from the view container. */
+    _ViewRepeaterOperation[_ViewRepeaterOperation["REMOVED"] = 3] = "REMOVED";
+})(_ViewRepeaterOperation || (_ViewRepeaterOperation = {}));
+/**
+ * Injection token for {@link _ViewRepeater}. This token is for use by Angular Material only.
+ * @docs-private
+ */
+const _VIEW_REPEATER_STRATEGY = new InjectionToken('_ViewRepeater');
+
 /**
  * A repeater that destroys views when they are removed from a
  * {@link ViewContainerRef}. When new items are inserted into the container,
@@ -42,16 +60,16 @@ class _DisposeViewRepeaterStrategy {
             if (record.previousIndex == null) {
                 const insertContext = itemContextFactory(record, adjustedPreviousIndex, currentIndex);
                 view = viewContainerRef.createEmbeddedView(insertContext.templateRef, insertContext.context, insertContext.index);
-                operation = 1 /* _ViewRepeaterOperation.INSERTED */;
+                operation = _ViewRepeaterOperation.INSERTED;
             }
             else if (currentIndex == null) {
                 viewContainerRef.remove(adjustedPreviousIndex);
-                operation = 3 /* _ViewRepeaterOperation.REMOVED */;
+                operation = _ViewRepeaterOperation.REMOVED;
             }
             else {
                 view = viewContainerRef.get(adjustedPreviousIndex);
                 viewContainerRef.move(view, currentIndex);
-                operation = 2 /* _ViewRepeaterOperation.MOVED */;
+                operation = _ViewRepeaterOperation.MOVED;
             }
             if (itemViewChanged) {
                 itemViewChanged({
@@ -102,17 +120,17 @@ class _RecycleViewRepeaterStrategy {
                 // Item added.
                 const viewArgsFactory = () => itemContextFactory(record, adjustedPreviousIndex, currentIndex);
                 view = this._insertView(viewArgsFactory, currentIndex, viewContainerRef, itemValueResolver(record));
-                operation = view ? 1 /* _ViewRepeaterOperation.INSERTED */ : 0 /* _ViewRepeaterOperation.REPLACED */;
+                operation = view ? _ViewRepeaterOperation.INSERTED : _ViewRepeaterOperation.REPLACED;
             }
             else if (currentIndex == null) {
                 // Item removed.
                 this._detachAndCacheView(adjustedPreviousIndex, viewContainerRef);
-                operation = 3 /* _ViewRepeaterOperation.REMOVED */;
+                operation = _ViewRepeaterOperation.REMOVED;
             }
             else {
                 // Item moved.
                 view = this._moveView(adjustedPreviousIndex, currentIndex, viewContainerRef, itemValueResolver(record));
-                operation = 2 /* _ViewRepeaterOperation.MOVED */;
+                operation = _ViewRepeaterOperation.MOVED;
             }
             if (itemViewChanged) {
                 itemViewChanged({
@@ -449,14 +467,8 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0-rc.2", ng
         }] });
 
 /**
- * Injection token for {@link _ViewRepeater}. This token is for use by Angular Material only.
- * @docs-private
- */
-const _VIEW_REPEATER_STRATEGY = new InjectionToken('_ViewRepeater');
-
-/**
  * Generated bundle index. Do not edit.
  */
 
-export { ArrayDataSource, DataSource, SelectionModel, UniqueSelectionDispatcher, _DisposeViewRepeaterStrategy, _RecycleViewRepeaterStrategy, _VIEW_REPEATER_STRATEGY, getMultipleValuesInSingleSelectionError, isDataSource };
+export { ArrayDataSource, DataSource, SelectionModel, UniqueSelectionDispatcher, _DisposeViewRepeaterStrategy, _RecycleViewRepeaterStrategy, _VIEW_REPEATER_STRATEGY, _ViewRepeaterOperation, getMultipleValuesInSingleSelectionError, isDataSource };
 //# sourceMappingURL=collections.mjs.map
