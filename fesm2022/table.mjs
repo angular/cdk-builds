@@ -1,5 +1,5 @@
 import * as i1 from '@angular/cdk/bidi';
-import { _VIEW_REPEATER_STRATEGY, _RecycleViewRepeaterStrategy, isDataSource, _DisposeViewRepeaterStrategy } from '@angular/cdk/collections';
+import { _VIEW_REPEATER_STRATEGY, _RecycleViewRepeaterStrategy, isDataSource, _ViewRepeaterOperation, _DisposeViewRepeaterStrategy } from '@angular/cdk/collections';
 export { DataSource } from '@angular/cdk/collections';
 import * as i2 from '@angular/cdk/platform';
 import * as i3 from '@angular/cdk/scrolling';
@@ -1402,7 +1402,7 @@ class CdkTable {
         }
         const viewContainer = this._rowOutlet.viewContainer;
         this._viewRepeater.applyChanges(changes, viewContainer, (record, _adjustedPreviousIndex, currentIndex) => this._getEmbeddedViewArgs(record.item, currentIndex), record => record.item.data, (change) => {
-            if (change.operation === 1 /* _ViewRepeaterOperation.INSERTED */ && change.context) {
+            if (change.operation === _ViewRepeaterOperation.INSERTED && change.context) {
                 this._renderCellTemplateForItem(change.record.item.rowDef, change.context);
             }
         });

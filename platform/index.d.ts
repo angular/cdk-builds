@@ -71,7 +71,7 @@ export declare class PlatformModule {
 
 
 /** The possible ways the browser may handle the horizontal scroll axis in RTL languages. */
-export declare const enum RtlScrollAxisType {
+export declare enum RtlScrollAxisType {
     /**
      * scrollLeft is 0 when scrolled all the way left and (scrollWidth - clientWidth) when scrolled
      * all the way right.
