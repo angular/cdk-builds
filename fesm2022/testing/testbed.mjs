@@ -85,7 +85,7 @@ let uniqueIds = 0;
  * Creates a browser MouseEvent with the specified options.
  * @docs-private
  */
-function createMouseEvent(type, clientX = 0, clientY = 0, offsetX = 1, offsetY = 1, button = 0, modifiers = {}) {
+function createMouseEvent(type, clientX = 0, clientY = 0, offsetX = 0, offsetY = 0, button = 0, modifiers = {}) {
     // Note: We cannot determine the position of the mouse event based on the screen
     // because the dimensions and position of the browser window are not available
     // To provide reasonable `screenX` and `screenY` coordinates, we simply use the
@@ -97,7 +97,7 @@ function createMouseEvent(type, clientX = 0, clientY = 0, offsetX = 1, offsetY =
         cancelable: true,
         composed: true,
         view: window,
-        detail: 0,
+        detail: 1,
         relatedTarget: null,
         screenX,
         screenY,
