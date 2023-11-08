@@ -1,14 +1,14 @@
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { inject, APP_ID, Injectable, Inject, QueryList, Directive, Input, InjectionToken, Optional, EventEmitter, Output, NgModule } from '@angular/core';
+import { inject, APP_ID, Injectable, Inject, QueryList, booleanAttribute, Directive, Input, InjectionToken, Optional, EventEmitter, Output, NgModule } from '@angular/core';
 import * as i1 from '@angular/cdk/platform';
 import { _getFocusedElementPierceShadowDom, normalizePassiveListenerOptions, _getEventTarget, _getShadowRoot } from '@angular/cdk/platform';
 import { Subject, Subscription, BehaviorSubject, of } from 'rxjs';
 import { hasModifierKey, A, Z, ZERO, NINE, PAGE_DOWN, PAGE_UP, END, HOME, LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW, TAB, ALT, CONTROL, MAC_META, META, SHIFT } from '@angular/cdk/keycodes';
 import { tap, debounceTime, filter, map, take, skip, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { coerceBooleanProperty, coerceElement } from '@angular/cdk/coercion';
 import * as i1$1 from '@angular/cdk/observers';
 import { ObserversModule } from '@angular/cdk/observers';
+import { coerceElement } from '@angular/cdk/coercion';
 import { BreakpointObserver } from '@angular/cdk/layout';
 
 /** IDs are delimited by an empty space, as per the spec. */
@@ -246,16 +246,16 @@ class AriaDescriber {
     _isElementNode(element) {
         return element.nodeType === this._document.ELEMENT_NODE;
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: AriaDescriber, deps: [{ token: DOCUMENT }, { token: i1.Platform }], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: AriaDescriber, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: AriaDescriber, deps: [{ token: DOCUMENT }, { token: i1.Platform }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: AriaDescriber, providedIn: 'root' }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: AriaDescriber, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: AriaDescriber, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
-        }], ctorParameters: function () { return [{ type: undefined, decorators: [{
+        }], ctorParameters: () => [{ type: undefined, decorators: [{
                     type: Inject,
                     args: [DOCUMENT]
-                }] }, { type: i1.Platform }]; } });
+                }] }, { type: i1.Platform }] });
 /** Gets a key that can be used to look messages up in the registry. */
 function getKey(message, role) {
     return typeof message === 'string' ? `${role || ''}/${message}` : message;
@@ -780,13 +780,13 @@ class InteractivityChecker {
             !this.isDisabled(element) &&
             (config?.ignoreVisibility || this.isVisible(element)));
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: InteractivityChecker, deps: [{ token: i1.Platform }], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: InteractivityChecker, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: InteractivityChecker, deps: [{ token: i1.Platform }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: InteractivityChecker, providedIn: 'root' }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: InteractivityChecker, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: InteractivityChecker, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
-        }], ctorParameters: function () { return [{ type: i1.Platform }]; } });
+        }], ctorParameters: () => [{ type: i1.Platform }] });
 /**
  * Returns the frame element from a window object. Since browsers like MS Edge throw errors if
  * the frameElement property is being accessed from a different host address, this property
@@ -1174,16 +1174,16 @@ class FocusTrapFactory {
     create(element, deferCaptureElements = false) {
         return new FocusTrap(element, this._checker, this._ngZone, this._document, deferCaptureElements);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: FocusTrapFactory, deps: [{ token: InteractivityChecker }, { token: i0.NgZone }, { token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: FocusTrapFactory, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: FocusTrapFactory, deps: [{ token: InteractivityChecker }, { token: i0.NgZone }, { token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: FocusTrapFactory, providedIn: 'root' }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: FocusTrapFactory, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: FocusTrapFactory, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
-        }], ctorParameters: function () { return [{ type: InteractivityChecker }, { type: i0.NgZone }, { type: undefined, decorators: [{
+        }], ctorParameters: () => [{ type: InteractivityChecker }, { type: i0.NgZone }, { type: undefined, decorators: [{
                     type: Inject,
                     args: [DOCUMENT]
-                }] }]; } });
+                }] }] });
 /** Directive for trapping focus within a region. */
 class CdkTrapFocus {
     /** Whether the focus trap is active. */
@@ -1191,17 +1191,7 @@ class CdkTrapFocus {
         return this.focusTrap.enabled;
     }
     set enabled(value) {
-        this.focusTrap.enabled = coerceBooleanProperty(value);
-    }
-    /**
-     * Whether the directive should automatically move focus into the trapped region upon
-     * initialization and return focus to the previous activeElement upon destruction.
-     */
-    get autoCapture() {
-        return this._autoCapture;
-    }
-    set autoCapture(value) {
-        this._autoCapture = coerceBooleanProperty(value);
+        this.focusTrap.enabled = value;
     }
     constructor(_elementRef, _focusTrapFactory, 
     /**
@@ -1248,24 +1238,24 @@ class CdkTrapFocus {
         this._previouslyFocusedElement = _getFocusedElementPierceShadowDom();
         this.focusTrap.focusInitialElementWhenReady();
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkTrapFocus, deps: [{ token: i0.ElementRef }, { token: FocusTrapFactory }, { token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkTrapFocus, selector: "[cdkTrapFocus]", inputs: { enabled: ["cdkTrapFocus", "enabled"], autoCapture: ["cdkTrapFocusAutoCapture", "autoCapture"] }, exportAs: ["cdkTrapFocus"], usesOnChanges: true, ngImport: i0 }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: CdkTrapFocus, deps: [{ token: i0.ElementRef }, { token: FocusTrapFactory }, { token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "17.0.0", type: CdkTrapFocus, selector: "[cdkTrapFocus]", inputs: { enabled: ["cdkTrapFocus", "enabled", booleanAttribute], autoCapture: ["cdkTrapFocusAutoCapture", "autoCapture", booleanAttribute] }, exportAs: ["cdkTrapFocus"], usesOnChanges: true, ngImport: i0 }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkTrapFocus, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: CdkTrapFocus, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkTrapFocus]',
                     exportAs: 'cdkTrapFocus',
                 }]
-        }], ctorParameters: function () { return [{ type: i0.ElementRef }, { type: FocusTrapFactory }, { type: undefined, decorators: [{
+        }], ctorParameters: () => [{ type: i0.ElementRef }, { type: FocusTrapFactory }, { type: undefined, decorators: [{
                     type: Inject,
                     args: [DOCUMENT]
-                }] }]; }, propDecorators: { enabled: [{
+                }] }], propDecorators: { enabled: [{
                 type: Input,
-                args: ['cdkTrapFocus']
+                args: [{ alias: 'cdkTrapFocus', transform: booleanAttribute }]
             }], autoCapture: [{
                 type: Input,
-                args: ['cdkTrapFocusAutoCapture']
+                args: [{ alias: 'cdkTrapFocusAutoCapture', transform: booleanAttribute }]
             }] } });
 
 /**
@@ -1404,10 +1394,10 @@ class FocusTrapManager {
             }
         }
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: FocusTrapManager, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: FocusTrapManager, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: FocusTrapManager, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: FocusTrapManager, providedIn: 'root' }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: FocusTrapManager, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: FocusTrapManager, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });
@@ -1432,13 +1422,13 @@ class ConfigurableFocusTrapFactory {
         }
         return new ConfigurableFocusTrap(element, this._checker, this._ngZone, this._document, this._focusTrapManager, this._inertStrategy, configObject);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: ConfigurableFocusTrapFactory, deps: [{ token: InteractivityChecker }, { token: i0.NgZone }, { token: FocusTrapManager }, { token: DOCUMENT }, { token: FOCUS_TRAP_INERT_STRATEGY, optional: true }], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: ConfigurableFocusTrapFactory, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: ConfigurableFocusTrapFactory, deps: [{ token: InteractivityChecker }, { token: i0.NgZone }, { token: FocusTrapManager }, { token: DOCUMENT }, { token: FOCUS_TRAP_INERT_STRATEGY, optional: true }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: ConfigurableFocusTrapFactory, providedIn: 'root' }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: ConfigurableFocusTrapFactory, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: ConfigurableFocusTrapFactory, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
-        }], ctorParameters: function () { return [{ type: InteractivityChecker }, { type: i0.NgZone }, { type: FocusTrapManager }, { type: undefined, decorators: [{
+        }], ctorParameters: () => [{ type: InteractivityChecker }, { type: i0.NgZone }, { type: FocusTrapManager }, { type: undefined, decorators: [{
                     type: Inject,
                     args: [DOCUMENT]
                 }] }, { type: undefined, decorators: [{
@@ -1446,7 +1436,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
                 }, {
                     type: Inject,
                     args: [FOCUS_TRAP_INERT_STRATEGY]
-                }] }]; } });
+                }] }] });
 
 /** Gets whether an event could be a faked `mousedown` event dispatched by a screen reader. */
 function isFakeMousedownFromScreenReader(event) {
@@ -1614,13 +1604,13 @@ class InputModalityDetector {
             document.removeEventListener('touchstart', this._onTouchstart, modalityEventListenerOptions);
         }
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: InputModalityDetector, deps: [{ token: i1.Platform }, { token: i0.NgZone }, { token: DOCUMENT }, { token: INPUT_MODALITY_DETECTOR_OPTIONS, optional: true }], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: InputModalityDetector, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: InputModalityDetector, deps: [{ token: i1.Platform }, { token: i0.NgZone }, { token: DOCUMENT }, { token: INPUT_MODALITY_DETECTOR_OPTIONS, optional: true }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: InputModalityDetector, providedIn: 'root' }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: InputModalityDetector, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: InputModalityDetector, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
-        }], ctorParameters: function () { return [{ type: i1.Platform }, { type: i0.NgZone }, { type: Document, decorators: [{
+        }], ctorParameters: () => [{ type: i1.Platform }, { type: i0.NgZone }, { type: Document, decorators: [{
                     type: Inject,
                     args: [DOCUMENT]
                 }] }, { type: undefined, decorators: [{
@@ -1628,7 +1618,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
                 }, {
                     type: Inject,
                     args: [INPUT_MODALITY_DETECTOR_OPTIONS]
-                }] }]; } });
+                }] }] });
 
 const LIVE_ANNOUNCER_ELEMENT_TOKEN = new InjectionToken('liveAnnouncerElement', {
     providedIn: 'root',
@@ -1754,13 +1744,13 @@ class LiveAnnouncer {
             }
         }
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: LiveAnnouncer, deps: [{ token: LIVE_ANNOUNCER_ELEMENT_TOKEN, optional: true }, { token: i0.NgZone }, { token: DOCUMENT }, { token: LIVE_ANNOUNCER_DEFAULT_OPTIONS, optional: true }], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: LiveAnnouncer, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: LiveAnnouncer, deps: [{ token: LIVE_ANNOUNCER_ELEMENT_TOKEN, optional: true }, { token: i0.NgZone }, { token: DOCUMENT }, { token: LIVE_ANNOUNCER_DEFAULT_OPTIONS, optional: true }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: LiveAnnouncer, providedIn: 'root' }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: LiveAnnouncer, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: LiveAnnouncer, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
-        }], ctorParameters: function () { return [{ type: undefined, decorators: [{
+        }], ctorParameters: () => [{ type: undefined, decorators: [{
                     type: Optional
                 }, {
                     type: Inject,
@@ -1773,7 +1763,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
                 }, {
                     type: Inject,
                     args: [LIVE_ANNOUNCER_DEFAULT_OPTIONS]
-                }] }]; } });
+                }] }] });
 /**
  * A directive that works similarly to aria-live, but uses the LiveAnnouncer to ensure compatibility
  * with a wider range of browsers and screen readers.
@@ -1818,16 +1808,16 @@ class CdkAriaLive {
             this._subscription.unsubscribe();
         }
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkAriaLive, deps: [{ token: i0.ElementRef }, { token: LiveAnnouncer }, { token: i1$1.ContentObserver }, { token: i0.NgZone }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkAriaLive, selector: "[cdkAriaLive]", inputs: { politeness: ["cdkAriaLive", "politeness"], duration: ["cdkAriaLiveDuration", "duration"] }, exportAs: ["cdkAriaLive"], ngImport: i0 }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: CdkAriaLive, deps: [{ token: i0.ElementRef }, { token: LiveAnnouncer }, { token: i1$1.ContentObserver }, { token: i0.NgZone }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "17.0.0", type: CdkAriaLive, selector: "[cdkAriaLive]", inputs: { politeness: ["cdkAriaLive", "politeness"], duration: ["cdkAriaLiveDuration", "duration"] }, exportAs: ["cdkAriaLive"], ngImport: i0 }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkAriaLive, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: CdkAriaLive, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkAriaLive]',
                     exportAs: 'cdkAriaLive',
                 }]
-        }], ctorParameters: function () { return [{ type: i0.ElementRef }, { type: LiveAnnouncer }, { type: i1$1.ContentObserver }, { type: i0.NgZone }]; }, propDecorators: { politeness: [{
+        }], ctorParameters: () => [{ type: i0.ElementRef }, { type: LiveAnnouncer }, { type: i1$1.ContentObserver }, { type: i0.NgZone }], propDecorators: { politeness: [{
                 type: Input,
                 args: ['cdkAriaLive']
             }], duration: [{
@@ -1835,6 +1825,21 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
                 args: ['cdkAriaLiveDuration']
             }] } });
 
+/** Detection mode used for attributing the origin of a focus event. */
+var FocusMonitorDetectionMode;
+(function (FocusMonitorDetectionMode) {
+    /**
+     * Any mousedown, keydown, or touchstart event that happened in the previous
+     * tick or the current tick will be used to assign a focus event's origin (to
+     * either mouse, keyboard, or touch). This is the default option.
+     */
+    FocusMonitorDetectionMode[FocusMonitorDetectionMode["IMMEDIATE"] = 0] = "IMMEDIATE";
+    /**
+     * A focus event's origin is always attributed to the last corresponding
+     * mousedown, keydown, or touchstart event, no matter how long ago it occurred.
+     */
+    FocusMonitorDetectionMode[FocusMonitorDetectionMode["EVENTUAL"] = 1] = "EVENTUAL";
+})(FocusMonitorDetectionMode || (FocusMonitorDetectionMode = {}));
 /** InjectionToken for FocusMonitorOptions. */
 const FOCUS_MONITOR_DEFAULT_OPTIONS = new InjectionToken('cdk-focus-monitor-default-options');
 /**
@@ -1902,7 +1907,7 @@ class FocusMonitor {
             }
         };
         this._document = document;
-        this._detectionMode = options?.detectionMode || 0 /* FocusMonitorDetectionMode.IMMEDIATE */;
+        this._detectionMode = options?.detectionMode || FocusMonitorDetectionMode.IMMEDIATE;
     }
     monitor(element, checkChildren = false) {
         const nativeElement = coerceElement(element);
@@ -2026,7 +2031,7 @@ class FocusMonitor {
         // #child, #parent is programmatically focused. This code will attribute the focus to touch
         // instead of program. This is a relatively minor edge-case that can be worked around by using
         // focusVia(parent, 'program') to focus #parent.
-        return (this._detectionMode === 1 /* FocusMonitorDetectionMode.EVENTUAL */ ||
+        return (this._detectionMode === FocusMonitorDetectionMode.EVENTUAL ||
             !!focusEventTarget?.contains(this._inputModalityDetector._mostRecentTarget));
     }
     /**
@@ -2057,7 +2062,7 @@ class FocusMonitor {
             // after the interaction event. We wait `TOUCH_BUFFER_MS` ms before resetting the origin for
             // a touch event because when a touch event is fired, the associated focus event isn't yet in
             // the event queue. Before doing so, clear any pending timeouts.
-            if (this._detectionMode === 0 /* FocusMonitorDetectionMode.IMMEDIATE */) {
+            if (this._detectionMode === FocusMonitorDetectionMode.IMMEDIATE) {
                 clearTimeout(this._originTimeoutId);
                 const ms = this._originFromTouchInteraction ? TOUCH_BUFFER_MS : 1;
                 this._originTimeoutId = setTimeout(() => (this._origin = null), ms);
@@ -2206,13 +2211,13 @@ class FocusMonitor {
         }
         return false;
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: FocusMonitor, deps: [{ token: i0.NgZone }, { token: i1.Platform }, { token: InputModalityDetector }, { token: DOCUMENT, optional: true }, { token: FOCUS_MONITOR_DEFAULT_OPTIONS, optional: true }], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: FocusMonitor, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: FocusMonitor, deps: [{ token: i0.NgZone }, { token: i1.Platform }, { token: InputModalityDetector }, { token: DOCUMENT, optional: true }, { token: FOCUS_MONITOR_DEFAULT_OPTIONS, optional: true }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: FocusMonitor, providedIn: 'root' }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: FocusMonitor, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: FocusMonitor, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
-        }], ctorParameters: function () { return [{ type: i0.NgZone }, { type: i1.Platform }, { type: InputModalityDetector }, { type: undefined, decorators: [{
+        }], ctorParameters: () => [{ type: i0.NgZone }, { type: i1.Platform }, { type: InputModalityDetector }, { type: undefined, decorators: [{
                     type: Optional
                 }, {
                     type: Inject,
@@ -2222,7 +2227,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
                 }, {
                     type: Inject,
                     args: [FOCUS_MONITOR_DEFAULT_OPTIONS]
-                }] }]; } });
+                }] }] });
 /**
  * Directive that determines how a particular element was focused (via keyboard, mouse, touch, or
  * programmatically) and adds corresponding classes to the element.
@@ -2257,19 +2262,26 @@ class CdkMonitorFocus {
             this._monitorSubscription.unsubscribe();
         }
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkMonitorFocus, deps: [{ token: i0.ElementRef }, { token: FocusMonitor }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkMonitorFocus, selector: "[cdkMonitorElementFocus], [cdkMonitorSubtreeFocus]", outputs: { cdkFocusChange: "cdkFocusChange" }, exportAs: ["cdkMonitorFocus"], ngImport: i0 }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: CdkMonitorFocus, deps: [{ token: i0.ElementRef }, { token: FocusMonitor }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "17.0.0", type: CdkMonitorFocus, selector: "[cdkMonitorElementFocus], [cdkMonitorSubtreeFocus]", outputs: { cdkFocusChange: "cdkFocusChange" }, exportAs: ["cdkMonitorFocus"], ngImport: i0 }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkMonitorFocus, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: CdkMonitorFocus, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkMonitorElementFocus], [cdkMonitorSubtreeFocus]',
                     exportAs: 'cdkMonitorFocus',
                 }]
-        }], ctorParameters: function () { return [{ type: i0.ElementRef }, { type: FocusMonitor }]; }, propDecorators: { cdkFocusChange: [{
+        }], ctorParameters: () => [{ type: i0.ElementRef }, { type: FocusMonitor }], propDecorators: { cdkFocusChange: [{
                 type: Output
             }] } });
 
+/** Set of possible high-contrast mode backgrounds. */
+var HighContrastMode;
+(function (HighContrastMode) {
+    HighContrastMode[HighContrastMode["NONE"] = 0] = "NONE";
+    HighContrastMode[HighContrastMode["BLACK_ON_WHITE"] = 1] = "BLACK_ON_WHITE";
+    HighContrastMode[HighContrastMode["WHITE_ON_BLACK"] = 2] = "WHITE_ON_BLACK";
+})(HighContrastMode || (HighContrastMode = {}));
 /** CSS class applied to the document body when in black-on-white high-contrast mode. */
 const BLACK_ON_WHITE_CSS_CLASS = 'cdk-high-contrast-black-on-white';
 /** CSS class applied to the document body when in white-on-black high-contrast mode. */
@@ -2303,7 +2315,7 @@ class HighContrastModeDetector {
     /** Gets the current high-contrast-mode for the page. */
     getHighContrastMode() {
         if (!this._platform.isBrowser) {
-            return 0 /* HighContrastMode.NONE */;
+            return HighContrastMode.NONE;
         }
         // Create a test element with an arbitrary background-color that is neither black nor
         // white; high-contrast mode will coerce the color to either black or white. Also ensure that
@@ -2328,14 +2340,14 @@ class HighContrastModeDetector {
             // Windows 11 dark themes.
             case 'rgb(45,50,54)':
             case 'rgb(32,32,32)':
-                return 2 /* HighContrastMode.WHITE_ON_BLACK */;
+                return HighContrastMode.WHITE_ON_BLACK;
             // Pre Windows 11 light theme.
             case 'rgb(255,255,255)':
             // Windows 11 light theme.
             case 'rgb(255,250,239)':
-                return 1 /* HighContrastMode.BLACK_ON_WHITE */;
+                return HighContrastMode.BLACK_ON_WHITE;
         }
-        return 0 /* HighContrastMode.NONE */;
+        return HighContrastMode.NONE;
     }
     ngOnDestroy() {
         this._breakpointSubscription.unsubscribe();
@@ -2347,45 +2359,45 @@ class HighContrastModeDetector {
             bodyClasses.remove(HIGH_CONTRAST_MODE_ACTIVE_CSS_CLASS, BLACK_ON_WHITE_CSS_CLASS, WHITE_ON_BLACK_CSS_CLASS);
             this._hasCheckedHighContrastMode = true;
             const mode = this.getHighContrastMode();
-            if (mode === 1 /* HighContrastMode.BLACK_ON_WHITE */) {
+            if (mode === HighContrastMode.BLACK_ON_WHITE) {
                 bodyClasses.add(HIGH_CONTRAST_MODE_ACTIVE_CSS_CLASS, BLACK_ON_WHITE_CSS_CLASS);
             }
-            else if (mode === 2 /* HighContrastMode.WHITE_ON_BLACK */) {
+            else if (mode === HighContrastMode.WHITE_ON_BLACK) {
                 bodyClasses.add(HIGH_CONTRAST_MODE_ACTIVE_CSS_CLASS, WHITE_ON_BLACK_CSS_CLASS);
             }
         }
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: HighContrastModeDetector, deps: [{ token: i1.Platform }, { token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: HighContrastModeDetector, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: HighContrastModeDetector, deps: [{ token: i1.Platform }, { token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: HighContrastModeDetector, providedIn: 'root' }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: HighContrastModeDetector, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: HighContrastModeDetector, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
-        }], ctorParameters: function () { return [{ type: i1.Platform }, { type: undefined, decorators: [{
+        }], ctorParameters: () => [{ type: i1.Platform }, { type: undefined, decorators: [{
                     type: Inject,
                     args: [DOCUMENT]
-                }] }]; } });
+                }] }] });
 
 class A11yModule {
     constructor(highContrastModeDetector) {
         highContrastModeDetector._applyBodyHighContrastModeCssClasses();
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: A11yModule, deps: [{ token: HighContrastModeDetector }], target: i0.ɵɵFactoryTarget.NgModule }); }
-    static { this.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "16.1.1", ngImport: i0, type: A11yModule, declarations: [CdkAriaLive, CdkTrapFocus, CdkMonitorFocus], imports: [ObserversModule], exports: [CdkAriaLive, CdkTrapFocus, CdkMonitorFocus] }); }
-    static { this.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: A11yModule, imports: [ObserversModule] }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: A11yModule, deps: [{ token: HighContrastModeDetector }], target: i0.ɵɵFactoryTarget.NgModule }); }
+    static { this.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.0.0", ngImport: i0, type: A11yModule, declarations: [CdkAriaLive, CdkTrapFocus, CdkMonitorFocus], imports: [ObserversModule], exports: [CdkAriaLive, CdkTrapFocus, CdkMonitorFocus] }); }
+    static { this.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: A11yModule, imports: [ObserversModule] }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: A11yModule, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: A11yModule, decorators: [{
             type: NgModule,
             args: [{
                     imports: [ObserversModule],
                     declarations: [CdkAriaLive, CdkTrapFocus, CdkMonitorFocus],
                     exports: [CdkAriaLive, CdkTrapFocus, CdkMonitorFocus],
                 }]
-        }], ctorParameters: function () { return [{ type: HighContrastModeDetector }]; } });
+        }], ctorParameters: () => [{ type: HighContrastModeDetector }] });
 
 /**
  * Generated bundle index. Do not edit.
  */
 
-export { A11yModule, ActiveDescendantKeyManager, AriaDescriber, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, CDK_DESCRIBEDBY_ID_PREFIX, CdkAriaLive, CdkMonitorFocus, CdkTrapFocus, ConfigurableFocusTrap, ConfigurableFocusTrapFactory, EventListenerFocusTrapInertStrategy, FOCUS_MONITOR_DEFAULT_OPTIONS, FOCUS_TRAP_INERT_STRATEGY, FocusKeyManager, FocusMonitor, FocusTrap, FocusTrapFactory, HighContrastModeDetector, INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS, INPUT_MODALITY_DETECTOR_OPTIONS, InputModalityDetector, InteractivityChecker, IsFocusableConfig, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, ListKeyManager, LiveAnnouncer, MESSAGES_CONTAINER_ID, addAriaReferencedId, getAriaReferenceIds, isFakeMousedownFromScreenReader, isFakeTouchstartFromScreenReader, removeAriaReferencedId };
+export { A11yModule, ActiveDescendantKeyManager, AriaDescriber, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, CDK_DESCRIBEDBY_ID_PREFIX, CdkAriaLive, CdkMonitorFocus, CdkTrapFocus, ConfigurableFocusTrap, ConfigurableFocusTrapFactory, EventListenerFocusTrapInertStrategy, FOCUS_MONITOR_DEFAULT_OPTIONS, FOCUS_TRAP_INERT_STRATEGY, FocusKeyManager, FocusMonitor, FocusMonitorDetectionMode, FocusTrap, FocusTrapFactory, HighContrastMode, HighContrastModeDetector, INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS, INPUT_MODALITY_DETECTOR_OPTIONS, InputModalityDetector, InteractivityChecker, IsFocusableConfig, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, ListKeyManager, LiveAnnouncer, MESSAGES_CONTAINER_ID, addAriaReferencedId, getAriaReferenceIds, isFakeMousedownFromScreenReader, isFakeTouchstartFromScreenReader, removeAriaReferencedId };
 //# sourceMappingURL=a11y.mjs.map

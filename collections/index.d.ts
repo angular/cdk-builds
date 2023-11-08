@@ -362,7 +362,7 @@ export declare interface _ViewRepeaterItemInsertArgs<C> {
 export declare type _ViewRepeaterItemValueResolver<T, R> = (record: IterableChangeRecord<R>) => T;
 
 /** Indicates how a view was changed by a {@link _ViewRepeater}. */
-export declare const enum _ViewRepeaterOperation {
+export declare enum _ViewRepeaterOperation {
     /** The content of an existing view was replaced with another item. */
     REPLACED = 0,
     /** A new view was created with `createEmbeddedView`. */

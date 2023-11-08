@@ -66,23 +66,23 @@ class Platform {
         /** Whether the current browser is Safari. */
         this.SAFARI = this.isBrowser && /safari/i.test(navigator.userAgent) && this.WEBKIT;
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: Platform, deps: [{ token: PLATFORM_ID }], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: Platform, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: Platform, deps: [{ token: PLATFORM_ID }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: Platform, providedIn: 'root' }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: Platform, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: Platform, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
-        }], ctorParameters: function () { return [{ type: Object, decorators: [{
+        }], ctorParameters: () => [{ type: Object, decorators: [{
                     type: Inject,
                     args: [PLATFORM_ID]
-                }] }]; } });
+                }] }] });
 
 class PlatformModule {
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: PlatformModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule }); }
-    static { this.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "16.1.1", ngImport: i0, type: PlatformModule }); }
-    static { this.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: PlatformModule }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: PlatformModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule }); }
+    static { this.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.0.0", ngImport: i0, type: PlatformModule }); }
+    static { this.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: PlatformModule }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: PlatformModule, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: PlatformModule, decorators: [{
             type: NgModule,
             args: [{}]
         }] });
@@ -168,6 +168,25 @@ function normalizePassiveListenerOptions(options) {
     return supportsPassiveEventListeners() ? options : !!options.capture;
 }
 
+/** The possible ways the browser may handle the horizontal scroll axis in RTL languages. */
+var RtlScrollAxisType;
+(function (RtlScrollAxisType) {
+    /**
+     * scrollLeft is 0 when scrolled all the way left and (scrollWidth - clientWidth) when scrolled
+     * all the way right.
+     */
+    RtlScrollAxisType[RtlScrollAxisType["NORMAL"] = 0] = "NORMAL";
+    /**
+     * scrollLeft is -(scrollWidth - clientWidth) when scrolled all the way left and 0 when scrolled
+     * all the way right.
+     */
+    RtlScrollAxisType[RtlScrollAxisType["NEGATED"] = 1] = "NEGATED";
+    /**
+     * scrollLeft is (scrollWidth - clientWidth) when scrolled all the way left and 0 when scrolled
+     * all the way right.
+     */
+    RtlScrollAxisType[RtlScrollAxisType["INVERTED"] = 2] = "INVERTED";
+})(RtlScrollAxisType || (RtlScrollAxisType = {}));
 /** Cached result of the way the browser handles the horizontal scroll axis in RTL mode. */
 let rtlScrollAxisType;
 /** Cached result of the check that indicates whether the browser supports scroll behaviors. */
@@ -210,7 +229,7 @@ function supportsScrollBehavior() {
 function getRtlScrollAxisType() {
     // We can't check unless we're on the browser. Just assume 'normal' if we're not.
     if (typeof document !== 'object' || !document) {
-        return 0 /* RtlScrollAxisType.NORMAL */;
+        return RtlScrollAxisType.NORMAL;
     }
     if (rtlScrollAxisType == null) {
         // Create a 1px wide scrolling container and a 2px wide content element.
@@ -228,7 +247,7 @@ function getRtlScrollAxisType() {
         contentStyle.height = '1px';
         scrollContainer.appendChild(content);
         document.body.appendChild(scrollContainer);
-        rtlScrollAxisType = 0 /* RtlScrollAxisType.NORMAL */;
+        rtlScrollAxisType = RtlScrollAxisType.NORMAL;
         // The viewport starts scrolled all the way to the right in RTL mode. If we are in a NORMAL
         // browser this would mean that the scrollLeft should be 1. If it's zero instead we know we're
         // dealing with one of the other two types of browsers.
@@ -239,7 +258,7 @@ function getRtlScrollAxisType() {
             // return 0 when we read it again.
             scrollContainer.scrollLeft = 1;
             rtlScrollAxisType =
-                scrollContainer.scrollLeft === 0 ? 1 /* RtlScrollAxisType.NEGATED */ : 2 /* RtlScrollAxisType.INVERTED */;
+                scrollContainer.scrollLeft === 0 ? RtlScrollAxisType.NEGATED : RtlScrollAxisType.INVERTED;
         }
         scrollContainer.remove();
     }
@@ -314,5 +333,5 @@ function _isTestEnvironment() {
  * Generated bundle index. Do not edit.
  */
 
-export { Platform, PlatformModule, _getEventTarget, _getFocusedElementPierceShadowDom, _getShadowRoot, _isTestEnvironment, _supportsShadowDom, getRtlScrollAxisType, getSupportedInputTypes, normalizePassiveListenerOptions, supportsPassiveEventListeners, supportsScrollBehavior };
+export { Platform, PlatformModule, RtlScrollAxisType, _getEventTarget, _getFocusedElementPierceShadowDom, _getShadowRoot, _isTestEnvironment, _supportsShadowDom, getRtlScrollAxisType, getSupportedInputTypes, normalizePassiveListenerOptions, supportsPassiveEventListeners, supportsScrollBehavior };
 //# sourceMappingURL=platform.mjs.map

@@ -1,5 +1,4 @@
 import { AfterContentInit } from '@angular/core';
-import { BooleanInput } from '@angular/cdk/coercion';
 import { ConnectedPosition } from '@angular/cdk/overlay';
 import { Directionality } from '@angular/cdk/bidi';
 import { ElementRef } from '@angular/core';
@@ -37,9 +36,7 @@ export declare class CdkContextMenuTrigger extends CdkMenuTriggerBase implements
     /** The app's context menu tracking registry */
     private readonly _contextMenuTracker;
     /** Whether the context menu is disabled. */
-    get disabled(): boolean;
-    set disabled(value: BooleanInput);
-    private _disabled;
+    disabled: boolean;
     constructor();
     /**
      * Open the attached menu at the specified location.
@@ -79,6 +76,7 @@ export declare class CdkContextMenuTrigger extends CdkMenuTriggerBase implements
     private _open;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkContextMenuTrigger, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkContextMenuTrigger, "[cdkContextMenuTriggerFor]", ["cdkContextMenuTriggerFor"], { "menuTemplateRef": { "alias": "cdkContextMenuTriggerFor"; "required": false; }; "menuPosition": { "alias": "cdkContextMenuPosition"; "required": false; }; "menuData": { "alias": "cdkContextMenuTriggerData"; "required": false; }; "disabled": { "alias": "cdkContextMenuDisabled"; "required": false; }; }, { "opened": "cdkContextMenuOpened"; "closed": "cdkContextMenuClosed"; }, never, never, true, never>;
+    static ngAcceptInputType_disabled: unknown;
 }
 
 /**
@@ -250,9 +248,7 @@ export declare class CdkMenuItem implements FocusableOption, FocusableElement, T
     /** Reference to the CdkMenuItemTrigger directive if one is added to the same element */
     private readonly _menuTrigger;
     /**  Whether the CdkMenuItem is disabled - defaults to false */
-    get disabled(): boolean;
-    set disabled(value: BooleanInput);
-    private _disabled;
+    disabled: boolean;
     /**
      * The text used to locate this item during menu typeahead. If not specified,
      * the `textContent` of the item will be used.
@@ -338,6 +334,7 @@ export declare class CdkMenuItem implements FocusableOption, FocusableElement, T
     private _setType;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuItem, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuItem, "[cdkMenuItem]", ["cdkMenuItem"], { "disabled": { "alias": "cdkMenuItemDisabled"; "required": false; }; "typeaheadLabel": { "alias": "cdkMenuitemTypeaheadLabel"; "required": false; }; }, { "triggered": "cdkMenuItemTriggered"; }, never, never, true, never>;
+    static ngAcceptInputType_disabled: unknown;
 }
 
 /**
@@ -388,13 +385,12 @@ export declare class CdkMenuItemRadio extends CdkMenuItemSelectable implements O
 /** Base class providing checked state for selectable MenuItems. */
 export declare abstract class CdkMenuItemSelectable extends CdkMenuItem {
     /** Whether the element is checked */
-    get checked(): boolean;
-    set checked(value: BooleanInput);
-    private _checked;
+    checked: boolean;
     /** Whether the item should close the menu if triggered by the spacebar. */
     protected closeOnSpacebarTrigger: boolean;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuItemSelectable, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuItemSelectable, never, never, { "checked": { "alias": "cdkMenuItemChecked"; "required": false; }; }, {}, never, never, false, never>;
+    static ngAcceptInputType_checked: unknown;
 }
 
 /** Module that declares components and directives for the CDK menu. */
@@ -583,7 +579,7 @@ export declare interface FocusableElement {
 }
 
 /** The relative item in the inline menu to focus after closing all popup menus. */
-export declare const enum FocusNext {
+export declare enum FocusNext {
     nextItem = 0,
     previousItem = 1,
     currentItem = 2

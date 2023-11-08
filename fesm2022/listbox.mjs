@@ -1,8 +1,8 @@
 import * as i0 from '@angular/core';
-import { inject, ElementRef, Directive, Input, NgZone, ChangeDetectorRef, forwardRef, Output, ContentChildren, NgModule } from '@angular/core';
+import { inject, ElementRef, booleanAttribute, Directive, Input, NgZone, ChangeDetectorRef, forwardRef, Output, ContentChildren, NgModule } from '@angular/core';
 import { ActiveDescendantKeyManager } from '@angular/cdk/a11y';
 import { A, hasModifierKey, SPACE, ENTER, HOME, END, UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW } from '@angular/cdk/keycodes';
-import { coerceBooleanProperty, coerceArray } from '@angular/cdk/coercion';
+import { coerceArray } from '@angular/cdk/coercion';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Subject, defer, merge, fromEvent } from 'rxjs';
 import { startWith, switchMap, map, takeUntil, filter } from 'rxjs/operators';
@@ -64,7 +64,7 @@ class CdkOption {
         return this.listbox.disabled || this._disabled;
     }
     set disabled(value) {
-        this._disabled = coerceBooleanProperty(value);
+        this._disabled = value;
     }
     /** The tabindex of the option when it is enabled. */
     get enabledTabIndex() {
@@ -134,10 +134,10 @@ class CdkOption {
         }
         return this.isActive() ? this.enabledTabIndex : -1;
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkOption, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkOption, isStandalone: true, selector: "[cdkOption]", inputs: { id: "id", value: ["cdkOption", "value"], typeaheadLabel: ["cdkOptionTypeaheadLabel", "typeaheadLabel"], disabled: ["cdkOptionDisabled", "disabled"], enabledTabIndex: ["tabindex", "enabledTabIndex"] }, host: { attributes: { "role": "option" }, listeners: { "click": "_clicked.next($event)", "focus": "_handleFocus()" }, properties: { "id": "id", "attr.aria-selected": "isSelected()", "attr.tabindex": "_getTabIndex()", "attr.aria-disabled": "disabled", "class.cdk-option-active": "isActive()" }, classAttribute: "cdk-option" }, exportAs: ["cdkOption"], ngImport: i0 }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: CdkOption, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "17.0.0", type: CdkOption, isStandalone: true, selector: "[cdkOption]", inputs: { id: "id", value: ["cdkOption", "value"], typeaheadLabel: ["cdkOptionTypeaheadLabel", "typeaheadLabel"], disabled: ["cdkOptionDisabled", "disabled", booleanAttribute], enabledTabIndex: ["tabindex", "enabledTabIndex"] }, host: { attributes: { "role": "option" }, listeners: { "click": "_clicked.next($event)", "focus": "_handleFocus()" }, properties: { "id": "id", "attr.aria-selected": "isSelected()", "attr.tabindex": "_getTabIndex()", "attr.aria-disabled": "disabled", "class.cdk-option-active": "isActive()" }, classAttribute: "cdk-option" }, exportAs: ["cdkOption"], ngImport: i0 }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkOption, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: CdkOption, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkOption]',
@@ -165,7 +165,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
                 args: ['cdkOptionTypeaheadLabel']
             }], disabled: [{
                 type: Input,
-                args: ['cdkOptionDisabled']
+                args: [{ alias: 'cdkOptionDisabled', transform: booleanAttribute }]
             }], enabledTabIndex: [{
                 type: Input,
                 args: ['tabindex']
@@ -200,24 +200,10 @@ class CdkListbox {
         return this.selectionModel.multiple;
     }
     set multiple(value) {
-        this.selectionModel.multiple = coerceBooleanProperty(value);
+        this.selectionModel.multiple = value;
         if (this.options) {
             this._updateInternalValue();
         }
-    }
-    /** Whether the listbox is disabled. */
-    get disabled() {
-        return this._disabled;
-    }
-    set disabled(value) {
-        this._disabled = coerceBooleanProperty(value);
-    }
-    /** Whether the listbox will use active descendant or will move focus onto the options. */
-    get useActiveDescendant() {
-        return this._useActiveDescendant;
-    }
-    set useActiveDescendant(shouldUseActiveDescendant) {
-        this._useActiveDescendant = coerceBooleanProperty(shouldUseActiveDescendant);
     }
     /** The orientation of the listbox. Only affects keyboard interaction, not visual layout. */
     get orientation() {
@@ -247,7 +233,7 @@ class CdkListbox {
         return this._navigationWrapDisabled;
     }
     set navigationWrapDisabled(wrap) {
-        this._navigationWrapDisabled = coerceBooleanProperty(wrap);
+        this._navigationWrapDisabled = wrap;
         this.listKeyManager?.withWrap(!this._navigationWrapDisabled);
     }
     /** Whether keyboard navigation should skip over disabled items. */
@@ -255,13 +241,15 @@ class CdkListbox {
         return this._navigateDisabledOptions;
     }
     set navigateDisabledOptions(skip) {
-        this._navigateDisabledOptions = coerceBooleanProperty(skip);
+        this._navigateDisabledOptions = skip;
         this.listKeyManager?.skipPredicate(this._navigateDisabledOptions ? this._skipNonePredicate : this._skipDisabledPredicate);
     }
     constructor() {
         this._generatedId = `cdk-listbox-${nextId++}`;
-        this._disabled = false;
-        this._useActiveDescendant = false;
+        /** Whether the listbox is disabled. */
+        this.disabled = false;
+        /** Whether the listbox will use active descendant or will move focus onto the options. */
+        this.useActiveDescendant = false;
         this._orientation = 'vertical';
         this._navigationWrapDisabled = false;
         this._navigateDisabledOptions = false;
@@ -526,7 +514,7 @@ class CdkListbox {
     }
     /** Called when the user presses keydown on the listbox. */
     _handleKeydown(event) {
-        if (this._disabled) {
+        if (this.disabled) {
             return;
         }
         const { keyCode } = event;
@@ -614,7 +602,7 @@ class CdkListbox {
     }
     /** Get the id of the active option if active descendant is being used. */
     _getAriaActiveDescendant() {
-        return this._useActiveDescendant ? this.listKeyManager?.activeItem?.id : null;
+        return this.useActiveDescendant ? this.listKeyManager?.activeItem?.id : null;
     }
     /** Get the tabindex for the listbox. */
     _getTabIndex() {
@@ -803,8 +791,8 @@ class CdkListbox {
             });
         });
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkListbox, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkListbox, isStandalone: true, selector: "[cdkListbox]", inputs: { id: "id", enabledTabIndex: ["tabindex", "enabledTabIndex"], value: ["cdkListboxValue", "value"], multiple: ["cdkListboxMultiple", "multiple"], disabled: ["cdkListboxDisabled", "disabled"], useActiveDescendant: ["cdkListboxUseActiveDescendant", "useActiveDescendant"], orientation: ["cdkListboxOrientation", "orientation"], compareWith: ["cdkListboxCompareWith", "compareWith"], navigationWrapDisabled: ["cdkListboxNavigationWrapDisabled", "navigationWrapDisabled"], navigateDisabledOptions: ["cdkListboxNavigatesDisabledOptions", "navigateDisabledOptions"] }, outputs: { valueChange: "cdkListboxValueChange" }, host: { attributes: { "role": "listbox" }, listeners: { "focus": "_handleFocus()", "keydown": "_handleKeydown($event)", "focusout": "_handleFocusOut($event)", "focusin": "_handleFocusIn()" }, properties: { "id": "id", "attr.tabindex": "_getTabIndex()", "attr.aria-disabled": "disabled", "attr.aria-multiselectable": "multiple", "attr.aria-activedescendant": "_getAriaActiveDescendant()", "attr.aria-orientation": "orientation" }, classAttribute: "cdk-listbox" }, providers: [
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: CdkListbox, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "17.0.0", type: CdkListbox, isStandalone: true, selector: "[cdkListbox]", inputs: { id: "id", enabledTabIndex: ["tabindex", "enabledTabIndex"], value: ["cdkListboxValue", "value"], multiple: ["cdkListboxMultiple", "multiple", booleanAttribute], disabled: ["cdkListboxDisabled", "disabled", booleanAttribute], useActiveDescendant: ["cdkListboxUseActiveDescendant", "useActiveDescendant", booleanAttribute], orientation: ["cdkListboxOrientation", "orientation"], compareWith: ["cdkListboxCompareWith", "compareWith"], navigationWrapDisabled: ["cdkListboxNavigationWrapDisabled", "navigationWrapDisabled", booleanAttribute], navigateDisabledOptions: ["cdkListboxNavigatesDisabledOptions", "navigateDisabledOptions", booleanAttribute] }, outputs: { valueChange: "cdkListboxValueChange" }, host: { attributes: { "role": "listbox" }, listeners: { "focus": "_handleFocus()", "keydown": "_handleKeydown($event)", "focusout": "_handleFocusOut($event)", "focusin": "_handleFocusIn()" }, properties: { "id": "id", "attr.tabindex": "_getTabIndex()", "attr.aria-disabled": "disabled", "attr.aria-multiselectable": "multiple", "attr.aria-activedescendant": "_getAriaActiveDescendant()", "attr.aria-orientation": "orientation" }, classAttribute: "cdk-listbox" }, providers: [
             {
                 provide: NG_VALUE_ACCESSOR,
                 useExisting: forwardRef(() => CdkListbox),
@@ -812,7 +800,7 @@ class CdkListbox {
             },
         ], queries: [{ propertyName: "options", predicate: CdkOption, descendants: true }], exportAs: ["cdkListbox"], ngImport: i0 }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkListbox, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: CdkListbox, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkListbox]',
@@ -840,7 +828,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
                         },
                     ],
                 }]
-        }], ctorParameters: function () { return []; }, propDecorators: { id: [{
+        }], ctorParameters: () => [], propDecorators: { id: [{
                 type: Input
             }], enabledTabIndex: [{
                 type: Input,
@@ -850,13 +838,13 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
                 args: ['cdkListboxValue']
             }], multiple: [{
                 type: Input,
-                args: ['cdkListboxMultiple']
+                args: [{ alias: 'cdkListboxMultiple', transform: booleanAttribute }]
             }], disabled: [{
                 type: Input,
-                args: ['cdkListboxDisabled']
+                args: [{ alias: 'cdkListboxDisabled', transform: booleanAttribute }]
             }], useActiveDescendant: [{
                 type: Input,
-                args: ['cdkListboxUseActiveDescendant']
+                args: [{ alias: 'cdkListboxUseActiveDescendant', transform: booleanAttribute }]
             }], orientation: [{
                 type: Input,
                 args: ['cdkListboxOrientation']
@@ -865,10 +853,10 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
                 args: ['cdkListboxCompareWith']
             }], navigationWrapDisabled: [{
                 type: Input,
-                args: ['cdkListboxNavigationWrapDisabled']
+                args: [{ alias: 'cdkListboxNavigationWrapDisabled', transform: booleanAttribute }]
             }], navigateDisabledOptions: [{
                 type: Input,
-                args: ['cdkListboxNavigatesDisabledOptions']
+                args: [{ alias: 'cdkListboxNavigatesDisabledOptions', transform: booleanAttribute }]
             }], valueChange: [{
                 type: Output,
                 args: ['cdkListboxValueChange']
@@ -879,11 +867,11 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
 
 const EXPORTED_DECLARATIONS = [CdkListbox, CdkOption];
 class CdkListboxModule {
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkListboxModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule }); }
-    static { this.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "16.1.1", ngImport: i0, type: CdkListboxModule, imports: [CdkListbox, CdkOption], exports: [CdkListbox, CdkOption] }); }
-    static { this.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkListboxModule }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: CdkListboxModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule }); }
+    static { this.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.0.0", ngImport: i0, type: CdkListboxModule, imports: [CdkListbox, CdkOption], exports: [CdkListbox, CdkOption] }); }
+    static { this.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: CdkListboxModule }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkListboxModule, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: CdkListboxModule, decorators: [{
             type: NgModule,
             args: [{
                     imports: [...EXPORTED_DECLARATIONS],
