@@ -34,13 +34,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0", ngImpor
 /** Injection token used to return classes implementing the Menu interface */
 const CDK_MENU = new InjectionToken('cdk-menu');
 
-/** The relative item in the inline menu to focus after closing all popup menus. */
-var FocusNext;
-(function (FocusNext) {
-    FocusNext[FocusNext["nextItem"] = 0] = "nextItem";
-    FocusNext[FocusNext["previousItem"] = 1] = "previousItem";
-    FocusNext[FocusNext["currentItem"] = 2] = "currentItem";
-})(FocusNext || (FocusNext = {}));
 /** Injection token used for an implementation of MenuStack. */
 const MENU_STACK = new InjectionToken('cdk-menu-stack');
 /** Provider that provides the parent menu stack, or a new menu stack if there is no parent one. */
@@ -961,8 +954,8 @@ class CdkMenuItem {
             event.preventDefault();
             this._menuStack.close(parentMenu, {
                 focusNextOnEmpty: this._menuStack.inlineMenuOrientation() === 'horizontal'
-                    ? FocusNext.previousItem
-                    : FocusNext.currentItem,
+                    ? 1 /* FocusNext.previousItem */
+                    : 2 /* FocusNext.currentItem */,
                 focusParentTrigger: true,
             });
         }
@@ -975,7 +968,7 @@ class CdkMenuItem {
         if (!this.hasMenu && this._menuStack.inlineMenuOrientation() === 'horizontal') {
             event.preventDefault();
             this._menuStack.closeAll({
-                focusNextOnEmpty: FocusNext.nextItem,
+                focusNextOnEmpty: 0 /* FocusNext.nextItem */,
                 focusParentTrigger: true,
             });
         }
@@ -1310,7 +1303,7 @@ class CdkMenu extends CdkMenuBase {
                 if (!hasModifierKey(event)) {
                     event.preventDefault();
                     this.menuStack.close(this, {
-                        focusNextOnEmpty: FocusNext.currentItem,
+                        focusNextOnEmpty: 2 /* FocusNext.currentItem */,
                         focusParentTrigger: true,
                     });
                 }
@@ -1331,15 +1324,15 @@ class CdkMenu extends CdkMenuBase {
     _toggleMenuFocus(focusNext) {
         const keyManager = this.keyManager;
         switch (focusNext) {
-            case FocusNext.nextItem:
+            case 0 /* FocusNext.nextItem */:
                 keyManager.setFocusOrigin('keyboard');
                 keyManager.setNextItemActive();
                 break;
-            case FocusNext.previousItem:
+            case 1 /* FocusNext.previousItem */:
                 keyManager.setFocusOrigin('keyboard');
                 keyManager.setPreviousItemActive();
                 break;
-            case FocusNext.currentItem:
+            case 2 /* FocusNext.currentItem */:
                 if (keyManager.activeItem) {
                     keyManager.setFocusOrigin('keyboard');
                     keyManager.setActiveItem(keyManager.activeItem);
@@ -1451,17 +1444,17 @@ class CdkMenuBar extends CdkMenuBase {
     _toggleOpenMenu(focusNext) {
         const keyManager = this.keyManager;
         switch (focusNext) {
-            case FocusNext.nextItem:
+            case 0 /* FocusNext.nextItem */:
                 keyManager.setFocusOrigin('keyboard');
                 keyManager.setNextItemActive();
                 keyManager.activeItem?.getMenuTrigger()?.open();
                 break;
-            case FocusNext.previousItem:
+            case 1 /* FocusNext.previousItem */:
                 keyManager.setFocusOrigin('keyboard');
                 keyManager.setPreviousItemActive();
                 keyManager.activeItem?.getMenuTrigger()?.open();
                 break;
-            case FocusNext.currentItem:
+            case 2 /* FocusNext.currentItem */:
                 if (keyManager.activeItem) {
                     keyManager.setFocusOrigin('keyboard');
                     keyManager.setActiveItem(keyManager.activeItem);
@@ -1873,5 +1866,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0", ngImpor
  * Generated bundle index. Do not edit.
  */
 
-export { CDK_MENU, CdkContextMenuTrigger, CdkMenu, CdkMenuBar, CdkMenuBase, CdkMenuGroup, CdkMenuItem, CdkMenuItemCheckbox, CdkMenuItemRadio, CdkMenuItemSelectable, CdkMenuModule, CdkMenuTrigger, CdkMenuTriggerBase, CdkTargetMenuAim, ContextMenuTracker, FocusNext, MENU_AIM, MENU_STACK, MENU_TRIGGER, MenuStack, PARENT_OR_NEW_INLINE_MENU_STACK_PROVIDER, PARENT_OR_NEW_MENU_STACK_PROVIDER, PointerFocusTracker, TargetMenuAim };
+export { CDK_MENU, CdkContextMenuTrigger, CdkMenu, CdkMenuBar, CdkMenuBase, CdkMenuGroup, CdkMenuItem, CdkMenuItemCheckbox, CdkMenuItemRadio, CdkMenuItemSelectable, CdkMenuModule, CdkMenuTrigger, CdkMenuTriggerBase, CdkTargetMenuAim, ContextMenuTracker, MENU_AIM, MENU_STACK, MENU_TRIGGER, MenuStack, PARENT_OR_NEW_INLINE_MENU_STACK_PROVIDER, PARENT_OR_NEW_MENU_STACK_PROVIDER, PointerFocusTracker, TargetMenuAim };
 //# sourceMappingURL=menu.mjs.map
