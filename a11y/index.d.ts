@@ -1,5 +1,6 @@
 import { AfterContentInit } from '@angular/core';
 import { AfterViewInit } from '@angular/core';
+import { BooleanInput } from '@angular/cdk/coercion';
 import { ContentObserver } from '@angular/cdk/observers';
 import { DoCheck } from '@angular/core';
 import { ElementRef } from '@angular/core';
@@ -191,12 +192,14 @@ export declare class CdkTrapFocus implements OnDestroy, AfterContentInit, OnChan
     private _previouslyFocusedElement;
     /** Whether the focus trap is active. */
     get enabled(): boolean;
-    set enabled(value: boolean);
+    set enabled(value: BooleanInput);
     /**
      * Whether the directive should automatically move focus into the trapped region upon
      * initialization and return focus to the previous activeElement upon destruction.
      */
-    autoCapture: boolean;
+    get autoCapture(): boolean;
+    set autoCapture(value: BooleanInput);
+    private _autoCapture;
     constructor(_elementRef: ElementRef<HTMLElement>, _focusTrapFactory: FocusTrapFactory, 
     /**
      * @deprecated No longer being used. To be removed.
@@ -210,8 +213,6 @@ export declare class CdkTrapFocus implements OnDestroy, AfterContentInit, OnChan
     private _captureFocus;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTrapFocus, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTrapFocus, "[cdkTrapFocus]", ["cdkTrapFocus"], { "enabled": { "alias": "cdkTrapFocus"; "required": false; }; "autoCapture": { "alias": "cdkTrapFocusAutoCapture"; "required": false; }; }, {}, never, never, false, never>;
-    static ngAcceptInputType_enabled: unknown;
-    static ngAcceptInputType_autoCapture: unknown;
 }
 
 /**
@@ -483,7 +484,7 @@ export declare class FocusMonitor implements OnDestroy {
 }
 
 /** Detection mode used for attributing the origin of a focus event. */
-export declare enum FocusMonitorDetectionMode {
+export declare const enum FocusMonitorDetectionMode {
     /**
      * Any mousedown, keydown, or touchstart event that happened in the previous
      * tick or the current tick will be used to assign a focus event's origin (to
@@ -671,7 +672,7 @@ declare class FocusTrapManager {
 export declare function getAriaReferenceIds(el: Element, attr: string): string[];
 
 /** Set of possible high-contrast mode backgrounds. */
-export declare enum HighContrastMode {
+export declare const enum HighContrastMode {
     NONE = 0,
     BLACK_ON_WHITE = 1,
     WHITE_ON_BLACK = 2
