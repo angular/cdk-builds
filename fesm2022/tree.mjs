@@ -2,8 +2,7 @@ import { SelectionModel, isDataSource } from '@angular/cdk/collections';
 import { isObservable, Subject, BehaviorSubject, of } from 'rxjs';
 import { take, filter, takeUntil } from 'rxjs/operators';
 import * as i0 from '@angular/core';
-import { InjectionToken, Directive, Inject, Optional, Component, ViewEncapsulation, ChangeDetectionStrategy, Input, ViewChild, ContentChildren, NgModule } from '@angular/core';
-import { coerceNumberProperty, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { InjectionToken, Directive, Inject, Optional, Component, ViewEncapsulation, ChangeDetectionStrategy, Input, ViewChild, ContentChildren, numberAttribute, booleanAttribute, NgModule } from '@angular/core';
 import * as i2 from '@angular/cdk/bidi';
 
 /** Base tree control. It has basic toggle/expand/collapse operations on a single data node. */
@@ -563,7 +562,7 @@ function getParentNodeAriaLevel(nodeElement) {
         }
     }
     else if (parent.classList.contains('cdk-nested-tree-node')) {
-        return coerceNumberProperty(parent.getAttribute('aria-level'));
+        return numberAttribute(parent.getAttribute('aria-level'));
     }
     else {
         // The ancestor element is the cdk-tree itself
@@ -644,7 +643,7 @@ class CdkNestedTreeNode extends CdkTreeNode {
         return outlets && outlets.find(outlet => !outlet._node || outlet._node === this);
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: CdkNestedTreeNode, deps: [{ token: i0.ElementRef }, { token: CdkTree }, { token: i0.IterableDiffers }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "17.0.0", type: CdkNestedTreeNode, selector: "cdk-nested-tree-node", inputs: { role: "role", disabled: "disabled", tabIndex: "tabIndex" }, host: { classAttribute: "cdk-nested-tree-node" }, providers: [
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "17.0.0", type: CdkNestedTreeNode, selector: "cdk-nested-tree-node", host: { classAttribute: "cdk-nested-tree-node" }, providers: [
             { provide: CdkTreeNode, useExisting: CdkNestedTreeNode },
             { provide: CDK_TREE_NODE_OUTLET_NODE, useExisting: CdkNestedTreeNode },
         ], queries: [{ propertyName: "nodeOutlet", predicate: CdkTreeNodeOutlet, descendants: true }], exportAs: ["cdkNestedTreeNode"], usesInheritance: true, ngImport: i0 }); }
@@ -654,7 +653,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0", ngImpor
             args: [{
                     selector: 'cdk-nested-tree-node',
                     exportAs: 'cdkNestedTreeNode',
-                    inputs: ['role', 'disabled', 'tabIndex'],
                     providers: [
                         { provide: CdkTreeNode, useExisting: CdkNestedTreeNode },
                         { provide: CDK_TREE_NODE_OUTLET_NODE, useExisting: CdkNestedTreeNode },
@@ -748,7 +746,7 @@ class CdkTreeNodePadding {
         // Set to null as the fallback value so that _setPadding can fall back to the node level if the
         // consumer set the directive as `cdkTreeNodePadding=""`. We still want to take this value if
         // they set 0 explicitly.
-        this._level = coerceNumberProperty(value, null);
+        this._level = isNaN(value) ? null : value;
         this._setPadding();
     }
     /**
@@ -766,11 +764,11 @@ class CdkTreeNodePadding {
             units = parts[1] || units;
         }
         this.indentUnits = units;
-        this._indent = coerceNumberProperty(value);
+        this._indent = numberAttribute(value);
         this._setPadding();
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: CdkTreeNodePadding, deps: [{ token: CdkTreeNode }, { token: CdkTree }, { token: i0.ElementRef }, { token: i2.Directionality, optional: true }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "17.0.0", type: CdkTreeNodePadding, selector: "[cdkTreeNodePadding]", inputs: { level: ["cdkTreeNodePadding", "level"], indent: ["cdkTreeNodePaddingIndent", "indent"] }, ngImport: i0 }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "17.0.0", type: CdkTreeNodePadding, selector: "[cdkTreeNodePadding]", inputs: { level: ["cdkTreeNodePadding", "level", numberAttribute], indent: ["cdkTreeNodePaddingIndent", "indent"] }, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: CdkTreeNodePadding, decorators: [{
             type: Directive,
@@ -781,7 +779,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0", ngImpor
                     type: Optional
                 }] }], propDecorators: { level: [{
                 type: Input,
-                args: ['cdkTreeNodePadding']
+                args: [{ alias: 'cdkTreeNodePadding', transform: numberAttribute }]
             }], indent: [{
                 type: Input,
                 args: ['cdkTreeNodePaddingIndent']
@@ -791,17 +789,11 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0", ngImpor
  * Node toggle to expand/collapse the node.
  */
 class CdkTreeNodeToggle {
-    /** Whether expand/collapse the node recursively. */
-    get recursive() {
-        return this._recursive;
-    }
-    set recursive(value) {
-        this._recursive = coerceBooleanProperty(value);
-    }
     constructor(_tree, _treeNode) {
         this._tree = _tree;
         this._treeNode = _treeNode;
-        this._recursive = false;
+        /** Whether expand/collapse the node recursively. */
+        this.recursive = false;
     }
     _toggle(event) {
         this.recursive
@@ -810,7 +802,7 @@ class CdkTreeNodeToggle {
         event.stopPropagation();
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: CdkTreeNodeToggle, deps: [{ token: CdkTree }, { token: CdkTreeNode }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "17.0.0", type: CdkTreeNodeToggle, selector: "[cdkTreeNodeToggle]", inputs: { recursive: ["cdkTreeNodeToggleRecursive", "recursive"] }, host: { listeners: { "click": "_toggle($event)" } }, ngImport: i0 }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "17.0.0", type: CdkTreeNodeToggle, selector: "[cdkTreeNodeToggle]", inputs: { recursive: ["cdkTreeNodeToggleRecursive", "recursive", booleanAttribute] }, host: { listeners: { "click": "_toggle($event)" } }, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: CdkTreeNodeToggle, decorators: [{
             type: Directive,
@@ -822,7 +814,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0", ngImpor
                 }]
         }], ctorParameters: () => [{ type: CdkTree }, { type: CdkTreeNode }], propDecorators: { recursive: [{
                 type: Input,
-                args: ['cdkTreeNodeToggleRecursive']
+                args: [{ alias: 'cdkTreeNodeToggleRecursive', transform: booleanAttribute }]
             }] } });
 
 const EXPORTED_DECLARATIONS = [

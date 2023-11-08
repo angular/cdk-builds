@@ -1825,6 +1825,21 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0", ngImpor
                 args: ['cdkAriaLiveDuration']
             }] } });
 
+/** Detection mode used for attributing the origin of a focus event. */
+var FocusMonitorDetectionMode;
+(function (FocusMonitorDetectionMode) {
+    /**
+     * Any mousedown, keydown, or touchstart event that happened in the previous
+     * tick or the current tick will be used to assign a focus event's origin (to
+     * either mouse, keyboard, or touch). This is the default option.
+     */
+    FocusMonitorDetectionMode[FocusMonitorDetectionMode["IMMEDIATE"] = 0] = "IMMEDIATE";
+    /**
+     * A focus event's origin is always attributed to the last corresponding
+     * mousedown, keydown, or touchstart event, no matter how long ago it occurred.
+     */
+    FocusMonitorDetectionMode[FocusMonitorDetectionMode["EVENTUAL"] = 1] = "EVENTUAL";
+})(FocusMonitorDetectionMode || (FocusMonitorDetectionMode = {}));
 /** InjectionToken for FocusMonitorOptions. */
 const FOCUS_MONITOR_DEFAULT_OPTIONS = new InjectionToken('cdk-focus-monitor-default-options');
 /**
@@ -1892,7 +1907,7 @@ class FocusMonitor {
             }
         };
         this._document = document;
-        this._detectionMode = options?.detectionMode || 0 /* FocusMonitorDetectionMode.IMMEDIATE */;
+        this._detectionMode = options?.detectionMode || FocusMonitorDetectionMode.IMMEDIATE;
     }
     monitor(element, checkChildren = false) {
         const nativeElement = coerceElement(element);
@@ -2016,7 +2031,7 @@ class FocusMonitor {
         // #child, #parent is programmatically focused. This code will attribute the focus to touch
         // instead of program. This is a relatively minor edge-case that can be worked around by using
         // focusVia(parent, 'program') to focus #parent.
-        return (this._detectionMode === 1 /* FocusMonitorDetectionMode.EVENTUAL */ ||
+        return (this._detectionMode === FocusMonitorDetectionMode.EVENTUAL ||
             !!focusEventTarget?.contains(this._inputModalityDetector._mostRecentTarget));
     }
     /**
@@ -2047,7 +2062,7 @@ class FocusMonitor {
             // after the interaction event. We wait `TOUCH_BUFFER_MS` ms before resetting the origin for
             // a touch event because when a touch event is fired, the associated focus event isn't yet in
             // the event queue. Before doing so, clear any pending timeouts.
-            if (this._detectionMode === 0 /* FocusMonitorDetectionMode.IMMEDIATE */) {
+            if (this._detectionMode === FocusMonitorDetectionMode.IMMEDIATE) {
                 clearTimeout(this._originTimeoutId);
                 const ms = this._originFromTouchInteraction ? TOUCH_BUFFER_MS : 1;
                 this._originTimeoutId = setTimeout(() => (this._origin = null), ms);
@@ -2260,6 +2275,13 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0", ngImpor
                 type: Output
             }] } });
 
+/** Set of possible high-contrast mode backgrounds. */
+var HighContrastMode;
+(function (HighContrastMode) {
+    HighContrastMode[HighContrastMode["NONE"] = 0] = "NONE";
+    HighContrastMode[HighContrastMode["BLACK_ON_WHITE"] = 1] = "BLACK_ON_WHITE";
+    HighContrastMode[HighContrastMode["WHITE_ON_BLACK"] = 2] = "WHITE_ON_BLACK";
+})(HighContrastMode || (HighContrastMode = {}));
 /** CSS class applied to the document body when in black-on-white high-contrast mode. */
 const BLACK_ON_WHITE_CSS_CLASS = 'cdk-high-contrast-black-on-white';
 /** CSS class applied to the document body when in white-on-black high-contrast mode. */
@@ -2293,7 +2315,7 @@ class HighContrastModeDetector {
     /** Gets the current high-contrast-mode for the page. */
     getHighContrastMode() {
         if (!this._platform.isBrowser) {
-            return 0 /* HighContrastMode.NONE */;
+            return HighContrastMode.NONE;
         }
         // Create a test element with an arbitrary background-color that is neither black nor
         // white; high-contrast mode will coerce the color to either black or white. Also ensure that
@@ -2318,14 +2340,14 @@ class HighContrastModeDetector {
             // Windows 11 dark themes.
             case 'rgb(45,50,54)':
             case 'rgb(32,32,32)':
-                return 2 /* HighContrastMode.WHITE_ON_BLACK */;
+                return HighContrastMode.WHITE_ON_BLACK;
             // Pre Windows 11 light theme.
             case 'rgb(255,255,255)':
             // Windows 11 light theme.
             case 'rgb(255,250,239)':
-                return 1 /* HighContrastMode.BLACK_ON_WHITE */;
+                return HighContrastMode.BLACK_ON_WHITE;
         }
-        return 0 /* HighContrastMode.NONE */;
+        return HighContrastMode.NONE;
     }
     ngOnDestroy() {
         this._breakpointSubscription.unsubscribe();
@@ -2337,10 +2359,10 @@ class HighContrastModeDetector {
             bodyClasses.remove(HIGH_CONTRAST_MODE_ACTIVE_CSS_CLASS, BLACK_ON_WHITE_CSS_CLASS, WHITE_ON_BLACK_CSS_CLASS);
             this._hasCheckedHighContrastMode = true;
             const mode = this.getHighContrastMode();
-            if (mode === 1 /* HighContrastMode.BLACK_ON_WHITE */) {
+            if (mode === HighContrastMode.BLACK_ON_WHITE) {
                 bodyClasses.add(HIGH_CONTRAST_MODE_ACTIVE_CSS_CLASS, BLACK_ON_WHITE_CSS_CLASS);
             }
-            else if (mode === 2 /* HighContrastMode.WHITE_ON_BLACK */) {
+            else if (mode === HighContrastMode.WHITE_ON_BLACK) {
                 bodyClasses.add(HIGH_CONTRAST_MODE_ACTIVE_CSS_CLASS, WHITE_ON_BLACK_CSS_CLASS);
             }
         }
@@ -2377,5 +2399,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0", ngImpor
  * Generated bundle index. Do not edit.
  */
 
-export { A11yModule, ActiveDescendantKeyManager, AriaDescriber, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, CDK_DESCRIBEDBY_ID_PREFIX, CdkAriaLive, CdkMonitorFocus, CdkTrapFocus, ConfigurableFocusTrap, ConfigurableFocusTrapFactory, EventListenerFocusTrapInertStrategy, FOCUS_MONITOR_DEFAULT_OPTIONS, FOCUS_TRAP_INERT_STRATEGY, FocusKeyManager, FocusMonitor, FocusTrap, FocusTrapFactory, HighContrastModeDetector, INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS, INPUT_MODALITY_DETECTOR_OPTIONS, InputModalityDetector, InteractivityChecker, IsFocusableConfig, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, ListKeyManager, LiveAnnouncer, MESSAGES_CONTAINER_ID, addAriaReferencedId, getAriaReferenceIds, isFakeMousedownFromScreenReader, isFakeTouchstartFromScreenReader, removeAriaReferencedId };
+export { A11yModule, ActiveDescendantKeyManager, AriaDescriber, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, CDK_DESCRIBEDBY_ID_PREFIX, CdkAriaLive, CdkMonitorFocus, CdkTrapFocus, ConfigurableFocusTrap, ConfigurableFocusTrapFactory, EventListenerFocusTrapInertStrategy, FOCUS_MONITOR_DEFAULT_OPTIONS, FOCUS_TRAP_INERT_STRATEGY, FocusKeyManager, FocusMonitor, FocusMonitorDetectionMode, FocusTrap, FocusTrapFactory, HighContrastMode, HighContrastModeDetector, INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS, INPUT_MODALITY_DETECTOR_OPTIONS, InputModalityDetector, InteractivityChecker, IsFocusableConfig, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, ListKeyManager, LiveAnnouncer, MESSAGES_CONTAINER_ID, addAriaReferencedId, getAriaReferenceIds, isFakeMousedownFromScreenReader, isFakeTouchstartFromScreenReader, removeAriaReferencedId };
 //# sourceMappingURL=a11y.mjs.map
