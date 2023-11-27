@@ -35,7 +35,7 @@ export declare class CdkObserveContent implements AfterContentInit, OnDestroy {
     private _subscribe;
     private _unsubscribe;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkObserveContent, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkObserveContent, "[cdkObserveContent]", ["cdkObserveContent"], { "disabled": { "alias": "cdkObserveContentDisabled"; "required": false; }; "debounce": { "alias": "debounce"; "required": false; }; }, { "event": "cdkObserveContent"; }, never, never, false, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkObserveContent, "[cdkObserveContent]", ["cdkObserveContent"], { "disabled": { "alias": "cdkObserveContentDisabled"; "required": false; }; "debounce": { "alias": "debounce"; "required": false; }; }, { "event": "cdkObserveContent"; }, never, never, true, never>;
     static ngAcceptInputType_disabled: unknown;
 }
 
@@ -84,7 +84,7 @@ export declare class MutationObserverFactory {
 
 export declare class ObserversModule {
     static ɵfac: i0.ɵɵFactoryDeclaration<ObserversModule, never>;
-    static ɵmod: i0.ɵɵNgModuleDeclaration<ObserversModule, [typeof CdkObserveContent], never, [typeof CdkObserveContent]>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<ObserversModule, never, [typeof CdkObserveContent], [typeof CdkObserveContent]>;
     static ɵinj: i0.ɵɵInjectorDeclaration<ObserversModule>;
 }
 

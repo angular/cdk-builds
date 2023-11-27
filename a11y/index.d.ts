@@ -5,7 +5,7 @@ import { DoCheck } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import * as i0 from '@angular/core';
-import * as i4 from '@angular/cdk/observers';
+import * as i1 from '@angular/cdk/observers';
 import { InjectionToken } from '@angular/core';
 import { NgZone } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -19,7 +19,7 @@ import { Subject } from 'rxjs';
 export declare class A11yModule {
     constructor(highContrastModeDetector: HighContrastModeDetector);
     static ɵfac: i0.ɵɵFactoryDeclaration<A11yModule, never>;
-    static ɵmod: i0.ɵɵNgModuleDeclaration<A11yModule, [typeof i1.CdkAriaLive, typeof i2.CdkTrapFocus, typeof i3.CdkMonitorFocus], [typeof i4.ObserversModule], [typeof i1.CdkAriaLive, typeof i2.CdkTrapFocus, typeof i3.CdkMonitorFocus]>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<A11yModule, never, [typeof i1.ObserversModule, typeof i2.CdkAriaLive, typeof i3.CdkTrapFocus, typeof i4.CdkMonitorFocus], [typeof i2.CdkAriaLive, typeof i3.CdkTrapFocus, typeof i4.CdkMonitorFocus]>;
     static ɵinj: i0.ɵɵInjectorDeclaration<A11yModule>;
 }
 
@@ -155,7 +155,7 @@ export declare class CdkAriaLive implements OnDestroy {
     constructor(_elementRef: ElementRef, _liveAnnouncer: LiveAnnouncer, _contentObserver: ContentObserver, _ngZone: NgZone);
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkAriaLive, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkAriaLive, "[cdkAriaLive]", ["cdkAriaLive"], { "politeness": { "alias": "cdkAriaLive"; "required": false; }; "duration": { "alias": "cdkAriaLiveDuration"; "required": false; }; }, {}, never, never, false, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkAriaLive, "[cdkAriaLive]", ["cdkAriaLive"], { "politeness": { "alias": "cdkAriaLive"; "required": false; }; "duration": { "alias": "cdkAriaLiveDuration"; "required": false; }; }, {}, never, never, true, never>;
 }
 
 /**
@@ -178,7 +178,7 @@ export declare class CdkMonitorFocus implements AfterViewInit, OnDestroy {
     ngAfterViewInit(): void;
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMonitorFocus, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMonitorFocus, "[cdkMonitorElementFocus], [cdkMonitorSubtreeFocus]", ["cdkMonitorFocus"], {}, { "cdkFocusChange": "cdkFocusChange"; }, never, never, false, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMonitorFocus, "[cdkMonitorElementFocus], [cdkMonitorSubtreeFocus]", ["cdkMonitorFocus"], {}, { "cdkFocusChange": "cdkFocusChange"; }, never, never, true, never>;
 }
 
 /** Directive for trapping focus within a region. */
@@ -209,7 +209,7 @@ export declare class CdkTrapFocus implements OnDestroy, AfterContentInit, OnChan
     ngOnChanges(changes: SimpleChanges): void;
     private _captureFocus;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTrapFocus, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTrapFocus, "[cdkTrapFocus]", ["cdkTrapFocus"], { "enabled": { "alias": "cdkTrapFocus"; "required": false; }; "autoCapture": { "alias": "cdkTrapFocusAutoCapture"; "required": false; }; }, {}, never, never, false, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTrapFocus, "[cdkTrapFocus]", ["cdkTrapFocus"], { "enabled": { "alias": "cdkTrapFocus"; "required": false; }; "autoCapture": { "alias": "cdkTrapFocusAutoCapture"; "required": false; }; }, {}, never, never, true, never>;
     static ngAcceptInputType_enabled: unknown;
     static ngAcceptInputType_autoCapture: unknown;
 }
@@ -719,14 +719,14 @@ export declare interface Highlightable extends ListKeyManagerOption {
     setInactiveStyles(): void;
 }
 
-declare namespace i1 {
+declare namespace i2 {
     export {
         LiveAnnouncer,
         CdkAriaLive
     }
 }
 
-declare namespace i2 {
+declare namespace i3 {
     export {
         FocusTrap,
         FocusTrapFactory,
@@ -734,7 +734,7 @@ declare namespace i2 {
     }
 }
 
-declare namespace i3 {
+declare namespace i4 {
     export {
         FocusOrigin,
         FocusOptions_2 as FocusOptions,

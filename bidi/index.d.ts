@@ -6,7 +6,7 @@ import { OnDestroy } from '@angular/core';
 
 export declare class BidiModule {
     static ɵfac: i0.ɵɵFactoryDeclaration<BidiModule, never>;
-    static ɵmod: i0.ɵɵNgModuleDeclaration<BidiModule, [typeof i1.Dir], never, [typeof i1.Dir]>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<BidiModule, never, [typeof i1.Dir], [typeof i1.Dir]>;
     static ɵinj: i0.ɵɵInjectorDeclaration<BidiModule>;
 }
 
@@ -34,7 +34,7 @@ export declare class Dir implements Directionality, AfterContentInit, OnDestroy 
     ngAfterContentInit(): void;
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<Dir, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<Dir, "[dir]", ["dir"], { "dir": { "alias": "dir"; "required": false; }; }, { "change": "dirChange"; }, never, never, false, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<Dir, "[dir]", ["dir"], { "dir": { "alias": "dir"; "required": false; }; }, { "change": "dirChange"; }, never, never, true, never>;
 }
 
 /**
