@@ -37,8 +37,8 @@ const EXPORTED_DECLARATIONS = [
     NoDataRowOutlet,
 ];
 export class CdkTableModule {
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: CdkTableModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule }); }
-    static { this.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.0.0", ngImport: i0, type: CdkTableModule, declarations: [CdkTable,
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: CdkTableModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule }); }
+    static { this.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.0.4", ngImport: i0, type: CdkTableModule, declarations: [CdkTable,
             CdkRowDef,
             CdkCellDef,
             CdkCellOutlet,
@@ -81,9 +81,9 @@ export class CdkTableModule {
             CdkNoDataRow,
             CdkRecycleRows,
             NoDataRowOutlet] }); }
-    static { this.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: CdkTableModule, imports: [ScrollingModule] }); }
+    static { this.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: CdkTableModule, imports: [ScrollingModule] }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: CdkTableModule, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: CdkTableModule, decorators: [{
             type: NgModule,
             args: [{
                     exports: EXPORTED_DECLARATIONS,

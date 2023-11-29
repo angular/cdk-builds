@@ -37,10 +37,10 @@ export class OverlayPositionBuilder {
     flexibleConnectedTo(origin) {
         return new FlexibleConnectedPositionStrategy(origin, this._viewportRuler, this._document, this._platform, this._overlayContainer);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: OverlayPositionBuilder, deps: [{ token: i1.ViewportRuler }, { token: DOCUMENT }, { token: i2.Platform }, { token: i3.OverlayContainer }], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: OverlayPositionBuilder, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: OverlayPositionBuilder, deps: [{ token: i1.ViewportRuler }, { token: DOCUMENT }, { token: i2.Platform }, { token: i3.OverlayContainer }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: OverlayPositionBuilder, providedIn: 'root' }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0", ngImport: i0, type: OverlayPositionBuilder, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: OverlayPositionBuilder, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: () => [{ type: i1.ViewportRuler }, { type: undefined, decorators: [{
