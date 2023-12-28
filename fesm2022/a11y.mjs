@@ -2,7 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
 import { inject, APP_ID, Injectable, Inject, QueryList, booleanAttribute, Directive, Input, InjectionToken, Optional, EventEmitter, Output, NgModule } from '@angular/core';
 import * as i1 from '@angular/cdk/platform';
-import { _getFocusedElementPierceShadowDom, normalizePassiveListenerOptions, _getEventTarget, _getShadowRoot } from '@angular/cdk/platform';
+import { Platform, _getFocusedElementPierceShadowDom, normalizePassiveListenerOptions, _getEventTarget, _getShadowRoot } from '@angular/cdk/platform';
 import { Subject, Subscription, BehaviorSubject, of } from 'rxjs';
 import { hasModifierKey, A, Z, ZERO, NINE, PAGE_DOWN, PAGE_UP, END, HOME, LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW, TAB, ALT, CONTROL, MAC_META, META, SHIFT } from '@angular/cdk/keycodes';
 import { tap, debounceTime, filter, map, take, skip, distinctUntilChanged, takeUntil } from 'rxjs/operators';
@@ -1188,10 +1188,12 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.4", ngImpor
 class CdkTrapFocus {
     /** Whether the focus trap is active. */
     get enabled() {
-        return this.focusTrap.enabled;
+        return this.focusTrap?.enabled || false;
     }
     set enabled(value) {
-        this.focusTrap.enabled = value;
+        if (this.focusTrap) {
+            this.focusTrap.enabled = value;
+        }
     }
     constructor(_elementRef, _focusTrapFactory, 
     /**
@@ -1203,10 +1205,13 @@ class CdkTrapFocus {
         this._focusTrapFactory = _focusTrapFactory;
         /** Previously focused element to restore focus to upon destroy when using autoCapture. */
         this._previouslyFocusedElement = null;
-        this.focusTrap = this._focusTrapFactory.create(this._elementRef.nativeElement, true);
+        const platform = inject(Platform);
+        if (platform.isBrowser) {
+            this.focusTrap = this._focusTrapFactory.create(this._elementRef.nativeElement, true);
+        }
     }
     ngOnDestroy() {
-        this.focusTrap.destroy();
+        this.focusTrap?.destroy();
         // If we stored a previously focused element when using autoCapture, return focus to that
         // element now that the trapped region is being destroyed.
         if (this._previouslyFocusedElement) {
@@ -1215,13 +1220,13 @@ class CdkTrapFocus {
         }
     }
     ngAfterContentInit() {
-        this.focusTrap.attachAnchors();
+        this.focusTrap?.attachAnchors();
         if (this.autoCapture) {
             this._captureFocus();
         }
     }
     ngDoCheck() {
-        if (!this.focusTrap.hasAttached()) {
+        if (this.focusTrap && !this.focusTrap.hasAttached()) {
             this.focusTrap.attachAnchors();
         }
     }
@@ -1230,13 +1235,13 @@ class CdkTrapFocus {
         if (autoCaptureChange &&
             !autoCaptureChange.firstChange &&
             this.autoCapture &&
-            this.focusTrap.hasAttached()) {
+            this.focusTrap?.hasAttached()) {
             this._captureFocus();
         }
     }
     _captureFocus() {
         this._previouslyFocusedElement = _getFocusedElementPierceShadowDom();
-        this.focusTrap.focusInitialElementWhenReady();
+        this.focusTrap?.focusInitialElementWhenReady();
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: CdkTrapFocus, deps: [{ token: i0.ElementRef }, { token: FocusTrapFactory }, { token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "17.0.4", type: CdkTrapFocus, selector: "[cdkTrapFocus]", inputs: { enabled: ["cdkTrapFocus", "enabled", booleanAttribute], autoCapture: ["cdkTrapFocusAutoCapture", "autoCapture", booleanAttribute] }, exportAs: ["cdkTrapFocus"], usesOnChanges: true, ngImport: i0 }); }
