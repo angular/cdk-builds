@@ -48,6 +48,7 @@ export declare class CdkDialogContainer<C extends DialogConfig = DialogConfig> e
     protected _ngZone: NgZone;
     private _overlayRef;
     private _focusMonitor?;
+    private _platform;
     protected _document: Document;
     /** The portal outlet inside of this container into which the dialog content will be loaded. */
     _portalOutlet: CdkPortalOutlet;
