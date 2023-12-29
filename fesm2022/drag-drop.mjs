@@ -101,27 +101,27 @@ function parseCssPropertyValue(computedStyle, name) {
     return value.split(',').map(part => part.trim());
 }
 
-/** Gets a mutable version of an element's bounding `ClientRect`. */
+/** Gets a mutable version of an element's bounding `DOMRect`. */
 function getMutableClientRect(element) {
-    const clientRect = element.getBoundingClientRect();
+    const rect = element.getBoundingClientRect();
     // We need to clone the `clientRect` here, because all the values on it are readonly
     // and we need to be able to update them. Also we can't use a spread here, because
-    // the values on a `ClientRect` aren't own properties. See:
+    // the values on a `DOMRect` aren't own properties. See:
     // https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect#Notes
     return {
-        top: clientRect.top,
-        right: clientRect.right,
-        bottom: clientRect.bottom,
-        left: clientRect.left,
-        width: clientRect.width,
-        height: clientRect.height,
-        x: clientRect.x,
-        y: clientRect.y,
+        top: rect.top,
+        right: rect.right,
+        bottom: rect.bottom,
+        left: rect.left,
+        width: rect.width,
+        height: rect.height,
+        x: rect.x,
+        y: rect.y,
     };
 }
 /**
- * Checks whether some coordinates are within a `ClientRect`.
- * @param clientRect ClientRect that is being checked.
+ * Checks whether some coordinates are within a `DOMRect`.
+ * @param clientRect DOMRect that is being checked.
  * @param x Coordinates along the X axis.
  * @param y Coordinates along the Y axis.
  */
@@ -130,25 +130,25 @@ function isInsideClientRect(clientRect, x, y) {
     return y >= top && y <= bottom && x >= left && x <= right;
 }
 /**
- * Updates the top/left positions of a `ClientRect`, as well as their bottom/right counterparts.
- * @param clientRect `ClientRect` that should be updated.
+ * Updates the top/left positions of a `DOMRect`, as well as their bottom/right counterparts.
+ * @param domRect `DOMRect` that should be updated.
  * @param top Amount to add to the `top` position.
  * @param left Amount to add to the `left` position.
  */
-function adjustClientRect(clientRect, top, left) {
-    clientRect.top += top;
-    clientRect.bottom = clientRect.top + clientRect.height;
-    clientRect.left += left;
-    clientRect.right = clientRect.left + clientRect.width;
+function adjustDomRect(domRect, top, left) {
+    domRect.top += top;
+    domRect.bottom = domRect.top + domRect.height;
+    domRect.left += left;
+    domRect.right = domRect.left + domRect.width;
 }
 /**
- * Checks whether the pointer coordinates are close to a ClientRect.
- * @param rect ClientRect to check against.
- * @param threshold Threshold around the ClientRect.
+ * Checks whether the pointer coordinates are close to a DOMRect.
+ * @param rect DOMRect to check against.
+ * @param threshold Threshold around the DOMRect.
  * @param pointerX Coordinates along the X axis.
  * @param pointerY Coordinates along the Y axis.
  */
-function isPointerNearClientRect(rect, threshold, pointerX, pointerY) {
+function isPointerNearDomRect(rect, threshold, pointerX, pointerY) {
     const { top, right, bottom, left, width, height } = rect;
     const xThreshold = width * threshold;
     const yThreshold = height * threshold;
@@ -207,7 +207,7 @@ class ParentPositionTracker {
         // parents that are inside the element that was scrolled.
         this.positions.forEach((position, node) => {
             if (position.clientRect && target !== node && target.contains(node)) {
-                adjustClientRect(position.clientRect, topDifference, leftDifference);
+                adjustDomRect(position.clientRect, topDifference, leftDifference);
             }
         });
         scrollPosition.top = newTop;
@@ -438,7 +438,7 @@ class DragRef {
             else {
                 // If there's a position constraint function, we want the element's top/left to be at the
                 // specific position on the page. Use the initial position as a reference if that's the case.
-                const offset = this.constrainPosition ? this._initialClientRect : this._pickupPositionOnPage;
+                const offset = this.constrainPosition ? this._initialDomRect : this._pickupPositionOnPage;
                 const activeTransform = this._activeTransform;
                 activeTransform.x = constrainedPointerPosition.x - offset.x + this._passiveTransform.x;
                 activeTransform.y = constrainedPointerPosition.y - offset.y + this._passiveTransform.y;
@@ -844,7 +844,7 @@ class DragRef {
         // Avoid multiple subscriptions and memory leaks when multi touch
         // (isDragging check above isn't enough because of possible temporal and/or dimensional delays)
         this._removeSubscriptions();
-        this._initialClientRect = this._rootElement.getBoundingClientRect();
+        this._initialDomRect = this._rootElement.getBoundingClientRect();
         this._pointerMoveSubscription = this._dragDropRegistry.pointerMove.subscribe(this._pointerMove);
         this._pointerUpSubscription = this._dragDropRegistry.pointerUp.subscribe(this._pointerUp);
         this._scrollSubscription = this._dragDropRegistry
@@ -860,7 +860,7 @@ class DragRef {
         this._pickupPositionInElement =
             previewTemplate && previewTemplate.template && !previewTemplate.matchSize
                 ? { x: 0, y: 0 }
-                : this._getPointerPositionInElement(this._initialClientRect, referenceElement, event);
+                : this._getPointerPositionInElement(this._initialDomRect, referenceElement, event);
         const pointerPosition = (this._pickupPositionOnPage =
             this._lastKnownPointerPosition =
                 this._getPointerPositionOnPage(event));
@@ -879,7 +879,7 @@ class DragRef {
         this._anchor.parentNode.replaceChild(this._rootElement, this._anchor);
         this._destroyPreview();
         this._destroyPlaceholder();
-        this._initialClientRect =
+        this._initialDomRect =
             this._boundaryRect =
                 this._previewRect =
                     this._initialTransform =
@@ -967,7 +967,7 @@ class DragRef {
         if (previewTemplate && previewConfig) {
             // Measure the element before we've inserted the preview
             // since the insertion could throw off the measurement.
-            const rootRect = previewConfig.matchSize ? this._initialClientRect : null;
+            const rootRect = previewConfig.matchSize ? this._initialDomRect : null;
             const viewRef = previewConfig.viewContainer.createEmbeddedView(previewTemplate, previewConfig.context);
             viewRef.detectChanges();
             preview = getRootNode(viewRef, this._document);
@@ -981,7 +981,7 @@ class DragRef {
         }
         else {
             preview = deepCloneNode(this._rootElement);
-            matchElementSize(preview, this._initialClientRect);
+            matchElementSize(preview, this._initialDomRect);
             if (this._initialTransform) {
                 preview.style.transform = this._initialTransform;
             }
@@ -1118,7 +1118,7 @@ class DragRef {
     _getConstrainedPointerPosition(point) {
         const dropContainerLock = this._dropContainer ? this._dropContainer.lockAxis : null;
         let { x, y } = this.constrainPosition
-            ? this.constrainPosition(point, this, this._initialClientRect, this._pickupPositionInElement)
+            ? this.constrainPosition(point, this, this._initialDomRect, this._pickupPositionInElement)
             : point;
         if (this.lockAxis === 'x' || dropContainerLock === 'x') {
             y =
@@ -1302,12 +1302,12 @@ class DragRef {
         const scrollDifference = this._parentPositions.handleScroll(event);
         if (scrollDifference) {
             const target = _getEventTarget(event);
-            // ClientRect dimensions are based on the scroll position of the page and its parent
-            // node so we have to update the cached boundary ClientRect if the user has scrolled.
+            // DOMRect dimensions are based on the scroll position of the page and its parent
+            // node so we have to update the cached boundary DOMRect if the user has scrolled.
             if (this._boundaryRect &&
                 target !== this._boundaryElement &&
                 target.contains(this._boundaryElement)) {
-                adjustClientRect(this._boundaryRect, scrollDifference.top, scrollDifference.left);
+                adjustDomRect(this._boundaryRect, scrollDifference.top, scrollDifference.left);
             }
             this._pickupPositionOnPage.x += scrollDifference.left;
             this._pickupPositionOnPage.y += scrollDifference.top;
@@ -1364,7 +1364,7 @@ class DragRef {
         if (!this._previewRect || (!this._previewRect.width && !this._previewRect.height)) {
             this._previewRect = this._preview
                 ? this._preview.getBoundingClientRect()
-                : this._initialClientRect;
+                : this._initialDomRect;
         }
         return this._previewRect;
     }
@@ -1552,11 +1552,11 @@ class SingleAxisSortStrategy {
                 // Round the transforms since some browsers will
                 // blur the elements, for sub-pixel transforms.
                 elementToOffset.style.transform = combineTransforms(`translate3d(${Math.round(sibling.offset)}px, 0, 0)`, sibling.initialTransform);
-                adjustClientRect(sibling.clientRect, 0, offset);
+                adjustDomRect(sibling.clientRect, 0, offset);
             }
             else {
                 elementToOffset.style.transform = combineTransforms(`translate3d(0, ${Math.round(sibling.offset)}px, 0)`, sibling.initialTransform);
-                adjustClientRect(sibling.clientRect, offset, 0);
+                adjustDomRect(sibling.clientRect, offset, 0);
             }
         });
         // Note that it's important that we do this after the client rects have been adjusted.
@@ -1668,7 +1668,7 @@ class SingleAxisSortStrategy {
         // we can avoid inconsistent behavior where we might be measuring the element before
         // its position has changed.
         this._itemPositions.forEach(({ clientRect }) => {
-            adjustClientRect(clientRect, topDifference, leftDifference);
+            adjustDomRect(clientRect, topDifference, leftDifference);
         });
         // We need two loops for this, because we want all of the cached
         // positions to be up-to-date before we re-sort the item.
@@ -2091,8 +2091,8 @@ class DropListRef {
     _sortItem(item, pointerX, pointerY, pointerDelta) {
         // Don't sort the item if sorting is disabled or it's out of range.
         if (this.sortingDisabled ||
-            !this._clientRect ||
-            !isPointerNearClientRect(this._clientRect, DROP_PROXIMITY_THRESHOLD, pointerX, pointerY)) {
+            !this._domRect ||
+            !isPointerNearDomRect(this._domRect, DROP_PROXIMITY_THRESHOLD, pointerX, pointerY)) {
             return;
         }
         const result = this._sortStrategy.sort(item, pointerX, pointerY, pointerDelta);
@@ -2125,7 +2125,7 @@ class DropListRef {
             if (element === this._document || !position.clientRect || scrollNode) {
                 return;
             }
-            if (isPointerNearClientRect(position.clientRect, DROP_PROXIMITY_THRESHOLD, pointerX, pointerY)) {
+            if (isPointerNearDomRect(position.clientRect, DROP_PROXIMITY_THRESHOLD, pointerX, pointerY)) {
                 [verticalScrollDirection, horizontalScrollDirection] = getElementScrollDirections(element, position.clientRect, pointerX, pointerY);
                 if (verticalScrollDirection || horizontalScrollDirection) {
                     scrollNode = element;
@@ -2135,7 +2135,7 @@ class DropListRef {
         // Otherwise check if we can start scrolling the viewport.
         if (!verticalScrollDirection && !horizontalScrollDirection) {
             const { width, height } = this._viewportRuler.getViewportSize();
-            const clientRect = {
+            const domRect = {
                 width,
                 height,
                 top: 0,
@@ -2143,8 +2143,8 @@ class DropListRef {
                 bottom: height,
                 left: 0,
             };
-            verticalScrollDirection = getVerticalScrollDirection(clientRect, pointerY);
-            horizontalScrollDirection = getHorizontalScrollDirection(clientRect, pointerX);
+            verticalScrollDirection = getVerticalScrollDirection(domRect, pointerY);
+            horizontalScrollDirection = getHorizontalScrollDirection(domRect, pointerX);
             scrollNode = window;
         }
         if (scrollNode &&
@@ -2186,8 +2186,8 @@ class DropListRef {
         const element = coerceElement(this.element);
         this._parentPositions.cache(this._scrollableElements);
         // The list element is always in the `scrollableElements`
-        // so we can take advantage of the cached `ClientRect`.
-        this._clientRect = this._parentPositions.positions.get(element).clientRect;
+        // so we can take advantage of the cached `DOMRect`.
+        this._domRect = this._parentPositions.positions.get(element).clientRect;
     }
     /** Resets the container to its initial state. */
     _reset() {
@@ -2206,7 +2206,7 @@ class DropListRef {
      * @param y Pointer position along the Y axis.
      */
     _isOverContainer(x, y) {
-        return this._clientRect != null && isInsideClientRect(this._clientRect, x, y);
+        return this._domRect != null && isInsideClientRect(this._domRect, x, y);
     }
     /**
      * Figures out whether an item should be moved into a sibling
@@ -2225,8 +2225,8 @@ class DropListRef {
      * @param y Position of the item along the Y axis.
      */
     _canReceive(item, x, y) {
-        if (!this._clientRect ||
-            !isInsideClientRect(this._clientRect, x, y) ||
+        if (!this._domRect ||
+            !isInsideClientRect(this._domRect, x, y) ||
             !this.enterPredicate(item, this)) {
             return false;
         }
@@ -2237,7 +2237,7 @@ class DropListRef {
             return false;
         }
         const nativeElement = coerceElement(this.element);
-        // The `ClientRect`, that we're using to find the container over which the user is
+        // The `DOMRect`, that we're using to find the container over which the user is
         // hovering, doesn't give us any information on whether the element has been scrolled
         // out of the view or whether it's overlapping with other containers. This means that
         // we could end up transferring the item into a container that's invisible or is positioned

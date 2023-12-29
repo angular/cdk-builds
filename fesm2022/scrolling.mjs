@@ -577,7 +577,7 @@ class ViewportRuler {
         }
         return output;
     }
-    /** Gets a ClientRect for the viewport's bounds. */
+    /** Gets a DOMRect for the viewport's bounds. */
     getViewportRect() {
         // Use the document element's bounding rect rather than the window scroll properties
         // (e.g. pageYOffset, scrollY) due to in issue in Chrome and IE where window scroll
