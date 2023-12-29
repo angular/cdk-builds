@@ -532,7 +532,7 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
     private _addPanelClasses;
     /** Clears the classes that the position strategy has applied from the overlay panel. */
     private _clearPanelClasses;
-    /** Returns the ClientRect of the current origin. */
+    /** Returns the DOMRect of the current origin. */
     private _getOriginRect;
 }
 

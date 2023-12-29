@@ -128,7 +128,7 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
      * of the user's pointer on the page, a reference to the item being dragged and its dimensions.
      * Should return a point describing where the item should be rendered.
      */
-    constrainPosition?: (userPointerPosition: Point, dragRef: DragRef, dimensions: ClientRect, pickupPositionInElement: Point) => Point;
+    constrainPosition?: (userPointerPosition: Point, dragRef: DragRef, dimensions: DOMRect, pickupPositionInElement: Point) => Point;
     /** Class to be added to the preview element. */
     previewClass: string | string[];
     /**
@@ -746,7 +746,7 @@ export declare class DragRef<T = any> {
     /** Whether the native dragging interactions have been enabled on the root element. */
     private _nativeInteractionsEnabled;
     /** Client rect of the root element when the dragging sequence has started. */
-    private _initialClientRect?;
+    private _initialDomRect?;
     /** Cached dimensions of the preview element. Should be read via `_getPreviewRect`. */
     private _previewRect?;
     /** Cached dimensions of the boundary element. */
@@ -854,7 +854,7 @@ export declare class DragRef<T = any> {
      * of the user's pointer on the page, a reference to the item being dragged and its dimensions.
      * Should return a point describing where the item should be rendered.
      */
-    constrainPosition?: (userPointerPosition: Point, dragRef: DragRef, dimensions: ClientRect, pickupPositionInElement: Point) => Point;
+    constrainPosition?: (userPointerPosition: Point, dragRef: DragRef, dimensions: DOMRect, pickupPositionInElement: Point) => Point;
     constructor(element: ElementRef<HTMLElement> | HTMLElement, _config: DragRefConfig, _document: Document, _ngZone: NgZone, _viewportRuler: ViewportRuler, _dragDropRegistry: DragDropRegistry<DragRef, DropListRef>);
     /**
      * Returns the element that is being used as a placeholder
@@ -1148,8 +1148,8 @@ export declare class DropListRef<T = any> {
     private _parentPositions;
     /** Strategy being used to sort items within the list. */
     private _sortStrategy;
-    /** Cached `ClientRect` of the drop list. */
-    private _clientRect;
+    /** Cached `DOMRect` of the drop list. */
+    private _domRect;
     /** Draggable items in the container. */
     private _draggables;
     /** Drop lists that are connected to the current one. */

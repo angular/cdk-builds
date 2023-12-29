@@ -220,7 +220,7 @@ export declare abstract class CdkVirtualScrollable extends CdkScrollable {
      */
     measureViewportSize(orientation: 'horizontal' | 'vertical'): number;
     /**
-     * Measure the bounding ClientRect size including the scroll offset.
+     * Measure the bounding DOMRect size including the scroll offset.
      *
      * @param from The edge to measure from.
      */
@@ -635,7 +635,7 @@ export declare class ViewportRuler implements OnDestroy {
         width: number;
         height: number;
     }>;
-    /** Gets a ClientRect for the viewport's bounds. */
+    /** Gets a DOMRect for the viewport's bounds. */
     getViewportRect(): {
         top: number;
         left: number;
