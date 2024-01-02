@@ -2112,7 +2112,7 @@ class DropListRef {
                 return;
             }
             if (isPointerNearDomRect(position.clientRect, DROP_PROXIMITY_THRESHOLD, pointerX, pointerY)) {
-                [verticalScrollDirection, horizontalScrollDirection] = getElementScrollDirections(element, position.clientRect, pointerX, pointerY);
+                [verticalScrollDirection, horizontalScrollDirection] = getElementScrollDirections(element, position.clientRect, this._sortStrategy.direction, pointerX, pointerY);
                 if (verticalScrollDirection || horizontalScrollDirection) {
                     scrollNode = element;
                 }
@@ -2341,10 +2341,11 @@ function getHorizontalScrollDirection(clientRect, pointerX) {
  * assuming that the user's pointer is already within it scrollable region.
  * @param element Element for which we should calculate the scroll direction.
  * @param clientRect Bounding client rectangle of the element.
+ * @param direction Layout direction of the drop list.
  * @param pointerX Position of the user's pointer along the x axis.
  * @param pointerY Position of the user's pointer along the y axis.
  */
-function getElementScrollDirections(element, clientRect, pointerX, pointerY) {
+function getElementScrollDirections(element, clientRect, direction, pointerX, pointerY) {
     const computedVertical = getVerticalScrollDirection(clientRect, pointerY);
     const computedHorizontal = getHorizontalScrollDirection(clientRect, pointerX);
     let verticalScrollDirection = 0 /* AutoScrollVerticalDirection.NONE */;
@@ -2366,13 +2367,26 @@ function getElementScrollDirections(element, clientRect, pointerX, pointerY) {
     }
     if (computedHorizontal) {
         const scrollLeft = element.scrollLeft;
-        if (computedHorizontal === 1 /* AutoScrollHorizontalDirection.LEFT */) {
-            if (scrollLeft > 0) {
+        if (direction === 'rtl') {
+            if (computedHorizontal === 2 /* AutoScrollHorizontalDirection.RIGHT */) {
+                // In RTL `scrollLeft` will be negative when scrolled.
+                if (scrollLeft < 0) {
+                    horizontalScrollDirection = 2 /* AutoScrollHorizontalDirection.RIGHT */;
+                }
+            }
+            else if (element.scrollWidth + scrollLeft > element.clientWidth) {
                 horizontalScrollDirection = 1 /* AutoScrollHorizontalDirection.LEFT */;
             }
         }
-        else if (element.scrollWidth - scrollLeft > element.clientWidth) {
-            horizontalScrollDirection = 2 /* AutoScrollHorizontalDirection.RIGHT */;
+        else {
+            if (computedHorizontal === 1 /* AutoScrollHorizontalDirection.LEFT */) {
+                if (scrollLeft > 0) {
+                    horizontalScrollDirection = 1 /* AutoScrollHorizontalDirection.LEFT */;
+                }
+            }
+            else if (element.scrollWidth - scrollLeft > element.clientWidth) {
+                horizontalScrollDirection = 2 /* AutoScrollHorizontalDirection.RIGHT */;
+            }
         }
     }
     return [verticalScrollDirection, horizontalScrollDirection];
