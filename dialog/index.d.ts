@@ -1,5 +1,6 @@
 import { BasePortalOutlet } from '@angular/cdk/portal';
 import { CdkPortalOutlet } from '@angular/cdk/portal';
+import { ChangeDetectorRef } from '@angular/core';
 import { ComponentFactoryResolver } from '@angular/core';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { ComponentRef } from '@angular/core';
@@ -69,7 +70,10 @@ export declare class CdkDialogContainer<C extends DialogConfig = DialogConfig> e
      * the rest are present.
      */
     _ariaLabelledByQueue: string[];
+    protected readonly _changeDetectorRef: ChangeDetectorRef;
     constructor(_elementRef: ElementRef, _focusTrapFactory: FocusTrapFactory, _document: any, _config: C, _interactivityChecker: InteractivityChecker, _ngZone: NgZone, _overlayRef: OverlayRef, _focusMonitor?: FocusMonitor | undefined);
+    _addAriaLabelledBy(id: string): void;
+    _removeAriaLabelledBy(id: string): void;
     protected _contentAttached(): void;
     /**
      * Can be used by child classes to customize the initial focus

@@ -6,7 +6,7 @@ import { Platform, _getFocusedElementPierceShadowDom } from '@angular/cdk/platfo
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, TemplatePortal, PortalModule } from '@angular/cdk/portal';
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { inject, Component, ViewEncapsulation, ChangeDetectionStrategy, Optional, Inject, ViewChild, InjectionToken, Injector, TemplateRef, Injectable, SkipSelf, NgModule } from '@angular/core';
+import { inject, ChangeDetectorRef, Component, ViewEncapsulation, ChangeDetectionStrategy, Optional, Inject, ViewChild, InjectionToken, Injector, TemplateRef, Injectable, SkipSelf, NgModule } from '@angular/core';
 import { ESCAPE, hasModifierKey } from '@angular/cdk/keycodes';
 import { Subject, defer, of } from 'rxjs';
 import { Directionality } from '@angular/cdk/bidi';
@@ -110,6 +110,7 @@ class CdkDialogContainer extends BasePortalOutlet {
          * the rest are present.
          */
         this._ariaLabelledByQueue = [];
+        this._changeDetectorRef = inject(ChangeDetectorRef);
         /**
          * Attaches a DOM portal to the dialog container.
          * @param portal Portal to be attached.
@@ -127,6 +128,17 @@ class CdkDialogContainer extends BasePortalOutlet {
         this._document = _document;
         if (this._config.ariaLabelledBy) {
             this._ariaLabelledByQueue.push(this._config.ariaLabelledBy);
+        }
+    }
+    _addAriaLabelledBy(id) {
+        this._ariaLabelledByQueue.push(id);
+        this._changeDetectorRef.markForCheck();
+    }
+    _removeAriaLabelledBy(id) {
+        const index = this._ariaLabelledByQueue.indexOf(id);
+        if (index > -1) {
+            this._ariaLabelledByQueue.splice(index, 1);
+            this._changeDetectorRef.markForCheck();
         }
     }
     _contentAttached() {
