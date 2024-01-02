@@ -19,10 +19,11 @@ const ID_DELIMITER = ' ';
  */
 function addAriaReferencedId(el, attr, id) {
     const ids = getAriaReferenceIds(el, attr);
-    if (ids.some(existingId => existingId.trim() == id.trim())) {
+    id = id.trim();
+    if (ids.some(existingId => existingId.trim() === id)) {
         return;
     }
-    ids.push(id.trim());
+    ids.push(id);
     el.setAttribute(attr, ids.join(ID_DELIMITER));
 }
 /**
@@ -31,7 +32,8 @@ function addAriaReferencedId(el, attr, id) {
  */
 function removeAriaReferencedId(el, attr, id) {
     const ids = getAriaReferenceIds(el, attr);
-    const filteredIds = ids.filter(val => val != id.trim());
+    id = id.trim();
+    const filteredIds = ids.filter(val => val !== id);
     if (filteredIds.length) {
         el.setAttribute(attr, filteredIds.join(ID_DELIMITER));
     }
@@ -45,7 +47,8 @@ function removeAriaReferencedId(el, attr, id) {
  */
 function getAriaReferenceIds(el, attr) {
     // Get string array of all individual ids (whitespace delimited) in the attribute value
-    return (el.getAttribute(attr) || '').match(/\S+/g) || [];
+    const attrValue = el.getAttribute(attr);
+    return attrValue?.match(/\S+/g) ?? [];
 }
 
 /**
