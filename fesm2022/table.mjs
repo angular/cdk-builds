@@ -231,9 +231,8 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.1.0-next.5", 
 class CdkFooterCell extends BaseCdkCell {
     constructor(columnDef, elementRef) {
         super(columnDef, elementRef);
-        if (columnDef._table?._elementRef.nativeElement.nodeType === 1) {
-            const tableRole = columnDef._table._elementRef.nativeElement.getAttribute('role');
-            const role = tableRole === 'grid' || tableRole === 'treegrid' ? 'gridcell' : 'cell';
+        const role = columnDef._table?._cellRole;
+        if (role) {
             elementRef.nativeElement.setAttribute('role', role);
         }
     }
@@ -254,9 +253,8 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.1.0-next.5", 
 class CdkCell extends BaseCdkCell {
     constructor(columnDef, elementRef) {
         super(columnDef, elementRef);
-        if (columnDef._table?._elementRef.nativeElement.nodeType === 1) {
-            const tableRole = columnDef._table._elementRef.nativeElement.getAttribute('role');
-            const role = tableRole === 'grid' || tableRole === 'treegrid' ? 'gridcell' : 'cell';
+        const role = columnDef._table?._cellRole;
+        if (role) {
             elementRef.nativeElement.setAttribute('role', role);
         }
     }
@@ -1175,6 +1173,16 @@ class RowViewRef extends EmbeddedViewRef {
  * connect function that will return an Observable stream that emits the data array to render.
  */
 class CdkTable {
+    /** Aria role to apply to the table's cells based on the table's own role. */
+    get _cellRole() {
+        if (this._cellRoleInternal === undefined) {
+            // Perform this lazily in case the table's role was updated by a directive after construction.
+            const role = this._elementRef.nativeElement.getAttribute('role');
+            const cellRole = role === 'grid' || role === 'treegrid' ? 'gridcell' : 'cell';
+            this._cellRoleInternal = this._isNativeHtmlTable && cellRole === 'cell' ? null : cellRole;
+        }
+        return this._cellRoleInternal;
+    }
     /**
      * Tracking function that will be used to check the differences in data changes. Used similarly
      * to `ngFor` `trackBy` function. Optimize row operations by identifying a row based on its data
@@ -1352,6 +1360,7 @@ class CdkTable {
         this._isShowingNoDataRow = false;
         /** Whether the table has rendered out all the outlets for the first time. */
         this._hasRendered = false;
+        this._cellRoleInternal = undefined;
         this._multiTemplateDataRows = false;
         this._fixedLayout = false;
         /**
