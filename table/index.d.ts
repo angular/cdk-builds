@@ -94,7 +94,7 @@ export declare const CDK_TABLE: InjectionToken<any>;
  * material library.
  * @docs-private
  */
-export declare const CDK_TABLE_TEMPLATE = "\n  <ng-content select=\"caption\"></ng-content>\n  <ng-content select=\"colgroup, col\"></ng-content>\n  <ng-container headerRowOutlet></ng-container>\n  <ng-container rowOutlet></ng-container>\n  <ng-container noDataRowOutlet></ng-container>\n  <ng-container footerRowOutlet></ng-container>\n";
+export declare const CDK_TABLE_TEMPLATE = "\n  <ng-content select=\"caption\"/>\n  <ng-content select=\"colgroup, col\"/>\n\n  <!--\n    Unprojected content throws a hydration error so we need this to capture it.\n    It gets removed on the client so it doesn't affect the layout.\n  -->\n  @if (_isServer) {\n    <ng-content/>\n  }\n\n  @if (_isNativeHtmlTable) {\n    <thead role=\"rowgroup\">\n      <ng-container headerRowOutlet/>\n    </thead>\n    <tbody role=\"rowgroup\">\n      <ng-container rowOutlet/>\n      <ng-container noDataRowOutlet/>\n    </tbody>\n    <tfoot role=\"rowgroup\">\n      <ng-container footerRowOutlet/>\n    </tfoot>\n  } @else {\n    <ng-container headerRowOutlet/>\n    <ng-container rowOutlet/>\n    <ng-container noDataRowOutlet/>\n    <ng-container footerRowOutlet/>\n  }\n";
 
 /** Cell template container that adds the right classes and role. */
 export declare class CdkCell extends BaseCdkCell {
@@ -509,8 +509,12 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * overridden by table subclasses
      */
     protected needsPositionStickyOnElement: boolean;
+    /** Whether the component is being rendered on the server. */
+    protected _isServer: boolean;
     /** Whether the no data row is currently showing anything. */
     private _isShowingNoDataRow;
+    /** Whether the table has rendered out all the outlets for the first time. */
+    private _hasRendered;
     /**
      * Tracking function that will be used to check the differences in data changes. Used similarly
      * to `ngFor` `trackBy` function. Optimize row operations by identifying a row based on its data
@@ -658,6 +662,10 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * input. May be called manually for cases where the cell content changes outside of these events.
      */
     updateStickyColumnStyles(): void;
+    /** Invoked whenever an outlet is created and has been assigned to the table. */
+    _outletAssigned(): void;
+    /** Renders the table if its state has changed. */
+    private _render;
     /**
      * Get the list of RenderRow objects to render according to the current list of data and defined
      * row definitions. If the previous list already contained a particular pair, it should be reused
@@ -724,8 +732,6 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     private _updateRowIndexContext;
     /** Gets the column definitions for the provided row def. */
     private _getCellTemplates;
-    /** Adds native table sections (e.g. tbody) and moves the row outlets into them. */
-    private _applyNativeTableSections;
     /**
      * Forces a re-render of the data rows. Should be called in cases where there has been an input
      * change that affects the evaluation of which rows should be rendered, e.g. toggling
@@ -749,7 +755,7 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     /** Creates or removes the no data row, depending on whether any data is being shown. */
     private _updateNoDataRow;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTable<any>, [null, null, null, { attribute: "role"; }, { optional: true; }, null, null, null, null, null, { optional: true; skipSelf: true; }, { optional: true; }]>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<CdkTable<any>, "cdk-table, table[cdk-table]", ["cdkTable"], { "trackBy": { "alias": "trackBy"; "required": false; }; "dataSource": { "alias": "dataSource"; "required": false; }; "multiTemplateDataRows": { "alias": "multiTemplateDataRows"; "required": false; }; "fixedLayout": { "alias": "fixedLayout"; "required": false; }; }, { "contentChanged": "contentChanged"; }, ["_noDataRow", "_contentColumnDefs", "_contentRowDefs", "_contentHeaderRowDefs", "_contentFooterRowDefs"], ["caption", "colgroup, col"], true, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<CdkTable<any>, "cdk-table, table[cdk-table]", ["cdkTable"], { "trackBy": { "alias": "trackBy"; "required": false; }; "dataSource": { "alias": "dataSource"; "required": false; }; "multiTemplateDataRows": { "alias": "multiTemplateDataRows"; "required": false; }; "fixedLayout": { "alias": "fixedLayout"; "required": false; }; }, { "contentChanged": "contentChanged"; }, ["_noDataRow", "_contentColumnDefs", "_contentRowDefs", "_contentHeaderRowDefs", "_contentFooterRowDefs"], ["caption", "colgroup, col", "*"], true, never>;
     static ngAcceptInputType_multiTemplateDataRows: unknown;
     static ngAcceptInputType_fixedLayout: unknown;
 }
