@@ -231,7 +231,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.1.0-next.5", 
 class CdkFooterCell extends BaseCdkCell {
     constructor(columnDef, elementRef) {
         super(columnDef, elementRef);
-        const role = columnDef._table?._cellRole;
+        const role = columnDef._table?._getCellRole();
         if (role) {
             elementRef.nativeElement.setAttribute('role', role);
         }
@@ -253,7 +253,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.1.0-next.5", 
 class CdkCell extends BaseCdkCell {
     constructor(columnDef, elementRef) {
         super(columnDef, elementRef);
-        const role = columnDef._table?._cellRole;
+        const role = columnDef._table?._getCellRole();
         if (role) {
             elementRef.nativeElement.setAttribute('role', role);
         }
@@ -1174,7 +1174,7 @@ class RowViewRef extends EmbeddedViewRef {
  */
 class CdkTable {
     /** Aria role to apply to the table's cells based on the table's own role. */
-    get _cellRole() {
+    _getCellRole() {
         if (this._cellRoleInternal === undefined) {
             // Perform this lazily in case the table's role was updated by a directive after construction.
             const role = this._elementRef.nativeElement.getAttribute('role');

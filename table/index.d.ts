@@ -516,7 +516,7 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     /** Whether the table has rendered out all the outlets for the first time. */
     private _hasRendered;
     /** Aria role to apply to the table's cells based on the table's own role. */
-    get _cellRole(): string | null;
+    _getCellRole(): string | null;
     private _cellRoleInternal;
     /**
      * Tracking function that will be used to check the differences in data changes. Used similarly
