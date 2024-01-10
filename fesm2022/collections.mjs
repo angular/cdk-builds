@@ -258,7 +258,7 @@ class SelectionModel {
         const newSelectedSet = new Set(values);
         values.forEach(value => this._markSelected(value));
         oldValues
-            .filter(value => !newSelectedSet.has(value))
+            .filter(value => !newSelectedSet.has(this._getConcreteValue(value, newSelectedSet)))
             .forEach(value => this._unmarkSelected(value));
         const changed = this._hasQueuedChanges();
         this._emitChangeEvent();
@@ -379,12 +379,13 @@ class SelectionModel {
         return !!(this._deselectedToEmit.length || this._selectedToEmit.length);
     }
     /** Returns a value that is comparable to inputValue by applying compareWith function, returns the same inputValue otherwise. */
-    _getConcreteValue(inputValue) {
+    _getConcreteValue(inputValue, selection) {
         if (!this.compareWith) {
             return inputValue;
         }
         else {
-            for (let selectedValue of this._selection) {
+            selection = selection ?? this._selection;
+            for (let selectedValue of selection) {
                 if (this.compareWith(inputValue, selectedValue)) {
                     return selectedValue;
                 }
