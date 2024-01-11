@@ -95,7 +95,7 @@ function createMouseEvent(type, clientX = 0, clientY = 0, offsetX = 0, offsetY =
     const event = new MouseEvent(type, {
         bubbles: true,
         cancelable: true,
-        composed: true, // Required for shadow DOM events.
+        composed: true,
         view: window,
         detail: 1,
         relatedTarget: null,
@@ -134,7 +134,7 @@ function createPointerEvent(type, clientX = 0, clientY = 0, offsetX, offsetY, op
     const event = new PointerEvent(type, {
         bubbles: true,
         cancelable: true,
-        composed: true, // Required for shadow DOM events.
+        composed: true,
         view: window,
         clientX,
         clientY,
@@ -174,7 +174,7 @@ function createKeyboardEvent(type, keyCode = 0, key = '', modifiers = {}) {
     return new KeyboardEvent(type, {
         bubbles: true,
         cancelable: true,
-        composed: true, // Required for shadow DOM events.
+        composed: true,
         view: window,
         keyCode: keyCode,
         key: key,

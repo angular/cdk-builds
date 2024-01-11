@@ -53,7 +53,7 @@ export declare abstract class BasePortalOutlet implements PortalOutlet {
 export declare class CdkPortal extends TemplatePortal {
     constructor(templateRef: TemplateRef<any>, viewContainerRef: ViewContainerRef);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkPortal, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkPortal, "[cdkPortal]", ["cdkPortal"], {}, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkPortal, "[cdkPortal]", ["cdkPortal"], {}, {}, never, never, false, never>;
 }
 
 /**
@@ -109,7 +109,7 @@ export declare class CdkPortalOutlet extends BasePortalOutlet implements OnInit,
     /** Gets the root node of the portal outlet. */
     private _getRootNode;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkPortalOutlet, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkPortalOutlet, "[cdkPortalOutlet]", ["cdkPortalOutlet"], { "portal": { "alias": "cdkPortalOutlet"; "required": false; }; }, { "attached": "attached"; }, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkPortalOutlet, "[cdkPortalOutlet]", ["cdkPortalOutlet"], { "portal": { "alias": "cdkPortalOutlet"; "required": false; }; }, { "attached": "attached"; }, never, never, false, never>;
 }
 
 /**
@@ -254,7 +254,7 @@ export declare type PortalHost = PortalOutlet;
  */
 export declare class PortalHostDirective extends CdkPortalOutlet {
     static ɵfac: i0.ɵɵFactoryDeclaration<PortalHostDirective, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<PortalHostDirective, "[cdkPortalHost], [portalHost]", ["cdkPortalHost"], { "portal": { "alias": "cdkPortalHost"; "required": false; }; }, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<PortalHostDirective, "[cdkPortalHost], [portalHost]", ["cdkPortalHost"], { "portal": { "alias": "cdkPortalHost"; "required": false; }; }, {}, never, never, false, never>;
 }
 
 /**
@@ -273,7 +273,7 @@ export declare class PortalInjector implements Injector {
 
 export declare class PortalModule {
     static ɵfac: i0.ɵɵFactoryDeclaration<PortalModule, never>;
-    static ɵmod: i0.ɵɵNgModuleDeclaration<PortalModule, never, [typeof CdkPortal, typeof CdkPortalOutlet, typeof TemplatePortalDirective, typeof PortalHostDirective], [typeof CdkPortal, typeof CdkPortalOutlet, typeof TemplatePortalDirective, typeof PortalHostDirective]>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<PortalModule, [typeof CdkPortal, typeof CdkPortalOutlet, typeof TemplatePortalDirective, typeof PortalHostDirective], never, [typeof CdkPortal, typeof CdkPortalOutlet, typeof TemplatePortalDirective, typeof PortalHostDirective]>;
     static ɵinj: i0.ɵɵInjectorDeclaration<PortalModule>;
 }
 
@@ -326,7 +326,7 @@ export declare class TemplatePortal<C = any> extends Portal<EmbeddedViewRef<C>> 
  */
 export declare class TemplatePortalDirective extends CdkPortal {
     static ɵfac: i0.ɵɵFactoryDeclaration<TemplatePortalDirective, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<TemplatePortalDirective, "[cdk-portal], [portal]", ["cdkPortal"], {}, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<TemplatePortalDirective, "[cdk-portal], [portal]", ["cdkPortal"], {}, {}, never, never, false, never>;
 }
 
 export { }
