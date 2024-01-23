@@ -853,27 +853,7 @@ export declare class _CoalescedStyleScheduler implements OnDestroy {
     private readonly _ngZone;
     private _currentSchedule;
     private readonly _destroyed;
-    private readonly _earlyReadTasks;
-    private readonly _writeTasks;
-    private readonly _readTasks;
     constructor(_ngZone: NgZone);
-    /**
-     * Like afterNextRender(fn, AfterRenderPhase.EarlyRead), but can be called
-     * outside of injection context. Runs after current/next CD.
-     */
-    scheduleEarlyRead(task: () => unknown): void;
-    /**
-     * Like afterNextRender(fn, AfterRenderPhase.Write), but can be called
-     * outside of injection context. Runs after current/next CD.
-     */
-    scheduleWrite(task: () => unknown): void;
-    /**
-     * Like afterNextRender(fn, AfterRenderPhase.Read), but can be called
-     * outside of injection context. Runs after current/next CD.
-     */
-    scheduleRead(task: () => unknown): void;
-    /** Greedily triggers pending EarlyRead, Write, and Read tasks, in that order. */
-    flushAfterRender(): void;
     /**
      * Schedules the specified task to run at the end of the current VM turn.
      */
