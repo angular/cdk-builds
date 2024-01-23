@@ -6,7 +6,7 @@ import * as i3 from '@angular/cdk/scrolling';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { InjectionToken, Directive, booleanAttribute, Inject, Optional, Input, ContentChild, afterRender, AfterRenderPhase, Injectable, Component, ChangeDetectionStrategy, ViewEncapsulation, inject, EmbeddedViewRef, EventEmitter, NgZone, Attribute, SkipSelf, Output, ContentChildren, ViewChild, NgModule } from '@angular/core';
+import { InjectionToken, Directive, booleanAttribute, Inject, Optional, Input, ContentChild, Injectable, Component, ChangeDetectionStrategy, ViewEncapsulation, inject, EmbeddedViewRef, EventEmitter, NgZone, Attribute, SkipSelf, Output, ContentChildren, ViewChild, NgModule } from '@angular/core';
 import { Subject, from, BehaviorSubject, isObservable, of } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
@@ -295,39 +295,6 @@ class _CoalescedStyleScheduler {
         this._ngZone = _ngZone;
         this._currentSchedule = null;
         this._destroyed = new Subject();
-        this._earlyReadTasks = [];
-        this._writeTasks = [];
-        this._readTasks = [];
-        afterRender(() => flushTasks(this._earlyReadTasks), { phase: AfterRenderPhase.EarlyRead });
-        afterRender(() => flushTasks(this._writeTasks), { phase: AfterRenderPhase.Write });
-        afterRender(() => flushTasks(this._readTasks), { phase: AfterRenderPhase.Read });
-    }
-    /**
-     * Like afterNextRender(fn, AfterRenderPhase.EarlyRead), but can be called
-     * outside of injection context. Runs after current/next CD.
-     */
-    scheduleEarlyRead(task) {
-        this._earlyReadTasks.push(task);
-    }
-    /**
-     * Like afterNextRender(fn, AfterRenderPhase.Write), but can be called
-     * outside of injection context. Runs after current/next CD.
-     */
-    scheduleWrite(task) {
-        this._writeTasks.push(task);
-    }
-    /**
-     * Like afterNextRender(fn, AfterRenderPhase.Read), but can be called
-     * outside of injection context. Runs after current/next CD.
-     */
-    scheduleRead(task) {
-        this._readTasks.push(task);
-    }
-    /** Greedily triggers pending EarlyRead, Write, and Read tasks, in that order. */
-    flushAfterRender() {
-        flushTasks(this._earlyReadTasks);
-        flushTasks(this._writeTasks);
-        flushTasks(this._readTasks);
     }
     /**
      * Schedules the specified task to run at the end of the current VM turn.
@@ -384,16 +351,6 @@ class _CoalescedStyleScheduler {
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.1.0-rc.0", ngImport: i0, type: _CoalescedStyleScheduler, decorators: [{
             type: Injectable
         }], ctorParameters: () => [{ type: i0.NgZone }] });
-/**
- * Runs and removes tasks from the passed array in order.
- * Tasks appended mid-flight will also be flushed.
- */
-function flushTasks(tasks) {
-    let task;
-    while ((task = tasks.shift())) {
-        task();
-    }
-}
 
 /**
  * The row template that can be used by the mat-table. Should not be used outside of the
@@ -718,9 +675,12 @@ class StickyStyler {
                 elementsToClear.push(row.children[i]);
             }
         }
-        for (const element of elementsToClear) {
-            this._removeStickyStyle(element, stickyDirections);
-        }
+        // Coalesce with sticky row/column updates (and potentially other changes like column resize).
+        this._coalescedStyleScheduler.schedule(() => {
+            for (const element of elementsToClear) {
+                this._removeStickyStyle(element, stickyDirections);
+            }
+        });
     }
     /**
      * Applies sticky left and right positions to the cells of each row according to the sticky
@@ -738,54 +698,51 @@ class StickyStyler {
             !this._isBrowser ||
             !(stickyStartStates.some(state => state) || stickyEndStates.some(state => state))) {
             if (this._positionListener) {
-                this._coalescedStyleScheduler.scheduleWrite(() => {
-                    this._positionListener.stickyColumnsUpdated({ sizes: [] });
-                    this._positionListener.stickyEndColumnsUpdated({ sizes: [] });
-                });
+                this._positionListener.stickyColumnsUpdated({ sizes: [] });
+                this._positionListener.stickyEndColumnsUpdated({ sizes: [] });
             }
             return;
         }
-        this._coalescedStyleScheduler.scheduleEarlyRead(() => {
+        // Coalesce with sticky row updates (and potentially other changes like column resize).
+        this._coalescedStyleScheduler.schedule(() => {
             const firstRow = rows[0];
             const numCells = firstRow.children.length;
-            const lastStickyStart = stickyStartStates.lastIndexOf(true);
-            const firstStickyEnd = stickyEndStates.indexOf(true);
             const cellWidths = this._getCellWidths(firstRow, recalculateCellWidths);
             const startPositions = this._getStickyStartColumnPositions(cellWidths, stickyStartStates);
             const endPositions = this._getStickyEndColumnPositions(cellWidths, stickyEndStates);
-            this._coalescedStyleScheduler.scheduleWrite(() => {
-                const isRtl = this.direction === 'rtl';
-                const start = isRtl ? 'right' : 'left';
-                const end = isRtl ? 'left' : 'right';
-                for (const row of rows) {
-                    for (let i = 0; i < numCells; i++) {
-                        const cell = row.children[i];
-                        if (stickyStartStates[i]) {
-                            this._addStickyStyle(cell, start, startPositions[i], i === lastStickyStart);
-                        }
-                        if (stickyEndStates[i]) {
-                            this._addStickyStyle(cell, end, endPositions[i], i === firstStickyEnd);
-                        }
+            const lastStickyStart = stickyStartStates.lastIndexOf(true);
+            const firstStickyEnd = stickyEndStates.indexOf(true);
+            const isRtl = this.direction === 'rtl';
+            const start = isRtl ? 'right' : 'left';
+            const end = isRtl ? 'left' : 'right';
+            for (const row of rows) {
+                for (let i = 0; i < numCells; i++) {
+                    const cell = row.children[i];
+                    if (stickyStartStates[i]) {
+                        this._addStickyStyle(cell, start, startPositions[i], i === lastStickyStart);
+                    }
+                    if (stickyEndStates[i]) {
+                        this._addStickyStyle(cell, end, endPositions[i], i === firstStickyEnd);
                     }
                 }
-                if (this._positionListener) {
-                    this._positionListener.stickyColumnsUpdated({
-                        sizes: lastStickyStart === -1
-                            ? []
-                            : cellWidths
-                                .slice(0, lastStickyStart + 1)
-                                .map((width, index) => (stickyStartStates[index] ? width : null)),
-                    });
-                    this._positionListener.stickyEndColumnsUpdated({
-                        sizes: firstStickyEnd === -1
-                            ? []
-                            : cellWidths
-                                .slice(firstStickyEnd)
-                                .map((width, index) => (stickyEndStates[index + firstStickyEnd] ? width : null))
-                                .reverse(),
-                    });
-                }
-            });
+            }
+            if (this._positionListener) {
+                this._positionListener.stickyColumnsUpdated({
+                    sizes: lastStickyStart === -1
+                        ? []
+                        : cellWidths
+                            .slice(0, lastStickyStart + 1)
+                            .map((width, index) => (stickyStartStates[index] ? width : null)),
+                });
+                this._positionListener.stickyEndColumnsUpdated({
+                    sizes: firstStickyEnd === -1
+                        ? []
+                        : cellWidths
+                            .slice(firstStickyEnd)
+                            .map((width, index) => (stickyEndStates[index + firstStickyEnd] ? width : null))
+                            .reverse(),
+                });
+            }
         });
     }
     /**
@@ -804,7 +761,9 @@ class StickyStyler {
         if (!this._isBrowser) {
             return;
         }
-        this._coalescedStyleScheduler.scheduleEarlyRead(() => {
+        // Coalesce with other sticky row updates (top/bottom), sticky columns updates
+        // (and potentially other changes like column resize).
+        this._coalescedStyleScheduler.schedule(() => {
             // If positioning the rows to the bottom, reverse their order when evaluating the sticky
             // position such that the last row stuck will be "bottom: 0px" and so on. Note that the
             // sticky states need to be reversed as well.
@@ -828,32 +787,30 @@ class StickyStyler {
                 stickyCellHeights[rowIndex] = height;
             }
             const borderedRowIndex = states.lastIndexOf(true);
-            this._coalescedStyleScheduler.scheduleWrite(() => {
-                for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
-                    if (!states[rowIndex]) {
-                        continue;
-                    }
-                    const offset = stickyOffsets[rowIndex];
-                    const isBorderedRowIndex = rowIndex === borderedRowIndex;
-                    for (const element of elementsToStick[rowIndex]) {
-                        this._addStickyStyle(element, position, offset, isBorderedRowIndex);
-                    }
+            for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+                if (!states[rowIndex]) {
+                    continue;
                 }
-                if (position === 'top') {
-                    this._positionListener?.stickyHeaderRowsUpdated({
-                        sizes: stickyCellHeights,
-                        offsets: stickyOffsets,
-                        elements: elementsToStick,
-                    });
+                const offset = stickyOffsets[rowIndex];
+                const isBorderedRowIndex = rowIndex === borderedRowIndex;
+                for (const element of elementsToStick[rowIndex]) {
+                    this._addStickyStyle(element, position, offset, isBorderedRowIndex);
                 }
-                else {
-                    this._positionListener?.stickyFooterRowsUpdated({
-                        sizes: stickyCellHeights,
-                        offsets: stickyOffsets,
-                        elements: elementsToStick,
-                    });
-                }
-            });
+            }
+            if (position === 'top') {
+                this._positionListener?.stickyHeaderRowsUpdated({
+                    sizes: stickyCellHeights,
+                    offsets: stickyOffsets,
+                    elements: elementsToStick,
+                });
+            }
+            else {
+                this._positionListener?.stickyFooterRowsUpdated({
+                    sizes: stickyCellHeights,
+                    offsets: stickyOffsets,
+                    elements: elementsToStick,
+                });
+            }
         });
     }
     /**
@@ -867,7 +824,7 @@ class StickyStyler {
             return;
         }
         // Coalesce with other sticky updates (and potentially other changes like column resize).
-        this._coalescedStyleScheduler.scheduleWrite(() => {
+        this._coalescedStyleScheduler.schedule(() => {
             const tfoot = tableElement.querySelector('tfoot');
             if (stickyStates.some(state => !state)) {
                 this._removeStickyStyle(tfoot, ['bottom']);
@@ -1512,12 +1469,10 @@ class CdkTable {
         if (this._ngZone && NgZone.isInAngularZone()) {
             this._ngZone.onStable.pipe(take(1), takeUntil(this._onDestroy)).subscribe(() => {
                 this.updateStickyColumnStyles();
-                this._coalescedStyleScheduler.flushAfterRender();
             });
         }
         else {
             this.updateStickyColumnStyles();
-            this._coalescedStyleScheduler.flushAfterRender();
         }
         this.contentChanged.next();
     }
