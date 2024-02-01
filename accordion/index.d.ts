@@ -1,3 +1,4 @@
+import { BooleanInput } from '@angular/cdk/coercion';
 import { ChangeDetectorRef } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import * as i0 from '@angular/core';
@@ -26,7 +27,9 @@ export declare class CdkAccordion implements OnDestroy, OnChanges {
     /** A readonly id value to use for unique selection coordination. */
     readonly id: string;
     /** Whether the accordion should allow multiple expanded accordion items simultaneously. */
-    multi: boolean;
+    get multi(): boolean;
+    set multi(multi: BooleanInput);
+    private _multi;
     /** Opens all enabled accordion items in an accordion where multi is enabled. */
     openAll(): void;
     /** Closes all enabled accordion items. */
@@ -34,8 +37,7 @@ export declare class CdkAccordion implements OnDestroy, OnChanges {
     ngOnChanges(changes: SimpleChanges): void;
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkAccordion, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkAccordion, "cdk-accordion, [cdkAccordion]", ["cdkAccordion"], { "multi": { "alias": "multi"; "required": false; }; }, {}, never, never, true, never>;
-    static ngAcceptInputType_multi: unknown;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkAccordion, "cdk-accordion, [cdkAccordion]", ["cdkAccordion"], { "multi": { "alias": "multi"; "required": false; }; }, {}, never, never, false, never>;
 }
 
 /**
@@ -64,10 +66,12 @@ export declare class CdkAccordionItem implements OnDestroy {
     readonly id: string;
     /** Whether the AccordionItem is expanded. */
     get expanded(): boolean;
-    set expanded(expanded: boolean);
+    set expanded(expanded: BooleanInput);
     private _expanded;
     /** Whether the AccordionItem is disabled. */
-    disabled: boolean;
+    get disabled(): boolean;
+    set disabled(disabled: BooleanInput);
+    private _disabled;
     /** Unregister function for _expansionDispatcher. */
     private _removeUniqueSelectionListener;
     constructor(accordion: CdkAccordion, _changeDetectorRef: ChangeDetectorRef, _expansionDispatcher: UniqueSelectionDispatcher);
@@ -81,14 +85,12 @@ export declare class CdkAccordionItem implements OnDestroy {
     open(): void;
     private _subscribeToOpenCloseAllActions;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkAccordionItem, [{ optional: true; skipSelf: true; }, null, null]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkAccordionItem, "cdk-accordion-item, [cdkAccordionItem]", ["cdkAccordionItem"], { "expanded": { "alias": "expanded"; "required": false; }; "disabled": { "alias": "disabled"; "required": false; }; }, { "closed": "closed"; "opened": "opened"; "destroyed": "destroyed"; "expandedChange": "expandedChange"; }, never, never, true, never>;
-    static ngAcceptInputType_expanded: unknown;
-    static ngAcceptInputType_disabled: unknown;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkAccordionItem, "cdk-accordion-item, [cdkAccordionItem]", ["cdkAccordionItem"], { "expanded": { "alias": "expanded"; "required": false; }; "disabled": { "alias": "disabled"; "required": false; }; }, { "closed": "closed"; "opened": "opened"; "destroyed": "destroyed"; "expandedChange": "expandedChange"; }, never, never, false, never>;
 }
 
 export declare class CdkAccordionModule {
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkAccordionModule, never>;
-    static ɵmod: i0.ɵɵNgModuleDeclaration<CdkAccordionModule, never, [typeof i1.CdkAccordion, typeof i2.CdkAccordionItem], [typeof i1.CdkAccordion, typeof i2.CdkAccordionItem]>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<CdkAccordionModule, [typeof i1.CdkAccordion, typeof i2.CdkAccordionItem], never, [typeof i1.CdkAccordion, typeof i2.CdkAccordionItem]>;
     static ɵinj: i0.ɵɵInjectorDeclaration<CdkAccordionModule>;
 }
 
