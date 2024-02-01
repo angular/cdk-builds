@@ -37,7 +37,7 @@ export declare class CdkCopyToClipboard implements OnDestroy {
     copy(attempts?: number): void;
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkCopyToClipboard, [null, null, { optional: true; }]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkCopyToClipboard, "[cdkCopyToClipboard]", never, { "text": { "alias": "cdkCopyToClipboard"; "required": false; }; "attempts": { "alias": "cdkCopyToClipboardAttempts"; "required": false; }; }, { "copied": "cdkCopyToClipboardCopied"; }, never, never, false, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkCopyToClipboard, "[cdkCopyToClipboard]", never, { "text": { "alias": "cdkCopyToClipboard"; "required": false; }; "attempts": { "alias": "cdkCopyToClipboardAttempts"; "required": false; }; }, { "copied": "cdkCopyToClipboardCopied"; }, never, never, true, never>;
 }
 
 /** Object that can be used to configure the default options for `CdkCopyToClipboard`. */
@@ -76,7 +76,7 @@ export { Clipboard_2 as Clipboard }
 
 export declare class ClipboardModule {
     static ɵfac: i0.ɵɵFactoryDeclaration<ClipboardModule, never>;
-    static ɵmod: i0.ɵɵNgModuleDeclaration<ClipboardModule, [typeof i1.CdkCopyToClipboard], never, [typeof i1.CdkCopyToClipboard]>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<ClipboardModule, never, [typeof i1.CdkCopyToClipboard], [typeof i1.CdkCopyToClipboard]>;
     static ɵinj: i0.ɵɵInjectorDeclaration<ClipboardModule>;
 }
 

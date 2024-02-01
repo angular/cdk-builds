@@ -1,4 +1,3 @@
-import { BooleanInput } from '@angular/cdk/coercion';
 import { ChangeDetectorRef } from '@angular/core';
 import { CollectionViewer } from '@angular/cdk/collections';
 import { DataSource } from '@angular/cdk/collections';
@@ -221,7 +220,7 @@ export declare abstract class CdkVirtualScrollable extends CdkScrollable {
      */
     measureViewportSize(orientation: 'horizontal' | 'vertical'): number;
     /**
-     * Measure the bounding ClientRect size including the scroll offset.
+     * Measure the bounding DOMRect size including the scroll offset.
      *
      * @param from The edge to measure from.
      */
@@ -278,9 +277,7 @@ export declare class CdkVirtualScrollViewport extends CdkVirtualScrollable imple
      * Whether rendered items should persist in the DOM after scrolling out of view. By default, items
      * will be removed.
      */
-    get appendOnly(): boolean;
-    set appendOnly(value: BooleanInput);
-    private _appendOnly;
+    appendOnly: boolean;
     /** Emits when the index of the first element visible in the viewport changes. */
     readonly scrolledIndexChange: Observable<number>;
     /** The element that wraps the rendered content. */
@@ -395,6 +392,7 @@ export declare class CdkVirtualScrollViewport extends CdkVirtualScrollable imple
     private _calculateSpacerSize;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkVirtualScrollViewport, [null, null, null, { optional: true; }, { optional: true; }, null, null, { optional: true; }]>;
     static ɵcmp: i0.ɵɵComponentDeclaration<CdkVirtualScrollViewport, "cdk-virtual-scroll-viewport", never, { "orientation": { "alias": "orientation"; "required": false; }; "appendOnly": { "alias": "appendOnly"; "required": false; }; }, { "scrolledIndexChange": "scrolledIndexChange"; }, never, ["*"], true, never>;
+    static ngAcceptInputType_appendOnly: unknown;
 }
 
 /** Time in ms to throttle the resize events by default. */
@@ -637,7 +635,7 @@ export declare class ViewportRuler implements OnDestroy {
         width: number;
         height: number;
     }>;
-    /** Gets a ClientRect for the viewport's bounds. */
+    /** Gets a DOMRect for the viewport's bounds. */
     getViewportRect(): {
         top: number;
         left: number;

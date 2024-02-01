@@ -1,5 +1,6 @@
 import { BasePortalOutlet } from '@angular/cdk/portal';
 import { CdkPortalOutlet } from '@angular/cdk/portal';
+import { ChangeDetectorRef } from '@angular/core';
 import { ComponentFactoryResolver } from '@angular/core';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { ComponentRef } from '@angular/core';
@@ -12,9 +13,9 @@ import { FocusMonitor } from '@angular/cdk/a11y';
 import { FocusOrigin } from '@angular/cdk/a11y';
 import { FocusTrapFactory } from '@angular/cdk/a11y';
 import * as i0 from '@angular/core';
-import * as i2 from '@angular/cdk/overlay';
-import * as i3 from '@angular/cdk/portal';
-import * as i4 from '@angular/cdk/a11y';
+import * as i1 from '@angular/cdk/overlay';
+import * as i2 from '@angular/cdk/portal';
+import * as i3 from '@angular/cdk/a11y';
 import { InjectionToken } from '@angular/core';
 import { Injector } from '@angular/core';
 import { InteractivityChecker } from '@angular/cdk/a11y';
@@ -48,6 +49,7 @@ export declare class CdkDialogContainer<C extends DialogConfig = DialogConfig> e
     protected _ngZone: NgZone;
     private _overlayRef;
     private _focusMonitor?;
+    private _platform;
     protected _document: Document;
     /** The portal outlet inside of this container into which the dialog content will be loaded. */
     _portalOutlet: CdkPortalOutlet;
@@ -68,7 +70,10 @@ export declare class CdkDialogContainer<C extends DialogConfig = DialogConfig> e
      * the rest are present.
      */
     _ariaLabelledByQueue: string[];
+    protected readonly _changeDetectorRef: ChangeDetectorRef;
     constructor(_elementRef: ElementRef, _focusTrapFactory: FocusTrapFactory, _document: any, _config: C, _interactivityChecker: InteractivityChecker, _ngZone: NgZone, _overlayRef: OverlayRef, _focusMonitor?: FocusMonitor | undefined);
+    _addAriaLabelledBy(id: string): void;
+    _removeAriaLabelledBy(id: string): void;
     protected _contentAttached(): void;
     /**
      * Can be used by child classes to customize the initial focus
@@ -122,7 +127,7 @@ export declare class CdkDialogContainer<C extends DialogConfig = DialogConfig> e
     /** Sets up the listener that handles clicks on the dialog backdrop. */
     private _handleBackdropClicks;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkDialogContainer<any>, [null, null, { optional: true; }, null, null, null, null, null]>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<CdkDialogContainer<any>, "cdk-dialog-container", never, {}, {}, never, never, false, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<CdkDialogContainer<any>, "cdk-dialog-container", never, {}, {}, never, never, true, never>;
 }
 
 /** Injection token that can be used to provide default options for the dialog module. */
@@ -226,14 +231,22 @@ export declare const DIALOG_DATA: InjectionToken<any>;
 /** Injection token for the Dialog's ScrollStrategy. */
 export declare const DIALOG_SCROLL_STRATEGY: InjectionToken<() => ScrollStrategy>;
 
-/** @docs-private */
+/**
+ * @docs-private
+ * @deprecated No longer used. To be removed.
+ * @breaking-change 19.0.0
+ */
 export declare const DIALOG_SCROLL_STRATEGY_PROVIDER: {
     provide: InjectionToken<() => ScrollStrategy>;
     deps: (typeof Overlay)[];
     useFactory: typeof DIALOG_SCROLL_STRATEGY_PROVIDER_FACTORY;
 };
 
-/** @docs-private */
+/**
+ * @docs-private
+ * @deprecated No longer used. To be removed.
+ * @breaking-change 19.0.0
+ */
 export declare function DIALOG_SCROLL_STRATEGY_PROVIDER_FACTORY(overlay: Overlay): () => ScrollStrategy;
 
 /** Additional options that can be passed in when closing a dialog. */
@@ -357,7 +370,7 @@ export declare class DialogConfig<D = unknown, R = unknown, C extends BasePortal
 
 export declare class DialogModule {
     static ɵfac: i0.ɵɵFactoryDeclaration<DialogModule, never>;
-    static ɵmod: i0.ɵɵNgModuleDeclaration<DialogModule, [typeof i1.CdkDialogContainer], [typeof i2.OverlayModule, typeof i3.PortalModule, typeof i4.A11yModule], [typeof i3.PortalModule, typeof i1.CdkDialogContainer]>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<DialogModule, never, [typeof i1.OverlayModule, typeof i2.PortalModule, typeof i3.A11yModule, typeof i4.CdkDialogContainer], [typeof i2.PortalModule, typeof i4.CdkDialogContainer]>;
     static ɵinj: i0.ɵɵInjectorDeclaration<DialogModule>;
 }
 
@@ -419,7 +432,7 @@ export declare class DialogRef<R = unknown, C = unknown> {
 /** Valid ARIA roles for a dialog. */
 export declare type DialogRole = 'dialog' | 'alertdialog';
 
-declare namespace i1 {
+declare namespace i4 {
     export {
         throwDialogContentAlreadyAttachedError,
         CdkDialogContainer
