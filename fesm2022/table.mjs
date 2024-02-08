@@ -826,11 +826,13 @@ class StickyStyler {
         // Coalesce with other sticky updates (and potentially other changes like column resize).
         this._coalescedStyleScheduler.schedule(() => {
             const tfoot = tableElement.querySelector('tfoot');
-            if (stickyStates.some(state => !state)) {
-                this._removeStickyStyle(tfoot, ['bottom']);
-            }
-            else {
-                this._addStickyStyle(tfoot, 'bottom', 0, false);
+            if (tfoot) {
+                if (stickyStates.some(state => !state)) {
+                    this._removeStickyStyle(tfoot, ['bottom']);
+                }
+                else {
+                    this._addStickyStyle(tfoot, 'bottom', 0, false);
+                }
             }
         });
     }
@@ -1359,7 +1361,9 @@ class CdkTable {
         /** Whether the no data row is currently showing anything. */
         this._isShowingNoDataRow = false;
         /** Whether the table has rendered out all the outlets for the first time. */
-        this._hasRendered = false;
+        this._hasAllOutlets = false;
+        /** Whether the table is done initializing. */
+        this._hasInitialized = false;
         this._cellRoleInternal = undefined;
         this._multiTemplateDataRows = false;
         this._fixedLayout = false;
@@ -1402,9 +1406,12 @@ class CdkTable {
             this._forceRecalculateCellWidths = true;
         });
     }
+    ngAfterContentInit() {
+        this._hasInitialized = true;
+    }
     ngAfterContentChecked() {
         // Only start re-rendering in `ngAfterContentChecked` after the first render.
-        if (this._hasRendered) {
+        if (this._canRender()) {
             this._render();
         }
     }
@@ -1615,14 +1622,22 @@ class CdkTable {
         // the next change detection will happen.
         // Also we can't use queries to resolve the outlets, because they're wrapped in a
         // conditional, so we have to rely on them being assigned via DI.
-        if (!this._hasRendered &&
+        if (!this._hasAllOutlets &&
             this._rowOutlet &&
             this._headerRowOutlet &&
             this._footerRowOutlet &&
             this._noDataRowOutlet) {
-            this._hasRendered = true;
-            this._render();
+            this._hasAllOutlets = true;
+            // In some setups this may fire before `ngAfterContentInit`
+            // so we need a check here. See #28538.
+            if (this._canRender()) {
+                this._render();
+            }
         }
+    }
+    /** Whether the table has all the information to start rendering. */
+    _canRender() {
+        return this._hasAllOutlets && this._hasInitialized;
     }
     /** Renders the table if its state has changed. */
     _render() {
