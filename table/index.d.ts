@@ -1,4 +1,5 @@
 import { AfterContentChecked } from '@angular/core';
+import { AfterContentInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ChangeDetectorRef } from '@angular/core';
 import { CollectionViewer } from '@angular/cdk/collections';
@@ -375,7 +376,7 @@ export declare class CdkRowDef<T> extends BaseRowDef {
  * as a data array, an Observable stream that emits the data array to render, or a DataSource with a
  * connect function that will return an Observable stream that emits the data array to render.
  */
-export declare class CdkTable<T> implements AfterContentChecked, CollectionViewer, OnDestroy, OnInit {
+export declare class CdkTable<T> implements AfterContentInit, AfterContentChecked, CollectionViewer, OnDestroy, OnInit {
     protected readonly _differs: IterableDiffers;
     protected readonly _changeDetectorRef: ChangeDetectorRef;
     protected readonly _elementRef: ElementRef;
@@ -514,7 +515,9 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     /** Whether the no data row is currently showing anything. */
     private _isShowingNoDataRow;
     /** Whether the table has rendered out all the outlets for the first time. */
-    private _hasRendered;
+    private _hasAllOutlets;
+    /** Whether the table is done initializing. */
+    private _hasInitialized;
     /** Aria role to apply to the table's cells based on the table's own role. */
     _getCellRole(): string | null;
     private _cellRoleInternal;
@@ -610,6 +613,7 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      */
     _ngZone?: NgZone | undefined);
     ngOnInit(): void;
+    ngAfterContentInit(): void;
     ngAfterContentChecked(): void;
     ngOnDestroy(): void;
     /**
@@ -667,6 +671,8 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     updateStickyColumnStyles(): void;
     /** Invoked whenever an outlet is created and has been assigned to the table. */
     _outletAssigned(): void;
+    /** Whether the table has all the information to start rendering. */
+    private _canRender;
     /** Renders the table if its state has changed. */
     private _render;
     /**
