@@ -629,6 +629,15 @@ class CdkListbox {
             Promise.resolve().then(() => this._setNextFocusToSelectedOption());
         }
         this.listKeyManager.change.subscribe(() => this._focusActiveOption());
+        this.options.changes.pipe(takeUntil(this.destroyed)).subscribe(() => {
+            const activeOption = this.listKeyManager.activeItem;
+            // If the active option was deleted, we need to reset
+            // the key manager so it can allow focus back in.
+            if (activeOption && !this.options.find(option => option === activeOption)) {
+                this.listKeyManager.setActiveItem(-1);
+                this.changeDetectorRef.markForCheck();
+            }
+        });
     }
     /** Focus the active option. */
     _focusActiveOption() {
