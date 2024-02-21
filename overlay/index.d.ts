@@ -101,6 +101,7 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     private _position;
     private _scrollStrategyFactory;
     private _disposeOnNavigation;
+    private _ngZone;
     /** Origin for the connected overlay. */
     origin: CdkOverlayOrigin | FlexibleConnectedPositionStrategyOrigin;
     /** Registered connected position pairs. */
@@ -347,6 +348,8 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
     private _boundingBox;
     /** The last position to have been calculated as the best fit position. */
     private _lastPosition;
+    /** The last calculated scroll visibility. Only tracked  */
+    private _lastScrollVisibility;
     /** Subject that emits whenever the position changes. */
     private readonly _positionChanges;
     /** Subscription to viewport size changes. */

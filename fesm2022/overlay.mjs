@@ -4,7 +4,7 @@ export { CdkScrollable, ScrollDispatcher, ViewportRuler } from '@angular/cdk/scr
 import * as i6 from '@angular/common';
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { Injectable, Inject, Optional, ElementRef, ApplicationRef, ANIMATION_MODULE_TYPE, InjectionToken, inject, Directive, EventEmitter, booleanAttribute, Input, Output, NgModule } from '@angular/core';
+import { Injectable, Inject, Optional, ElementRef, ApplicationRef, ANIMATION_MODULE_TYPE, InjectionToken, inject, Directive, NgZone, EventEmitter, booleanAttribute, Input, Output, NgModule } from '@angular/core';
 import { coerceCssPixelValue, coerceArray } from '@angular/cdk/coercion';
 import * as i1$1 from '@angular/cdk/platform';
 import { supportsScrollBehavior, _getEventTarget, _isTestEnvironment } from '@angular/cdk/platform';
@@ -1655,16 +1655,23 @@ class FlexibleConnectedPositionStrategy {
         if (position.panelClass) {
             this._addPanelClasses(position.panelClass);
         }
-        // Save the last connected position in case the position needs to be re-calculated.
-        this._lastPosition = position;
         // Notify that the position has been changed along with its change properties.
         // We only emit if we've got any subscriptions, because the scroll visibility
         // calculations can be somewhat expensive.
         if (this._positionChanges.observers.length) {
-            const scrollableViewProperties = this._getScrollVisibility();
-            const changeEvent = new ConnectedOverlayPositionChange(position, scrollableViewProperties);
-            this._positionChanges.next(changeEvent);
+            const scrollVisibility = this._getScrollVisibility();
+            // We're recalculating on scroll, but we only want to emit if anything
+            // changed since downstream code might be hitting the `NgZone`.
+            if (position !== this._lastPosition ||
+                !this._lastScrollVisibility ||
+                !compareScrollVisibility(this._lastScrollVisibility, scrollVisibility)) {
+                const changeEvent = new ConnectedOverlayPositionChange(position, scrollVisibility);
+                this._positionChanges.next(changeEvent);
+            }
+            this._lastScrollVisibility = scrollVisibility;
         }
+        // Save the last connected position in case the position needs to be re-calculated.
+        this._lastPosition = position;
         this._isInitialRender = false;
     }
     /** Sets the transform origin based on the configured selector and the passed-in position.  */
@@ -2090,6 +2097,16 @@ function getRoundedBoundingClientRect(clientRect) {
         width: Math.floor(clientRect.width),
         height: Math.floor(clientRect.height),
     };
+}
+/** Returns whether two `ScrollingVisibility` objects are identical. */
+function compareScrollVisibility(a, b) {
+    if (a === b) {
+        return true;
+    }
+    return (a.isOriginClipped === b.isOriginClipped &&
+        a.isOriginOutsideView === b.isOriginOutsideView &&
+        a.isOverlayClipped === b.isOverlayClipped &&
+        a.isOverlayOutsideView === b.isOverlayOutsideView);
 }
 const STANDARD_DROPDOWN_BELOW_POSITIONS = [
     { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top' },
@@ -2563,6 +2580,7 @@ class CdkConnectedOverlay {
         this._detachSubscription = Subscription.EMPTY;
         this._positionSubscription = Subscription.EMPTY;
         this._disposeOnNavigation = false;
+        this._ngZone = inject(NgZone);
         /** Margin between the overlay and the viewport edges. */
         this.viewportMargin = 0;
         /** Whether the overlay is open. */
@@ -2743,7 +2761,7 @@ class CdkConnectedOverlay {
             this._positionSubscription = this._position.positionChanges
                 .pipe(takeWhile(() => this.positionChange.observers.length > 0))
                 .subscribe(position => {
-                this.positionChange.emit(position);
+                this._ngZone.run(() => this.positionChange.emit(position));
                 if (this.positionChange.observers.length === 0) {
                     this._positionSubscription.unsubscribe();
                 }
