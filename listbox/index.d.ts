@@ -279,7 +279,7 @@ export declare class CdkOption<T = unknown> implements ListKeyManagerOption, Hig
      * The text used to locate this item during listbox typeahead. If not specified,
      * the `textContent` of the item will be used.
      */
-    typeaheadLabel: string;
+    typeaheadLabel: string | null;
     /** Whether this option is disabled. */
     get disabled(): boolean;
     set disabled(value: boolean);
