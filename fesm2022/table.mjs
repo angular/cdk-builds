@@ -12,42 +12,6 @@ import { takeUntil, take } from 'rxjs/operators';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 
 /**
- * Mixin to provide a directive with a function that checks if the sticky input has been
- * changed since the last time the function was called. Essentially adds a dirty-check to the
- * sticky value.
- * @docs-private
- */
-function mixinHasStickyInput(base) {
-    return class extends base {
-        /** Whether sticky positioning should be applied. */
-        get sticky() {
-            return this._sticky;
-        }
-        set sticky(v) {
-            const prevValue = this._sticky;
-            this._sticky = coerceBooleanProperty(v);
-            this._hasStickyChanged = prevValue !== this._sticky;
-        }
-        /** Whether the sticky value has changed since this was last called. */
-        hasStickyChanged() {
-            const hasStickyChanged = this._hasStickyChanged;
-            this._hasStickyChanged = false;
-            return hasStickyChanged;
-        }
-        /** Resets the dirty check for cases where the sticky state has been used without checking. */
-        resetStickyChanged() {
-            this._hasStickyChanged = false;
-        }
-        constructor(...args) {
-            super(...args);
-            this._sticky = false;
-            /** Whether the sticky input has changed since it was last checked. */
-            this._hasStickyChanged = false;
-        }
-    };
-}
-
-/**
  * Used to provide a table to some of the sub-components without causing a circular dependency.
  * @docs-private
  */
@@ -109,22 +73,27 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.0", ngImpor
                     standalone: true,
                 }]
         }], ctorParameters: () => [{ type: i0.TemplateRef }] });
-// Boilerplate for applying mixins to CdkColumnDef.
-/** @docs-private */
-class CdkColumnDefBase {
-}
-const _CdkColumnDefBase = mixinHasStickyInput(CdkColumnDefBase);
 /**
  * Column definition for the CDK table.
  * Defines a set of cells available for a table column.
  */
-class CdkColumnDef extends _CdkColumnDefBase {
+class CdkColumnDef {
     /** Unique name for this column. */
     get name() {
         return this._name;
     }
     set name(name) {
         this._setNameInput(name);
+    }
+    /** Whether the cell is sticky. */
+    get sticky() {
+        return this._sticky;
+    }
+    set sticky(value) {
+        if (value !== this._sticky) {
+            this._sticky = value;
+            this._hasStickyChanged = true;
+        }
     }
     /**
      * Whether this column should be sticky positioned on the end of the row. Should make sure
@@ -141,9 +110,20 @@ class CdkColumnDef extends _CdkColumnDefBase {
         }
     }
     constructor(_table) {
-        super();
         this._table = _table;
+        this._hasStickyChanged = false;
+        this._sticky = false;
         this._stickyEnd = false;
+    }
+    /** Whether the sticky state has changed. */
+    hasStickyChanged() {
+        const hasStickyChanged = this._hasStickyChanged;
+        this.resetStickyChanged();
+        return hasStickyChanged;
+    }
+    /** Resets the sticky changed state. */
+    resetStickyChanged() {
+        this._hasStickyChanged = false;
     }
     /**
      * Overridable method that sets the css classes that will be added to every cell in this
@@ -171,13 +151,12 @@ class CdkColumnDef extends _CdkColumnDefBase {
         }
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.2.0", ngImport: i0, type: CdkColumnDef, deps: [{ token: CDK_TABLE, optional: true }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "17.2.0", type: CdkColumnDef, isStandalone: true, selector: "[cdkColumnDef]", inputs: { sticky: "sticky", name: ["cdkColumnDef", "name"], stickyEnd: ["stickyEnd", "stickyEnd", booleanAttribute] }, providers: [{ provide: 'MAT_SORT_HEADER_COLUMN_DEF', useExisting: CdkColumnDef }], queries: [{ propertyName: "cell", first: true, predicate: CdkCellDef, descendants: true }, { propertyName: "headerCell", first: true, predicate: CdkHeaderCellDef, descendants: true }, { propertyName: "footerCell", first: true, predicate: CdkFooterCellDef, descendants: true }], usesInheritance: true, ngImport: i0 }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "17.2.0", type: CdkColumnDef, isStandalone: true, selector: "[cdkColumnDef]", inputs: { name: ["cdkColumnDef", "name"], sticky: ["sticky", "sticky", booleanAttribute], stickyEnd: ["stickyEnd", "stickyEnd", booleanAttribute] }, providers: [{ provide: 'MAT_SORT_HEADER_COLUMN_DEF', useExisting: CdkColumnDef }], queries: [{ propertyName: "cell", first: true, predicate: CdkCellDef, descendants: true }, { propertyName: "headerCell", first: true, predicate: CdkHeaderCellDef, descendants: true }, { propertyName: "footerCell", first: true, predicate: CdkFooterCellDef, descendants: true }], ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.0", ngImport: i0, type: CdkColumnDef, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkColumnDef]',
-                    inputs: ['sticky'],
                     providers: [{ provide: 'MAT_SORT_HEADER_COLUMN_DEF', useExisting: CdkColumnDef }],
                     standalone: true,
                 }]
@@ -189,6 +168,9 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.0", ngImpor
                 }] }], propDecorators: { name: [{
                 type: Input,
                 args: ['cdkColumnDef']
+            }], sticky: [{
+                type: Input,
+                args: [{ transform: booleanAttribute }]
             }], stickyEnd: [{
                 type: Input,
                 args: [{ transform: booleanAttribute }]
@@ -401,33 +383,50 @@ class BaseRowDef {
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.0", ngImport: i0, type: BaseRowDef, decorators: [{
             type: Directive
         }], ctorParameters: () => [{ type: i0.TemplateRef }, { type: i0.IterableDiffers }] });
-// Boilerplate for applying mixins to CdkHeaderRowDef.
-/** @docs-private */
-class CdkHeaderRowDefBase extends BaseRowDef {
-}
-const _CdkHeaderRowDefBase = mixinHasStickyInput(CdkHeaderRowDefBase);
 /**
  * Header row definition for the CDK table.
  * Captures the header row's template and other header properties such as the columns to display.
  */
-class CdkHeaderRowDef extends _CdkHeaderRowDefBase {
+class CdkHeaderRowDef extends BaseRowDef {
+    /** Whether the row is sticky. */
+    get sticky() {
+        return this._sticky;
+    }
+    set sticky(value) {
+        if (value !== this._sticky) {
+            this._sticky = value;
+            this._hasStickyChanged = true;
+        }
+    }
     constructor(template, _differs, _table) {
         super(template, _differs);
         this._table = _table;
+        this._hasStickyChanged = false;
+        this._sticky = false;
     }
     // Prerender fails to recognize that ngOnChanges in a part of this class through inheritance.
     // Explicitly define it so that the method is called as part of the Angular lifecycle.
     ngOnChanges(changes) {
         super.ngOnChanges(changes);
     }
+    /** Whether the sticky state has changed. */
+    hasStickyChanged() {
+        const hasStickyChanged = this._hasStickyChanged;
+        this.resetStickyChanged();
+        return hasStickyChanged;
+    }
+    /** Resets the sticky changed state. */
+    resetStickyChanged() {
+        this._hasStickyChanged = false;
+    }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.2.0", ngImport: i0, type: CdkHeaderRowDef, deps: [{ token: i0.TemplateRef }, { token: i0.IterableDiffers }, { token: CDK_TABLE, optional: true }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "17.2.0", type: CdkHeaderRowDef, isStandalone: true, selector: "[cdkHeaderRowDef]", inputs: { columns: ["cdkHeaderRowDef", "columns"], sticky: ["cdkHeaderRowDefSticky", "sticky"] }, usesInheritance: true, usesOnChanges: true, ngImport: i0 }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "17.2.0", type: CdkHeaderRowDef, isStandalone: true, selector: "[cdkHeaderRowDef]", inputs: { columns: ["cdkHeaderRowDef", "columns"], sticky: ["cdkHeaderRowDefSticky", "sticky", booleanAttribute] }, usesInheritance: true, usesOnChanges: true, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.0", ngImport: i0, type: CdkHeaderRowDef, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkHeaderRowDef]',
-                    inputs: ['columns: cdkHeaderRowDef', 'sticky: cdkHeaderRowDefSticky'],
+                    inputs: [{ name: 'columns', alias: 'cdkHeaderRowDef' }],
                     standalone: true,
                 }]
         }], ctorParameters: () => [{ type: i0.TemplateRef }, { type: i0.IterableDiffers }, { type: undefined, decorators: [{
@@ -435,34 +434,54 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.0", ngImpor
                     args: [CDK_TABLE]
                 }, {
                     type: Optional
-                }] }] });
-// Boilerplate for applying mixins to CdkFooterRowDef.
-/** @docs-private */
-class CdkFooterRowDefBase extends BaseRowDef {
-}
-const _CdkFooterRowDefBase = mixinHasStickyInput(CdkFooterRowDefBase);
+                }] }], propDecorators: { sticky: [{
+                type: Input,
+                args: [{ alias: 'cdkHeaderRowDefSticky', transform: booleanAttribute }]
+            }] } });
 /**
  * Footer row definition for the CDK table.
  * Captures the footer row's template and other footer properties such as the columns to display.
  */
-class CdkFooterRowDef extends _CdkFooterRowDefBase {
+class CdkFooterRowDef extends BaseRowDef {
+    /** Whether the row is sticky. */
+    get sticky() {
+        return this._sticky;
+    }
+    set sticky(value) {
+        if (value !== this._sticky) {
+            this._sticky = value;
+            this._hasStickyChanged = true;
+        }
+    }
     constructor(template, _differs, _table) {
         super(template, _differs);
         this._table = _table;
+        this._hasStickyChanged = false;
+        this._sticky = false;
     }
     // Prerender fails to recognize that ngOnChanges in a part of this class through inheritance.
     // Explicitly define it so that the method is called as part of the Angular lifecycle.
     ngOnChanges(changes) {
         super.ngOnChanges(changes);
     }
+    /** Whether the sticky state has changed. */
+    hasStickyChanged() {
+        const hasStickyChanged = this._hasStickyChanged;
+        this.resetStickyChanged();
+        return hasStickyChanged;
+    }
+    /** Resets the sticky changed state. */
+    resetStickyChanged() {
+        this._hasStickyChanged = false;
+    }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.2.0", ngImport: i0, type: CdkFooterRowDef, deps: [{ token: i0.TemplateRef }, { token: i0.IterableDiffers }, { token: CDK_TABLE, optional: true }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "17.2.0", type: CdkFooterRowDef, isStandalone: true, selector: "[cdkFooterRowDef]", inputs: { columns: ["cdkFooterRowDef", "columns"], sticky: ["cdkFooterRowDefSticky", "sticky"] }, usesInheritance: true, usesOnChanges: true, ngImport: i0 }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "17.2.0", type: CdkFooterRowDef, isStandalone: true, selector: "[cdkFooterRowDef]", inputs: { columns: ["cdkFooterRowDef", "columns"], sticky: ["cdkFooterRowDefSticky", "sticky", booleanAttribute] }, usesInheritance: true, usesOnChanges: true, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.0", ngImport: i0, type: CdkFooterRowDef, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkFooterRowDef]',
-                    inputs: ['columns: cdkFooterRowDef', 'sticky: cdkFooterRowDefSticky'],
+                    inputs: [{ name: 'columns', alias: 'cdkFooterRowDef' }],
                     standalone: true,
                 }]
         }], ctorParameters: () => [{ type: i0.TemplateRef }, { type: i0.IterableDiffers }, { type: undefined, decorators: [{
@@ -470,7 +489,10 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.0", ngImpor
                     args: [CDK_TABLE]
                 }, {
                     type: Optional
-                }] }] });
+                }] }], propDecorators: { sticky: [{
+                type: Input,
+                args: [{ alias: 'cdkFooterRowDefSticky', transform: booleanAttribute }]
+            }] } });
 /**
  * Data row definition for the CDK table.
  * Captures the header row's template and other row properties such as the columns to display and
@@ -490,7 +512,10 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.0", ngImpor
             type: Directive,
             args: [{
                     selector: '[cdkRowDef]',
-                    inputs: ['columns: cdkRowDefColumns', 'when: cdkRowDefWhen'],
+                    inputs: [
+                        { name: 'columns', alias: 'cdkRowDefColumns' },
+                        { name: 'when', alias: 'cdkRowDefWhen' },
+                    ],
                     standalone: true,
                 }]
         }], ctorParameters: () => [{ type: i0.TemplateRef }, { type: i0.IterableDiffers }, { type: undefined, decorators: [{
@@ -2234,7 +2259,7 @@ class CdkTextColumn {
         {{dataAccessor(data, name)}}
       </td>
     </ng-container>
-  `, isInline: true, dependencies: [{ kind: "directive", type: CdkColumnDef, selector: "[cdkColumnDef]", inputs: ["sticky", "cdkColumnDef", "stickyEnd"] }, { kind: "directive", type: CdkHeaderCellDef, selector: "[cdkHeaderCellDef]" }, { kind: "directive", type: CdkHeaderCell, selector: "cdk-header-cell, th[cdk-header-cell]" }, { kind: "directive", type: CdkCellDef, selector: "[cdkCellDef]" }, { kind: "directive", type: CdkCell, selector: "cdk-cell, td[cdk-cell]" }], changeDetection: i0.ChangeDetectionStrategy.Default, encapsulation: i0.ViewEncapsulation.None }); }
+  `, isInline: true, dependencies: [{ kind: "directive", type: CdkColumnDef, selector: "[cdkColumnDef]", inputs: ["cdkColumnDef", "sticky", "stickyEnd"] }, { kind: "directive", type: CdkHeaderCellDef, selector: "[cdkHeaderCellDef]" }, { kind: "directive", type: CdkHeaderCell, selector: "cdk-header-cell, th[cdk-header-cell]" }, { kind: "directive", type: CdkCellDef, selector: "[cdkCellDef]" }, { kind: "directive", type: CdkCell, selector: "cdk-cell, td[cdk-cell]" }], changeDetection: i0.ChangeDetectionStrategy.Default, encapsulation: i0.ViewEncapsulation.None }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.0", ngImport: i0, type: CdkTextColumn, decorators: [{
             type: Component,
@@ -2365,6 +2390,42 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.0", ngImpor
                     imports: [ScrollingModule, ...EXPORTED_DECLARATIONS],
                 }]
         }] });
+
+/**
+ * Mixin to provide a directive with a function that checks if the sticky input has been
+ * changed since the last time the function was called. Essentially adds a dirty-check to the
+ * sticky value.
+ * @docs-private
+ */
+function mixinHasStickyInput(base) {
+    return class extends base {
+        /** Whether sticky positioning should be applied. */
+        get sticky() {
+            return this._sticky;
+        }
+        set sticky(v) {
+            const prevValue = this._sticky;
+            this._sticky = coerceBooleanProperty(v);
+            this._hasStickyChanged = prevValue !== this._sticky;
+        }
+        /** Whether the sticky value has changed since this was last called. */
+        hasStickyChanged() {
+            const hasStickyChanged = this._hasStickyChanged;
+            this._hasStickyChanged = false;
+            return hasStickyChanged;
+        }
+        /** Resets the dirty check for cases where the sticky state has been used without checking. */
+        resetStickyChanged() {
+            this._hasStickyChanged = false;
+        }
+        constructor(...args) {
+            super(...args);
+            this._sticky = false;
+            /** Whether the sticky input has changed since it was last checked. */
+            this._hasStickyChanged = false;
+        }
+    };
+}
 
 /**
  * Generated bundle index. Do not edit.

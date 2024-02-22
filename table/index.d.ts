@@ -67,8 +67,6 @@ export declare abstract class BaseRowDef implements OnChanges {
 export declare interface CanStick {
     /** Whether sticky positioning should be applied. */
     sticky: boolean;
-    /** Whether the sticky input has changed since it was last checked. */
-    _hasStickyChanged: boolean;
     /** Whether the sticky value has changed since this was last called. */
     hasStickyChanged(): boolean;
     /** Resets the dirty check for cases where the sticky state has been used without checking. */
@@ -185,12 +183,17 @@ export declare interface CdkCellOutletRowContext<T> {
  * Column definition for the CDK table.
  * Defines a set of cells available for a table column.
  */
-export declare class CdkColumnDef extends _CdkColumnDefBase implements CanStick {
+export declare class CdkColumnDef implements CanStick {
     _table?: any;
+    private _hasStickyChanged;
     /** Unique name for this column. */
     get name(): string;
     set name(name: string);
     protected _name: string;
+    /** Whether the cell is sticky. */
+    get sticky(): boolean;
+    set sticky(value: boolean);
+    private _sticky;
     /**
      * Whether this column should be sticky positioned on the end of the row. Should make sure
      * that it mimics the `CanStick` mixin such that `_hasStickyChanged` is set to true if the value
@@ -217,6 +220,10 @@ export declare class CdkColumnDef extends _CdkColumnDefBase implements CanStick 
      */
     _columnCssClassName: string[];
     constructor(_table?: any);
+    /** Whether the sticky state has changed. */
+    hasStickyChanged(): boolean;
+    /** Resets the sticky changed state. */
+    resetStickyChanged(): void;
     /**
      * Overridable method that sets the css classes that will be added to every cell in this
      * column.
@@ -233,15 +240,10 @@ export declare class CdkColumnDef extends _CdkColumnDefBase implements CanStick 
      */
     protected _setNameInput(value: string): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkColumnDef, [{ optional: true; }]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkColumnDef, "[cdkColumnDef]", never, { "sticky": { "alias": "sticky"; "required": false; }; "name": { "alias": "cdkColumnDef"; "required": false; }; "stickyEnd": { "alias": "stickyEnd"; "required": false; }; }, {}, ["cell", "headerCell", "footerCell"], never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkColumnDef, "[cdkColumnDef]", never, { "name": { "alias": "cdkColumnDef"; "required": false; }; "sticky": { "alias": "sticky"; "required": false; }; "stickyEnd": { "alias": "stickyEnd"; "required": false; }; }, {}, ["cell", "headerCell", "footerCell"], never, true, never>;
+    static ngAcceptInputType_sticky: unknown;
     static ngAcceptInputType_stickyEnd: unknown;
 }
-
-/** @docs-private */
-declare class CdkColumnDefBase {
-}
-
-declare const _CdkColumnDefBase: CanStickCtor & typeof CdkColumnDefBase;
 
 /** Footer cell template container that adds the right classes and role. */
 export declare class CdkFooterCell extends BaseCdkCell {
@@ -271,19 +273,23 @@ export declare class CdkFooterRow {
  * Footer row definition for the CDK table.
  * Captures the footer row's template and other footer properties such as the columns to display.
  */
-export declare class CdkFooterRowDef extends _CdkFooterRowDefBase implements CanStick, OnChanges {
+export declare class CdkFooterRowDef extends BaseRowDef implements CanStick, OnChanges {
     _table?: any;
+    private _hasStickyChanged;
+    /** Whether the row is sticky. */
+    get sticky(): boolean;
+    set sticky(value: boolean);
+    private _sticky;
     constructor(template: TemplateRef<any>, _differs: IterableDiffers, _table?: any);
     ngOnChanges(changes: SimpleChanges): void;
+    /** Whether the sticky state has changed. */
+    hasStickyChanged(): boolean;
+    /** Resets the sticky changed state. */
+    resetStickyChanged(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkFooterRowDef, [null, null, { optional: true; }]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkFooterRowDef, "[cdkFooterRowDef]", never, { "columns": { "alias": "cdkFooterRowDef"; "required": false; }; "sticky": { "alias": "cdkFooterRowDefSticky"; "required": false; }; }, {}, never, never, true, never>;
+    static ngAcceptInputType_sticky: unknown;
 }
-
-/** @docs-private */
-declare class CdkFooterRowDefBase extends BaseRowDef {
-}
-
-declare const _CdkFooterRowDefBase: CanStickCtor & typeof CdkFooterRowDefBase;
 
 /** Header cell template container that adds the right classes and role. */
 export declare class CdkHeaderCell extends BaseCdkCell {
@@ -313,19 +319,23 @@ export declare class CdkHeaderRow {
  * Header row definition for the CDK table.
  * Captures the header row's template and other header properties such as the columns to display.
  */
-export declare class CdkHeaderRowDef extends _CdkHeaderRowDefBase implements CanStick, OnChanges {
+export declare class CdkHeaderRowDef extends BaseRowDef implements CanStick, OnChanges {
     _table?: any;
+    private _hasStickyChanged;
+    /** Whether the row is sticky. */
+    get sticky(): boolean;
+    set sticky(value: boolean);
+    private _sticky;
     constructor(template: TemplateRef<any>, _differs: IterableDiffers, _table?: any);
     ngOnChanges(changes: SimpleChanges): void;
+    /** Whether the sticky state has changed. */
+    hasStickyChanged(): boolean;
+    /** Resets the sticky changed state. */
+    resetStickyChanged(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkHeaderRowDef, [null, null, { optional: true; }]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkHeaderRowDef, "[cdkHeaderRowDef]", never, { "columns": { "alias": "cdkHeaderRowDef"; "required": false; }; "sticky": { "alias": "cdkHeaderRowDefSticky"; "required": false; }; }, {}, never, never, true, never>;
+    static ngAcceptInputType_sticky: unknown;
 }
-
-/** @docs-private */
-declare class CdkHeaderRowDefBase extends BaseRowDef {
-}
-
-declare const _CdkHeaderRowDefBase: CanStickCtor & typeof CdkHeaderRowDefBase;
 
 /** Row that can be used to display a message when no data is shown in the table. */
 export declare class CdkNoDataRow {
