@@ -1,13 +1,13 @@
 import * as i0 from '@angular/core';
-import { Injectable, Inject, InjectionToken, booleanAttribute, Directive, Optional, SkipSelf, Input, EventEmitter, Self, ContentChildren, ContentChild, Output, NgModule } from '@angular/core';
+import { Injectable, Inject, InjectionToken, booleanAttribute, Directive, Optional, SkipSelf, Input, EventEmitter, Self, Output, inject, NgModule } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import * as i1 from '@angular/cdk/scrolling';
 import { CdkScrollableModule } from '@angular/cdk/scrolling';
 import { _getEventTarget, normalizePassiveListenerOptions, _getShadowRoot } from '@angular/cdk/platform';
 import { coerceElement, coerceNumberProperty, coerceArray } from '@angular/cdk/coercion';
 import { isFakeTouchstartFromScreenReader, isFakeMousedownFromScreenReader } from '@angular/cdk/a11y';
-import { Subject, Subscription, interval, animationFrameScheduler, Observable, merge } from 'rxjs';
-import { takeUntil, map, take, startWith, tap, switchMap } from 'rxjs/operators';
+import { Subject, Subscription, interval, animationFrameScheduler, Observable, merge, BehaviorSubject } from 'rxjs';
+import { takeUntil, map, take, tap, switchMap, startWith } from 'rxjs/operators';
 import * as i1$1 from '@angular/cdk/bidi';
 
 /**
@@ -2701,17 +2701,19 @@ class CdkDragHandle {
         this._disabled = value;
         this._stateChanges.next(this);
     }
-    constructor(element, parentDrag) {
+    constructor(element, _parentDrag) {
         this.element = element;
+        this._parentDrag = _parentDrag;
         /** Emits when the state of the handle has changed. */
         this._stateChanges = new Subject();
         this._disabled = false;
         if (typeof ngDevMode === 'undefined' || ngDevMode) {
             assertElementNode(element.nativeElement, 'cdkDragHandle');
         }
-        this._parentDrag = parentDrag;
+        _parentDrag?._addHandle(this);
     }
     ngOnDestroy() {
+        this._parentDrag?._removeHandle(this);
         this._stateChanges.complete();
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.2.0", ngImport: i0, type: CdkDragHandle, deps: [{ token: i0.ElementRef }, { token: CDK_DRAG_PARENT, optional: true, skipSelf: true }], target: i0.ɵɵFactoryTarget.Directive }); }
@@ -2737,67 +2739,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.0", ngImpor
                 }] }], propDecorators: { disabled: [{
                 type: Input,
                 args: [{ alias: 'cdkDragHandleDisabled', transform: booleanAttribute }]
-            }] } });
-
-/**
- * Injection token that can be used to reference instances of `CdkDragPlaceholder`. It serves as
- * alternative token to the actual `CdkDragPlaceholder` class which could cause unnecessary
- * retention of the class and its directive metadata.
- */
-const CDK_DRAG_PLACEHOLDER = new InjectionToken('CdkDragPlaceholder');
-/**
- * Element that will be used as a template for the placeholder of a CdkDrag when
- * it is being dragged. The placeholder is displayed in place of the element being dragged.
- */
-class CdkDragPlaceholder {
-    constructor(templateRef) {
-        this.templateRef = templateRef;
-    }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.2.0", ngImport: i0, type: CdkDragPlaceholder, deps: [{ token: i0.TemplateRef }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "17.2.0", type: CdkDragPlaceholder, isStandalone: true, selector: "ng-template[cdkDragPlaceholder]", inputs: { data: "data" }, providers: [{ provide: CDK_DRAG_PLACEHOLDER, useExisting: CdkDragPlaceholder }], ngImport: i0 }); }
-}
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.0", ngImport: i0, type: CdkDragPlaceholder, decorators: [{
-            type: Directive,
-            args: [{
-                    selector: 'ng-template[cdkDragPlaceholder]',
-                    standalone: true,
-                    providers: [{ provide: CDK_DRAG_PLACEHOLDER, useExisting: CdkDragPlaceholder }],
-                }]
-        }], ctorParameters: () => [{ type: i0.TemplateRef }], propDecorators: { data: [{
-                type: Input
-            }] } });
-
-/**
- * Injection token that can be used to reference instances of `CdkDragPreview`. It serves as
- * alternative token to the actual `CdkDragPreview` class which could cause unnecessary
- * retention of the class and its directive metadata.
- */
-const CDK_DRAG_PREVIEW = new InjectionToken('CdkDragPreview');
-/**
- * Element that will be used as a template for the preview
- * of a CdkDrag when it is being dragged.
- */
-class CdkDragPreview {
-    constructor(templateRef) {
-        this.templateRef = templateRef;
-        /** Whether the preview should preserve the same size as the item that is being dragged. */
-        this.matchSize = false;
-    }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.2.0", ngImport: i0, type: CdkDragPreview, deps: [{ token: i0.TemplateRef }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "17.2.0", type: CdkDragPreview, isStandalone: true, selector: "ng-template[cdkDragPreview]", inputs: { data: "data", matchSize: ["matchSize", "matchSize", booleanAttribute] }, providers: [{ provide: CDK_DRAG_PREVIEW, useExisting: CdkDragPreview }], ngImport: i0 }); }
-}
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.0", ngImport: i0, type: CdkDragPreview, decorators: [{
-            type: Directive,
-            args: [{
-                    selector: 'ng-template[cdkDragPreview]',
-                    standalone: true,
-                    providers: [{ provide: CDK_DRAG_PREVIEW, useExisting: CdkDragPreview }],
-                }]
-        }], ctorParameters: () => [{ type: i0.TemplateRef }], propDecorators: { data: [{
-                type: Input
-            }], matchSize: [{
-                type: Input,
-                args: [{ transform: booleanAttribute }]
             }] } });
 
 /**
@@ -2843,6 +2784,7 @@ class CdkDrag {
         this._selfHandle = _selfHandle;
         this._parentDrag = _parentDrag;
         this._destroyed = new Subject();
+        this._handles = new BehaviorSubject([]);
         /** Emits when the user starts dragging the item. */
         this.started = new EventEmitter();
         /** Emits when the user has released a drag item, before any animations have started. */
@@ -2970,10 +2912,40 @@ class CdkDrag {
         }
         // Unnecessary in most cases, but used to avoid extra change detections with `zone-paths-rxjs`.
         this._ngZone.runOutsideAngular(() => {
+            this._handles.complete();
             this._destroyed.next();
             this._destroyed.complete();
             this._dragRef.dispose();
         });
+    }
+    _addHandle(handle) {
+        const handles = this._handles.getValue();
+        handles.push(handle);
+        this._handles.next(handles);
+    }
+    _removeHandle(handle) {
+        const handles = this._handles.getValue();
+        const index = handles.indexOf(handle);
+        if (index > -1) {
+            handles.splice(index, 1);
+            this._handles.next(handles);
+        }
+    }
+    _setPreviewTemplate(preview) {
+        this._previewTemplate = preview;
+    }
+    _resetPreviewTemplate(preview) {
+        if (preview === this._previewTemplate) {
+            this._previewTemplate = null;
+        }
+    }
+    _setPlaceholderTemplate(placeholder) {
+        this._placeholderTemplate = placeholder;
+    }
+    _resetPlaceholderTemplate(placeholder) {
+        if (placeholder === this._placeholderTemplate) {
+            this._placeholderTemplate = null;
+        }
     }
     /** Syncs the root element with the `DragRef`. */
     _updateRootElement() {
@@ -3138,26 +3110,22 @@ class CdkDrag {
     /** Sets up the listener that syncs the handles with the drag ref. */
     _setupHandlesListener() {
         // Listen for any newly-added handles.
-        this._handles.changes
-            .pipe(startWith(this._handles), 
+        this._handles
+            .pipe(
         // Sync the new handles with the DragRef.
-        tap((handles) => {
-            const childHandleElements = handles
-                .filter(handle => handle._parentDrag === this)
-                .map(handle => handle.element);
+        tap(handles => {
+            const handleElements = handles.map(handle => handle.element);
             // Usually handles are only allowed to be a descendant of the drag element, but if
             // the consumer defined a different drag root, we should allow the drag element
             // itself to be a handle too.
             if (this._selfHandle && this.rootElementSelector) {
-                childHandleElements.push(this.element);
+                handleElements.push(this.element);
             }
-            this._dragRef.withHandles(childHandleElements);
+            this._dragRef.withHandles(handleElements);
         }), 
         // Listen if the state of any of the handles changes.
         switchMap((handles) => {
-            return merge(...handles.map(item => {
-                return item._stateChanges.pipe(startWith(item));
-            }));
+            return merge(...handles.map(item => item._stateChanges.pipe(startWith(item))));
         }), takeUntil(this._destroyed))
             .subscribe(handleInstance => {
             // Enabled/disable the handle that changed in the DragRef.
@@ -3167,7 +3135,7 @@ class CdkDrag {
         });
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.2.0", ngImport: i0, type: CdkDrag, deps: [{ token: i0.ElementRef }, { token: CDK_DROP_LIST, optional: true, skipSelf: true }, { token: DOCUMENT }, { token: i0.NgZone }, { token: i0.ViewContainerRef }, { token: CDK_DRAG_CONFIG, optional: true }, { token: i1$1.Directionality, optional: true }, { token: DragDrop }, { token: i0.ChangeDetectorRef }, { token: CDK_DRAG_HANDLE, optional: true, self: true }, { token: CDK_DRAG_PARENT, optional: true, skipSelf: true }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "17.2.0", type: CdkDrag, isStandalone: true, selector: "[cdkDrag]", inputs: { data: ["cdkDragData", "data"], lockAxis: ["cdkDragLockAxis", "lockAxis"], rootElementSelector: ["cdkDragRootElement", "rootElementSelector"], boundaryElement: ["cdkDragBoundary", "boundaryElement"], dragStartDelay: ["cdkDragStartDelay", "dragStartDelay"], freeDragPosition: ["cdkDragFreeDragPosition", "freeDragPosition"], disabled: ["cdkDragDisabled", "disabled", booleanAttribute], constrainPosition: ["cdkDragConstrainPosition", "constrainPosition"], previewClass: ["cdkDragPreviewClass", "previewClass"], previewContainer: ["cdkDragPreviewContainer", "previewContainer"] }, outputs: { started: "cdkDragStarted", released: "cdkDragReleased", ended: "cdkDragEnded", entered: "cdkDragEntered", exited: "cdkDragExited", dropped: "cdkDragDropped", moved: "cdkDragMoved" }, host: { properties: { "class.cdk-drag-disabled": "disabled", "class.cdk-drag-dragging": "_dragRef.isDragging()" }, classAttribute: "cdk-drag" }, providers: [{ provide: CDK_DRAG_PARENT, useExisting: CdkDrag }], queries: [{ propertyName: "_previewTemplate", first: true, predicate: CDK_DRAG_PREVIEW, descendants: true }, { propertyName: "_placeholderTemplate", first: true, predicate: CDK_DRAG_PLACEHOLDER, descendants: true }, { propertyName: "_handles", predicate: CDK_DRAG_HANDLE, descendants: true }], exportAs: ["cdkDrag"], usesOnChanges: true, ngImport: i0 }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "17.2.0", type: CdkDrag, isStandalone: true, selector: "[cdkDrag]", inputs: { data: ["cdkDragData", "data"], lockAxis: ["cdkDragLockAxis", "lockAxis"], rootElementSelector: ["cdkDragRootElement", "rootElementSelector"], boundaryElement: ["cdkDragBoundary", "boundaryElement"], dragStartDelay: ["cdkDragStartDelay", "dragStartDelay"], freeDragPosition: ["cdkDragFreeDragPosition", "freeDragPosition"], disabled: ["cdkDragDisabled", "disabled", booleanAttribute], constrainPosition: ["cdkDragConstrainPosition", "constrainPosition"], previewClass: ["cdkDragPreviewClass", "previewClass"], previewContainer: ["cdkDragPreviewContainer", "previewContainer"] }, outputs: { started: "cdkDragStarted", released: "cdkDragReleased", ended: "cdkDragEnded", entered: "cdkDragEntered", exited: "cdkDragExited", dropped: "cdkDragDropped", moved: "cdkDragMoved" }, host: { properties: { "class.cdk-drag-disabled": "disabled", "class.cdk-drag-dragging": "_dragRef.isDragging()" }, classAttribute: "cdk-drag" }, providers: [{ provide: CDK_DRAG_PARENT, useExisting: CdkDrag }], exportAs: ["cdkDrag"], usesOnChanges: true, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.0", ngImport: i0, type: CdkDrag, decorators: [{
             type: Directive,
@@ -3213,16 +3181,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.0", ngImpor
                 }, {
                     type: Inject,
                     args: [CDK_DRAG_PARENT]
-                }] }], propDecorators: { _handles: [{
-                type: ContentChildren,
-                args: [CDK_DRAG_HANDLE, { descendants: true }]
-            }], _previewTemplate: [{
-                type: ContentChild,
-                args: [CDK_DRAG_PREVIEW]
-            }], _placeholderTemplate: [{
-                type: ContentChild,
-                args: [CDK_DRAG_PLACEHOLDER]
-            }], data: [{
+                }] }], propDecorators: { data: [{
                 type: Input,
                 args: ['cdkDragData']
             }], lockAxis: [{
@@ -3630,6 +3589,77 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.0", ngImpor
             }], sorted: [{
                 type: Output,
                 args: ['cdkDropListSorted']
+            }] } });
+
+/**
+ * Injection token that can be used to reference instances of `CdkDragPreview`. It serves as
+ * alternative token to the actual `CdkDragPreview` class which could cause unnecessary
+ * retention of the class and its directive metadata.
+ */
+const CDK_DRAG_PREVIEW = new InjectionToken('CdkDragPreview');
+/**
+ * Element that will be used as a template for the preview
+ * of a CdkDrag when it is being dragged.
+ */
+class CdkDragPreview {
+    constructor(templateRef) {
+        this.templateRef = templateRef;
+        this._drag = inject(CDK_DRAG_PARENT);
+        /** Whether the preview should preserve the same size as the item that is being dragged. */
+        this.matchSize = false;
+        this._drag._setPreviewTemplate(this);
+    }
+    ngOnDestroy() {
+        this._drag._resetPreviewTemplate(this);
+    }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.2.0", ngImport: i0, type: CdkDragPreview, deps: [{ token: i0.TemplateRef }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "17.2.0", type: CdkDragPreview, isStandalone: true, selector: "ng-template[cdkDragPreview]", inputs: { data: "data", matchSize: ["matchSize", "matchSize", booleanAttribute] }, providers: [{ provide: CDK_DRAG_PREVIEW, useExisting: CdkDragPreview }], ngImport: i0 }); }
+}
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.0", ngImport: i0, type: CdkDragPreview, decorators: [{
+            type: Directive,
+            args: [{
+                    selector: 'ng-template[cdkDragPreview]',
+                    standalone: true,
+                    providers: [{ provide: CDK_DRAG_PREVIEW, useExisting: CdkDragPreview }],
+                }]
+        }], ctorParameters: () => [{ type: i0.TemplateRef }], propDecorators: { data: [{
+                type: Input
+            }], matchSize: [{
+                type: Input,
+                args: [{ transform: booleanAttribute }]
+            }] } });
+
+/**
+ * Injection token that can be used to reference instances of `CdkDragPlaceholder`. It serves as
+ * alternative token to the actual `CdkDragPlaceholder` class which could cause unnecessary
+ * retention of the class and its directive metadata.
+ */
+const CDK_DRAG_PLACEHOLDER = new InjectionToken('CdkDragPlaceholder');
+/**
+ * Element that will be used as a template for the placeholder of a CdkDrag when
+ * it is being dragged. The placeholder is displayed in place of the element being dragged.
+ */
+class CdkDragPlaceholder {
+    constructor(templateRef) {
+        this.templateRef = templateRef;
+        this._drag = inject(CDK_DRAG_PARENT);
+        this._drag._setPlaceholderTemplate(this);
+    }
+    ngOnDestroy() {
+        this._drag._resetPlaceholderTemplate(this);
+    }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.2.0", ngImport: i0, type: CdkDragPlaceholder, deps: [{ token: i0.TemplateRef }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "17.2.0", type: CdkDragPlaceholder, isStandalone: true, selector: "ng-template[cdkDragPlaceholder]", inputs: { data: "data" }, providers: [{ provide: CDK_DRAG_PLACEHOLDER, useExisting: CdkDragPlaceholder }], ngImport: i0 }); }
+}
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.0", ngImport: i0, type: CdkDragPlaceholder, decorators: [{
+            type: Directive,
+            args: [{
+                    selector: 'ng-template[cdkDragPlaceholder]',
+                    standalone: true,
+                    providers: [{ provide: CDK_DRAG_PLACEHOLDER, useExisting: CdkDragPlaceholder }],
+                }]
+        }], ctorParameters: () => [{ type: i0.TemplateRef }], propDecorators: { data: [{
+                type: Input
             }] } });
 
 const DRAG_DROP_DIRECTIVES = [
