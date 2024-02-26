@@ -1736,7 +1736,7 @@ class FlexibleConnectedPositionStrategy {
         const isBoundedByLeftViewportEdge = (position.overlayX === 'end' && !isRtl) || (position.overlayX === 'start' && isRtl);
         let width, left, right;
         if (isBoundedByLeftViewportEdge) {
-            right = viewport.width - origin.x + this._viewportMargin;
+            right = viewport.width - origin.x + this._viewportMargin * 2;
             width = origin.x - this._viewportMargin;
         }
         else if (isBoundedByRightViewportEdge) {
