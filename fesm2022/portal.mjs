@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { ElementRef, Injector, Directive, EventEmitter, Inject, Output, NgModule } from '@angular/core';
+import { ElementRef, Injector, Directive, EventEmitter, Inject, Input, Output, NgModule } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 /**
@@ -563,13 +563,15 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.0", ngImpor
             args: [{
                     selector: '[cdkPortalOutlet]',
                     exportAs: 'cdkPortalOutlet',
-                    inputs: ['portal: cdkPortalOutlet'],
                     standalone: true,
                 }]
         }], ctorParameters: () => [{ type: i0.ComponentFactoryResolver }, { type: i0.ViewContainerRef }, { type: undefined, decorators: [{
                     type: Inject,
                     args: [DOCUMENT]
-                }] }], propDecorators: { attached: [{
+                }] }], propDecorators: { portal: [{
+                type: Input,
+                args: ['cdkPortalOutlet']
+            }], attached: [{
                 type: Output
             }] } });
 /**
@@ -590,7 +592,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.0", ngImpor
             args: [{
                     selector: '[cdkPortalHost], [portalHost]',
                     exportAs: 'cdkPortalHost',
-                    inputs: ['portal: cdkPortalHost'],
+                    inputs: [{ name: 'portal', alias: 'cdkPortalHost' }],
                     providers: [
                         {
                             provide: CdkPortalOutlet,

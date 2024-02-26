@@ -198,7 +198,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.0", ngImpor
             type: Directive,
             args: [{
                     selector: '[cdkTreeNodeDef]',
-                    inputs: ['when: cdkTreeNodeDefWhen'],
+                    inputs: [{ name: 'when', alias: 'cdkTreeNodeDefWhen' }],
                     standalone: true,
                 }]
         }], ctorParameters: () => [{ type: i0.TemplateRef }] });

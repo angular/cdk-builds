@@ -789,9 +789,9 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.0", ngImpor
                         '(click)': '_handleClick()',
                     },
                     inputs: [
-                        'menuTemplateRef: cdkMenuTriggerFor',
-                        'menuPosition: cdkMenuPosition',
-                        'menuData: cdkMenuTriggerData',
+                        { name: 'menuTemplateRef', alias: 'cdkMenuTriggerFor' },
+                        { name: 'menuPosition', alias: 'cdkMenuPosition' },
+                        { name: 'menuData', alias: 'cdkMenuTriggerData' },
                     ],
                     outputs: ['opened: cdkMenuOpened', 'closed: cdkMenuClosed'],
                     providers: [
@@ -1816,9 +1816,9 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.0", ngImpor
                         '(contextmenu)': '_openOnContextMenu($event)',
                     },
                     inputs: [
-                        'menuTemplateRef: cdkContextMenuTriggerFor',
-                        'menuPosition: cdkContextMenuPosition',
-                        'menuData: cdkContextMenuTriggerData',
+                        { name: 'menuTemplateRef', alias: 'cdkContextMenuTriggerFor' },
+                        { name: 'menuPosition', alias: 'cdkContextMenuPosition' },
+                        { name: 'menuData', alias: 'cdkContextMenuTriggerData' },
                     ],
                     outputs: ['opened: cdkContextMenuOpened', 'closed: cdkContextMenuClosed'],
                     providers: [
