@@ -12,7 +12,6 @@ import { NumberInput } from '@angular/cdk/coercion';
 import { Observable } from 'rxjs';
 import { OnChanges } from '@angular/core';
 import { OnDestroy } from '@angular/core';
-import { QueryList } from '@angular/core';
 import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import { SimpleChanges } from '@angular/core';
 import { Subject } from 'rxjs';
@@ -39,7 +38,7 @@ export declare const CDK_DRAG_HANDLE: InjectionToken<CdkDragHandle>;
  * to avoid circular imports.
  * @docs-private
  */
-export declare const CDK_DRAG_PARENT: InjectionToken<{}>;
+export declare const CDK_DRAG_PARENT: InjectionToken<CdkDrag<any>>;
 
 /**
  * Injection token that can be used to reference instances of `CdkDragPlaceholder`. It serves as
@@ -83,14 +82,11 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     private _parentDrag?;
     private readonly _destroyed;
     private static _dragInstances;
+    private _handles;
+    private _previewTemplate;
+    private _placeholderTemplate;
     /** Reference to the underlying drag instance. */
     _dragRef: DragRef<CdkDrag<T>>;
-    /** Elements that can be used to drag the draggable item. */
-    _handles: QueryList<CdkDragHandle>;
-    /** Element that will be used as a template to create the draggable item's preview. */
-    _previewTemplate: CdkDragPreview;
-    /** Template for placeholder element rendered to show where a draggable would be dropped. */
-    _placeholderTemplate: CdkDragPlaceholder;
     /** Arbitrary data to attach to this drag instance. */
     data: T;
     /** Locks the position of the dragged element along the specified axis. */
@@ -193,6 +189,12 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     ngAfterViewInit(): void;
     ngOnChanges(changes: SimpleChanges): void;
     ngOnDestroy(): void;
+    _addHandle(handle: CdkDragHandle): void;
+    _removeHandle(handle: CdkDragHandle): void;
+    _setPreviewTemplate(preview: CdkDragPreview): void;
+    _resetPreviewTemplate(preview: CdkDragPreview): void;
+    _setPlaceholderTemplate(placeholder: CdkDragPlaceholder): void;
+    _resetPlaceholderTemplate(placeholder: CdkDragPlaceholder): void;
     /** Syncs the root element with the `DragRef`. */
     private _updateRootElement;
     /** Gets the boundary element, based on the `boundaryElement` value. */
@@ -206,7 +208,7 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     /** Sets up the listener that syncs the handles with the drag ref. */
     private _setupHandlesListener;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkDrag<any>, [null, { optional: true; skipSelf: true; }, null, null, null, { optional: true; }, { optional: true; }, null, null, { optional: true; self: true; }, { optional: true; skipSelf: true; }]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDrag<any>, "[cdkDrag]", ["cdkDrag"], { "data": { "alias": "cdkDragData"; "required": false; }; "lockAxis": { "alias": "cdkDragLockAxis"; "required": false; }; "rootElementSelector": { "alias": "cdkDragRootElement"; "required": false; }; "boundaryElement": { "alias": "cdkDragBoundary"; "required": false; }; "dragStartDelay": { "alias": "cdkDragStartDelay"; "required": false; }; "freeDragPosition": { "alias": "cdkDragFreeDragPosition"; "required": false; }; "disabled": { "alias": "cdkDragDisabled"; "required": false; }; "constrainPosition": { "alias": "cdkDragConstrainPosition"; "required": false; }; "previewClass": { "alias": "cdkDragPreviewClass"; "required": false; }; "previewContainer": { "alias": "cdkDragPreviewContainer"; "required": false; }; }, { "started": "cdkDragStarted"; "released": "cdkDragReleased"; "ended": "cdkDragEnded"; "entered": "cdkDragEntered"; "exited": "cdkDragExited"; "dropped": "cdkDragDropped"; "moved": "cdkDragMoved"; }, ["_previewTemplate", "_placeholderTemplate", "_handles"], never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDrag<any>, "[cdkDrag]", ["cdkDrag"], { "data": { "alias": "cdkDragData"; "required": false; }; "lockAxis": { "alias": "cdkDragLockAxis"; "required": false; }; "rootElementSelector": { "alias": "cdkDragRootElement"; "required": false; }; "boundaryElement": { "alias": "cdkDragBoundary"; "required": false; }; "dragStartDelay": { "alias": "cdkDragStartDelay"; "required": false; }; "freeDragPosition": { "alias": "cdkDragFreeDragPosition"; "required": false; }; "disabled": { "alias": "cdkDragDisabled"; "required": false; }; "constrainPosition": { "alias": "cdkDragConstrainPosition"; "required": false; }; "previewClass": { "alias": "cdkDragPreviewClass"; "required": false; }; "previewContainer": { "alias": "cdkDragPreviewContainer"; "required": false; }; }, { "started": "cdkDragStarted"; "released": "cdkDragReleased"; "ended": "cdkDragEnded"; "entered": "cdkDragEntered"; "exited": "cdkDragExited"; "dropped": "cdkDragDropped"; "moved": "cdkDragMoved"; }, never, never, true, never>;
     static ngAcceptInputType_disabled: unknown;
 }
 
@@ -280,15 +282,14 @@ export declare interface CdkDragExit<T = any, I = T> {
 /** Handle that can be used to drag a CdkDrag instance. */
 export declare class CdkDragHandle implements OnDestroy {
     element: ElementRef<HTMLElement>;
-    /** Closest parent draggable instance. */
-    _parentDrag: {} | undefined;
+    private _parentDrag?;
     /** Emits when the state of the handle has changed. */
     readonly _stateChanges: Subject<CdkDragHandle>;
     /** Whether starting to drag through this handle is disabled. */
     get disabled(): boolean;
     set disabled(value: boolean);
     private _disabled;
-    constructor(element: ElementRef<HTMLElement>, parentDrag?: any);
+    constructor(element: ElementRef<HTMLElement>, _parentDrag?: CdkDrag<any> | undefined);
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkDragHandle, [null, { optional: true; skipSelf: true; }]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDragHandle, "[cdkDragHandle]", never, { "disabled": { "alias": "cdkDragHandleDisabled"; "required": false; }; }, {}, never, never, true, never>;
@@ -327,11 +328,13 @@ export declare interface CdkDragMove<T = any> {
  * Element that will be used as a template for the placeholder of a CdkDrag when
  * it is being dragged. The placeholder is displayed in place of the element being dragged.
  */
-export declare class CdkDragPlaceholder<T = any> {
+export declare class CdkDragPlaceholder<T = any> implements OnDestroy {
     templateRef: TemplateRef<T>;
+    private _drag;
     /** Context data to be added to the placeholder template instance. */
     data: T;
     constructor(templateRef: TemplateRef<T>);
+    ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkDragPlaceholder<any>, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDragPlaceholder<any>, "ng-template[cdkDragPlaceholder]", never, { "data": { "alias": "data"; "required": false; }; }, {}, never, never, true, never>;
 }
@@ -340,13 +343,15 @@ export declare class CdkDragPlaceholder<T = any> {
  * Element that will be used as a template for the preview
  * of a CdkDrag when it is being dragged.
  */
-export declare class CdkDragPreview<T = any> {
+export declare class CdkDragPreview<T = any> implements OnDestroy {
     templateRef: TemplateRef<T>;
+    private _drag;
     /** Context data to be added to the preview template instance. */
     data: T;
     /** Whether the preview should preserve the same size as the item that is being dragged. */
     matchSize: boolean;
     constructor(templateRef: TemplateRef<T>);
+    ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkDragPreview<any>, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDragPreview<any>, "ng-template[cdkDragPreview]", never, { "data": { "alias": "data"; "required": false; }; "matchSize": { "alias": "matchSize"; "required": false; }; }, {}, never, never, true, never>;
     static ngAcceptInputType_matchSize: unknown;
