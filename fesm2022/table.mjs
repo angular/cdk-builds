@@ -2396,6 +2396,8 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.0", ngImpor
  * changed since the last time the function was called. Essentially adds a dirty-check to the
  * sticky value.
  * @docs-private
+ * @deprecated Implement the `CanStick` interface instead.
+ * @breaking-change 19.0.0
  */
 function mixinHasStickyInput(base) {
     return class extends base {
