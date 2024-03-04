@@ -987,6 +987,8 @@ declare namespace i5 {
  * changed since the last time the function was called. Essentially adds a dirty-check to the
  * sticky value.
  * @docs-private
+ * @deprecated Implement the `CanStick` interface instead.
+ * @breaking-change 19.0.0
  */
 export declare function mixinHasStickyInput<T extends Constructor<{}>>(base: T): CanStickCtor & T;
 
