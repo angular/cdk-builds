@@ -4,11 +4,11 @@ export { CdkScrollable, ScrollDispatcher, ViewportRuler } from '@angular/cdk/scr
 import * as i6 from '@angular/common';
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { Injectable, Inject, Optional, ElementRef, ApplicationRef, ANIMATION_MODULE_TYPE, InjectionToken, inject, Directive, NgZone, EventEmitter, booleanAttribute, Input, Output, NgModule } from '@angular/core';
+import { Injectable, Inject, Optional, afterNextRender, ElementRef, EnvironmentInjector, ApplicationRef, ANIMATION_MODULE_TYPE, InjectionToken, inject, Directive, NgZone, EventEmitter, booleanAttribute, Input, Output, NgModule } from '@angular/core';
 import { coerceCssPixelValue, coerceArray } from '@angular/cdk/coercion';
 import * as i1$1 from '@angular/cdk/platform';
 import { supportsScrollBehavior, _getEventTarget, _isTestEnvironment } from '@angular/cdk/platform';
-import { filter, take, takeUntil, takeWhile } from 'rxjs/operators';
+import { filter, takeUntil, takeWhile } from 'rxjs/operators';
 import * as i5 from '@angular/cdk/bidi';
 import { BidiModule } from '@angular/cdk/bidi';
 import { DomPortalOutlet, TemplatePortal, PortalModule } from '@angular/cdk/portal';
@@ -719,7 +719,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.0.0-next.0+sh
  * Used to manipulate or dispose of said overlay.
  */
 class OverlayRef {
-    constructor(_portalOutlet, _host, _pane, _config, _ngZone, _keyboardDispatcher, _document, _location, _outsideClickDispatcher, _animationsDisabled = false) {
+    constructor(_portalOutlet, _host, _pane, _config, _ngZone, _keyboardDispatcher, _document, _location, _outsideClickDispatcher, _animationsDisabled = false, _injector) {
         this._portalOutlet = _portalOutlet;
         this._host = _host;
         this._pane = _pane;
@@ -730,6 +730,7 @@ class OverlayRef {
         this._location = _location;
         this._outsideClickDispatcher = _outsideClickDispatcher;
         this._animationsDisabled = _animationsDisabled;
+        this._injector = _injector;
         this._backdropElement = null;
         this._backdropClick = new Subject();
         this._attachments = new Subject();
@@ -788,15 +789,14 @@ class OverlayRef {
         if (this._scrollStrategy) {
             this._scrollStrategy.enable();
         }
-        // Update the position once the zone is stable so that the overlay will be fully rendered
-        // before attempting to position it, as the position may depend on the size of the rendered
-        // content.
-        this._ngZone.onStable.pipe(take(1)).subscribe(() => {
-            // The overlay could've been detached before the zone has stabilized.
+        // Update the position once the overlay is fully rendered before attempting to position it,
+        // as the position may depend on the size of the rendered content.
+        afterNextRender(() => {
+            // The overlay could've been detached before the callback executed.
             if (this.hasAttached()) {
                 this.updatePosition();
             }
-        });
+        }, { injector: this._injector });
         // Enable pointer events for the overlay pane element.
         this._togglePointerEvents(true);
         if (this._config.hasBackdrop) {
@@ -2423,7 +2423,7 @@ class Overlay {
         const portalOutlet = this._createPortalOutlet(pane);
         const overlayConfig = new OverlayConfig(config);
         overlayConfig.direction = overlayConfig.direction || this._directionality.value;
-        return new OverlayRef(portalOutlet, host, pane, overlayConfig, this._ngZone, this._keyboardDispatcher, this._document, this._location, this._outsideClickDispatcher, this._animationsModuleType === 'NoopAnimations');
+        return new OverlayRef(portalOutlet, host, pane, overlayConfig, this._ngZone, this._keyboardDispatcher, this._document, this._location, this._outsideClickDispatcher, this._animationsModuleType === 'NoopAnimations', this._injector.get(EnvironmentInjector));
     }
     /**
      * Gets a position builder that can be used, via fluent API,

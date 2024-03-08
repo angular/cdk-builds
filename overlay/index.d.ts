@@ -7,6 +7,7 @@ import { Direction } from '@angular/cdk/bidi';
 import { Directionality } from '@angular/cdk/bidi';
 import { ElementRef } from '@angular/core';
 import { EmbeddedViewRef } from '@angular/core';
+import { EnvironmentInjector } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import * as i0 from '@angular/core';
 import * as i1 from '@angular/cdk/bidi';
@@ -912,6 +913,7 @@ export declare class OverlayRef implements PortalOutlet {
     private _location;
     private _outsideClickDispatcher;
     private _animationsDisabled;
+    private _injector;
     private _backdropElement;
     private _backdropTimeout;
     private readonly _backdropClick;
@@ -931,7 +933,7 @@ export declare class OverlayRef implements PortalOutlet {
     readonly _keydownEvents: Subject<KeyboardEvent>;
     /** Stream of mouse outside events dispatched to this overlay. */
     readonly _outsidePointerEvents: Subject<MouseEvent>;
-    constructor(_portalOutlet: PortalOutlet, _host: HTMLElement, _pane: HTMLElement, _config: ImmutableObject<OverlayConfig>, _ngZone: NgZone, _keyboardDispatcher: OverlayKeyboardDispatcher, _document: Document, _location: Location_2, _outsideClickDispatcher: OverlayOutsideClickDispatcher, _animationsDisabled?: boolean);
+    constructor(_portalOutlet: PortalOutlet, _host: HTMLElement, _pane: HTMLElement, _config: ImmutableObject<OverlayConfig>, _ngZone: NgZone, _keyboardDispatcher: OverlayKeyboardDispatcher, _document: Document, _location: Location_2, _outsideClickDispatcher: OverlayOutsideClickDispatcher, _animationsDisabled: boolean, _injector: EnvironmentInjector);
     /** The overlay's HTML element */
     get overlayElement(): HTMLElement;
     /** The overlay's backdrop HTML element. */
