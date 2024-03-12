@@ -158,6 +158,7 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
      * because this event will fire for every pixel that the user has dragged.
      */
     readonly moved: Observable<CdkDragMove<T>>;
+    private _injector;
     constructor(
     /** Element that the draggable is attached to. */
     element: ElementRef<HTMLElement>, 

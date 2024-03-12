@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { Injectable, Inject, InjectionToken, booleanAttribute, Directive, Optional, SkipSelf, Input, EventEmitter, Self, Output, inject, NgModule } from '@angular/core';
+import { Injectable, Inject, InjectionToken, booleanAttribute, Directive, Optional, SkipSelf, Input, EventEmitter, inject, Injector, afterNextRender, Self, Output, NgModule } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import * as i1 from '@angular/cdk/scrolling';
 import { CdkScrollableModule } from '@angular/cdk/scrolling';
@@ -2815,6 +2815,7 @@ class CdkDrag {
                 subscription.unsubscribe();
             };
         });
+        this._injector = inject(Injector);
         this._dragRef = dragDrop.createDrag(element, {
             dragStartThreshold: config && config.dragStartThreshold != null ? config.dragStartThreshold : 5,
             pointerDirectionChangeThreshold: config && config.pointerDirectionChangeThreshold != null
@@ -2873,31 +2874,28 @@ class CdkDrag {
         this._dragRef.setFreeDragPosition(value);
     }
     ngAfterViewInit() {
-        // Normally this isn't in the zone, but it can cause major performance regressions for apps
-        // using `zone-patch-rxjs` because it'll trigger a change detection when it unsubscribes.
-        this._ngZone.runOutsideAngular(() => {
-            // We need to wait for the zone to stabilize, in order for the reference
-            // element to be in the proper place in the DOM. This is mostly relevant
-            // for draggable elements inside portals since they get stamped out in
-            // their original DOM position and then they get transferred to the portal.
-            this._ngZone.onStable.pipe(take(1), takeUntil(this._destroyed)).subscribe(() => {
-                this._updateRootElement();
-                this._setupHandlesListener();
-                if (this.freeDragPosition) {
-                    this._dragRef.setFreeDragPosition(this.freeDragPosition);
-                }
-            });
-        });
+        // We need to wait until after render, in order for the reference
+        // element to be in the proper place in the DOM. This is mostly relevant
+        // for draggable elements inside portals since they get stamped out in
+        // their original DOM position, and then they get transferred to the portal.
+        afterNextRender(() => {
+            this._updateRootElement();
+            this._setupHandlesListener();
+            if (this.freeDragPosition) {
+                this._dragRef.setFreeDragPosition(this.freeDragPosition);
+            }
+        }, { injector: this._injector });
     }
     ngOnChanges(changes) {
         const rootSelectorChange = changes['rootElementSelector'];
         const positionChange = changes['freeDragPosition'];
         // We don't have to react to the first change since it's being
-        // handled in `ngAfterViewInit` where it needs to be deferred.
+        // handled in the `afterNextRender` queued up in the constructor.
         if (rootSelectorChange && !rootSelectorChange.firstChange) {
             this._updateRootElement();
         }
-        // Skip the first change since it's being handled in `ngAfterViewInit`.
+        // Skip the first change since it's being handled in the `afterNextRender` queued up in the
+        // constructor.
         if (positionChange && !positionChange.firstChange && this.freeDragPosition) {
             this._dragRef.setFreeDragPosition(this.freeDragPosition);
         }
