@@ -6,7 +6,7 @@ import * as i3 from '@angular/cdk/scrolling';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { InjectionToken, Directive, booleanAttribute, Inject, Optional, Input, ContentChild, Injectable, Component, ChangeDetectionStrategy, ViewEncapsulation, inject, EmbeddedViewRef, EventEmitter, NgZone, Attribute, SkipSelf, Output, ContentChildren, ViewChild, NgModule } from '@angular/core';
+import { InjectionToken, Directive, booleanAttribute, Inject, Optional, Input, ContentChild, Injectable, Component, ChangeDetectionStrategy, ViewEncapsulation, inject, EmbeddedViewRef, EventEmitter, Injector, afterNextRender, Attribute, SkipSelf, Output, ContentChildren, ViewChild, NgModule } from '@angular/core';
 import { Subject, from, BehaviorSubject, isObservable, of } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
@@ -1291,10 +1291,10 @@ class CdkTable {
      */
     _stickyPositioningListener, 
     /**
-     * @deprecated `_ngZone` parameter to become required.
-     * @breaking-change 14.0.0
+     * @deprecated `_unusedNgZone` parameter to be removed.
+     * @breaking-change 19.0.0
      */
-    _ngZone) {
+    _unusedNgZone) {
         this._differs = _differs;
         this._changeDetectorRef = _changeDetectorRef;
         this._elementRef = _elementRef;
@@ -1304,7 +1304,6 @@ class CdkTable {
         this._coalescedStyleScheduler = _coalescedStyleScheduler;
         this._viewportRuler = _viewportRuler;
         this._stickyPositioningListener = _stickyPositioningListener;
-        this._ngZone = _ngZone;
         /** Subject that emits when the component has been destroyed. */
         this._onDestroy = new Subject();
         /**
@@ -1409,6 +1408,7 @@ class CdkTable {
             start: 0,
             end: Number.MAX_VALUE,
         });
+        this._injector = inject(Injector);
         if (!role) {
             _elementRef.nativeElement.setAttribute('role', 'table');
         }
@@ -1496,16 +1496,9 @@ class CdkTable {
             rowView.context.$implicit = record.item.data;
         });
         this._updateNoDataRow();
-        // Allow the new row data to render before measuring it.
-        // @breaking-change 14.0.0 Remove undefined check once _ngZone is required.
-        if (this._ngZone && NgZone.isInAngularZone()) {
-            this._ngZone.onStable.pipe(take(1), takeUntil(this._onDestroy)).subscribe(() => {
-                this.updateStickyColumnStyles();
-            });
-        }
-        else {
+        afterNextRender(() => {
             this.updateStickyColumnStyles();
-        }
+        }, { injector: this._injector });
         this.contentChanged.next();
     }
     /** Adds a column definition that was not included as part of the content children. */

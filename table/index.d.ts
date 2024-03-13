@@ -400,11 +400,6 @@ export declare class CdkTable<T> implements AfterContentInit, AfterContentChecke
      * @breaking-change 13.0.0
      */
     protected readonly _stickyPositioningListener: StickyPositioningListener;
-    /**
-     * @deprecated `_ngZone` parameter to become required.
-     * @breaking-change 14.0.0
-     */
-    protected readonly _ngZone?: NgZone | undefined;
     private _document;
     /** Latest data provided by the data source. */
     protected _data: readonly T[];
@@ -611,6 +606,7 @@ export declare class CdkTable<T> implements AfterContentInit, AfterContentChecke
     _contentFooterRowDefs: QueryList<CdkFooterRowDef>;
     /** Row definition that will only be rendered if there's no data in the table. */
     _noDataRow: CdkNoDataRow;
+    private _injector;
     constructor(_differs: IterableDiffers, _changeDetectorRef: ChangeDetectorRef, _elementRef: ElementRef, role: string, _dir: Directionality, _document: any, _platform: Platform, _viewRepeater: _ViewRepeater<T, RenderRow<T>, RowContext<T>>, _coalescedStyleScheduler: _CoalescedStyleScheduler, _viewportRuler: ViewportRuler, 
     /**
      * @deprecated `_stickyPositioningListener` parameter to become required.
@@ -618,10 +614,10 @@ export declare class CdkTable<T> implements AfterContentInit, AfterContentChecke
      */
     _stickyPositioningListener: StickyPositioningListener, 
     /**
-     * @deprecated `_ngZone` parameter to become required.
-     * @breaking-change 14.0.0
+     * @deprecated `_unusedNgZone` parameter to be removed.
+     * @breaking-change 19.0.0
      */
-    _ngZone?: NgZone | undefined);
+    _unusedNgZone?: NgZone);
     ngOnInit(): void;
     ngAfterContentInit(): void;
     ngAfterContentChecked(): void;
