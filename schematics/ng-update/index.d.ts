@@ -6,5 +6,5 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Rule } from '@angular-devkit/schematics';
-/** Entry point for the migration schematics with target of Angular CDK 17.0.0 */
-export declare function updateToV17(): Rule;
+/** Entry point for the migration schematics with target of Angular CDK 18.0.0 */
+export declare function updateToV18(): Rule;
