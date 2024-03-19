@@ -4,7 +4,7 @@ export { CdkScrollable, ScrollDispatcher, ViewportRuler } from '@angular/cdk/scr
 import * as i6 from '@angular/common';
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { Injectable, Inject, Optional, afterNextRender, ElementRef, EnvironmentInjector, ApplicationRef, ANIMATION_MODULE_TYPE, InjectionToken, inject, Directive, NgZone, EventEmitter, booleanAttribute, Input, Output, NgModule } from '@angular/core';
+import { Injectable, Inject, Optional, untracked, afterRender, afterNextRender, ElementRef, EnvironmentInjector, ApplicationRef, ANIMATION_MODULE_TYPE, InjectionToken, inject, Directive, NgZone, EventEmitter, booleanAttribute, Input, Output, NgModule } from '@angular/core';
 import { coerceCssPixelValue, coerceArray } from '@angular/cdk/coercion';
 import * as i1$1 from '@angular/cdk/platform';
 import { supportsScrollBehavior, _getEventTarget, _isTestEnvironment } from '@angular/cdk/platform';
@@ -744,11 +744,18 @@ class OverlayRef {
         this._keydownEvents = new Subject();
         /** Stream of mouse outside events dispatched to this overlay. */
         this._outsidePointerEvents = new Subject();
+        this._renders = new Subject();
         if (_config.scrollStrategy) {
             this._scrollStrategy = _config.scrollStrategy;
             this._scrollStrategy.attach(this);
         }
         this._positionStrategy = _config.positionStrategy;
+        // Users could open the overlay from an `effect`, in which case we need to
+        // run the `afterRender` as `untracked`. We don't recommend that users do
+        // this, but we also don't want to break users who are doing it.
+        this._afterRenderRef = untracked(() => afterRender(() => {
+            this._renders.next();
+        }, { injector: this._injector }));
     }
     /** The overlay's HTML element */
     get overlayElement() {
@@ -859,7 +866,7 @@ class OverlayRef {
         this._keyboardDispatcher.remove(this);
         // Keeping the host element in the DOM can cause scroll jank, because it still gets
         // rendered, even though it's transparent and unclickable which is why we remove it.
-        this._detachContentWhenStable();
+        this._detachContentWhenEmpty();
         this._locationChanges.unsubscribe();
         this._outsideClickDispatcher.remove(this);
         return detachmentResult;
@@ -886,6 +893,8 @@ class OverlayRef {
             this._detachments.next();
         }
         this._detachments.complete();
+        this._afterRenderRef.destroy();
+        this._renders.complete();
     }
     /** Whether the overlay has attached content. */
     hasAttached() {
@@ -1075,7 +1084,7 @@ class OverlayRef {
         }
     }
     /** Detaches the overlay content next time the zone stabilizes. */
-    _detachContentWhenStable() {
+    _detachContentWhenEmpty() {
         // Normally we wouldn't have to explicitly run this outside the `NgZone`, however
         // if the consumer is using `zone-patch-rxjs`, the `Subscription.unsubscribe` call will
         // be patched to run inside the zone, which will throw us into an infinite loop.
@@ -1083,7 +1092,7 @@ class OverlayRef {
             // We can't remove the host here immediately, because the overlay pane's content
             // might still be animating. This stream helps us avoid interrupting the animation
             // by waiting for the pane to become empty.
-            const subscription = this._ngZone.onStable
+            const subscription = this._renders
                 .pipe(takeUntil(merge(this._attachments, this._detachments)))
                 .subscribe(() => {
                 // Needs a couple of checks for the pane and host, because

@@ -933,6 +933,8 @@ export declare class OverlayRef implements PortalOutlet {
     readonly _keydownEvents: Subject<KeyboardEvent>;
     /** Stream of mouse outside events dispatched to this overlay. */
     readonly _outsidePointerEvents: Subject<MouseEvent>;
+    private _renders;
+    private _afterRenderRef;
     constructor(_portalOutlet: PortalOutlet, _host: HTMLElement, _pane: HTMLElement, _config: ImmutableObject<OverlayConfig>, _ngZone: NgZone, _keyboardDispatcher: OverlayKeyboardDispatcher, _document: Document, _location: Location_2, _outsideClickDispatcher: OverlayOutsideClickDispatcher, _animationsDisabled: boolean, _injector: EnvironmentInjector);
     /** The overlay's HTML element */
     get overlayElement(): HTMLElement;
@@ -1007,7 +1009,7 @@ export declare class OverlayRef implements PortalOutlet {
     /** Toggles a single CSS class or an array of classes on an element. */
     private _toggleClasses;
     /** Detaches the overlay content next time the zone stabilizes. */
-    private _detachContentWhenStable;
+    private _detachContentWhenEmpty;
     /** Disposes of a scroll strategy. */
     private _disposeScrollStrategy;
     /** Removes a backdrop element from the DOM. */
