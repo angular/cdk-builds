@@ -3604,13 +3604,13 @@ const CDK_DRAG_PREVIEW = new InjectionToken('CdkDragPreview');
 class CdkDragPreview {
     constructor(templateRef) {
         this.templateRef = templateRef;
-        this._drag = inject(CDK_DRAG_PARENT);
+        this._drag = inject(CDK_DRAG_PARENT, { optional: true });
         /** Whether the preview should preserve the same size as the item that is being dragged. */
         this.matchSize = false;
-        this._drag._setPreviewTemplate(this);
+        this._drag?._setPreviewTemplate(this);
     }
     ngOnDestroy() {
-        this._drag._resetPreviewTemplate(this);
+        this._drag?._resetPreviewTemplate(this);
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.2.0", ngImport: i0, type: CdkDragPreview, deps: [{ token: i0.TemplateRef }], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "17.2.0", type: CdkDragPreview, isStandalone: true, selector: "ng-template[cdkDragPreview]", inputs: { data: "data", matchSize: ["matchSize", "matchSize", booleanAttribute] }, providers: [{ provide: CDK_DRAG_PREVIEW, useExisting: CdkDragPreview }], ngImport: i0 }); }
@@ -3642,11 +3642,11 @@ const CDK_DRAG_PLACEHOLDER = new InjectionToken('CdkDragPlaceholder');
 class CdkDragPlaceholder {
     constructor(templateRef) {
         this.templateRef = templateRef;
-        this._drag = inject(CDK_DRAG_PARENT);
-        this._drag._setPlaceholderTemplate(this);
+        this._drag = inject(CDK_DRAG_PARENT, { optional: true });
+        this._drag?._setPlaceholderTemplate(this);
     }
     ngOnDestroy() {
-        this._drag._resetPlaceholderTemplate(this);
+        this._drag?._resetPlaceholderTemplate(this);
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.2.0", ngImport: i0, type: CdkDragPlaceholder, deps: [{ token: i0.TemplateRef }], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "17.2.0", type: CdkDragPlaceholder, isStandalone: true, selector: "ng-template[cdkDragPlaceholder]", inputs: { data: "data" }, providers: [{ provide: CDK_DRAG_PLACEHOLDER, useExisting: CdkDragPlaceholder }], ngImport: i0 }); }
