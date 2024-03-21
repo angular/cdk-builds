@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { inject, APP_ID, Injectable, Inject, QueryList, booleanAttribute, Directive, Input, InjectionToken, Optional, EventEmitter, Output, NgModule } from '@angular/core';
+import { inject, APP_ID, Injectable, Inject, QueryList, isSignal, effect, booleanAttribute, Directive, Input, InjectionToken, Optional, EventEmitter, Output, NgModule } from '@angular/core';
 import * as i1 from '@angular/cdk/platform';
 import { Platform, _getFocusedElementPierceShadowDom, normalizePassiveListenerOptions, _getEventTarget, _getShadowRoot } from '@angular/cdk/platform';
 import { Subject, Subscription, BehaviorSubject, of } from 'rxjs';
@@ -275,7 +275,7 @@ function setMessageId(element, serviceId) {
  * of items, it will set the active item correctly when arrow events occur.
  */
 class ListKeyManager {
-    constructor(_items) {
+    constructor(_items, injector) {
         this._items = _items;
         this._activeItemIndex = -1;
         this._activeItem = null;
@@ -304,15 +304,13 @@ class ListKeyManager {
         // not have access to a QueryList of the items they want to manage (e.g. when the
         // items aren't being collected via `ViewChildren` or `ContentChildren`).
         if (_items instanceof QueryList) {
-            this._itemChangesSubscription = _items.changes.subscribe((newItems) => {
-                if (this._activeItem) {
-                    const itemArray = newItems.toArray();
-                    const newIndex = itemArray.indexOf(this._activeItem);
-                    if (newIndex > -1 && newIndex !== this._activeItemIndex) {
-                        this._activeItemIndex = newIndex;
-                    }
-                }
-            });
+            this._itemChangesSubscription = _items.changes.subscribe((newItems) => this._itemsChanged(newItems.toArray()));
+        }
+        else if (isSignal(_items)) {
+            if (!injector && (typeof ngDevMode === 'undefined' || ngDevMode)) {
+                throw new Error('ListKeyManager constructed with a signal must receive an injector');
+            }
+            this._effectRef = effect(() => this._itemsChanged(_items()), { injector });
         }
     }
     /**
@@ -363,10 +361,11 @@ class ListKeyManager {
      * @param debounceInterval Time to wait after the last keystroke before setting the active item.
      */
     withTypeAhead(debounceInterval = 200) {
-        if ((typeof ngDevMode === 'undefined' || ngDevMode) &&
-            this._items.length &&
-            this._items.some(item => typeof item.getLabel !== 'function')) {
-            throw Error('ListKeyManager items in typeahead mode must implement the `getLabel` method.');
+        if (typeof ngDevMode === 'undefined' || ngDevMode) {
+            const items = this._getItemsArray();
+            if (items.length > 0 && items.some(item => typeof item.getLabel !== 'function')) {
+                throw Error('ListKeyManager items in typeahead mode must implement the `getLabel` method.');
+            }
         }
         this._typeaheadSubscription.unsubscribe();
         // Debounce the presses of non-navigational keys, collect the ones that correspond to letters
@@ -563,6 +562,7 @@ class ListKeyManager {
     destroy() {
         this._typeaheadSubscription.unsubscribe();
         this._itemChangesSubscription?.unsubscribe();
+        this._effectRef?.destroy();
         this._letterKeyStream.complete();
         this.tabOut.complete();
         this.change.complete();
@@ -620,7 +620,19 @@ class ListKeyManager {
     }
     /** Returns the items as an array. */
     _getItemsArray() {
+        if (isSignal(this._items)) {
+            return this._items();
+        }
         return this._items instanceof QueryList ? this._items.toArray() : this._items;
+    }
+    /** Callback for when the items have changed. */
+    _itemsChanged(newItems) {
+        if (this._activeItem) {
+            const newIndex = newItems.indexOf(this._activeItem);
+            if (newIndex > -1 && newIndex !== this._activeItemIndex) {
+                this._activeItemIndex = newIndex;
+            }
+        }
     }
 }
 
