@@ -8,6 +8,7 @@ import { Subject, defer, merge, fromEvent } from 'rxjs';
 import { startWith, switchMap, map, takeUntil, filter } from 'rxjs/operators';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Directionality } from '@angular/cdk/bidi';
+import { Platform } from '@angular/cdk/platform';
 
 /** The next id to use for creating unique DOM IDs. */
 let nextId = 0;
@@ -277,6 +278,8 @@ class CdkListbox {
         this._optionClicked = defer(() => this.options.changes.pipe(startWith(this.options), switchMap(options => merge(...options.map(option => option._clicked.pipe(map(event => ({ option, event }))))))));
         /** The directionality of the page. */
         this._dir = inject(Directionality, { optional: true });
+        /** Whether the component is being rendered in the browser. */
+        this._isBrowser = inject(Platform).isBrowser;
         /** A predicate that skips disabled options. */
         this._skipDisabledPredicate = (option) => option.disabled;
         /** A predicate that does not skip any options. */
@@ -285,7 +288,9 @@ class CdkListbox {
         this._hasFocus = false;
         /** A reference to the option that was active before the listbox lost focus. */
         this._previousActiveOption = null;
-        this._setPreviousActiveOptionAsActiveOptionOnWindowBlur();
+        if (this._isBrowser) {
+            this._setPreviousActiveOptionAsActiveOptionOnWindowBlur();
+        }
     }
     ngAfterContentInit() {
         if (typeof ngDevMode === 'undefined' || ngDevMode) {
