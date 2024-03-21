@@ -80,6 +80,8 @@ export declare class CdkListbox<T = unknown> implements AfterContentInit, OnDest
     private _optionClicked;
     /** The directionality of the page. */
     private readonly _dir;
+    /** Whether the component is being rendered in the browser. */
+    private readonly _isBrowser;
     /** A predicate that skips disabled options. */
     private readonly _skipDisabledPredicate;
     /** A predicate that does not skip any options. */
