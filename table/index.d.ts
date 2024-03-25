@@ -861,11 +861,10 @@ export declare const _COALESCED_STYLE_SCHEDULER: InjectionToken<_CoalescedStyleS
  *
  * @docs-private
  */
-export declare class _CoalescedStyleScheduler implements OnDestroy {
-    private readonly _ngZone;
+export declare class _CoalescedStyleScheduler {
     private _currentSchedule;
-    private readonly _destroyed;
-    constructor(_ngZone: NgZone);
+    private _injector;
+    constructor(_unusedNgZone?: NgZone);
     /**
      * Schedules the specified task to run at the end of the current VM turn.
      */
@@ -875,10 +874,7 @@ export declare class _CoalescedStyleScheduler implements OnDestroy {
      * VM turn.
      */
     scheduleEnd(task: () => unknown): void;
-    /** Prevent any further tasks from running. */
-    ngOnDestroy(): void;
     private _createScheduleIfNeeded;
-    private _getScheduleObservable;
     static ɵfac: i0.ɵɵFactoryDeclaration<_CoalescedStyleScheduler, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<_CoalescedStyleScheduler>;
 }
