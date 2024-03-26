@@ -6,9 +6,9 @@ import * as i3 from '@angular/cdk/scrolling';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { InjectionToken, Directive, booleanAttribute, Inject, Optional, Input, ContentChild, inject, EnvironmentInjector, afterNextRender, Injectable, Component, ChangeDetectionStrategy, ViewEncapsulation, EmbeddedViewRef, EventEmitter, Injector, Attribute, SkipSelf, Output, ContentChildren, ViewChild, NgModule } from '@angular/core';
-import { Subject, BehaviorSubject, isObservable, of } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { InjectionToken, Directive, booleanAttribute, Inject, Optional, Input, ContentChild, Injectable, Component, ChangeDetectionStrategy, ViewEncapsulation, inject, EmbeddedViewRef, EventEmitter, Injector, afterNextRender, Attribute, SkipSelf, Output, ContentChildren, ViewChild, NgModule } from '@angular/core';
+import { Subject, from, BehaviorSubject, isObservable, of } from 'rxjs';
+import { takeUntil, take } from 'rxjs/operators';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 
 /**
@@ -273,9 +273,10 @@ const _COALESCED_STYLE_SCHEDULER = new InjectionToken('_COALESCED_STYLE_SCHEDULE
  * @docs-private
  */
 class _CoalescedStyleScheduler {
-    constructor(_unusedNgZone) {
+    constructor(_ngZone) {
+        this._ngZone = _ngZone;
         this._currentSchedule = null;
-        this._injector = inject(EnvironmentInjector);
+        this._destroyed = new Subject();
     }
     /**
      * Schedules the specified task to run at the end of the current VM turn.
@@ -292,12 +293,19 @@ class _CoalescedStyleScheduler {
         this._createScheduleIfNeeded();
         this._currentSchedule.endTasks.push(task);
     }
+    /** Prevent any further tasks from running. */
+    ngOnDestroy() {
+        this._destroyed.next();
+        this._destroyed.complete();
+    }
     _createScheduleIfNeeded() {
         if (this._currentSchedule) {
             return;
         }
         this._currentSchedule = new _Schedule();
-        afterNextRender(() => {
+        this._getScheduleObservable()
+            .pipe(takeUntil(this._destroyed))
+            .subscribe(() => {
             while (this._currentSchedule.tasks.length || this._currentSchedule.endTasks.length) {
                 const schedule = this._currentSchedule;
                 // Capture new tasks scheduled by the current set of tasks.
@@ -310,7 +318,14 @@ class _CoalescedStyleScheduler {
                 }
             }
             this._currentSchedule = null;
-        }, { injector: this._injector });
+        });
+    }
+    _getScheduleObservable() {
+        // Use onStable when in the context of an ongoing change detection cycle so that we
+        // do not accidentally trigger additional cycles.
+        return this._ngZone.isStable
+            ? from(Promise.resolve(undefined))
+            : this._ngZone.onStable.pipe(take(1));
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.0.0-next.1", ngImport: i0, type: _CoalescedStyleScheduler, deps: [{ token: i0.NgZone }], target: i0.ɵɵFactoryTarget.Injectable }); }
     static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "18.0.0-next.1", ngImport: i0, type: _CoalescedStyleScheduler }); }
