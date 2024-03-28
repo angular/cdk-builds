@@ -7,12 +7,14 @@ import { EventEmitter } from '@angular/core';
 import * as i0 from '@angular/core';
 import * as i1 from '@angular/cdk/observers';
 import { InjectionToken } from '@angular/core';
+import { Injector } from '@angular/core';
 import { NgZone } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OnChanges } from '@angular/core';
 import { OnDestroy } from '@angular/core';
 import { Platform } from '@angular/cdk/platform';
 import { QueryList } from '@angular/core';
+import { Signal } from '@angular/core';
 import { SimpleChanges } from '@angular/core';
 import { Subject } from 'rxjs';
 
@@ -520,9 +522,6 @@ export declare type FocusOrigin = 'touch' | 'mouse' | 'keyboard' | 'program' | n
  * This class currently uses a relatively simple approach to focus trapping.
  * It assumes that the tab order is the same as DOM order, which is not necessarily true.
  * Things like `tabIndex > 0`, flex `order`, and shadow roots can cause the two to be misaligned.
- *
- * @deprecated Use `ConfigurableFocusTrap` instead.
- * @breaking-change 11.0.0
  */
 export declare class FocusTrap {
     readonly _element: HTMLElement;
@@ -616,8 +615,6 @@ export declare class FocusTrap {
 
 /**
  * Factory that allows easy instantiation of focus traps.
- * @deprecated Use `ConfigurableFocusTrapFactory` instead.
- * @breaking-change 11.0.0
  */
 export declare class FocusTrapFactory {
     private _checker;
@@ -915,13 +912,15 @@ export declare class ListKeyManager<T extends ListKeyManagerOption> {
     private _allowedModifierKeys;
     private _homeAndEnd;
     private _pageUpAndDown;
+    private _effectRef;
     /**
      * Predicate function that can be used to check whether an item should be skipped
      * by the key manager. By default, disabled items are skipped.
      */
     private _skipPredicateFn;
     private _pressedLetters;
-    constructor(_items: QueryList<T> | T[]);
+    constructor(items: QueryList<T> | T[] | readonly T[]);
+    constructor(items: Signal<T[]> | Signal<readonly T[]>, injector: Injector);
     /**
      * Stream that emits any time the TAB key is pressed, so components can react
      * when focus is shifted off of the list.
@@ -1044,6 +1043,8 @@ export declare class ListKeyManager<T extends ListKeyManagerOption> {
     private _setActiveItemByIndex;
     /** Returns the items as an array. */
     private _getItemsArray;
+    /** Callback for when the items have changed. */
+    private _itemsChanged;
 }
 
 /** Modifier keys handled by the ListKeyManager. */
