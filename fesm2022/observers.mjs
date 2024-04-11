@@ -2,8 +2,34 @@ import { coerceElement, coerceNumberProperty } from '@angular/cdk/coercion';
 import * as i0 from '@angular/core';
 import { Injectable, EventEmitter, booleanAttribute, Directive, Output, Input, NgModule } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { map, filter, debounceTime } from 'rxjs/operators';
 
+// Angular may add, remove, or edit comment nodes during change detection. We don't care about
+// these changes because they don't affect the user-preceived content, and worse it can cause
+// infinite change detection cycles where the change detection updates a comment, triggering the
+// MutationObserver, triggering another change detection and kicking the cycle off again.
+function shouldIgnoreRecord(record) {
+    // Ignore changes to comment text.
+    if (record.type === 'characterData' && record.target instanceof Comment) {
+        return true;
+    }
+    // Ignore addition / removal of comments.
+    if (record.type === 'childList') {
+        for (let i = 0; i < record.addedNodes.length; i++) {
+            if (!(record.addedNodes[i] instanceof Comment)) {
+                return false;
+            }
+        }
+        for (let i = 0; i < record.removedNodes.length; i++) {
+            if (!(record.removedNodes[i] instanceof Comment)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    // Observe everything else.
+    return false;
+}
 /**
  * Factory that creates a new MutationObserver and allows us to stub it out in unit tests.
  * @docs-private
@@ -33,7 +59,9 @@ class ContentObserver {
         const element = coerceElement(elementOrRef);
         return new Observable((observer) => {
             const stream = this._observeElement(element);
-            const subscription = stream.subscribe(observer);
+            const subscription = stream
+                .pipe(map(records => records.filter(record => !shouldIgnoreRecord(record))), filter(records => !!records.length))
+                .subscribe(observer);
             return () => {
                 subscription.unsubscribe();
                 this._unobserveElement(element);
