@@ -287,6 +287,11 @@ function transferCanvasData(source, clone) {
 const passiveEventListenerOptions = normalizePassiveListenerOptions({ passive: true });
 /** Options that can be used to bind an active event listener. */
 const activeEventListenerOptions = normalizePassiveListenerOptions({ passive: false });
+/** Event options that can be used to bind an active, capturing event. */
+const activeCapturingEventOptions$1 = normalizePassiveListenerOptions({
+    passive: false,
+    capture: true,
+});
 /**
  * Time in milliseconds for which to ignore mouse events, after
  * receiving a touch event. Used to avoid doing double work for
@@ -593,7 +598,7 @@ class DragRef {
         this._destroyPreview();
         this._destroyPlaceholder();
         this._dragDropRegistry.removeDragItem(this);
-        this._removeSubscriptions();
+        this._removeListeners();
         this.beforeStarted.complete();
         this.started.complete();
         this.released.complete();
@@ -691,10 +696,11 @@ class DragRef {
         }
     }
     /** Unsubscribes from the global subscriptions. */
-    _removeSubscriptions() {
+    _removeListeners() {
         this._pointerMoveSubscription.unsubscribe();
         this._pointerUpSubscription.unsubscribe();
         this._scrollSubscription.unsubscribe();
+        this._getShadowRoot()?.removeEventListener('selectstart', shadowDomSelectStart, activeCapturingEventOptions$1);
     }
     /** Destroys the preview element and its ViewRef. */
     _destroyPreview() {
@@ -720,7 +726,7 @@ class DragRef {
         if (!this._dragDropRegistry.isDragging(this)) {
             return;
         }
-        this._removeSubscriptions();
+        this._removeListeners();
         this._dragDropRegistry.stopDragging(this);
         this._toggleNativeDragInteractions();
         if (this._handles) {
@@ -765,14 +771,21 @@ class DragRef {
             this._lastTouchEventTime = Date.now();
         }
         this._toggleNativeDragInteractions();
+        // Needs to happen before the root element is moved.
+        const shadowRoot = this._getShadowRoot();
         const dropContainer = this._dropContainer;
+        if (shadowRoot) {
+            // In some browsers the global `selectstart` that we maintain in the `DragDropRegistry`
+            // doesn't cross the shadow boundary so we have to prevent it at the shadow root (see #28792).
+            this._ngZone.runOutsideAngular(() => {
+                shadowRoot.addEventListener('selectstart', shadowDomSelectStart, activeCapturingEventOptions$1);
+            });
+        }
         if (dropContainer) {
             const element = this._rootElement;
             const parent = element.parentNode;
             const placeholder = (this._placeholder = this._createPlaceholderElement());
             const anchor = (this._anchor = this._anchor || this._document.createComment(''));
-            // Needs to happen before the root element is moved.
-            const shadowRoot = this._getShadowRoot();
             // Insert an anchor node so that we can restore the element's position in the DOM.
             parent.insertBefore(anchor, element);
             // There's no risk of transforms stacking when inside a drop container so
@@ -847,7 +860,7 @@ class DragRef {
         this._hasStartedDragging = this._hasMoved = false;
         // Avoid multiple subscriptions and memory leaks when multi touch
         // (isDragging check above isn't enough because of possible temporal and/or dimensional delays)
-        this._removeSubscriptions();
+        this._removeListeners();
         this._initialDomRect = this._rootElement.getBoundingClientRect();
         this._pointerMoveSubscription = this._dragDropRegistry.pointerMove.subscribe(this._pointerMove);
         this._pointerUpSubscription = this._dragDropRegistry.pointerUp.subscribe(this._pointerUp);
@@ -1422,6 +1435,10 @@ function matchElementSize(target, sourceRect) {
     target.style.width = `${sourceRect.width}px`;
     target.style.height = `${sourceRect.height}px`;
     target.style.transform = getTransform(sourceRect.left, sourceRect.top);
+}
+/** Callback invoked for `selectstart` events inside the shadow DOM. */
+function shadowDomSelectStart(event) {
+    event.preventDefault();
 }
 
 /**

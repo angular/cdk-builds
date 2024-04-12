@@ -934,7 +934,7 @@ export declare class DragRef<T = any> {
     /** Updates the item's sort order based on the last-known pointer position. */
     _sortFromLastPointerPosition(): void;
     /** Unsubscribes from the global subscriptions. */
-    private _removeSubscriptions;
+    private _removeListeners;
     /** Destroys the preview element and its ViewRef. */
     private _destroyPreview;
     /** Destroys the placeholder element and its ViewRef. */
