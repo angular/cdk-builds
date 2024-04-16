@@ -2,7 +2,6 @@ import { AfterContentInit } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import * as i0 from '@angular/core';
-import { NgZone } from '@angular/core';
 import { NumberInput } from '@angular/cdk/coercion';
 import { Observable } from 'rxjs';
 import { OnDestroy } from '@angular/core';
@@ -14,7 +13,6 @@ import { OnDestroy } from '@angular/core';
 export declare class CdkObserveContent implements AfterContentInit, OnDestroy {
     private _contentObserver;
     private _elementRef;
-    private _ngZone;
     /** Event emitted for each change in the element's content. */
     readonly event: EventEmitter<MutationRecord[]>;
     /**
@@ -29,7 +27,7 @@ export declare class CdkObserveContent implements AfterContentInit, OnDestroy {
     set debounce(value: NumberInput);
     private _debounce;
     private _currentSubscription;
-    constructor(_contentObserver: ContentObserver, _elementRef: ElementRef<HTMLElement>, _ngZone: NgZone);
+    constructor(_contentObserver: ContentObserver, _elementRef: ElementRef<HTMLElement>);
     ngAfterContentInit(): void;
     ngOnDestroy(): void;
     private _subscribe;
@@ -44,6 +42,7 @@ export declare class ContentObserver implements OnDestroy {
     private _mutationObserverFactory;
     /** Keeps track of the existing MutationObservers so they can be reused. */
     private _observedElements;
+    private _ngZone;
     constructor(_mutationObserverFactory: MutationObserverFactory);
     ngOnDestroy(): void;
     /**
