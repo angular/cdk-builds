@@ -652,8 +652,11 @@ declare interface DragHelperTemplate<T = any> {
 }
 
 /** Template that can be used to create a drag preview element. */
-declare interface DragPreviewTemplate<T = any> extends DragHelperTemplate<T> {
+declare interface DragPreviewTemplate<T = any> {
     matchSize?: boolean;
+    template: TemplateRef<T> | null;
+    viewContainer: ViewContainerRef;
+    context: T;
 }
 
 /**
@@ -667,8 +670,6 @@ export declare class DragRef<T = any> {
     private _dragDropRegistry;
     /** Element displayed next to the user's pointer while the element is dragged. */
     private _preview;
-    /** Reference to the view of the preview element. */
-    private _previewRef;
     /** Container into which to insert the preview. */
     private _previewContainer;
     /** Reference to the view of the placeholder element. */
@@ -966,11 +967,6 @@ export declare class DragRef<T = any> {
      * into a new one, depending on its current drag position.
      */
     private _updateActiveDropContainer;
-    /**
-     * Creates the element that will be rendered next to the user's pointer
-     * and will be used as a preview of the element that is being dragged.
-     */
-    private _createPreviewElement;
     /**
      * Animates the preview element from its current position to the location of the drop placeholder.
      * @returns Promise that resolves when the animation completes.
