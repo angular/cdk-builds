@@ -71,34 +71,25 @@ function combineTransforms(transform, initialTransform) {
         ? transform + ' ' + initialTransform
         : transform;
 }
-
-/** Parses a CSS time value to milliseconds. */
-function parseCssTimeUnitsToMs(value) {
-    // Some browsers will return it in seconds, whereas others will return milliseconds.
-    const multiplier = value.toLowerCase().indexOf('ms') > -1 ? 1 : 1000;
-    return parseFloat(value) * multiplier;
+/**
+ * Matches the target element's size to the source's size.
+ * @param target Element that needs to be resized.
+ * @param sourceRect Dimensions of the source element.
+ */
+function matchElementSize(target, sourceRect) {
+    target.style.width = `${sourceRect.width}px`;
+    target.style.height = `${sourceRect.height}px`;
+    target.style.transform = getTransform(sourceRect.left, sourceRect.top);
 }
-/** Gets the transform transition duration, including the delay, of an element in milliseconds. */
-function getTransformTransitionDurationInMs(element) {
-    const computedStyle = getComputedStyle(element);
-    const transitionedProperties = parseCssPropertyValue(computedStyle, 'transition-property');
-    const property = transitionedProperties.find(prop => prop === 'transform' || prop === 'all');
-    // If there's no transition for `all` or `transform`, we shouldn't do anything.
-    if (!property) {
-        return 0;
-    }
-    // Get the index of the property that we're interested in and match
-    // it up to the same index in `transition-delay` and `transition-duration`.
-    const propertyIndex = transitionedProperties.indexOf(property);
-    const rawDurations = parseCssPropertyValue(computedStyle, 'transition-duration');
-    const rawDelays = parseCssPropertyValue(computedStyle, 'transition-delay');
-    return (parseCssTimeUnitsToMs(rawDurations[propertyIndex]) +
-        parseCssTimeUnitsToMs(rawDelays[propertyIndex]));
-}
-/** Parses out multiple values from a computed style into an array. */
-function parseCssPropertyValue(computedStyle, name) {
-    const value = computedStyle.getPropertyValue(name);
-    return value.split(',').map(part => part.trim());
+/**
+ * Gets a 3d `transform` that can be applied to an element.
+ * @param x Desired position of the element along the X axis.
+ * @param y Desired position of the element along the Y axis.
+ */
+function getTransform(x, y) {
+    // Round the transforms since some browsers will
+    // blur the elements for sub-pixel transforms.
+    return `translate3d(${Math.round(x)}px, ${Math.round(y)}px, 0)`;
 }
 
 /** Gets a mutable version of an element's bounding `DOMRect`. */
@@ -280,6 +271,173 @@ function transferCanvasData(source, clone) {
             context.drawImage(source, 0, 0);
         }
         catch { }
+    }
+}
+
+/**
+ * Gets the root HTML element of an embedded view.
+ * If the root is not an HTML element it gets wrapped in one.
+ */
+function getRootNode(viewRef, _document) {
+    const rootNodes = viewRef.rootNodes;
+    if (rootNodes.length === 1 && rootNodes[0].nodeType === _document.ELEMENT_NODE) {
+        return rootNodes[0];
+    }
+    const wrapper = _document.createElement('div');
+    rootNodes.forEach(node => wrapper.appendChild(node));
+    return wrapper;
+}
+
+/** Parses a CSS time value to milliseconds. */
+function parseCssTimeUnitsToMs(value) {
+    // Some browsers will return it in seconds, whereas others will return milliseconds.
+    const multiplier = value.toLowerCase().indexOf('ms') > -1 ? 1 : 1000;
+    return parseFloat(value) * multiplier;
+}
+/** Gets the transform transition duration, including the delay, of an element in milliseconds. */
+function getTransformTransitionDurationInMs(element) {
+    const computedStyle = getComputedStyle(element);
+    const transitionedProperties = parseCssPropertyValue(computedStyle, 'transition-property');
+    const property = transitionedProperties.find(prop => prop === 'transform' || prop === 'all');
+    // If there's no transition for `all` or `transform`, we shouldn't do anything.
+    if (!property) {
+        return 0;
+    }
+    // Get the index of the property that we're interested in and match
+    // it up to the same index in `transition-delay` and `transition-duration`.
+    const propertyIndex = transitionedProperties.indexOf(property);
+    const rawDurations = parseCssPropertyValue(computedStyle, 'transition-duration');
+    const rawDelays = parseCssPropertyValue(computedStyle, 'transition-delay');
+    return (parseCssTimeUnitsToMs(rawDurations[propertyIndex]) +
+        parseCssTimeUnitsToMs(rawDelays[propertyIndex]));
+}
+/** Parses out multiple values from a computed style into an array. */
+function parseCssPropertyValue(computedStyle, name) {
+    const value = computedStyle.getPropertyValue(name);
+    return value.split(',').map(part => part.trim());
+}
+
+/** Inline styles to be set as `!important` while dragging. */
+const importantProperties = new Set([
+    // Needs to be important, because some `mat-table` sets `position: sticky !important`. See #22781.
+    'position',
+]);
+class PreviewRef {
+    constructor(_document, _rootElement, _direction, _initialDomRect, _previewTemplate, _previewClass, _pickupPositionOnPage, _initialTransform, _zIndex) {
+        this._document = _document;
+        this._rootElement = _rootElement;
+        this._direction = _direction;
+        this._initialDomRect = _initialDomRect;
+        this._previewTemplate = _previewTemplate;
+        this._previewClass = _previewClass;
+        this._pickupPositionOnPage = _pickupPositionOnPage;
+        this._initialTransform = _initialTransform;
+        this._zIndex = _zIndex;
+    }
+    attach(parent) {
+        this._wrapper = this._createWrapper();
+        this._preview = this._createPreview();
+        this._wrapper.appendChild(this._preview);
+        parent.appendChild(this._wrapper);
+        // The null check is necessary for browsers that don't support the popover API.
+        if (this._wrapper.showPopover) {
+            this._wrapper.showPopover();
+        }
+    }
+    destroy() {
+        this._wrapper?.remove();
+        this._previewEmbeddedView?.destroy();
+        this._preview = this._wrapper = this._previewEmbeddedView = null;
+    }
+    setTransform(value) {
+        this._preview.style.transform = value;
+    }
+    getBoundingClientRect() {
+        return this._preview.getBoundingClientRect();
+    }
+    addClass(className) {
+        this._preview.classList.add(className);
+    }
+    getTransitionDuration() {
+        return getTransformTransitionDurationInMs(this._preview);
+    }
+    addEventListener(name, handler) {
+        this._preview.addEventListener(name, handler);
+    }
+    removeEventListener(name, handler) {
+        this._preview.removeEventListener(name, handler);
+    }
+    _createWrapper() {
+        const wrapper = this._document.createElement('div');
+        wrapper.setAttribute('popover', 'manual');
+        wrapper.setAttribute('dir', this._direction);
+        wrapper.classList.add('cdk-drag-preview-container');
+        extendStyles(wrapper.style, {
+            // This is redundant, but we need it for browsers that don't support the popover API.
+            'position': 'fixed',
+            'top': '0',
+            'left': '0',
+            'width': '100%',
+            'height': '100%',
+            'z-index': this._zIndex + '',
+            // Reset the user agent styles.
+            'background': 'none',
+            'border': 'none',
+            'pointer-events': 'none',
+            'margin': '0',
+            'padding': '0',
+        });
+        toggleNativeDragInteractions(wrapper, false);
+        return wrapper;
+    }
+    _createPreview() {
+        const previewConfig = this._previewTemplate;
+        const previewClass = this._previewClass;
+        const previewTemplate = previewConfig ? previewConfig.template : null;
+        let preview;
+        if (previewTemplate && previewConfig) {
+            // Measure the element before we've inserted the preview
+            // since the insertion could throw off the measurement.
+            const rootRect = previewConfig.matchSize ? this._initialDomRect : null;
+            const viewRef = previewConfig.viewContainer.createEmbeddedView(previewTemplate, previewConfig.context);
+            viewRef.detectChanges();
+            preview = getRootNode(viewRef, this._document);
+            this._previewEmbeddedView = viewRef;
+            if (previewConfig.matchSize) {
+                matchElementSize(preview, rootRect);
+            }
+            else {
+                preview.style.transform = getTransform(this._pickupPositionOnPage.x, this._pickupPositionOnPage.y);
+            }
+        }
+        else {
+            preview = deepCloneNode(this._rootElement);
+            matchElementSize(preview, this._initialDomRect);
+            if (this._initialTransform) {
+                preview.style.transform = this._initialTransform;
+            }
+        }
+        extendStyles(preview.style, {
+            // It's important that we disable the pointer events on the preview, because
+            // it can throw off the `document.elementFromPoint` calls in the `CdkDropList`.
+            'pointer-events': 'none',
+            // We have to reset the margin, because it can throw off positioning relative to the viewport.
+            'margin': '0',
+            'position': 'absolute',
+            'top': '0',
+            'left': '0',
+        }, importantProperties);
+        toggleNativeDragInteractions(preview, false);
+        preview.classList.add('cdk-drag-preview');
+        if (previewClass) {
+            if (Array.isArray(previewClass)) {
+                previewClass.forEach(className => preview.classList.add(className));
+            }
+            else {
+                preview.classList.add(previewClass);
+            }
+        }
+        return preview;
     }
 }
 
@@ -704,9 +862,8 @@ class DragRef {
     }
     /** Destroys the preview element and its ViewRef. */
     _destroyPreview() {
-        this._preview?.remove();
-        this._previewRef?.destroy();
-        this._preview = this._previewRef = null;
+        this._preview?.destroy();
+        this._preview = null;
     }
     /** Destroys the placeholder element and its ViewRef. */
     _destroyPlaceholder() {
@@ -793,13 +950,13 @@ class DragRef {
             this._initialTransform = element.style.transform || '';
             // Create the preview after the initial transform has
             // been cached, because it can be affected by the transform.
-            this._preview = this._createPreviewElement();
+            this._preview = new PreviewRef(this._document, this._rootElement, this._direction, this._initialDomRect, this._previewTemplate || null, this.previewClass || null, this._pickupPositionOnPage, this._initialTransform, this._config.zIndex || 1000);
+            this._preview.attach(this._getPreviewInsertionPoint(parent, shadowRoot));
             // We move the element out at the end of the body and we make it hidden, because keeping it in
             // place will throw off the consumer's `:last-child` selectors. We can't remove the element
             // from the DOM completely, because iOS will stop firing all subsequent events in the chain.
             toggleVisibility(element, false, dragImportantProperties);
             this._document.body.appendChild(parent.replaceChild(placeholder, element));
-            this._getPreviewInsertionPoint(parent, shadowRoot).appendChild(this._preview);
             this.started.next({ source: this, event }); // Emit before notifying the container.
             dropContainer.start();
             this._initialContainer = dropContainer;
@@ -973,61 +1130,6 @@ class DragRef {
         }
     }
     /**
-     * Creates the element that will be rendered next to the user's pointer
-     * and will be used as a preview of the element that is being dragged.
-     */
-    _createPreviewElement() {
-        const previewConfig = this._previewTemplate;
-        const previewClass = this.previewClass;
-        const previewTemplate = previewConfig ? previewConfig.template : null;
-        let preview;
-        if (previewTemplate && previewConfig) {
-            // Measure the element before we've inserted the preview
-            // since the insertion could throw off the measurement.
-            const rootRect = previewConfig.matchSize ? this._initialDomRect : null;
-            const viewRef = previewConfig.viewContainer.createEmbeddedView(previewTemplate, previewConfig.context);
-            viewRef.detectChanges();
-            preview = getRootNode(viewRef, this._document);
-            this._previewRef = viewRef;
-            if (previewConfig.matchSize) {
-                matchElementSize(preview, rootRect);
-            }
-            else {
-                preview.style.transform = getTransform(this._pickupPositionOnPage.x, this._pickupPositionOnPage.y);
-            }
-        }
-        else {
-            preview = deepCloneNode(this._rootElement);
-            matchElementSize(preview, this._initialDomRect);
-            if (this._initialTransform) {
-                preview.style.transform = this._initialTransform;
-            }
-        }
-        extendStyles(preview.style, {
-            // It's important that we disable the pointer events on the preview, because
-            // it can throw off the `document.elementFromPoint` calls in the `CdkDropList`.
-            'pointer-events': 'none',
-            // We have to reset the margin, because it can throw off positioning relative to the viewport.
-            'margin': '0',
-            'position': 'fixed',
-            'top': '0',
-            'left': '0',
-            'z-index': `${this._config.zIndex || 1000}`,
-        }, dragImportantProperties);
-        toggleNativeDragInteractions(preview, false);
-        preview.classList.add('cdk-drag-preview');
-        preview.setAttribute('dir', this._direction);
-        if (previewClass) {
-            if (Array.isArray(previewClass)) {
-                previewClass.forEach(className => preview.classList.add(className));
-            }
-            else {
-                preview.classList.add(previewClass);
-            }
-        }
-        return preview;
-    }
-    /**
      * Animates the preview element from its current position to the location of the drop placeholder.
      * @returns Promise that resolves when the animation completes.
      */
@@ -1038,14 +1140,14 @@ class DragRef {
         }
         const placeholderRect = this._placeholder.getBoundingClientRect();
         // Apply the class that adds a transition to the preview.
-        this._preview.classList.add('cdk-drag-animating');
+        this._preview.addClass('cdk-drag-animating');
         // Move the preview to the placeholder position.
         this._applyPreviewTransform(placeholderRect.left, placeholderRect.top);
         // If the element doesn't have a `transition`, the `transitionend` event won't fire. Since
         // we need to trigger a style recalculation in order for the `cdk-drag-animating` class to
         // apply its style, we take advantage of the available info to figure out whether we need to
         // bind the event in the first place.
-        const duration = getTransformTransitionDurationInMs(this._preview);
+        const duration = this._preview.getTransitionDuration();
         if (duration === 0) {
             return Promise.resolve();
         }
@@ -1233,7 +1335,7 @@ class DragRef {
         // it could be completely different and the transform might not make sense anymore.
         const initialTransform = this._previewTemplate?.template ? undefined : this._initialTransform;
         const transform = getTransform(x, y);
-        this._preview.style.transform = combineTransforms(transform, initialTransform);
+        this._preview.setTransform(combineTransforms(transform, initialTransform));
     }
     /**
      * Gets the distance that the user has dragged during the current drag sequence.
@@ -1392,16 +1494,6 @@ class DragRef {
         });
     }
 }
-/**
- * Gets a 3d `transform` that can be applied to an element.
- * @param x Desired position of the element along the X axis.
- * @param y Desired position of the element along the Y axis.
- */
-function getTransform(x, y) {
-    // Round the transforms since some browsers will
-    // blur the elements for sub-pixel transforms.
-    return `translate3d(${Math.round(x)}px, ${Math.round(y)}px, 0)`;
-}
 /** Clamps a value between a minimum and a maximum. */
 function clamp$1(value, min, max) {
     return Math.max(min, Math.min(max, value));
@@ -1412,29 +1504,6 @@ function isTouchEvent(event) {
     // as fast as possible. Since we only bind mouse events and touch events, we can assume
     // that if the event's name starts with `t`, it's a touch event.
     return event.type[0] === 't';
-}
-/**
- * Gets the root HTML element of an embedded view.
- * If the root is not an HTML element it gets wrapped in one.
- */
-function getRootNode(viewRef, _document) {
-    const rootNodes = viewRef.rootNodes;
-    if (rootNodes.length === 1 && rootNodes[0].nodeType === _document.ELEMENT_NODE) {
-        return rootNodes[0];
-    }
-    const wrapper = _document.createElement('div');
-    rootNodes.forEach(node => wrapper.appendChild(node));
-    return wrapper;
-}
-/**
- * Matches the target element's size to the source's size.
- * @param target Element that needs to be resized.
- * @param sourceRect Dimensions of the source element.
- */
-function matchElementSize(target, sourceRect) {
-    target.style.width = `${sourceRect.width}px`;
-    target.style.height = `${sourceRect.height}px`;
-    target.style.transform = getTransform(sourceRect.left, sourceRect.top);
 }
 /** Callback invoked for `selectstart` events inside the shadow DOM. */
 function shadowDomSelectStart(event) {
