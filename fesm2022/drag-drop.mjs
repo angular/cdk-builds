@@ -71,34 +71,25 @@ function combineTransforms(transform, initialTransform) {
         ? transform + ' ' + initialTransform
         : transform;
 }
-
-/** Parses a CSS time value to milliseconds. */
-function parseCssTimeUnitsToMs(value) {
-    // Some browsers will return it in seconds, whereas others will return milliseconds.
-    const multiplier = value.toLowerCase().indexOf('ms') > -1 ? 1 : 1000;
-    return parseFloat(value) * multiplier;
+/**
+ * Matches the target element's size to the source's size.
+ * @param target Element that needs to be resized.
+ * @param sourceRect Dimensions of the source element.
+ */
+function matchElementSize(target, sourceRect) {
+    target.style.width = `${sourceRect.width}px`;
+    target.style.height = `${sourceRect.height}px`;
+    target.style.transform = getTransform(sourceRect.left, sourceRect.top);
 }
-/** Gets the transform transition duration, including the delay, of an element in milliseconds. */
-function getTransformTransitionDurationInMs(element) {
-    const computedStyle = getComputedStyle(element);
-    const transitionedProperties = parseCssPropertyValue(computedStyle, 'transition-property');
-    const property = transitionedProperties.find(prop => prop === 'transform' || prop === 'all');
-    // If there's no transition for `all` or `transform`, we shouldn't do anything.
-    if (!property) {
-        return 0;
-    }
-    // Get the index of the property that we're interested in and match
-    // it up to the same index in `transition-delay` and `transition-duration`.
-    const propertyIndex = transitionedProperties.indexOf(property);
-    const rawDurations = parseCssPropertyValue(computedStyle, 'transition-duration');
-    const rawDelays = parseCssPropertyValue(computedStyle, 'transition-delay');
-    return (parseCssTimeUnitsToMs(rawDurations[propertyIndex]) +
-        parseCssTimeUnitsToMs(rawDelays[propertyIndex]));
-}
-/** Parses out multiple values from a computed style into an array. */
-function parseCssPropertyValue(computedStyle, name) {
-    const value = computedStyle.getPropertyValue(name);
-    return value.split(',').map(part => part.trim());
+/**
+ * Gets a 3d `transform` that can be applied to an element.
+ * @param x Desired position of the element along the X axis.
+ * @param y Desired position of the element along the Y axis.
+ */
+function getTransform(x, y) {
+    // Round the transforms since some browsers will
+    // blur the elements for sub-pixel transforms.
+    return `translate3d(${Math.round(x)}px, ${Math.round(y)}px, 0)`;
 }
 
 /** Gets a mutable version of an element's bounding `DOMRect`. */
@@ -283,10 +274,182 @@ function transferCanvasData(source, clone) {
     }
 }
 
+/**
+ * Gets the root HTML element of an embedded view.
+ * If the root is not an HTML element it gets wrapped in one.
+ */
+function getRootNode(viewRef, _document) {
+    const rootNodes = viewRef.rootNodes;
+    if (rootNodes.length === 1 && rootNodes[0].nodeType === _document.ELEMENT_NODE) {
+        return rootNodes[0];
+    }
+    const wrapper = _document.createElement('div');
+    rootNodes.forEach(node => wrapper.appendChild(node));
+    return wrapper;
+}
+
+/** Parses a CSS time value to milliseconds. */
+function parseCssTimeUnitsToMs(value) {
+    // Some browsers will return it in seconds, whereas others will return milliseconds.
+    const multiplier = value.toLowerCase().indexOf('ms') > -1 ? 1 : 1000;
+    return parseFloat(value) * multiplier;
+}
+/** Gets the transform transition duration, including the delay, of an element in milliseconds. */
+function getTransformTransitionDurationInMs(element) {
+    const computedStyle = getComputedStyle(element);
+    const transitionedProperties = parseCssPropertyValue(computedStyle, 'transition-property');
+    const property = transitionedProperties.find(prop => prop === 'transform' || prop === 'all');
+    // If there's no transition for `all` or `transform`, we shouldn't do anything.
+    if (!property) {
+        return 0;
+    }
+    // Get the index of the property that we're interested in and match
+    // it up to the same index in `transition-delay` and `transition-duration`.
+    const propertyIndex = transitionedProperties.indexOf(property);
+    const rawDurations = parseCssPropertyValue(computedStyle, 'transition-duration');
+    const rawDelays = parseCssPropertyValue(computedStyle, 'transition-delay');
+    return (parseCssTimeUnitsToMs(rawDurations[propertyIndex]) +
+        parseCssTimeUnitsToMs(rawDelays[propertyIndex]));
+}
+/** Parses out multiple values from a computed style into an array. */
+function parseCssPropertyValue(computedStyle, name) {
+    const value = computedStyle.getPropertyValue(name);
+    return value.split(',').map(part => part.trim());
+}
+
+/** Inline styles to be set as `!important` while dragging. */
+const importantProperties = new Set([
+    // Needs to be important, because some `mat-table` sets `position: sticky !important`. See #22781.
+    'position',
+]);
+class PreviewRef {
+    constructor(_document, _rootElement, _direction, _initialDomRect, _previewTemplate, _previewClass, _pickupPositionOnPage, _initialTransform, _zIndex) {
+        this._document = _document;
+        this._rootElement = _rootElement;
+        this._direction = _direction;
+        this._initialDomRect = _initialDomRect;
+        this._previewTemplate = _previewTemplate;
+        this._previewClass = _previewClass;
+        this._pickupPositionOnPage = _pickupPositionOnPage;
+        this._initialTransform = _initialTransform;
+        this._zIndex = _zIndex;
+    }
+    attach(parent) {
+        this._wrapper = this._createWrapper();
+        this._preview = this._createPreview();
+        this._wrapper.appendChild(this._preview);
+        parent.appendChild(this._wrapper);
+        // The null check is necessary for browsers that don't support the popover API.
+        if (this._wrapper.showPopover) {
+            this._wrapper.showPopover();
+        }
+    }
+    destroy() {
+        this._wrapper?.remove();
+        this._previewEmbeddedView?.destroy();
+        this._preview = this._wrapper = this._previewEmbeddedView = null;
+    }
+    setTransform(value) {
+        this._preview.style.transform = value;
+    }
+    getBoundingClientRect() {
+        return this._preview.getBoundingClientRect();
+    }
+    addClass(className) {
+        this._preview.classList.add(className);
+    }
+    getTransitionDuration() {
+        return getTransformTransitionDurationInMs(this._preview);
+    }
+    addEventListener(name, handler) {
+        this._preview.addEventListener(name, handler);
+    }
+    removeEventListener(name, handler) {
+        this._preview.removeEventListener(name, handler);
+    }
+    _createWrapper() {
+        const wrapper = this._document.createElement('div');
+        wrapper.setAttribute('popover', 'manual');
+        wrapper.setAttribute('dir', this._direction);
+        wrapper.classList.add('cdk-drag-preview-container');
+        extendStyles(wrapper.style, {
+            // This is redundant, but we need it for browsers that don't support the popover API.
+            'position': 'fixed',
+            'top': '0',
+            'left': '0',
+            'width': '100%',
+            'height': '100%',
+            'z-index': this._zIndex + '',
+            // Reset the user agent styles.
+            'background': 'none',
+            'border': 'none',
+            'pointer-events': 'none',
+            'margin': '0',
+            'padding': '0',
+        });
+        toggleNativeDragInteractions(wrapper, false);
+        return wrapper;
+    }
+    _createPreview() {
+        const previewConfig = this._previewTemplate;
+        const previewClass = this._previewClass;
+        const previewTemplate = previewConfig ? previewConfig.template : null;
+        let preview;
+        if (previewTemplate && previewConfig) {
+            // Measure the element before we've inserted the preview
+            // since the insertion could throw off the measurement.
+            const rootRect = previewConfig.matchSize ? this._initialDomRect : null;
+            const viewRef = previewConfig.viewContainer.createEmbeddedView(previewTemplate, previewConfig.context);
+            viewRef.detectChanges();
+            preview = getRootNode(viewRef, this._document);
+            this._previewEmbeddedView = viewRef;
+            if (previewConfig.matchSize) {
+                matchElementSize(preview, rootRect);
+            }
+            else {
+                preview.style.transform = getTransform(this._pickupPositionOnPage.x, this._pickupPositionOnPage.y);
+            }
+        }
+        else {
+            preview = deepCloneNode(this._rootElement);
+            matchElementSize(preview, this._initialDomRect);
+            if (this._initialTransform) {
+                preview.style.transform = this._initialTransform;
+            }
+        }
+        extendStyles(preview.style, {
+            // It's important that we disable the pointer events on the preview, because
+            // it can throw off the `document.elementFromPoint` calls in the `CdkDropList`.
+            'pointer-events': 'none',
+            // We have to reset the margin, because it can throw off positioning relative to the viewport.
+            'margin': '0',
+            'position': 'absolute',
+            'top': '0',
+            'left': '0',
+        }, importantProperties);
+        toggleNativeDragInteractions(preview, false);
+        preview.classList.add('cdk-drag-preview');
+        if (previewClass) {
+            if (Array.isArray(previewClass)) {
+                previewClass.forEach(className => preview.classList.add(className));
+            }
+            else {
+                preview.classList.add(previewClass);
+            }
+        }
+        return preview;
+    }
+}
+
 /** Options that can be used to bind a passive event listener. */
 const passiveEventListenerOptions = normalizePassiveListenerOptions({ passive: true });
 /** Options that can be used to bind an active event listener. */
 const activeEventListenerOptions = normalizePassiveListenerOptions({ passive: false });
+/** Event options that can be used to bind an active, capturing event. */
+const activeCapturingEventOptions$1 = normalizePassiveListenerOptions({
+    passive: false,
+    capture: true,
+});
 /**
  * Time in milliseconds for which to ignore mouse events, after
  * receiving a touch event. Used to avoid doing double work for
@@ -417,7 +580,9 @@ class DragRef {
                     if (!container || (!container.isDragging() && !container.isReceiving())) {
                         // Prevent the default action as soon as the dragging sequence is considered as
                         // "started" since waiting for the next event can allow the device to begin scrolling.
-                        event.preventDefault();
+                        if (event.cancelable) {
+                            event.preventDefault();
+                        }
                         this._hasStartedDragging = true;
                         this._ngZone.run(() => this._startDragSequence(event));
                     }
@@ -427,7 +592,9 @@ class DragRef {
             // We prevent the default action down here so that we know that dragging has started. This is
             // important for touch devices where doing this too early can unnecessarily block scrolling,
             // if there's a dragging delay.
-            event.preventDefault();
+            if (event.cancelable) {
+                event.preventDefault();
+            }
             const constrainedPointerPosition = this._getConstrainedPointerPosition(pointerPosition);
             this._hasMoved = true;
             this._lastKnownPointerPosition = pointerPosition;
@@ -589,7 +756,7 @@ class DragRef {
         this._destroyPreview();
         this._destroyPlaceholder();
         this._dragDropRegistry.removeDragItem(this);
-        this._removeSubscriptions();
+        this._removeListeners();
         this.beforeStarted.complete();
         this.started.complete();
         this.released.complete();
@@ -687,16 +854,16 @@ class DragRef {
         }
     }
     /** Unsubscribes from the global subscriptions. */
-    _removeSubscriptions() {
+    _removeListeners() {
         this._pointerMoveSubscription.unsubscribe();
         this._pointerUpSubscription.unsubscribe();
         this._scrollSubscription.unsubscribe();
+        this._getShadowRoot()?.removeEventListener('selectstart', shadowDomSelectStart, activeCapturingEventOptions$1);
     }
     /** Destroys the preview element and its ViewRef. */
     _destroyPreview() {
-        this._preview?.remove();
-        this._previewRef?.destroy();
-        this._preview = this._previewRef = null;
+        this._preview?.destroy();
+        this._preview = null;
     }
     /** Destroys the placeholder element and its ViewRef. */
     _destroyPlaceholder() {
@@ -716,7 +883,7 @@ class DragRef {
         if (!this._dragDropRegistry.isDragging(this)) {
             return;
         }
-        this._removeSubscriptions();
+        this._removeListeners();
         this._dragDropRegistry.stopDragging(this);
         this._toggleNativeDragInteractions();
         if (this._handles) {
@@ -761,14 +928,21 @@ class DragRef {
             this._lastTouchEventTime = Date.now();
         }
         this._toggleNativeDragInteractions();
+        // Needs to happen before the root element is moved.
+        const shadowRoot = this._getShadowRoot();
         const dropContainer = this._dropContainer;
+        if (shadowRoot) {
+            // In some browsers the global `selectstart` that we maintain in the `DragDropRegistry`
+            // doesn't cross the shadow boundary so we have to prevent it at the shadow root (see #28792).
+            this._ngZone.runOutsideAngular(() => {
+                shadowRoot.addEventListener('selectstart', shadowDomSelectStart, activeCapturingEventOptions$1);
+            });
+        }
         if (dropContainer) {
             const element = this._rootElement;
             const parent = element.parentNode;
             const placeholder = (this._placeholder = this._createPlaceholderElement());
             const anchor = (this._anchor = this._anchor || this._document.createComment(''));
-            // Needs to happen before the root element is moved.
-            const shadowRoot = this._getShadowRoot();
             // Insert an anchor node so that we can restore the element's position in the DOM.
             parent.insertBefore(anchor, element);
             // There's no risk of transforms stacking when inside a drop container so
@@ -776,13 +950,13 @@ class DragRef {
             this._initialTransform = element.style.transform || '';
             // Create the preview after the initial transform has
             // been cached, because it can be affected by the transform.
-            this._preview = this._createPreviewElement();
+            this._preview = new PreviewRef(this._document, this._rootElement, this._direction, this._initialDomRect, this._previewTemplate || null, this.previewClass || null, this._pickupPositionOnPage, this._initialTransform, this._config.zIndex || 1000);
+            this._preview.attach(this._getPreviewInsertionPoint(parent, shadowRoot));
             // We move the element out at the end of the body and we make it hidden, because keeping it in
             // place will throw off the consumer's `:last-child` selectors. We can't remove the element
             // from the DOM completely, because iOS will stop firing all subsequent events in the chain.
             toggleVisibility(element, false, dragImportantProperties);
             this._document.body.appendChild(parent.replaceChild(placeholder, element));
-            this._getPreviewInsertionPoint(parent, shadowRoot).appendChild(this._preview);
             this.started.next({ source: this, event }); // Emit before notifying the container.
             dropContainer.start();
             this._initialContainer = dropContainer;
@@ -843,7 +1017,7 @@ class DragRef {
         this._hasStartedDragging = this._hasMoved = false;
         // Avoid multiple subscriptions and memory leaks when multi touch
         // (isDragging check above isn't enough because of possible temporal and/or dimensional delays)
-        this._removeSubscriptions();
+        this._removeListeners();
         this._initialDomRect = this._rootElement.getBoundingClientRect();
         this._pointerMoveSubscription = this._dragDropRegistry.pointerMove.subscribe(this._pointerMove);
         this._pointerUpSubscription = this._dragDropRegistry.pointerUp.subscribe(this._pointerUp);
@@ -956,61 +1130,6 @@ class DragRef {
         }
     }
     /**
-     * Creates the element that will be rendered next to the user's pointer
-     * and will be used as a preview of the element that is being dragged.
-     */
-    _createPreviewElement() {
-        const previewConfig = this._previewTemplate;
-        const previewClass = this.previewClass;
-        const previewTemplate = previewConfig ? previewConfig.template : null;
-        let preview;
-        if (previewTemplate && previewConfig) {
-            // Measure the element before we've inserted the preview
-            // since the insertion could throw off the measurement.
-            const rootRect = previewConfig.matchSize ? this._initialDomRect : null;
-            const viewRef = previewConfig.viewContainer.createEmbeddedView(previewTemplate, previewConfig.context);
-            viewRef.detectChanges();
-            preview = getRootNode(viewRef, this._document);
-            this._previewRef = viewRef;
-            if (previewConfig.matchSize) {
-                matchElementSize(preview, rootRect);
-            }
-            else {
-                preview.style.transform = getTransform(this._pickupPositionOnPage.x, this._pickupPositionOnPage.y);
-            }
-        }
-        else {
-            preview = deepCloneNode(this._rootElement);
-            matchElementSize(preview, this._initialDomRect);
-            if (this._initialTransform) {
-                preview.style.transform = this._initialTransform;
-            }
-        }
-        extendStyles(preview.style, {
-            // It's important that we disable the pointer events on the preview, because
-            // it can throw off the `document.elementFromPoint` calls in the `CdkDropList`.
-            'pointer-events': 'none',
-            // We have to reset the margin, because it can throw off positioning relative to the viewport.
-            'margin': '0',
-            'position': 'fixed',
-            'top': '0',
-            'left': '0',
-            'z-index': `${this._config.zIndex || 1000}`,
-        }, dragImportantProperties);
-        toggleNativeDragInteractions(preview, false);
-        preview.classList.add('cdk-drag-preview');
-        preview.setAttribute('dir', this._direction);
-        if (previewClass) {
-            if (Array.isArray(previewClass)) {
-                previewClass.forEach(className => preview.classList.add(className));
-            }
-            else {
-                preview.classList.add(previewClass);
-            }
-        }
-        return preview;
-    }
-    /**
      * Animates the preview element from its current position to the location of the drop placeholder.
      * @returns Promise that resolves when the animation completes.
      */
@@ -1021,14 +1140,14 @@ class DragRef {
         }
         const placeholderRect = this._placeholder.getBoundingClientRect();
         // Apply the class that adds a transition to the preview.
-        this._preview.classList.add('cdk-drag-animating');
+        this._preview.addClass('cdk-drag-animating');
         // Move the preview to the placeholder position.
         this._applyPreviewTransform(placeholderRect.left, placeholderRect.top);
         // If the element doesn't have a `transition`, the `transitionend` event won't fire. Since
         // we need to trigger a style recalculation in order for the `cdk-drag-animating` class to
         // apply its style, we take advantage of the available info to figure out whether we need to
         // bind the event in the first place.
-        const duration = getTransformTransitionDurationInMs(this._preview);
+        const duration = this._preview.getTransitionDuration();
         if (duration === 0) {
             return Promise.resolve();
         }
@@ -1216,7 +1335,7 @@ class DragRef {
         // it could be completely different and the transform might not make sense anymore.
         const initialTransform = this._previewTemplate?.template ? undefined : this._initialTransform;
         const transform = getTransform(x, y);
-        this._preview.style.transform = combineTransforms(transform, initialTransform);
+        this._preview.setTransform(combineTransforms(transform, initialTransform));
     }
     /**
      * Gets the distance that the user has dragged during the current drag sequence.
@@ -1375,16 +1494,6 @@ class DragRef {
         });
     }
 }
-/**
- * Gets a 3d `transform` that can be applied to an element.
- * @param x Desired position of the element along the X axis.
- * @param y Desired position of the element along the Y axis.
- */
-function getTransform(x, y) {
-    // Round the transforms since some browsers will
-    // blur the elements for sub-pixel transforms.
-    return `translate3d(${Math.round(x)}px, ${Math.round(y)}px, 0)`;
-}
 /** Clamps a value between a minimum and a maximum. */
 function clamp$1(value, min, max) {
     return Math.max(min, Math.min(max, value));
@@ -1396,28 +1505,9 @@ function isTouchEvent(event) {
     // that if the event's name starts with `t`, it's a touch event.
     return event.type[0] === 't';
 }
-/**
- * Gets the root HTML element of an embedded view.
- * If the root is not an HTML element it gets wrapped in one.
- */
-function getRootNode(viewRef, _document) {
-    const rootNodes = viewRef.rootNodes;
-    if (rootNodes.length === 1 && rootNodes[0].nodeType === _document.ELEMENT_NODE) {
-        return rootNodes[0];
-    }
-    const wrapper = _document.createElement('div');
-    rootNodes.forEach(node => wrapper.appendChild(node));
-    return wrapper;
-}
-/**
- * Matches the target element's size to the source's size.
- * @param target Element that needs to be resized.
- * @param sourceRect Dimensions of the source element.
- */
-function matchElementSize(target, sourceRect) {
-    target.style.width = `${sourceRect.width}px`;
-    target.style.height = `${sourceRect.height}px`;
-    target.style.transform = getTransform(sourceRect.left, sourceRect.top);
+/** Callback invoked for `selectstart` events inside the shadow DOM. */
+function shadowDomSelectStart(event) {
+    event.preventDefault();
 }
 
 /**
@@ -2614,10 +2704,10 @@ class DragDropRegistry {
         });
         this._globalListeners.clear();
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.0.0-next.1", ngImport: i0, type: DragDropRegistry, deps: [{ token: i0.NgZone }, { token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "18.0.0-next.1", ngImport: i0, type: DragDropRegistry, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.0.0-next.5", ngImport: i0, type: DragDropRegistry, deps: [{ token: i0.NgZone }, { token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "18.0.0-next.5", ngImport: i0, type: DragDropRegistry, providedIn: 'root' }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.0.0-next.1", ngImport: i0, type: DragDropRegistry, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.0.0-next.5", ngImport: i0, type: DragDropRegistry, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: () => [{ type: i0.NgZone }, { type: undefined, decorators: [{
@@ -2655,10 +2745,10 @@ class DragDrop {
     createDropList(element) {
         return new DropListRef(element, this._dragDropRegistry, this._document, this._ngZone, this._viewportRuler);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.0.0-next.1", ngImport: i0, type: DragDrop, deps: [{ token: DOCUMENT }, { token: i0.NgZone }, { token: i1.ViewportRuler }, { token: DragDropRegistry }], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "18.0.0-next.1", ngImport: i0, type: DragDrop, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.0.0-next.5", ngImport: i0, type: DragDrop, deps: [{ token: DOCUMENT }, { token: i0.NgZone }, { token: i1.ViewportRuler }, { token: DragDropRegistry }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "18.0.0-next.5", ngImport: i0, type: DragDrop, providedIn: 'root' }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.0.0-next.1", ngImport: i0, type: DragDrop, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.0.0-next.5", ngImport: i0, type: DragDrop, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: () => [{ type: undefined, decorators: [{
@@ -2716,10 +2806,10 @@ class CdkDragHandle {
         this._parentDrag?._removeHandle(this);
         this._stateChanges.complete();
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.0.0-next.1", ngImport: i0, type: CdkDragHandle, deps: [{ token: i0.ElementRef }, { token: CDK_DRAG_PARENT, optional: true, skipSelf: true }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "18.0.0-next.1", type: CdkDragHandle, isStandalone: true, selector: "[cdkDragHandle]", inputs: { disabled: ["cdkDragHandleDisabled", "disabled", booleanAttribute] }, host: { classAttribute: "cdk-drag-handle" }, providers: [{ provide: CDK_DRAG_HANDLE, useExisting: CdkDragHandle }], ngImport: i0 }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.0.0-next.5", ngImport: i0, type: CdkDragHandle, deps: [{ token: i0.ElementRef }, { token: CDK_DRAG_PARENT, optional: true, skipSelf: true }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "18.0.0-next.5", type: CdkDragHandle, isStandalone: true, selector: "[cdkDragHandle]", inputs: { disabled: ["cdkDragHandleDisabled", "disabled", booleanAttribute] }, host: { classAttribute: "cdk-drag-handle" }, providers: [{ provide: CDK_DRAG_HANDLE, useExisting: CdkDragHandle }], ngImport: i0 }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.0.0-next.1", ngImport: i0, type: CdkDragHandle, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.0.0-next.5", ngImport: i0, type: CdkDragHandle, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkDragHandle]',
@@ -3132,10 +3222,10 @@ class CdkDrag {
             handleInstance.disabled ? dragRef.disableHandle(handle) : dragRef.enableHandle(handle);
         });
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.0.0-next.1", ngImport: i0, type: CdkDrag, deps: [{ token: i0.ElementRef }, { token: CDK_DROP_LIST, optional: true, skipSelf: true }, { token: DOCUMENT }, { token: i0.NgZone }, { token: i0.ViewContainerRef }, { token: CDK_DRAG_CONFIG, optional: true }, { token: i1$1.Directionality, optional: true }, { token: DragDrop }, { token: i0.ChangeDetectorRef }, { token: CDK_DRAG_HANDLE, optional: true, self: true }, { token: CDK_DRAG_PARENT, optional: true, skipSelf: true }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "18.0.0-next.1", type: CdkDrag, isStandalone: true, selector: "[cdkDrag]", inputs: { data: ["cdkDragData", "data"], lockAxis: ["cdkDragLockAxis", "lockAxis"], rootElementSelector: ["cdkDragRootElement", "rootElementSelector"], boundaryElement: ["cdkDragBoundary", "boundaryElement"], dragStartDelay: ["cdkDragStartDelay", "dragStartDelay"], freeDragPosition: ["cdkDragFreeDragPosition", "freeDragPosition"], disabled: ["cdkDragDisabled", "disabled", booleanAttribute], constrainPosition: ["cdkDragConstrainPosition", "constrainPosition"], previewClass: ["cdkDragPreviewClass", "previewClass"], previewContainer: ["cdkDragPreviewContainer", "previewContainer"] }, outputs: { started: "cdkDragStarted", released: "cdkDragReleased", ended: "cdkDragEnded", entered: "cdkDragEntered", exited: "cdkDragExited", dropped: "cdkDragDropped", moved: "cdkDragMoved" }, host: { properties: { "class.cdk-drag-disabled": "disabled", "class.cdk-drag-dragging": "_dragRef.isDragging()" }, classAttribute: "cdk-drag" }, providers: [{ provide: CDK_DRAG_PARENT, useExisting: CdkDrag }], exportAs: ["cdkDrag"], usesOnChanges: true, ngImport: i0 }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.0.0-next.5", ngImport: i0, type: CdkDrag, deps: [{ token: i0.ElementRef }, { token: CDK_DROP_LIST, optional: true, skipSelf: true }, { token: DOCUMENT }, { token: i0.NgZone }, { token: i0.ViewContainerRef }, { token: CDK_DRAG_CONFIG, optional: true }, { token: i1$1.Directionality, optional: true }, { token: DragDrop }, { token: i0.ChangeDetectorRef }, { token: CDK_DRAG_HANDLE, optional: true, self: true }, { token: CDK_DRAG_PARENT, optional: true, skipSelf: true }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "18.0.0-next.5", type: CdkDrag, isStandalone: true, selector: "[cdkDrag]", inputs: { data: ["cdkDragData", "data"], lockAxis: ["cdkDragLockAxis", "lockAxis"], rootElementSelector: ["cdkDragRootElement", "rootElementSelector"], boundaryElement: ["cdkDragBoundary", "boundaryElement"], dragStartDelay: ["cdkDragStartDelay", "dragStartDelay"], freeDragPosition: ["cdkDragFreeDragPosition", "freeDragPosition"], disabled: ["cdkDragDisabled", "disabled", booleanAttribute], constrainPosition: ["cdkDragConstrainPosition", "constrainPosition"], previewClass: ["cdkDragPreviewClass", "previewClass"], previewContainer: ["cdkDragPreviewContainer", "previewContainer"] }, outputs: { started: "cdkDragStarted", released: "cdkDragReleased", ended: "cdkDragEnded", entered: "cdkDragEntered", exited: "cdkDragExited", dropped: "cdkDragDropped", moved: "cdkDragMoved" }, host: { properties: { "class.cdk-drag-disabled": "disabled", "class.cdk-drag-dragging": "_dragRef.isDragging()" }, classAttribute: "cdk-drag" }, providers: [{ provide: CDK_DRAG_PARENT, useExisting: CdkDrag }], exportAs: ["cdkDrag"], usesOnChanges: true, ngImport: i0 }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.0.0-next.1", ngImport: i0, type: CdkDrag, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.0.0-next.5", ngImport: i0, type: CdkDrag, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkDrag]',
@@ -3254,10 +3344,10 @@ class CdkDropListGroup {
     ngOnDestroy() {
         this._items.clear();
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.0.0-next.1", ngImport: i0, type: CdkDropListGroup, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "18.0.0-next.1", type: CdkDropListGroup, isStandalone: true, selector: "[cdkDropListGroup]", inputs: { disabled: ["cdkDropListGroupDisabled", "disabled", booleanAttribute] }, providers: [{ provide: CDK_DROP_LIST_GROUP, useExisting: CdkDropListGroup }], exportAs: ["cdkDropListGroup"], ngImport: i0 }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.0.0-next.5", ngImport: i0, type: CdkDropListGroup, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "18.0.0-next.5", type: CdkDropListGroup, isStandalone: true, selector: "[cdkDropListGroup]", inputs: { disabled: ["cdkDropListGroupDisabled", "disabled", booleanAttribute] }, providers: [{ provide: CDK_DROP_LIST_GROUP, useExisting: CdkDropListGroup }], exportAs: ["cdkDropListGroup"], ngImport: i0 }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.0.0-next.1", ngImport: i0, type: CdkDropListGroup, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.0.0-next.5", ngImport: i0, type: CdkDropListGroup, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkDropListGroup]',
@@ -3503,14 +3593,14 @@ class CdkDropList {
     _syncItemsWithRef() {
         this._dropListRef.withItems(this.getSortedItems().map(item => item._dragRef));
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.0.0-next.1", ngImport: i0, type: CdkDropList, deps: [{ token: i0.ElementRef }, { token: DragDrop }, { token: i0.ChangeDetectorRef }, { token: i1.ScrollDispatcher }, { token: i1$1.Directionality, optional: true }, { token: CDK_DROP_LIST_GROUP, optional: true, skipSelf: true }, { token: CDK_DRAG_CONFIG, optional: true }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "18.0.0-next.1", type: CdkDropList, isStandalone: true, selector: "[cdkDropList], cdk-drop-list", inputs: { connectedTo: ["cdkDropListConnectedTo", "connectedTo"], data: ["cdkDropListData", "data"], orientation: ["cdkDropListOrientation", "orientation"], id: "id", lockAxis: ["cdkDropListLockAxis", "lockAxis"], disabled: ["cdkDropListDisabled", "disabled", booleanAttribute], sortingDisabled: ["cdkDropListSortingDisabled", "sortingDisabled", booleanAttribute], enterPredicate: ["cdkDropListEnterPredicate", "enterPredicate"], sortPredicate: ["cdkDropListSortPredicate", "sortPredicate"], autoScrollDisabled: ["cdkDropListAutoScrollDisabled", "autoScrollDisabled", booleanAttribute], autoScrollStep: ["cdkDropListAutoScrollStep", "autoScrollStep"] }, outputs: { dropped: "cdkDropListDropped", entered: "cdkDropListEntered", exited: "cdkDropListExited", sorted: "cdkDropListSorted" }, host: { properties: { "attr.id": "id", "class.cdk-drop-list-disabled": "disabled", "class.cdk-drop-list-dragging": "_dropListRef.isDragging()", "class.cdk-drop-list-receiving": "_dropListRef.isReceiving()" }, classAttribute: "cdk-drop-list" }, providers: [
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.0.0-next.5", ngImport: i0, type: CdkDropList, deps: [{ token: i0.ElementRef }, { token: DragDrop }, { token: i0.ChangeDetectorRef }, { token: i1.ScrollDispatcher }, { token: i1$1.Directionality, optional: true }, { token: CDK_DROP_LIST_GROUP, optional: true, skipSelf: true }, { token: CDK_DRAG_CONFIG, optional: true }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "18.0.0-next.5", type: CdkDropList, isStandalone: true, selector: "[cdkDropList], cdk-drop-list", inputs: { connectedTo: ["cdkDropListConnectedTo", "connectedTo"], data: ["cdkDropListData", "data"], orientation: ["cdkDropListOrientation", "orientation"], id: "id", lockAxis: ["cdkDropListLockAxis", "lockAxis"], disabled: ["cdkDropListDisabled", "disabled", booleanAttribute], sortingDisabled: ["cdkDropListSortingDisabled", "sortingDisabled", booleanAttribute], enterPredicate: ["cdkDropListEnterPredicate", "enterPredicate"], sortPredicate: ["cdkDropListSortPredicate", "sortPredicate"], autoScrollDisabled: ["cdkDropListAutoScrollDisabled", "autoScrollDisabled", booleanAttribute], autoScrollStep: ["cdkDropListAutoScrollStep", "autoScrollStep"] }, outputs: { dropped: "cdkDropListDropped", entered: "cdkDropListEntered", exited: "cdkDropListExited", sorted: "cdkDropListSorted" }, host: { properties: { "attr.id": "id", "class.cdk-drop-list-disabled": "disabled", "class.cdk-drop-list-dragging": "_dropListRef.isDragging()", "class.cdk-drop-list-receiving": "_dropListRef.isReceiving()" }, classAttribute: "cdk-drop-list" }, providers: [
             // Prevent child drop lists from picking up the same group as their parent.
             { provide: CDK_DROP_LIST_GROUP, useValue: undefined },
             { provide: CDK_DROP_LIST, useExisting: CdkDropList },
         ], exportAs: ["cdkDropList"], ngImport: i0 }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.0.0-next.1", ngImport: i0, type: CdkDropList, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.0.0-next.5", ngImport: i0, type: CdkDropList, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkDropList], cdk-drop-list',
@@ -3610,10 +3700,10 @@ class CdkDragPreview {
     ngOnDestroy() {
         this._drag?._resetPreviewTemplate(this);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.0.0-next.1", ngImport: i0, type: CdkDragPreview, deps: [{ token: i0.TemplateRef }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "18.0.0-next.1", type: CdkDragPreview, isStandalone: true, selector: "ng-template[cdkDragPreview]", inputs: { data: "data", matchSize: ["matchSize", "matchSize", booleanAttribute] }, providers: [{ provide: CDK_DRAG_PREVIEW, useExisting: CdkDragPreview }], ngImport: i0 }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.0.0-next.5", ngImport: i0, type: CdkDragPreview, deps: [{ token: i0.TemplateRef }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "18.0.0-next.5", type: CdkDragPreview, isStandalone: true, selector: "ng-template[cdkDragPreview]", inputs: { data: "data", matchSize: ["matchSize", "matchSize", booleanAttribute] }, providers: [{ provide: CDK_DRAG_PREVIEW, useExisting: CdkDragPreview }], ngImport: i0 }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.0.0-next.1", ngImport: i0, type: CdkDragPreview, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.0.0-next.5", ngImport: i0, type: CdkDragPreview, decorators: [{
             type: Directive,
             args: [{
                     selector: 'ng-template[cdkDragPreview]',
@@ -3646,10 +3736,10 @@ class CdkDragPlaceholder {
     ngOnDestroy() {
         this._drag?._resetPlaceholderTemplate(this);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.0.0-next.1", ngImport: i0, type: CdkDragPlaceholder, deps: [{ token: i0.TemplateRef }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "18.0.0-next.1", type: CdkDragPlaceholder, isStandalone: true, selector: "ng-template[cdkDragPlaceholder]", inputs: { data: "data" }, providers: [{ provide: CDK_DRAG_PLACEHOLDER, useExisting: CdkDragPlaceholder }], ngImport: i0 }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.0.0-next.5", ngImport: i0, type: CdkDragPlaceholder, deps: [{ token: i0.TemplateRef }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "18.0.0-next.5", type: CdkDragPlaceholder, isStandalone: true, selector: "ng-template[cdkDragPlaceholder]", inputs: { data: "data" }, providers: [{ provide: CDK_DRAG_PLACEHOLDER, useExisting: CdkDragPlaceholder }], ngImport: i0 }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.0.0-next.1", ngImport: i0, type: CdkDragPlaceholder, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.0.0-next.5", ngImport: i0, type: CdkDragPlaceholder, decorators: [{
             type: Directive,
             args: [{
                     selector: 'ng-template[cdkDragPlaceholder]',
@@ -3669,8 +3759,8 @@ const DRAG_DROP_DIRECTIVES = [
     CdkDragPlaceholder,
 ];
 class DragDropModule {
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.0.0-next.1", ngImport: i0, type: DragDropModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule }); }
-    static { this.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "18.0.0-next.1", ngImport: i0, type: DragDropModule, imports: [CdkDropList,
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.0.0-next.5", ngImport: i0, type: DragDropModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule }); }
+    static { this.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "18.0.0-next.5", ngImport: i0, type: DragDropModule, imports: [CdkDropList,
             CdkDropListGroup,
             CdkDrag,
             CdkDragHandle,
@@ -3681,9 +3771,9 @@ class DragDropModule {
             CdkDragHandle,
             CdkDragPreview,
             CdkDragPlaceholder] }); }
-    static { this.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "18.0.0-next.1", ngImport: i0, type: DragDropModule, providers: [DragDrop], imports: [CdkScrollableModule] }); }
+    static { this.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "18.0.0-next.5", ngImport: i0, type: DragDropModule, providers: [DragDrop], imports: [CdkScrollableModule] }); }
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.0.0-next.1", ngImport: i0, type: DragDropModule, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.0.0-next.5", ngImport: i0, type: DragDropModule, decorators: [{
             type: NgModule,
             args: [{
                     imports: DRAG_DROP_DIRECTIVES,
