@@ -318,6 +318,8 @@ export declare class CdkVirtualScrollViewport extends CdkVirtualScrollable imple
     private _runAfterChangeDetection;
     /** Subscription to changes in the viewport size. */
     private _viewportChanges;
+    private _injector;
+    private _isDestroyed;
     constructor(elementRef: ElementRef<HTMLElement>, _changeDetectorRef: ChangeDetectorRef, ngZone: NgZone, _scrollStrategy: VirtualScrollStrategy, dir: Directionality, scrollDispatcher: ScrollDispatcher, viewportRuler: ViewportRuler, scrollable: CdkVirtualScrollable);
     ngOnInit(): void;
     ngOnDestroy(): void;
