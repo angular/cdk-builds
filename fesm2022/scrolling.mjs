@@ -1,6 +1,6 @@
 import { coerceNumberProperty, coerceElement } from '@angular/cdk/coercion';
 import * as i0 from '@angular/core';
-import { InjectionToken, forwardRef, Directive, Input, Injectable, Optional, Inject, inject, booleanAttribute, Component, ViewEncapsulation, ChangeDetectionStrategy, Output, ViewChild, SkipSelf, ElementRef, NgModule } from '@angular/core';
+import { InjectionToken, forwardRef, Directive, Input, Injectable, Optional, Inject, inject, Injector, afterNextRender, booleanAttribute, Component, ViewEncapsulation, ChangeDetectionStrategy, Output, ViewChild, SkipSelf, ElementRef, NgModule } from '@angular/core';
 import { Subject, of, Observable, fromEvent, animationFrameScheduler, asapScheduler, Subscription, isObservable } from 'rxjs';
 import { distinctUntilChanged, auditTime, filter, takeUntil, startWith, pairwise, switchMap, shareReplay } from 'rxjs/operators';
 import * as i1 from '@angular/cdk/platform';
@@ -760,6 +760,8 @@ class CdkVirtualScrollViewport extends CdkVirtualScrollable {
         this._runAfterChangeDetection = [];
         /** Subscription to changes in the viewport size. */
         this._viewportChanges = Subscription.EMPTY;
+        this._injector = inject(Injector);
+        this._isDestroyed = false;
         if (!_scrollStrategy && (typeof ngDevMode === 'undefined' || ngDevMode)) {
             throw Error('Error: cdk-virtual-scroll-viewport requires the "itemSize" property to be set.');
         }
@@ -811,6 +813,7 @@ class CdkVirtualScrollViewport extends CdkVirtualScrollable {
         this._renderedRangeSubject.complete();
         this._detachedSubject.complete();
         this._viewportChanges.unsubscribe();
+        this._isDestroyed = true;
         super.ngOnDestroy();
     }
     /** Attaches a `CdkVirtualScrollRepeater` to this viewport. */
@@ -1030,21 +1033,28 @@ class CdkVirtualScrollViewport extends CdkVirtualScrollable {
     }
     /** Run change detection. */
     _doChangeDetection() {
-        this._isChangeDetectionPending = false;
-        // Apply the content transform. The transform can't be set via an Angular binding because
-        // bypassSecurityTrustStyle is banned in Google. However the value is safe, it's composed of
-        // string literals, a variable that can only be 'X' or 'Y', and user input that is run through
-        // the `Number` function first to coerce it to a numeric value.
-        this._contentWrapper.nativeElement.style.transform = this._renderedContentTransform;
-        // Apply changes to Angular bindings. Note: We must call `markForCheck` to run change detection
-        // from the root, since the repeated items are content projected in. Calling `detectChanges`
-        // instead does not properly check the projected content.
-        this.ngZone.run(() => this._changeDetectorRef.markForCheck());
-        const runAfterChangeDetection = this._runAfterChangeDetection;
-        this._runAfterChangeDetection = [];
-        for (const fn of runAfterChangeDetection) {
-            fn();
+        if (this._isDestroyed) {
+            return;
         }
+        this.ngZone.run(() => {
+            // Apply changes to Angular bindings. Note: We must call `markForCheck` to run change detection
+            // from the root, since the repeated items are content projected in. Calling `detectChanges`
+            // instead does not properly check the projected content.
+            this._changeDetectorRef.markForCheck();
+            // Apply the content transform. The transform can't be set via an Angular binding because
+            // bypassSecurityTrustStyle is banned in Google. However the value is safe, it's composed of
+            // string literals, a variable that can only be 'X' or 'Y', and user input that is run through
+            // the `Number` function first to coerce it to a numeric value.
+            this._contentWrapper.nativeElement.style.transform = this._renderedContentTransform;
+            afterNextRender(() => {
+                this._isChangeDetectionPending = false;
+                const runAfterChangeDetection = this._runAfterChangeDetection;
+                this._runAfterChangeDetection = [];
+                for (const fn of runAfterChangeDetection) {
+                    fn();
+                }
+            }, { injector: this._injector });
+        });
     }
     /** Calculates the `style.width` and `style.height` for the spacer element. */
     _calculateSpacerSize() {
