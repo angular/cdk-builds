@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { Injectable, Inject, InjectionToken, booleanAttribute, Directive, Optional, SkipSelf, Input, EventEmitter, inject, Injector, afterNextRender, Self, Output, NgModule } from '@angular/core';
+import { Injectable, Inject, Component, ViewEncapsulation, ChangeDetectionStrategy, inject, ApplicationRef, EnvironmentInjector, createComponent, InjectionToken, booleanAttribute, Directive, Optional, SkipSelf, Input, EventEmitter, Injector, afterNextRender, Self, Output, NgModule } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import * as i1 from '@angular/cdk/scrolling';
 import { CdkScrollableModule } from '@angular/cdk/scrolling';
@@ -335,20 +335,18 @@ class PreviewRef {
         this._zIndex = _zIndex;
     }
     attach(parent) {
-        this._wrapper = this._createWrapper();
         this._preview = this._createPreview();
-        this._wrapper.appendChild(this._preview);
-        parent.appendChild(this._wrapper);
+        parent.appendChild(this._preview);
         // The null check is necessary for browsers that don't support the popover API.
         // Note that we use a string access for compatibility with Closure.
-        if ('showPopover' in this._wrapper) {
-            this._wrapper['showPopover']();
+        if ('showPopover' in this._preview) {
+            this._preview['showPopover']();
         }
     }
     destroy() {
-        this._wrapper?.remove();
+        this._preview.remove();
         this._previewEmbeddedView?.destroy();
-        this._preview = this._wrapper = this._previewEmbeddedView = null;
+        this._preview = this._previewEmbeddedView = null;
     }
     setTransform(value) {
         this._preview.style.transform = value;
@@ -367,29 +365,6 @@ class PreviewRef {
     }
     removeEventListener(name, handler) {
         this._preview.removeEventListener(name, handler);
-    }
-    _createWrapper() {
-        const wrapper = this._document.createElement('div');
-        wrapper.setAttribute('popover', 'manual');
-        wrapper.setAttribute('dir', this._direction);
-        wrapper.classList.add('cdk-drag-preview-container');
-        extendStyles(wrapper.style, {
-            // This is redundant, but we need it for browsers that don't support the popover API.
-            'position': 'fixed',
-            'top': '0',
-            'left': '0',
-            'width': '100%',
-            'height': '100%',
-            'z-index': this._zIndex + '',
-            // Reset the user agent styles.
-            'background': 'none',
-            'border': 'none',
-            'pointer-events': 'none',
-            'margin': '0',
-            'padding': '0',
-        });
-        toggleNativeDragInteractions(wrapper, false);
-        return wrapper;
     }
     _createPreview() {
         const previewConfig = this._previewTemplate;
@@ -424,12 +399,15 @@ class PreviewRef {
             'pointer-events': 'none',
             // We have to reset the margin, because it can throw off positioning relative to the viewport.
             'margin': '0',
-            'position': 'absolute',
+            'position': 'fixed',
             'top': '0',
             'left': '0',
+            'z-index': this._zIndex + '',
         }, importantProperties);
         toggleNativeDragInteractions(preview, false);
         preview.classList.add('cdk-drag-preview');
+        preview.setAttribute('popover', 'manual');
+        preview.setAttribute('dir', this._direction);
         if (previewClass) {
             if (Array.isArray(previewClass)) {
                 previewClass.forEach(className => preview.classList.add(className));
@@ -2721,6 +2699,20 @@ const DEFAULT_CONFIG = {
     dragStartThreshold: 5,
     pointerDirectionChangeThreshold: 5,
 };
+/** Keeps track of the apps currently containing badges. */
+const activeApps = new Set();
+/**
+ * Component used to load the drag&drop reset styles.
+ * @docs-private
+ */
+class _ResetsLoader {
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.0.0-next.5", ngImport: i0, type: _ResetsLoader, deps: [], target: i0.ɵɵFactoryTarget.Component }); }
+    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "18.0.0-next.5", type: _ResetsLoader, isStandalone: true, selector: "ng-component", host: { attributes: { "cdk-drag-resets-container": "" } }, ngImport: i0, template: '', isInline: true, styles: ["@layer cdk-resets{.cdk-drag-preview{background:none;border:none;padding:0;color:inherit}}"], changeDetection: i0.ChangeDetectionStrategy.OnPush, encapsulation: i0.ViewEncapsulation.None }); }
+}
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.0.0-next.5", ngImport: i0, type: _ResetsLoader, decorators: [{
+            type: Component,
+            args: [{ standalone: true, encapsulation: ViewEncapsulation.None, template: '', changeDetection: ChangeDetectionStrategy.OnPush, host: { 'cdk-drag-resets-container': '' }, styles: ["@layer cdk-resets{.cdk-drag-preview{background:none;border:none;padding:0;color:inherit}}"] }]
+        }] });
 /**
  * Service that allows for drag-and-drop functionality to be attached to DOM elements.
  */
@@ -2730,6 +2722,8 @@ class DragDrop {
         this._ngZone = _ngZone;
         this._viewportRuler = _viewportRuler;
         this._dragDropRegistry = _dragDropRegistry;
+        this._appRef = inject(ApplicationRef);
+        this._environmentInjector = inject(EnvironmentInjector);
     }
     /**
      * Turns an element into a draggable item.
@@ -2737,6 +2731,7 @@ class DragDrop {
      * @param config Object used to configure the dragging behavior.
      */
     createDrag(element, config = DEFAULT_CONFIG) {
+        this._loadResets();
         return new DragRef(element, config, this._document, this._ngZone, this._viewportRuler, this._dragDropRegistry);
     }
     /**
@@ -2745,6 +2740,22 @@ class DragDrop {
      */
     createDropList(element) {
         return new DropListRef(element, this._dragDropRegistry, this._document, this._ngZone, this._viewportRuler);
+    }
+    // TODO(crisbeto): abstract this away into something reusable.
+    /** Loads the CSS resets needed for the module to work correctly. */
+    _loadResets() {
+        if (!activeApps.has(this._appRef)) {
+            activeApps.add(this._appRef);
+            const componentRef = createComponent(_ResetsLoader, {
+                environmentInjector: this._environmentInjector,
+            });
+            this._appRef.onDestroy(() => {
+                activeApps.delete(this._appRef);
+                if (activeApps.size === 0) {
+                    componentRef.destroy();
+                }
+            });
+        }
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.0.0-next.5", ngImport: i0, type: DragDrop, deps: [{ token: DOCUMENT }, { token: i0.NgZone }, { token: i1.ViewportRuler }, { token: DragDropRegistry }], target: i0.ɵɵFactoryTarget.Injectable }); }
     static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "18.0.0-next.5", ngImport: i0, type: DragDrop, providedIn: 'root' }); }
