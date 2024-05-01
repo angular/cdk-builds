@@ -523,6 +523,8 @@ export declare class DragDrop {
     private _ngZone;
     private _viewportRuler;
     private _dragDropRegistry;
+    private _appRef;
+    private _environmentInjector;
     constructor(_document: any, _ngZone: NgZone, _viewportRuler: ViewportRuler, _dragDropRegistry: DragDropRegistry<DragRef, DropListRef>);
     /**
      * Turns an element into a draggable item.
@@ -535,6 +537,8 @@ export declare class DragDrop {
      * @param element Element to which to attach the drop list functionality.
      */
     createDropList<T = any>(element: ElementRef<HTMLElement> | HTMLElement): DropListRef<T>;
+    /** Loads the CSS resets needed for the module to work correctly. */
+    private _loadResets;
     static ɵfac: i0.ɵɵFactoryDeclaration<DragDrop, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<DragDrop>;
 }
