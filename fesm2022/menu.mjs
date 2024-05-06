@@ -188,6 +188,14 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.0", ngImpor
 
 /** Injection token used for an implementation of MenuStack. */
 const MENU_TRIGGER = new InjectionToken('cdk-menu-trigger');
+/** Injection token used to configure the behavior of the menu when the page is scrolled. */
+const MENU_SCROLL_STRATEGY = new InjectionToken('cdk-menu-scroll-strategy', {
+    providedIn: 'root',
+    factory: () => {
+        const overlay = inject(Overlay);
+        return () => overlay.scrollStrategies.reposition();
+    },
+});
 /**
  * Abstract directive that implements shared logic common to all menu triggers.
  * This class can be extended to create custom menu trigger types.
@@ -200,6 +208,8 @@ class CdkMenuTriggerBase {
         this.viewContainerRef = inject(ViewContainerRef);
         /** The menu stack in which this menu resides. */
         this.menuStack = inject(MENU_STACK);
+        /** Function used to configure the scroll strategy for the menu. */
+        this.menuScrollStrategy = inject(MENU_SCROLL_STRATEGY);
         /** Emits when the attached menu is requested to open */
         this.opened = new EventEmitter();
         /** Emits when the attached menu is requested to close */
@@ -675,7 +685,7 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
     _getOverlayConfig() {
         return new OverlayConfig({
             positionStrategy: this._getOverlayPositionStrategy(),
-            scrollStrategy: this._overlay.scrollStrategies.reposition(),
+            scrollStrategy: this.menuScrollStrategy(),
             direction: this._directionality || undefined,
         });
     }
@@ -1716,7 +1726,7 @@ class CdkContextMenuTrigger extends CdkMenuTriggerBase {
     _getOverlayConfig(coordinates) {
         return new OverlayConfig({
             positionStrategy: this._getOverlayPositionStrategy(coordinates),
-            scrollStrategy: this._overlay.scrollStrategies.reposition(),
+            scrollStrategy: this.menuScrollStrategy(),
             direction: this._directionality || undefined,
         });
     }
@@ -1876,5 +1886,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.2.0", ngImpor
  * Generated bundle index. Do not edit.
  */
 
-export { CDK_MENU, CdkContextMenuTrigger, CdkMenu, CdkMenuBar, CdkMenuBase, CdkMenuGroup, CdkMenuItem, CdkMenuItemCheckbox, CdkMenuItemRadio, CdkMenuItemSelectable, CdkMenuModule, CdkMenuTrigger, CdkMenuTriggerBase, CdkTargetMenuAim, ContextMenuTracker, FocusNext, MENU_AIM, MENU_STACK, MENU_TRIGGER, MenuStack, PARENT_OR_NEW_INLINE_MENU_STACK_PROVIDER, PARENT_OR_NEW_MENU_STACK_PROVIDER, PointerFocusTracker, TargetMenuAim };
+export { CDK_MENU, CdkContextMenuTrigger, CdkMenu, CdkMenuBar, CdkMenuBase, CdkMenuGroup, CdkMenuItem, CdkMenuItemCheckbox, CdkMenuItemRadio, CdkMenuItemSelectable, CdkMenuModule, CdkMenuTrigger, CdkMenuTriggerBase, CdkTargetMenuAim, ContextMenuTracker, FocusNext, MENU_AIM, MENU_SCROLL_STRATEGY, MENU_STACK, MENU_TRIGGER, MenuStack, PARENT_OR_NEW_INLINE_MENU_STACK_PROVIDER, PARENT_OR_NEW_MENU_STACK_PROVIDER, PointerFocusTracker, TargetMenuAim };
 //# sourceMappingURL=menu.mjs.map

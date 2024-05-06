@@ -16,6 +16,7 @@ import { OnDestroy } from '@angular/core';
 import { Optional } from '@angular/core';
 import { OverlayRef } from '@angular/cdk/overlay';
 import { QueryList } from '@angular/core';
+import { ScrollStrategy } from '@angular/cdk/overlay';
 import { Subject } from 'rxjs';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { TemplateRef } from '@angular/core';
@@ -487,6 +488,8 @@ export declare abstract class CdkMenuTriggerBase implements OnDestroy {
     protected readonly viewContainerRef: ViewContainerRef;
     /** The menu stack in which this menu resides. */
     protected readonly menuStack: MenuStack;
+    /** Function used to configure the scroll strategy for the menu. */
+    protected readonly menuScrollStrategy: () => ScrollStrategy;
     /**
      * A list of preferred menu positions to be used when constructing the
      * `FlexibleConnectedPositionStrategy` for this trigger's menu.
@@ -661,6 +664,9 @@ export declare interface Menu extends MenuStackItem {
 
 /** Injection token used for an implementation of MenuAim. */
 export declare const MENU_AIM: InjectionToken<MenuAim>;
+
+/** Injection token used to configure the behavior of the menu when the page is scrolled. */
+export declare const MENU_SCROLL_STRATEGY: InjectionToken<() => ScrollStrategy>;
 
 /** Injection token used for an implementation of MenuStack. */
 export declare const MENU_STACK: InjectionToken<MenuStack>;
