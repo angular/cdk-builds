@@ -2663,7 +2663,11 @@ class CdkConnectedOverlay {
             }
         });
         this._overlayRef.outsidePointerEvents().subscribe((event) => {
-            this.overlayOutsideClick.next(event);
+            const origin = this._getOriginElement();
+            const target = _getEventTarget(event);
+            if (!origin || (origin !== target && !origin.contains(target))) {
+                this.overlayOutsideClick.next(event);
+            }
         });
     }
     /** Builds the overlay config based on the directive's inputs */
@@ -2709,7 +2713,7 @@ class CdkConnectedOverlay {
             panelClass: currentPosition.panelClass || undefined,
         }));
         return positionStrategy
-            .setOrigin(this._getFlexibleConnectedPositionStrategyOrigin())
+            .setOrigin(this._getOrigin())
             .withPositions(positions)
             .withFlexibleDimensions(this.flexibleDimensions)
             .withPush(this.push)
@@ -2720,19 +2724,29 @@ class CdkConnectedOverlay {
     }
     /** Returns the position strategy of the overlay to be set on the overlay config */
     _createPositionStrategy() {
-        const strategy = this._overlay
-            .position()
-            .flexibleConnectedTo(this._getFlexibleConnectedPositionStrategyOrigin());
+        const strategy = this._overlay.position().flexibleConnectedTo(this._getOrigin());
         this._updatePositionStrategy(strategy);
         return strategy;
     }
-    _getFlexibleConnectedPositionStrategyOrigin() {
+    _getOrigin() {
         if (this.origin instanceof CdkOverlayOrigin) {
             return this.origin.elementRef;
         }
         else {
             return this.origin;
         }
+    }
+    _getOriginElement() {
+        if (this.origin instanceof CdkOverlayOrigin) {
+            return this.origin.elementRef.nativeElement;
+        }
+        if (this.origin instanceof ElementRef) {
+            return this.origin.nativeElement;
+        }
+        if (typeof Element !== 'undefined' && this.origin instanceof Element) {
+            return this.origin;
+        }
+        return null;
     }
     /** Attaches the overlay and subscribes to backdrop clicks if backdrop exists */
     _attachOverlay() {
