@@ -7,7 +7,7 @@
  */
 import { Migration } from '../update-tool/migration';
 import { ValueOfChanges, VersionChanges } from '../update-tool/version-changes';
-import { AttributeSelectorUpgradeData, ClassNameUpgradeData, ConstructorChecksUpgradeData, CssSelectorUpgradeData, ElementSelectorUpgradeData, InputNameUpgradeData, MethodCallUpgradeData, OutputNameUpgradeData, PropertyNameUpgradeData, SymbolRemovalUpgradeData } from './data';
+import { AttributeSelectorUpgradeData, ClassNameUpgradeData, ConstructorChecksUpgradeData, CssSelectorUpgradeData, ElementSelectorUpgradeData, InputNameUpgradeData, MethodCallUpgradeData, OutputNameUpgradeData, PropertyNameUpgradeData, SymbolRemovalUpgradeData, CssTokenUpgradeData } from './data';
 /** Upgrade data for the Angular CDK. */
 export declare const cdkUpgradeData: UpgradeData;
 /**
@@ -19,6 +19,7 @@ export interface UpgradeData {
     classNames: VersionChanges<ClassNameUpgradeData>;
     constructorChecks: VersionChanges<ConstructorChecksUpgradeData>;
     cssSelectors: VersionChanges<CssSelectorUpgradeData>;
+    cssTokens: VersionChanges<CssTokenUpgradeData>;
     elementSelectors: VersionChanges<ElementSelectorUpgradeData>;
     inputNames: VersionChanges<InputNameUpgradeData>;
     methodCallChecks: VersionChanges<MethodCallUpgradeData>;
