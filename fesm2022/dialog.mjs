@@ -6,11 +6,11 @@ import { Platform, _getFocusedElementPierceShadowDom } from '@angular/cdk/platfo
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, TemplatePortal, PortalModule } from '@angular/cdk/portal';
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { inject, ChangeDetectorRef, Injector, afterNextRender, Component, ViewEncapsulation, ChangeDetectionStrategy, Optional, Inject, ViewChild, InjectionToken, TemplateRef, Injectable, SkipSelf, NgModule } from '@angular/core';
-import { take, startWith } from 'rxjs/operators';
+import { inject, ChangeDetectorRef, Component, ViewEncapsulation, ChangeDetectionStrategy, Optional, Inject, ViewChild, InjectionToken, Injector, TemplateRef, Injectable, SkipSelf, NgModule } from '@angular/core';
 import { ESCAPE, hasModifierKey } from '@angular/cdk/keycodes';
 import { Subject, defer, of } from 'rxjs';
 import { Directionality } from '@angular/cdk/bidi';
+import { startWith } from 'rxjs/operators';
 
 /** Configuration for opening a modal dialog. */
 class DialogConfig {
@@ -111,7 +111,6 @@ class CdkDialogContainer extends BasePortalOutlet {
          */
         this._ariaLabelledByQueue = [];
         this._changeDetectorRef = inject(ChangeDetectorRef);
-        this._injector = inject(Injector);
         /**
          * Attaches a DOM portal to the dialog container.
          * @param portal Portal to be attached.
@@ -244,33 +243,13 @@ class CdkDialogContainer extends BasePortalOutlet {
                 break;
             case true:
             case 'first-tabbable':
-                const doFocus = () => {
-                    const focusedSuccessfully = this._focusTrap?.focusInitialElement();
-                    // If we weren't able to find a focusable element in the dialog, then focus the
-                    // dialog container instead.
+                this._focusTrap?.focusInitialElementWhenReady().then(focusedSuccessfully => {
+                    // If we weren't able to find a focusable element in the dialog, then focus the dialog
+                    // container instead.
                     if (!focusedSuccessfully) {
                         this._focusDialogContainer();
                     }
-                };
-                // TODO(mmalerba): Make this behave consistently across zonefull / zoneless.
-                if (!this._ngZone.isStable) {
-                    // Subscribing `onStable` has slightly different behavior than `afterNextRender`.
-                    // `afterNextRender` does not wait for state changes queued up in a Promise
-                    // to avoid change after checked errors. In most cases we would consider this an
-                    // acceptable behavior change, the dialog at least made its best effort to focus the
-                    // first element. However, this is particularly problematic when combined with the
-                    // current behavior of the mat-radio-group, which adjusts the tabindex of its child
-                    // radios based on the selected value of the group. When the selected value is bound
-                    // via `[(ngModel)]` it hits this "state change in a promise" edge-case and can wind up
-                    // putting the focus on a radio button that is not supposed to be eligible to receive
-                    // focus. For now, we side-step this whole sequence of events by continuing to use
-                    // `onStable` in zonefull apps, but it should be noted that zoneless apps can still
-                    // suffer from this issue.
-                    this._ngZone.onStable.pipe(take(1)).subscribe(doFocus);
-                }
-                else {
-                    afterNextRender(doFocus, { injector: this._injector });
-                }
+                });
                 break;
             case 'first-heading':
                 this._focusByCssSelector('h1, h2, h3, h4, h5, h6, [role="heading"]');
