@@ -528,6 +528,8 @@ export declare class FocusTrap {
     private _checker;
     readonly _ngZone: NgZone;
     readonly _document: Document;
+    /** @breaking-change 20.0.0 param to become required */
+    readonly _injector?: Injector | undefined;
     private _startAnchor;
     private _endAnchor;
     private _hasAttached;
@@ -537,7 +539,9 @@ export declare class FocusTrap {
     get enabled(): boolean;
     set enabled(value: boolean);
     protected _enabled: boolean;
-    constructor(_element: HTMLElement, _checker: InteractivityChecker, _ngZone: NgZone, _document: Document, deferAnchors?: boolean);
+    constructor(_element: HTMLElement, _checker: InteractivityChecker, _ngZone: NgZone, _document: Document, deferAnchors?: boolean, 
+    /** @breaking-change 20.0.0 param to become required */
+    _injector?: Injector | undefined);
     /** Destroys the focus trap by cleaning up the anchors. */
     destroy(): void;
     /**
@@ -620,6 +624,7 @@ export declare class FocusTrapFactory {
     private _checker;
     private _ngZone;
     private _document;
+    private _injector;
     constructor(_checker: InteractivityChecker, _ngZone: NgZone, _document: any);
     /**
      * Creates a focus-trapped region around the given element.

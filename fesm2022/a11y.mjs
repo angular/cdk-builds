@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { inject, APP_ID, Injectable, Inject, QueryList, isSignal, effect, booleanAttribute, Directive, Input, InjectionToken, Optional, EventEmitter, Output, NgModule } from '@angular/core';
+import { inject, APP_ID, Injectable, Inject, QueryList, isSignal, effect, afterNextRender, Injector, booleanAttribute, Directive, Input, InjectionToken, Optional, EventEmitter, Output, NgModule } from '@angular/core';
 import * as i1 from '@angular/cdk/platform';
 import { Platform, _getFocusedElementPierceShadowDom, normalizePassiveListenerOptions, _getEventTarget, _getShadowRoot } from '@angular/cdk/platform';
 import { Subject, Subscription, BehaviorSubject, of } from 'rxjs';
@@ -915,11 +915,14 @@ class FocusTrap {
             this._toggleAnchorTabIndex(value, this._endAnchor);
         }
     }
-    constructor(_element, _checker, _ngZone, _document, deferAnchors = false) {
+    constructor(_element, _checker, _ngZone, _document, deferAnchors = false, 
+    /** @breaking-change 20.0.0 param to become required */
+    _injector) {
         this._element = _element;
         this._checker = _checker;
         this._ngZone = _ngZone;
         this._document = _document;
+        this._injector = _injector;
         this._hasAttached = false;
         // Event listeners for the anchors. Need to be regular functions so that we can unbind them later.
         this.startAnchorListener = () => this.focusLastTabbableElement();
@@ -1157,11 +1160,29 @@ class FocusTrap {
     }
     /** Executes a function when the zone is stable. */
     _executeOnStable(fn) {
-        if (this._ngZone.isStable) {
-            fn();
+        // TODO(mmalerba): Make this behave consistently across zonefull / zoneless.
+        if (!this._ngZone.isStable) {
+            // Subscribing `onStable` has slightly different behavior than `afterNextRender`.
+            // `afterNextRender` does not wait for state changes queued up in a Promise
+            // to avoid change after checked errors. In most cases we would consider this an
+            // acceptable behavior change, the dialog at least made its best effort to focus the
+            // first element. However, this is particularly problematic when combined with the
+            // current behavior of the mat-radio-group, which adjusts the tabindex of its child
+            // radios based on the selected value of the group. When the selected value is bound
+            // via `[(ngModel)]` it hits this "state change in a promise" edge-case and can wind up
+            // putting the focus on a radio button that is not supposed to be eligible to receive
+            // focus. For now, we side-step this whole sequence of events by continuing to use
+            // `onStable` in zonefull apps, but it should be noted that zoneless apps can still
+            // suffer from this issue.
+            this._ngZone.onStable.pipe(take(1)).subscribe(fn);
         }
         else {
-            this._ngZone.onStable.pipe(take(1)).subscribe(fn);
+            if (this._injector) {
+                afterNextRender(fn, { injector: this._injector });
+            }
+            else {
+                fn();
+            }
         }
     }
 }
@@ -1172,6 +1193,7 @@ class FocusTrapFactory {
     constructor(_checker, _ngZone, _document) {
         this._checker = _checker;
         this._ngZone = _ngZone;
+        this._injector = inject(Injector);
         this._document = _document;
     }
     /**
@@ -1182,7 +1204,7 @@ class FocusTrapFactory {
      * @returns The created focus trap instance.
      */
     create(element, deferCaptureElements = false) {
-        return new FocusTrap(element, this._checker, this._ngZone, this._document, deferCaptureElements);
+        return new FocusTrap(element, this._checker, this._ngZone, this._document, deferCaptureElements, this._injector);
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.0.0-rc.2", ngImport: i0, type: FocusTrapFactory, deps: [{ token: InteractivityChecker }, { token: i0.NgZone }, { token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Injectable }); }
     static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "18.0.0-rc.2", ngImport: i0, type: FocusTrapFactory, providedIn: 'root' }); }
