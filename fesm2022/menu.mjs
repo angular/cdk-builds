@@ -1678,6 +1678,7 @@ class CdkContextMenuTrigger extends CdkMenuTriggerBase {
         this._directionality = inject(Directionality, { optional: true });
         /** The app's context menu tracking registry */
         this._contextMenuTracker = inject(ContextMenuTracker);
+        this._changeDetectorRef = inject(ChangeDetectorRef);
         /** Whether the context menu is disabled. */
         this.disabled = false;
         this._setMenuStackCloseListener();
@@ -1688,6 +1689,7 @@ class CdkContextMenuTrigger extends CdkMenuTriggerBase {
      */
     open(coordinates) {
         this._open(null, coordinates);
+        this._changeDetectorRef.markForCheck();
     }
     /** Close the currently opened context menu. */
     close() {
