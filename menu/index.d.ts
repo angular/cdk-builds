@@ -36,6 +36,7 @@ export declare class CdkContextMenuTrigger extends CdkMenuTriggerBase implements
     private readonly _directionality;
     /** The app's context menu tracking registry */
     private readonly _contextMenuTracker;
+    private readonly _changeDetectorRef;
     /** Whether the context menu is disabled. */
     disabled: boolean;
     constructor();
