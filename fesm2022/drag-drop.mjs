@@ -1,95 +1,71 @@
 import * as i0 from '@angular/core';
-import { Component, ViewEncapsulation, ChangeDetectionStrategy, inject, ApplicationRef, EnvironmentInjector, createComponent, Injectable, Inject, InjectionToken, booleanAttribute, Directive, Optional, SkipSelf, Input, EventEmitter, Injector, afterNextRender, Self, Output, NgModule } from '@angular/core';
+import { signal, Component, ViewEncapsulation, ChangeDetectionStrategy, inject, ApplicationRef, EnvironmentInjector, createComponent, Injectable, Inject, InjectionToken, booleanAttribute, Directive, Optional, SkipSelf, Input, EventEmitter, Injector, afterNextRender, Self, Output, NgModule } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import * as i1 from '@angular/cdk/scrolling';
 import { CdkScrollableModule } from '@angular/cdk/scrolling';
-import { _getEventTarget, normalizePassiveListenerOptions, _getShadowRoot } from '@angular/cdk/platform';
-import { coerceElement, coerceNumberProperty, coerceArray } from '@angular/cdk/coercion';
 import { isFakeTouchstartFromScreenReader, isFakeMousedownFromScreenReader } from '@angular/cdk/a11y';
+import { coerceElement, coerceNumberProperty, coerceArray } from '@angular/cdk/coercion';
+import { _getEventTarget, normalizePassiveListenerOptions, _getShadowRoot } from '@angular/cdk/platform';
 import { Subject, Subscription, interval, animationFrameScheduler, Observable, merge, BehaviorSubject } from 'rxjs';
 import { takeUntil, map, take, tap, switchMap, startWith } from 'rxjs/operators';
 import * as i1$1 from '@angular/cdk/bidi';
 
-/**
- * Shallow-extends a stylesheet object with another stylesheet-like object.
- * Note that the keys in `source` have to be dash-cased.
- * @docs-private
- */
-function extendStyles(dest, source, importantProperties) {
-    for (let key in source) {
-        if (source.hasOwnProperty(key)) {
-            const value = source[key];
-            if (value) {
-                dest.setProperty(key, value, importantProperties?.has(key) ? 'important' : '');
-            }
-            else {
-                dest.removeProperty(key);
-            }
+/** Creates a deep clone of an element. */
+function deepCloneNode(node) {
+    const clone = node.cloneNode(true);
+    const descendantsWithId = clone.querySelectorAll('[id]');
+    const nodeName = node.nodeName.toLowerCase();
+    // Remove the `id` to avoid having multiple elements with the same id on the page.
+    clone.removeAttribute('id');
+    for (let i = 0; i < descendantsWithId.length; i++) {
+        descendantsWithId[i].removeAttribute('id');
+    }
+    if (nodeName === 'canvas') {
+        transferCanvasData(node, clone);
+    }
+    else if (nodeName === 'input' || nodeName === 'select' || nodeName === 'textarea') {
+        transferInputData(node, clone);
+    }
+    transferData('canvas', node, clone, transferCanvasData);
+    transferData('input, textarea, select', node, clone, transferInputData);
+    return clone;
+}
+/** Matches elements between an element and its clone and allows for their data to be cloned. */
+function transferData(selector, node, clone, callback) {
+    const descendantElements = node.querySelectorAll(selector);
+    if (descendantElements.length) {
+        const cloneElements = clone.querySelectorAll(selector);
+        for (let i = 0; i < descendantElements.length; i++) {
+            callback(descendantElements[i], cloneElements[i]);
         }
     }
-    return dest;
 }
-/**
- * Toggles whether the native drag interactions should be enabled for an element.
- * @param element Element on which to toggle the drag interactions.
- * @param enable Whether the drag interactions should be enabled.
- * @docs-private
- */
-function toggleNativeDragInteractions(element, enable) {
-    const userSelect = enable ? '' : 'none';
-    extendStyles(element.style, {
-        'touch-action': enable ? '' : 'none',
-        '-webkit-user-drag': enable ? '' : 'none',
-        '-webkit-tap-highlight-color': enable ? '' : 'transparent',
-        'user-select': userSelect,
-        '-ms-user-select': userSelect,
-        '-webkit-user-select': userSelect,
-        '-moz-user-select': userSelect,
-    });
+// Counter for unique cloned radio button names.
+let cloneUniqueId = 0;
+/** Transfers the data of one input element to another. */
+function transferInputData(source, clone) {
+    // Browsers throw an error when assigning the value of a file input programmatically.
+    if (clone.type !== 'file') {
+        clone.value = source.value;
+    }
+    // Radio button `name` attributes must be unique for radio button groups
+    // otherwise original radio buttons can lose their checked state
+    // once the clone is inserted in the DOM.
+    if (clone.type === 'radio' && clone.name) {
+        clone.name = `mat-clone-${clone.name}-${cloneUniqueId++}`;
+    }
 }
-/**
- * Toggles whether an element is visible while preserving its dimensions.
- * @param element Element whose visibility to toggle
- * @param enable Whether the element should be visible.
- * @param importantProperties Properties to be set as `!important`.
- * @docs-private
- */
-function toggleVisibility(element, enable, importantProperties) {
-    extendStyles(element.style, {
-        position: enable ? '' : 'fixed',
-        top: enable ? '' : '0',
-        opacity: enable ? '' : '0',
-        left: enable ? '' : '-999em',
-    }, importantProperties);
-}
-/**
- * Combines a transform string with an optional other transform
- * that exited before the base transform was applied.
- */
-function combineTransforms(transform, initialTransform) {
-    return initialTransform && initialTransform != 'none'
-        ? transform + ' ' + initialTransform
-        : transform;
-}
-/**
- * Matches the target element's size to the source's size.
- * @param target Element that needs to be resized.
- * @param sourceRect Dimensions of the source element.
- */
-function matchElementSize(target, sourceRect) {
-    target.style.width = `${sourceRect.width}px`;
-    target.style.height = `${sourceRect.height}px`;
-    target.style.transform = getTransform(sourceRect.left, sourceRect.top);
-}
-/**
- * Gets a 3d `transform` that can be applied to an element.
- * @param x Desired position of the element along the X axis.
- * @param y Desired position of the element along the Y axis.
- */
-function getTransform(x, y) {
-    // Round the transforms since some browsers will
-    // blur the elements for sub-pixel transforms.
-    return `translate3d(${Math.round(x)}px, ${Math.round(y)}px, 0)`;
+/** Transfers the data of one canvas element to another. */
+function transferCanvasData(source, clone) {
+    const context = clone.getContext('2d');
+    if (context) {
+        // In some cases `drawImage` can throw (e.g. if the canvas size is 0x0).
+        // We can't do much about it so just ignore the error.
+        try {
+            context.drawImage(source, 0, 0);
+        }
+        catch { }
+    }
 }
 
 /** Gets a mutable version of an element's bounding `DOMRect`. */
@@ -216,64 +192,6 @@ class ParentPositionTracker {
     }
 }
 
-/** Creates a deep clone of an element. */
-function deepCloneNode(node) {
-    const clone = node.cloneNode(true);
-    const descendantsWithId = clone.querySelectorAll('[id]');
-    const nodeName = node.nodeName.toLowerCase();
-    // Remove the `id` to avoid having multiple elements with the same id on the page.
-    clone.removeAttribute('id');
-    for (let i = 0; i < descendantsWithId.length; i++) {
-        descendantsWithId[i].removeAttribute('id');
-    }
-    if (nodeName === 'canvas') {
-        transferCanvasData(node, clone);
-    }
-    else if (nodeName === 'input' || nodeName === 'select' || nodeName === 'textarea') {
-        transferInputData(node, clone);
-    }
-    transferData('canvas', node, clone, transferCanvasData);
-    transferData('input, textarea, select', node, clone, transferInputData);
-    return clone;
-}
-/** Matches elements between an element and its clone and allows for their data to be cloned. */
-function transferData(selector, node, clone, callback) {
-    const descendantElements = node.querySelectorAll(selector);
-    if (descendantElements.length) {
-        const cloneElements = clone.querySelectorAll(selector);
-        for (let i = 0; i < descendantElements.length; i++) {
-            callback(descendantElements[i], cloneElements[i]);
-        }
-    }
-}
-// Counter for unique cloned radio button names.
-let cloneUniqueId = 0;
-/** Transfers the data of one input element to another. */
-function transferInputData(source, clone) {
-    // Browsers throw an error when assigning the value of a file input programmatically.
-    if (clone.type !== 'file') {
-        clone.value = source.value;
-    }
-    // Radio button `name` attributes must be unique for radio button groups
-    // otherwise original radio buttons can lose their checked state
-    // once the clone is inserted in the DOM.
-    if (clone.type === 'radio' && clone.name) {
-        clone.name = `mat-clone-${clone.name}-${cloneUniqueId++}`;
-    }
-}
-/** Transfers the data of one canvas element to another. */
-function transferCanvasData(source, clone) {
-    const context = clone.getContext('2d');
-    if (context) {
-        // In some cases `drawImage` can throw (e.g. if the canvas size is 0x0).
-        // We can't do much about it so just ignore the error.
-        try {
-            context.drawImage(source, 0, 0);
-        }
-        catch { }
-    }
-}
-
 /**
  * Gets the root HTML element of an embedded view.
  * If the root is not an HTML element it gets wrapped in one.
@@ -286,6 +204,88 @@ function getRootNode(viewRef, _document) {
     const wrapper = _document.createElement('div');
     rootNodes.forEach(node => wrapper.appendChild(node));
     return wrapper;
+}
+
+/**
+ * Shallow-extends a stylesheet object with another stylesheet-like object.
+ * Note that the keys in `source` have to be dash-cased.
+ * @docs-private
+ */
+function extendStyles(dest, source, importantProperties) {
+    for (let key in source) {
+        if (source.hasOwnProperty(key)) {
+            const value = source[key];
+            if (value) {
+                dest.setProperty(key, value, importantProperties?.has(key) ? 'important' : '');
+            }
+            else {
+                dest.removeProperty(key);
+            }
+        }
+    }
+    return dest;
+}
+/**
+ * Toggles whether the native drag interactions should be enabled for an element.
+ * @param element Element on which to toggle the drag interactions.
+ * @param enable Whether the drag interactions should be enabled.
+ * @docs-private
+ */
+function toggleNativeDragInteractions(element, enable) {
+    const userSelect = enable ? '' : 'none';
+    extendStyles(element.style, {
+        'touch-action': enable ? '' : 'none',
+        '-webkit-user-drag': enable ? '' : 'none',
+        '-webkit-tap-highlight-color': enable ? '' : 'transparent',
+        'user-select': userSelect,
+        '-ms-user-select': userSelect,
+        '-webkit-user-select': userSelect,
+        '-moz-user-select': userSelect,
+    });
+}
+/**
+ * Toggles whether an element is visible while preserving its dimensions.
+ * @param element Element whose visibility to toggle
+ * @param enable Whether the element should be visible.
+ * @param importantProperties Properties to be set as `!important`.
+ * @docs-private
+ */
+function toggleVisibility(element, enable, importantProperties) {
+    extendStyles(element.style, {
+        position: enable ? '' : 'fixed',
+        top: enable ? '' : '0',
+        opacity: enable ? '' : '0',
+        left: enable ? '' : '-999em',
+    }, importantProperties);
+}
+/**
+ * Combines a transform string with an optional other transform
+ * that exited before the base transform was applied.
+ */
+function combineTransforms(transform, initialTransform) {
+    return initialTransform && initialTransform != 'none'
+        ? transform + ' ' + initialTransform
+        : transform;
+}
+/**
+ * Matches the target element's size to the source's size.
+ * @param target Element that needs to be resized.
+ * @param sourceRect Dimensions of the source element.
+ */
+function matchElementSize(target, sourceRect) {
+    target.style.width = `${sourceRect.width}px`;
+    target.style.height = `${sourceRect.height}px`;
+    target.style.transform = getTransform(sourceRect.left, sourceRect.top);
+}
+/**
+ * Gets a 3d `transform` that can be applied to an element.
+ * @param x Desired position of the element along the X axis.
+ * @param y Desired position of the element along the Y axis.
+ */
+function getTransform(x, y) {
+    // Round the transforms since some browsers will
+    // blur the elements for sub-pixel transforms.
+    return `translate3d(${Math.round(x)}px, ${Math.round(y)}px, 0)`;
 }
 
 /** Parses a CSS time value to milliseconds. */
@@ -475,7 +475,7 @@ class DragRef {
          * Whether the dragging sequence has been started. Doesn't
          * necessarily mean that the element has been moved.
          */
-        this._hasStartedDragging = false;
+        this._hasStartedDragging = signal(false);
         /** Emits when the item is being moved. */
         this._moveEvents = new Subject();
         /** Subscription to pointer movement events. */
@@ -538,7 +538,7 @@ class DragRef {
         /** Handler that is invoked when the user moves their pointer after they've initiated a drag. */
         this._pointerMove = (event) => {
             const pointerPosition = this._getPointerPositionOnPage(event);
-            if (!this._hasStartedDragging) {
+            if (!this._hasStartedDragging()) {
                 const distanceX = Math.abs(pointerPosition.x - this._pickupPositionOnPage.x);
                 const distanceY = Math.abs(pointerPosition.y - this._pickupPositionOnPage.y);
                 const isOverThreshold = distanceX + distanceY >= this._config.dragStartThreshold;
@@ -562,7 +562,7 @@ class DragRef {
                         if (event.cancelable) {
                             event.preventDefault();
                         }
-                        this._hasStartedDragging = true;
+                        this._hasStartedDragging.set(true);
                         this._ngZone.run(() => this._startDragSequence(event));
                     }
                 }
@@ -760,7 +760,7 @@ class DragRef {
     }
     /** Checks whether the element is currently being dragged. */
     isDragging() {
-        return this._hasStartedDragging && this._dragDropRegistry.isDragging(this);
+        return this._hasStartedDragging() && this._dragDropRegistry.isDragging(this);
     }
     /** Resets a standalone drag item to its initial position. */
     reset() {
@@ -869,7 +869,7 @@ class DragRef {
             this._rootElement.style.webkitTapHighlightColor =
                 this._rootElementTapHighlight;
         }
-        if (!this._hasStartedDragging) {
+        if (!this._hasStartedDragging()) {
             return;
         }
         this.released.next({ source: this, event });
@@ -993,7 +993,8 @@ class DragRef {
             this._rootElementTapHighlight = rootStyles.webkitTapHighlightColor || '';
             rootStyles.webkitTapHighlightColor = 'transparent';
         }
-        this._hasStartedDragging = this._hasMoved = false;
+        this._hasMoved = false;
+        this._hasStartedDragging.set(this._hasMoved);
         // Avoid multiple subscriptions and memory leaks when multi touch
         // (isDragging check above isn't enough because of possible temporal and/or dimensional delays)
         this._removeListeners();
@@ -2512,7 +2513,7 @@ class DragDropRegistry {
         /** Registered drag item instances. */
         this._dragInstances = new Set();
         /** Drag item instances that are currently being dragged. */
-        this._activeDragInstances = [];
+        this._activeDragInstances = signal([]);
         /** Keeps track of the event listeners that we've bound to the `document`. */
         this._globalListeners = new Map();
         /**
@@ -2541,17 +2542,17 @@ class DragDropRegistry {
          * @param event Event whose default action should be prevented.
          */
         this._preventDefaultWhileDragging = (event) => {
-            if (this._activeDragInstances.length > 0) {
+            if (this._activeDragInstances().length > 0) {
                 event.preventDefault();
             }
         };
         /** Event listener for `touchmove` that is bound even if no dragging is happening. */
         this._persistentTouchmoveListener = (event) => {
-            if (this._activeDragInstances.length > 0) {
+            if (this._activeDragInstances().length > 0) {
                 // Note that we only want to prevent the default action after dragging has actually started.
                 // Usually this is the same time at which the item is added to the `_activeDragInstances`,
                 // but it could be pushed back if the user has set up a drag delay or threshold.
-                if (this._activeDragInstances.some(this._draggingPredicate)) {
+                if (this._activeDragInstances().some(this._draggingPredicate)) {
                     event.preventDefault();
                 }
                 this.pointerMove.next(event);
@@ -2598,12 +2599,12 @@ class DragDropRegistry {
      */
     startDragging(drag, event) {
         // Do not process the same drag twice to avoid memory leaks and redundant listeners
-        if (this._activeDragInstances.indexOf(drag) > -1) {
+        if (this._activeDragInstances().indexOf(drag) > -1) {
             return;
         }
         this._loadResets();
-        this._activeDragInstances.push(drag);
-        if (this._activeDragInstances.length === 1) {
+        this._activeDragInstances.update(instances => [...instances, drag]);
+        if (this._activeDragInstances().length === 1) {
             const isTouchEvent = event.type.startsWith('touch');
             // We explicitly bind __active__ listeners here, because newer browsers will default to
             // passive ones for `mousemove` and `touchmove`. The events need to be active, because we
@@ -2644,17 +2645,21 @@ class DragDropRegistry {
     }
     /** Stops dragging a drag item instance. */
     stopDragging(drag) {
-        const index = this._activeDragInstances.indexOf(drag);
-        if (index > -1) {
-            this._activeDragInstances.splice(index, 1);
-            if (this._activeDragInstances.length === 0) {
-                this._clearGlobalListeners();
+        this._activeDragInstances.update(instances => {
+            const index = instances.indexOf(drag);
+            if (index > -1) {
+                instances.splice(index, 1);
+                return [...instances];
             }
+            return instances;
+        });
+        if (this._activeDragInstances().length === 0) {
+            this._clearGlobalListeners();
         }
     }
     /** Gets whether a drag item instance is currently being dragged. */
     isDragging(drag) {
-        return this._activeDragInstances.indexOf(drag) > -1;
+        return this._activeDragInstances().indexOf(drag) > -1;
     }
     /**
      * Gets a stream that will emit when any element on the page is scrolled while an item is being
@@ -2673,7 +2678,7 @@ class DragDropRegistry {
                 return this._ngZone.runOutsideAngular(() => {
                     const eventOptions = true;
                     const callback = (event) => {
-                        if (this._activeDragInstances.length) {
+                        if (this._activeDragInstances().length) {
                             observer.next(event);
                         }
                     };
