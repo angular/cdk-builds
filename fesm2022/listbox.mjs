@@ -1,14 +1,14 @@
-import * as i0 from '@angular/core';
-import { inject, ElementRef, booleanAttribute, Directive, Input, NgZone, ChangeDetectorRef, forwardRef, Output, ContentChildren, NgModule } from '@angular/core';
 import { ActiveDescendantKeyManager } from '@angular/cdk/a11y';
-import { A, hasModifierKey, SPACE, ENTER, HOME, END, UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW } from '@angular/cdk/keycodes';
+import { Directionality } from '@angular/cdk/bidi';
 import { coerceArray } from '@angular/cdk/coercion';
 import { SelectionModel } from '@angular/cdk/collections';
+import { A, hasModifierKey, SPACE, ENTER, HOME, END, UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW } from '@angular/cdk/keycodes';
+import { Platform } from '@angular/cdk/platform';
+import * as i0 from '@angular/core';
+import { inject, ElementRef, booleanAttribute, Directive, Input, NgZone, ChangeDetectorRef, forwardRef, Output, ContentChildren, NgModule } from '@angular/core';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Subject, defer, merge, fromEvent } from 'rxjs';
 import { startWith, switchMap, map, takeUntil, filter } from 'rxjs/operators';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Directionality } from '@angular/cdk/bidi';
-import { Platform } from '@angular/cdk/platform';
 
 /** The next id to use for creating unique DOM IDs. */
 let nextId = 0;
@@ -433,6 +433,7 @@ class CdkListbox {
      */
     setDisabledState(isDisabled) {
         this.disabled = isDisabled;
+        this.changeDetectorRef.markForCheck();
     }
     /** Focus the listbox's host element. */
     focus() {
