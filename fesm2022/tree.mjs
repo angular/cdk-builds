@@ -1,8 +1,8 @@
 import { SelectionModel, isDataSource } from '@angular/cdk/collections';
 import { isObservable, Subject, BehaviorSubject, of } from 'rxjs';
-import { take, filter, takeUntil } from 'rxjs/operators';
+import { take, filter, takeUntil, map, distinctUntilChanged } from 'rxjs/operators';
 import * as i0 from '@angular/core';
-import { InjectionToken, Directive, Inject, Optional, Component, ViewEncapsulation, ChangeDetectionStrategy, Input, ViewChild, ContentChildren, numberAttribute, booleanAttribute, NgModule } from '@angular/core';
+import { InjectionToken, Directive, Inject, Optional, Component, ViewEncapsulation, ChangeDetectionStrategy, Input, ViewChild, ContentChildren, inject, ChangeDetectorRef, numberAttribute, booleanAttribute, NgModule } from '@angular/core';
 import * as i2 from '@angular/cdk/bidi';
 
 /** Base tree control. It has basic toggle/expand/collapse operations on a single data node. */
@@ -368,6 +368,8 @@ class CdkTree {
                 viewContainer.move(view, currentIndex);
             }
         });
+        // TODO: change to `this._changeDetectorRef.markForCheck()`, or just switch this component to
+        // use signals.
         this._changeDetectorRef.detectChanges();
     }
     /**
@@ -506,12 +508,18 @@ class CdkTreeNode {
         this._destroyed = new Subject();
         /** Emits when the node's data has changed. */
         this._dataChanges = new Subject();
+        this._changeDetectorRef = inject(ChangeDetectorRef);
         CdkTreeNode.mostRecentTreeNode = this;
         this.role = 'treeitem';
     }
     ngOnInit() {
         this._parentNodeAriaLevel = getParentNodeAriaLevel(this._elementRef.nativeElement);
         this._elementRef.nativeElement.setAttribute('aria-level', `${this.level + 1}`);
+        this._tree.treeControl.expansionModel.changed
+            .pipe(map(() => this.isExpanded), distinctUntilChanged())
+            .subscribe(() => {
+            this._changeDetectorRef.markForCheck();
+        });
     }
     ngOnDestroy() {
         // If this is the last tree node being destroyed,
