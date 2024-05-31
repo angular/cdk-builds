@@ -180,6 +180,7 @@ export declare abstract class CdkMenuBase extends CdkMenuGroup implements Menu, 
     protected pointerTracker?: PointerFocusTracker<CdkMenuItem>;
     /** Whether this menu's menu stack has focus. */
     private _menuStackHasFocus;
+    private _tabIndexSignal;
     ngAfterContentInit(): void;
     ngOnDestroy(): void;
     /**

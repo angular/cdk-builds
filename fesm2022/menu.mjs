@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { Directive, InjectionToken, Optional, SkipSelf, Inject, Injectable, inject, Injector, ViewContainerRef, EventEmitter, NgZone, ElementRef, ChangeDetectorRef, booleanAttribute, Input, Output, ContentChildren, NgModule } from '@angular/core';
+import { Directive, InjectionToken, Optional, SkipSelf, Inject, Injectable, inject, Injector, ViewContainerRef, EventEmitter, NgZone, ElementRef, ChangeDetectorRef, booleanAttribute, Input, Output, signal, computed, ContentChildren, NgModule } from '@angular/core';
 import { Overlay, OverlayConfig, STANDARD_DROPDOWN_BELOW_POSITIONS, STANDARD_DROPDOWN_ADJACENT_POSITIONS, OverlayModule } from '@angular/cdk/overlay';
 import { ENTER, SPACE, UP_ARROW, hasModifierKey, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, TAB, ESCAPE } from '@angular/cdk/keycodes';
 import { startWith, debounceTime, distinctUntilChanged, filter, takeUntil, mergeMap, mapTo, mergeAll, switchMap, skipWhile, skip } from 'rxjs/operators';
@@ -1135,7 +1135,11 @@ class CdkMenuBase extends CdkMenuGroup {
         /** Emits when the MenuBar is destroyed. */
         this.destroyed = new Subject();
         /** Whether this menu's menu stack has focus. */
-        this._menuStackHasFocus = false;
+        this._menuStackHasFocus = signal(false);
+        this._tabIndexSignal = computed(() => {
+            const tabindexIfInline = this._menuStackHasFocus() ? -1 : 0;
+            return this.isInline ? tabindexIfInline : null;
+        });
     }
     ngAfterContentInit() {
         if (!this.isInline) {
@@ -1171,8 +1175,7 @@ class CdkMenuBase extends CdkMenuGroup {
     }
     /** Gets the tabindex for this menu. */
     _getTabIndex() {
-        const tabindexIfInline = this._menuStackHasFocus ? -1 : 0;
-        return this.isInline ? tabindexIfInline : null;
+        return this._tabIndexSignal();
     }
     /**
      * Close the open menu if the current active item opened the requested MenuStackItem.
@@ -1233,7 +1236,7 @@ class CdkMenuBase extends CdkMenuGroup {
     _subscribeToMenuStackHasFocus() {
         if (this.isInline) {
             this.menuStack.hasFocus.pipe(takeUntil(this.destroyed)).subscribe(hasFocus => {
-                this._menuStackHasFocus = hasFocus;
+                this._menuStackHasFocus.set(hasFocus);
             });
         }
     }

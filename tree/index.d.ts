@@ -212,6 +212,7 @@ export declare class CdkTreeNode<T, K = T> implements FocusableOption, OnDestroy
     protected _data: T;
     get isExpanded(): boolean;
     get level(): number;
+    private _changeDetectorRef;
     constructor(_elementRef: ElementRef<HTMLElement>, _tree: CdkTree<T, K>);
     ngOnInit(): void;
     ngOnDestroy(): void;
