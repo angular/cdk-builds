@@ -648,7 +648,7 @@ function uninstallAutoChangeDetectionStatusHandler(fixture) {
 }
 /** Whether we are currently in the fake async zone. */
 function isInFakeAsyncZone() {
-    return Zone.current.get('FakeAsyncTestZoneSpec') != null;
+    return typeof Zone !== 'undefined' && Zone.current.get('FakeAsyncTestZoneSpec') != null;
 }
 /**
  * Triggers change detection for a specific fixture.
@@ -671,7 +671,9 @@ class TestbedHarnessEnvironment extends HarnessEnvironment {
         /** Whether the environment has been destroyed. */
         this._destroyed = false;
         this._options = { ...defaultEnvironmentOptions, ...options };
-        this._taskState = TaskStateZoneInterceptor.setup();
+        if (typeof Zone !== 'undefined') {
+            this._taskState = TaskStateZoneInterceptor.setup();
+        }
         this._stabilizeCallback = () => this.forceStabilize();
         installAutoChangeDetectionStatusHandler(_fixture);
         _fixture.componentRef.onDestroy(() => {
@@ -739,7 +741,7 @@ class TestbedHarnessEnvironment extends HarnessEnvironment {
         // we cannot rely on "fixture.whenStable" since it does not catch tasks scheduled
         // outside of the Angular zone. For test harnesses, we want to ensure that the
         // app is fully stabilized and therefore need to use our own zone interceptor.
-        await this._taskState.pipe(takeWhile(state => !state.stable)).toPromise();
+        await this._taskState?.pipe(takeWhile(state => !state.stable)).toPromise();
     }
     /** Gets the root element for the document. */
     getDocumentRoot() {
