@@ -16,7 +16,7 @@ export declare class TestbedHarnessEnvironment extends HarnessEnvironment<Elemen
     /** Whether the environment has been destroyed. */
     private _destroyed;
     /** Observable that emits whenever the test task state changes. */
-    private _taskState;
+    private _taskState?;
     /** The options for this environment. */
     private _options;
     /** Environment stabilization callback passed to the created test elements. */
