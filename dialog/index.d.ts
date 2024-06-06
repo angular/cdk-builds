@@ -71,6 +71,8 @@ export declare class CdkDialogContainer<C extends DialogConfig = DialogConfig> e
      */
     _ariaLabelledByQueue: string[];
     protected readonly _changeDetectorRef: ChangeDetectorRef;
+    private _injector;
+    private _isDestroyed;
     constructor(_elementRef: ElementRef, _focusTrapFactory: FocusTrapFactory, _document: any, _config: C, _interactivityChecker: InteractivityChecker, _ngZone: NgZone, _overlayRef: OverlayRef, _focusMonitor?: FocusMonitor | undefined);
     _addAriaLabelledBy(id: string): void;
     _removeAriaLabelledBy(id: string): void;
