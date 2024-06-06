@@ -6,7 +6,7 @@ import { Platform, _getFocusedElementPierceShadowDom } from '@angular/cdk/platfo
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, TemplatePortal, PortalModule } from '@angular/cdk/portal';
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { inject, ChangeDetectorRef, Component, ViewEncapsulation, ChangeDetectionStrategy, Optional, Inject, ViewChild, InjectionToken, Injector, TemplateRef, Injectable, SkipSelf, NgModule } from '@angular/core';
+import { inject, ChangeDetectorRef, Injector, afterNextRender, Component, ViewEncapsulation, ChangeDetectionStrategy, Optional, Inject, ViewChild, InjectionToken, TemplateRef, Injectable, SkipSelf, NgModule } from '@angular/core';
 import { ESCAPE, hasModifierKey } from '@angular/cdk/keycodes';
 import { Subject, defer, of } from 'rxjs';
 import { Directionality } from '@angular/cdk/bidi';
@@ -111,6 +111,8 @@ class CdkDialogContainer extends BasePortalOutlet {
          */
         this._ariaLabelledByQueue = [];
         this._changeDetectorRef = inject(ChangeDetectorRef);
+        this._injector = inject(Injector);
+        this._isDestroyed = false;
         /**
          * Attaches a DOM portal to the dialog container.
          * @param portal Portal to be attached.
@@ -154,6 +156,7 @@ class CdkDialogContainer extends BasePortalOutlet {
         this._trapFocus();
     }
     ngOnDestroy() {
+        this._isDestroyed = true;
         this._restoreFocus();
     }
     /**
@@ -223,13 +226,17 @@ class CdkDialogContainer extends BasePortalOutlet {
      * cannot be moved then focus will go to the dialog container.
      */
     _trapFocus() {
+        if (this._isDestroyed) {
+            return;
+        }
         const element = this._elementRef.nativeElement;
         // If were to attempt to focus immediately, then the content of the dialog would not yet be
         // ready in instances where change detection has to run first. To deal with this, we simply
         // wait for the microtask queue to be empty when setting focus when autoFocus isn't set to
         // dialog. If the element inside the dialog can't be focused, then the container is focused
         // so the user can't tab into other elements behind it.
-        switch (this._config.autoFocus) {
+        const autoFocus = this._config.autoFocus;
+        switch (autoFocus) {
             case false:
             case 'dialog':
                 // Ensure that focus is on the dialog container. It's possible that a different
@@ -237,9 +244,11 @@ class CdkDialogContainer extends BasePortalOutlet {
                 // https://github.com/angular/components/issues/16215. Note that we only want to do this
                 // if the focus isn't inside the dialog already, because it's possible that the consumer
                 // turned off `autoFocus` in order to move focus themselves.
-                if (!this._containsFocus()) {
-                    element.focus();
-                }
+                afterNextRender(() => {
+                    if (!this._containsFocus()) {
+                        element.focus();
+                    }
+                }, { injector: this._injector });
                 break;
             case true:
             case 'first-tabbable':
@@ -252,10 +261,14 @@ class CdkDialogContainer extends BasePortalOutlet {
                 });
                 break;
             case 'first-heading':
-                this._focusByCssSelector('h1, h2, h3, h4, h5, h6, [role="heading"]');
+                afterNextRender(() => {
+                    this._focusByCssSelector('h1, h2, h3, h4, h5, h6, [role="heading"]');
+                }, { injector: this._injector });
                 break;
             default:
-                this._focusByCssSelector(this._config.autoFocus);
+                afterNextRender(() => {
+                    this._focusByCssSelector(autoFocus);
+                }, { injector: this._injector });
                 break;
         }
     }
