@@ -249,8 +249,8 @@ export declare class CdkTreeNodeDef<T> {
  */
 export declare class CdkTreeNodeOutlet {
     viewContainer: ViewContainerRef;
-    _node?: any;
-    constructor(viewContainer: ViewContainerRef, _node?: any);
+    _node?: any | undefined;
+    constructor(viewContainer: ViewContainerRef, _node?: any | undefined);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNodeOutlet, [null, { optional: true; }]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodeOutlet, "[cdkTreeNodeOutlet]", never, {}, {}, never, never, true, never>;
 }

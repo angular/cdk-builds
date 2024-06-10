@@ -77,7 +77,7 @@ export declare class MediaMatcher {
     private _nonce?;
     /** The internal matchMedia method to return back a MediaQueryList like object. */
     private _matchMedia;
-    constructor(_platform: Platform, _nonce?: string | null | undefined);
+    constructor(_platform: Platform, _nonce?: (string | null) | undefined);
     /**
      * Evaluates the given media query and returns the native MediaQueryList from which results
      * can be retrieved.

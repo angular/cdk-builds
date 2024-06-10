@@ -277,7 +277,7 @@ export declare class ConnectionPositionPair {
     /** Offset along the Y axis. */
     offsetY?: number | undefined;
     /** Class(es) to be applied to the panel while this position is active. */
-    panelClass?: string | string[] | undefined;
+    panelClass?: (string | string[]) | undefined;
     /** X-axis attachment point for connected overlay origin. Can be 'start', 'end', or 'center'. */
     originX: HorizontalConnectionPos;
     /** Y-axis attachment point for connected overlay origin. Can be 'top', 'bottom', or 'center'. */
@@ -292,7 +292,7 @@ export declare class ConnectionPositionPair {
     /** Offset along the Y axis. */
     offsetY?: number | undefined, 
     /** Class(es) to be applied to the panel while this position is active. */
-    panelClass?: string | string[] | undefined);
+    panelClass?: (string | string[]) | undefined);
 }
 
 /**

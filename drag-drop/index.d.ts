@@ -168,7 +168,7 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
      * @deprecated `_document` parameter no longer being used and will be removed.
      * @breaking-change 12.0.0
      */
-    _document: any, _ngZone: NgZone, _viewContainerRef: ViewContainerRef, config: DragDropConfig, _dir: Directionality, dragDrop: DragDrop, _changeDetectorRef: ChangeDetectorRef, _selfHandle?: CdkDragHandle | undefined, _parentDrag?: CdkDrag<any> | undefined);
+    _document: any, _ngZone: NgZone, _viewContainerRef: ViewContainerRef, config: DragDropConfig, _dir: Directionality, dragDrop: DragDrop, _changeDetectorRef: ChangeDetectorRef, _selfHandle?: CdkDragHandle | undefined, _parentDrag?: CdkDrag | undefined);
     /**
      * Returns the element that is being used as a placeholder
      * while the current element is being dragged.
@@ -290,7 +290,7 @@ export declare class CdkDragHandle implements OnDestroy {
     get disabled(): boolean;
     set disabled(value: boolean);
     private _disabled;
-    constructor(element: ElementRef<HTMLElement>, _parentDrag?: CdkDrag<any> | undefined);
+    constructor(element: ElementRef<HTMLElement>, _parentDrag?: CdkDrag | undefined);
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkDragHandle, [null, { optional: true; skipSelf: true; }]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDragHandle, "[cdkDragHandle]", never, { "disabled": { "alias": "cdkDragHandleDisabled"; "required": false; }; }, {}, never, never, true, never>;
@@ -459,7 +459,7 @@ export declare class CdkDropList<T = any> implements OnDestroy {
     private _unsortedItems;
     constructor(
     /** Element that the drop list is attached to. */
-    element: ElementRef<HTMLElement>, dragDrop: DragDrop, _changeDetectorRef: ChangeDetectorRef, _scrollDispatcher: ScrollDispatcher, _dir?: Directionality | undefined, _group?: CdkDropListGroup<CdkDropList<any>> | undefined, config?: DragDropConfig);
+    element: ElementRef<HTMLElement>, dragDrop: DragDrop, _changeDetectorRef: ChangeDetectorRef, _scrollDispatcher: ScrollDispatcher, _dir?: Directionality | undefined, _group?: CdkDropListGroup<CdkDropList> | undefined, config?: DragDropConfig);
     /** Registers an items with the drop list. */
     addItem(item: CdkDrag): void;
     /** Removes an item from the drop list. */

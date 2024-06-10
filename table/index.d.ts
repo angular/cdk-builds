@@ -184,7 +184,7 @@ export declare interface CdkCellOutletRowContext<T> {
  * Defines a set of cells available for a table column.
  */
 export declare class CdkColumnDef implements CanStick {
-    _table?: any;
+    _table?: any | undefined;
     private _hasStickyChanged;
     /** Unique name for this column. */
     get name(): string;
@@ -219,7 +219,7 @@ export declare class CdkColumnDef implements CanStick {
      * @docs-private
      */
     _columnCssClassName: string[];
-    constructor(_table?: any);
+    constructor(_table?: any | undefined);
     /** Whether the sticky state has changed. */
     hasStickyChanged(): boolean;
     /** Resets the sticky changed state. */
@@ -274,13 +274,13 @@ export declare class CdkFooterRow {
  * Captures the footer row's template and other footer properties such as the columns to display.
  */
 export declare class CdkFooterRowDef extends BaseRowDef implements CanStick, OnChanges {
-    _table?: any;
+    _table?: any | undefined;
     private _hasStickyChanged;
     /** Whether the row is sticky. */
     get sticky(): boolean;
     set sticky(value: boolean);
     private _sticky;
-    constructor(template: TemplateRef<any>, _differs: IterableDiffers, _table?: any);
+    constructor(template: TemplateRef<any>, _differs: IterableDiffers, _table?: any | undefined);
     ngOnChanges(changes: SimpleChanges): void;
     /** Whether the sticky state has changed. */
     hasStickyChanged(): boolean;
@@ -320,13 +320,13 @@ export declare class CdkHeaderRow {
  * Captures the header row's template and other header properties such as the columns to display.
  */
 export declare class CdkHeaderRowDef extends BaseRowDef implements CanStick, OnChanges {
-    _table?: any;
+    _table?: any | undefined;
     private _hasStickyChanged;
     /** Whether the row is sticky. */
     get sticky(): boolean;
     set sticky(value: boolean);
     private _sticky;
-    constructor(template: TemplateRef<any>, _differs: IterableDiffers, _table?: any);
+    constructor(template: TemplateRef<any>, _differs: IterableDiffers, _table?: any | undefined);
     ngOnChanges(changes: SimpleChanges): void;
     /** Whether the sticky state has changed. */
     hasStickyChanged(): boolean;
@@ -367,7 +367,7 @@ export declare class CdkRow {
  * a when predicate that describes when this row should be used.
  */
 export declare class CdkRowDef<T> extends BaseRowDef {
-    _table?: any;
+    _table?: any | undefined;
     /**
      * Function that should return true if this row template should be used for the provided index
      * and row data. If left undefined, this row will be considered the default row template to use
@@ -375,7 +375,7 @@ export declare class CdkRowDef<T> extends BaseRowDef {
      * For every row, there must be at least one when function that passes or an undefined to default.
      */
     when: (index: number, rowData: T) => boolean;
-    constructor(template: TemplateRef<any>, _differs: IterableDiffers, _table?: any);
+    constructor(template: TemplateRef<any>, _differs: IterableDiffers, _table?: any | undefined);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkRowDef<any>, [null, null, { optional: true; }]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkRowDef<any>, "[cdkRowDef]", never, { "columns": { "alias": "cdkRowDefColumns"; "required": false; }; "when": { "alias": "cdkRowDefWhen"; "required": false; }; }, {}, never, never, true, never>;
 }

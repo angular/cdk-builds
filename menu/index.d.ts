@@ -785,7 +785,7 @@ export declare interface MenuStackItem {
 }
 
 /** Provider that provides the parent menu stack, or a new inline menu stack if there is no parent one. */
-export declare const PARENT_OR_NEW_INLINE_MENU_STACK_PROVIDER: (orientation: 'vertical' | 'horizontal') => {
+export declare const PARENT_OR_NEW_INLINE_MENU_STACK_PROVIDER: (orientation: "vertical" | "horizontal") => {
     provide: InjectionToken<MenuStack>;
     deps: Optional[][];
     useFactory: (parentMenuStack?: MenuStack) => MenuStack;
