@@ -252,13 +252,14 @@ class CdkDialogContainer extends BasePortalOutlet {
                 break;
             case true:
             case 'first-tabbable':
-                this._focusTrap?.focusInitialElementWhenReady().then(focusedSuccessfully => {
+                afterNextRender(() => {
+                    const focusedSuccessfully = this._focusTrap?.focusInitialElement();
                     // If we weren't able to find a focusable element in the dialog, then focus the dialog
                     // container instead.
                     if (!focusedSuccessfully) {
                         this._focusDialogContainer();
                     }
-                });
+                }, { injector: this._injector });
                 break;
             case 'first-heading':
                 afterNextRender(() => {
