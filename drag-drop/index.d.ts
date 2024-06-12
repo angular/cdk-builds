@@ -1067,7 +1067,7 @@ export declare type DragStartDelay = number | {
 };
 
 /** Possible orientations for a drop list. */
-export declare type DropListOrientation = 'horizontal' | 'vertical';
+export declare type DropListOrientation = 'horizontal' | 'vertical' | 'mixed';
 
 /**
  * Reference to a drop list. Used to manipulate or dispose of the container.
@@ -1180,6 +1180,8 @@ export declare class DropListRef<T = any> {
     private _scrollableElements;
     /** Initial value for the element's `scroll-snap-type` style. */
     private _initialScrollSnap;
+    /** Direction of the list's layout. */
+    private _direction;
     constructor(element: ElementRef<HTMLElement> | HTMLElement, _dragDropRegistry: DragDropRegistry<DragRef, DropListRef>, _document: any, _ngZone: NgZone, _viewportRuler: ViewportRuler);
     /** Removes the drop list functionality from the DOM element. */
     dispose(): void;
@@ -1232,7 +1234,7 @@ export declare class DropListRef<T = any> {
      * Sets the orientation of the container.
      * @param orientation New orientation for the container.
      */
-    withOrientation(orientation: 'vertical' | 'horizontal'): this;
+    withOrientation(orientation: DropListOrientation): this;
     /**
      * Sets which parent elements are can be scrolled while the user is dragging.
      * @param elements Elements that can be scrolled.
