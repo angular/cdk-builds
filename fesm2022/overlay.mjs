@@ -568,8 +568,8 @@ class OverlayOutsideClickDispatcher extends BaseOverlayDispatcher {
                 // If it's a click inside the overlay, just break - we should do nothing
                 // If it's an outside click (both origin and target of the click) dispatch the mouse event,
                 // and proceed with the next overlay
-                if (overlayRef.overlayElement.contains(target) ||
-                    overlayRef.overlayElement.contains(origin)) {
+                if (containsPierceShadowDom(overlayRef.overlayElement, target) ||
+                    containsPierceShadowDom(overlayRef.overlayElement, origin)) {
                     break;
                 }
                 const outsidePointerEvents = overlayRef._outsidePointerEvents;
@@ -644,6 +644,19 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.0.0", ngImpor
                 }] }, { type: i1$1.Platform }, { type: i0.NgZone, decorators: [{
                     type: Optional
                 }] }] });
+/** Version of `Element.contains` that transcends shadow DOM boundaries. */
+function containsPierceShadowDom(parent, child) {
+    const supportsShadowRoot = typeof ShadowRoot !== 'undefined' && ShadowRoot;
+    let current = child;
+    while (current) {
+        if (current === parent) {
+            return true;
+        }
+        current =
+            supportsShadowRoot && current instanceof ShadowRoot ? current.host : current.parentNode;
+    }
+    return false;
+}
 
 /** Container inside which all overlays will render. */
 class OverlayContainer {
