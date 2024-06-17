@@ -493,6 +493,20 @@ class CdkTreeNode {
     get isExpanded() {
         return this._tree.treeControl.isExpanded(this._data);
     }
+    /* If leaf node, return true to not assign aria-expanded attribute */
+    get isLeafNode() {
+        // If flat tree node data returns false for expandable property, it's a leaf node
+        if (this._tree.treeControl.isExpandable !== undefined &&
+            !this._tree.treeControl.isExpandable(this._data)) {
+            return true;
+            // If nested tree node data returns 0 descendants, it's a leaf node
+        }
+        else if (this._tree.treeControl.isExpandable === undefined &&
+            this._tree.treeControl.getDescendants(this._data).length === 0) {
+            return true;
+        }
+        return false;
+    }
     get level() {
         // If the treeControl has a getLevel method, use it to get the level. Otherwise read the
         // aria-level off the parent node and use it as the level for this node (note aria-level is
@@ -545,7 +559,7 @@ class CdkTreeNode {
         this.role = 'treeitem';
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.0.0", ngImport: i0, type: CdkTreeNode, deps: [{ token: i0.ElementRef }, { token: CdkTree }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "18.0.0", type: CdkTreeNode, isStandalone: true, selector: "cdk-tree-node", inputs: { role: "role" }, host: { properties: { "attr.aria-expanded": "isExpanded" }, classAttribute: "cdk-tree-node" }, exportAs: ["cdkTreeNode"], ngImport: i0 }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "18.0.0", type: CdkTreeNode, isStandalone: true, selector: "cdk-tree-node", inputs: { role: "role" }, host: { properties: { "attr.aria-expanded": "isLeafNode ? null : isExpanded" }, classAttribute: "cdk-tree-node" }, exportAs: ["cdkTreeNode"], ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.0.0", ngImport: i0, type: CdkTreeNode, decorators: [{
             type: Directive,
@@ -554,7 +568,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.0.0", ngImpor
                     exportAs: 'cdkTreeNode',
                     host: {
                         'class': 'cdk-tree-node',
-                        '[attr.aria-expanded]': 'isExpanded',
+                        '[attr.aria-expanded]': 'isLeafNode ? null : isExpanded',
                     },
                     standalone: true,
                 }]
