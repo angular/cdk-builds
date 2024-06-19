@@ -1550,8 +1550,7 @@ function clamp(value, max) {
  * @docs-private
  */
 class SingleAxisSortStrategy {
-    constructor(_element, _dragDropRegistry) {
-        this._element = _element;
+    constructor(_dragDropRegistry) {
         this._dragDropRegistry = _dragDropRegistry;
         /** Cache of the dimensions of all the items inside the container. */
         this._itemPositions = [];
@@ -1702,7 +1701,7 @@ class SingleAxisSortStrategy {
     /** Resets the strategy to its initial state before dragging was started. */
     reset() {
         // TODO(crisbeto): may have to wait for the animations to finish.
-        this._activeDraggables.forEach(item => {
+        this._activeDraggables?.forEach(item => {
             const rootElement = item.getRootElement();
             if (rootElement) {
                 const initialTransform = this._itemPositions.find(p => p.drag === item)?.initialTransform;
@@ -1750,6 +1749,9 @@ class SingleAxisSortStrategy {
                 drag._sortFromLastPointerPosition();
             }
         });
+    }
+    withElementContainer(container) {
+        this._element = container;
     }
     /** Refreshes the position cache of the items and sibling containers. */
     _cacheItemPositions() {
@@ -1880,8 +1882,7 @@ class SingleAxisSortStrategy {
  * @docs-private
  */
 class MixedSortStrategy {
-    constructor(_element, _document, _dragDropRegistry) {
-        this._element = _element;
+    constructor(_document, _dragDropRegistry) {
         this._document = _document;
         this._dragDropRegistry = _dragDropRegistry;
         /**
@@ -2047,6 +2048,12 @@ class MixedSortStrategy {
             }
         });
     }
+    withElementContainer(container) {
+        if (container !== this._element) {
+            this._element = container;
+            this._rootNode = undefined;
+        }
+    }
     /**
      * Gets the index of an item in the drop container, based on the position of the user's pointer.
      * @param item Item that is being sorted.
@@ -2193,6 +2200,8 @@ class DropListRef {
         this._stopScrollTimers = new Subject();
         /** Shadow root of the current element. Necessary for `elementFromPoint` to resolve correctly. */
         this._cachedShadowRoot = null;
+        /** Elements that can be scrolled while the user is dragging. */
+        this._scrollableElements = [];
         /** Direction of the list's layout. */
         this._direction = 'ltr';
         /** Starts the interval that'll auto-scroll the element. */
@@ -2217,9 +2226,9 @@ class DropListRef {
                 }
             });
         };
-        this.element = coerceElement(element);
+        const coercedElement = (this.element = coerceElement(element));
         this._document = _document;
-        this.withScrollableParents([this.element]).withOrientation('vertical');
+        this.withOrientation('vertical').withElementContainer(coercedElement);
         _dragDropRegistry.registerDropContainer(this);
         this._parentPositions = new ParentPositionTracker(_document);
     }
@@ -2351,14 +2360,15 @@ class DropListRef {
      */
     withOrientation(orientation) {
         if (orientation === 'mixed') {
-            this._sortStrategy = new MixedSortStrategy(coerceElement(this.element), this._document, this._dragDropRegistry);
+            this._sortStrategy = new MixedSortStrategy(this._document, this._dragDropRegistry);
         }
         else {
-            const strategy = new SingleAxisSortStrategy(coerceElement(this.element), this._dragDropRegistry);
+            const strategy = new SingleAxisSortStrategy(this._dragDropRegistry);
             strategy.direction = this._direction;
             strategy.orientation = orientation;
             this._sortStrategy = strategy;
         }
+        this._sortStrategy.withElementContainer(this._container);
         this._sortStrategy.withSortPredicate((index, item) => this.sortPredicate(index, item, this));
         return this;
     }
@@ -2367,11 +2377,44 @@ class DropListRef {
      * @param elements Elements that can be scrolled.
      */
     withScrollableParents(elements) {
-        const element = coerceElement(this.element);
+        const element = this._container;
         // We always allow the current element to be scrollable
         // so we need to ensure that it's in the array.
         this._scrollableElements =
             elements.indexOf(element) === -1 ? [element, ...elements] : elements.slice();
+        return this;
+    }
+    /**
+     * Configures the drop list so that a different element is used as the container for the
+     * dragged items. This is useful for the cases when one might not have control over the
+     * full DOM that sets up the dragging.
+     * Note that the alternate container needs to be a descendant of the drop list.
+     * @param container New element container to be assigned.
+     */
+    withElementContainer(container) {
+        if (container === this._container) {
+            return this;
+        }
+        const element = coerceElement(this.element);
+        if ((typeof ngDevMode === 'undefined' || ngDevMode) &&
+            container !== element &&
+            !element.contains(container)) {
+            throw new Error('Invalid DOM structure for drop list. Alternate container element must be a descendant of the drop list.');
+        }
+        const oldContainerIndex = this._scrollableElements.indexOf(this._container);
+        const newContainerIndex = this._scrollableElements.indexOf(container);
+        if (oldContainerIndex > -1) {
+            this._scrollableElements.splice(oldContainerIndex, 1);
+        }
+        if (newContainerIndex > -1) {
+            this._scrollableElements.splice(newContainerIndex, 1);
+        }
+        if (this._sortStrategy) {
+            this._sortStrategy.withElementContainer(container);
+        }
+        this._cachedShadowRoot = null;
+        this._scrollableElements.unshift(container);
+        this._container = container;
         return this;
     }
     /** Gets the scrollable parents that are registered with this drop container. */
@@ -2481,9 +2524,19 @@ class DropListRef {
     }
     /** Starts the dragging sequence within the list. */
     _draggingStarted() {
-        const styles = coerceElement(this.element).style;
+        const styles = this._container.style;
         this.beforeStarted.next();
         this._isDragging = true;
+        if ((typeof ngDevMode === 'undefined' || ngDevMode) &&
+            // Prevent the check from running on apps not using an alternate container. Ideally we
+            // would always run it, but introducing it at this stage would be a breaking change.
+            this._container !== coerceElement(this.element)) {
+            for (const drag of this._draggables) {
+                if (!drag.isDragging() && drag.getVisibleElement().parentNode !== this._container) {
+                    throw new Error('Invalid DOM structure for drop list. All items must be placed directly inside of the element container.');
+                }
+            }
+        }
         // We need to disable scroll snapping while the user is dragging, because it breaks automatic
         // scrolling. The browser seems to round the value based on the snapping points which means
         // that we can't increment/decrement the scroll position.
@@ -2496,16 +2549,15 @@ class DropListRef {
     }
     /** Caches the positions of the configured scrollable parents. */
     _cacheParentPositions() {
-        const element = coerceElement(this.element);
         this._parentPositions.cache(this._scrollableElements);
         // The list element is always in the `scrollableElements`
         // so we can take advantage of the cached `DOMRect`.
-        this._domRect = this._parentPositions.positions.get(element).clientRect;
+        this._domRect = this._parentPositions.positions.get(this._container).clientRect;
     }
     /** Resets the container to its initial state. */
     _reset() {
         this._isDragging = false;
-        const styles = coerceElement(this.element).style;
+        const styles = this._container.style;
         styles.scrollSnapType = styles.msScrollSnapType = this._initialScrollSnap;
         this._siblings.forEach(sibling => sibling._stopReceiving(this));
         this._sortStrategy.reset();
@@ -2549,14 +2601,13 @@ class DropListRef {
         if (!elementFromPoint) {
             return false;
         }
-        const nativeElement = coerceElement(this.element);
         // The `DOMRect`, that we're using to find the container over which the user is
         // hovering, doesn't give us any information on whether the element has been scrolled
         // out of the view or whether it's overlapping with other containers. This means that
         // we could end up transferring the item into a container that's invisible or is positioned
         // below another one. We use the result from `elementFromPoint` to get the top-most element
         // at the pointer position and to find whether it's one of the intersecting drop containers.
-        return elementFromPoint === nativeElement || nativeElement.contains(elementFromPoint);
+        return elementFromPoint === this._container || this._container.contains(elementFromPoint);
     }
     /**
      * Called by one of the connected drop lists when a dragging sequence has started.
@@ -2618,7 +2669,7 @@ class DropListRef {
      */
     _getShadowRoot() {
         if (!this._cachedShadowRoot) {
-            const shadowRoot = _getShadowRoot(coerceElement(this.element));
+            const shadowRoot = _getShadowRoot(this._container);
             this._cachedShadowRoot = (shadowRoot || this._document);
         }
         return this._cachedShadowRoot;
@@ -3782,6 +3833,13 @@ class CdkDropList {
                 // shouldn't be able to change without the drop list being destroyed.
                 this._scrollableParentsResolved = true;
             }
+            if (this.elementContainerSelector) {
+                const container = this.element.nativeElement.querySelector(this.elementContainerSelector);
+                if (!container && (typeof ngDevMode === 'undefined' || ngDevMode)) {
+                    throw new Error(`CdkDropList could not find an element container matching the selector "${this.elementContainerSelector}"`);
+                }
+                ref.withElementContainer(container);
+            }
             ref.disabled = this.disabled;
             ref.lockAxis = this.lockAxis;
             ref.sortingDisabled = this.sortingDisabled;
@@ -3854,7 +3912,7 @@ class CdkDropList {
         this._dropListRef.withItems(this.getSortedItems().map(item => item._dragRef));
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.1.0-next.1", ngImport: i0, type: CdkDropList, deps: [{ token: i0.ElementRef }, { token: DragDrop }, { token: i0.ChangeDetectorRef }, { token: i1.ScrollDispatcher }, { token: i1$1.Directionality, optional: true }, { token: CDK_DROP_LIST_GROUP, optional: true, skipSelf: true }, { token: CDK_DRAG_CONFIG, optional: true }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "18.1.0-next.1", type: CdkDropList, isStandalone: true, selector: "[cdkDropList], cdk-drop-list", inputs: { connectedTo: ["cdkDropListConnectedTo", "connectedTo"], data: ["cdkDropListData", "data"], orientation: ["cdkDropListOrientation", "orientation"], id: "id", lockAxis: ["cdkDropListLockAxis", "lockAxis"], disabled: ["cdkDropListDisabled", "disabled", booleanAttribute], sortingDisabled: ["cdkDropListSortingDisabled", "sortingDisabled", booleanAttribute], enterPredicate: ["cdkDropListEnterPredicate", "enterPredicate"], sortPredicate: ["cdkDropListSortPredicate", "sortPredicate"], autoScrollDisabled: ["cdkDropListAutoScrollDisabled", "autoScrollDisabled", booleanAttribute], autoScrollStep: ["cdkDropListAutoScrollStep", "autoScrollStep"] }, outputs: { dropped: "cdkDropListDropped", entered: "cdkDropListEntered", exited: "cdkDropListExited", sorted: "cdkDropListSorted" }, host: { properties: { "attr.id": "id", "class.cdk-drop-list-disabled": "disabled", "class.cdk-drop-list-dragging": "_dropListRef.isDragging()", "class.cdk-drop-list-receiving": "_dropListRef.isReceiving()" }, classAttribute: "cdk-drop-list" }, providers: [
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "18.1.0-next.1", type: CdkDropList, isStandalone: true, selector: "[cdkDropList], cdk-drop-list", inputs: { connectedTo: ["cdkDropListConnectedTo", "connectedTo"], data: ["cdkDropListData", "data"], orientation: ["cdkDropListOrientation", "orientation"], id: "id", lockAxis: ["cdkDropListLockAxis", "lockAxis"], disabled: ["cdkDropListDisabled", "disabled", booleanAttribute], sortingDisabled: ["cdkDropListSortingDisabled", "sortingDisabled", booleanAttribute], enterPredicate: ["cdkDropListEnterPredicate", "enterPredicate"], sortPredicate: ["cdkDropListSortPredicate", "sortPredicate"], autoScrollDisabled: ["cdkDropListAutoScrollDisabled", "autoScrollDisabled", booleanAttribute], autoScrollStep: ["cdkDropListAutoScrollStep", "autoScrollStep"], elementContainerSelector: ["cdkDropListElementContainer", "elementContainerSelector"] }, outputs: { dropped: "cdkDropListDropped", entered: "cdkDropListEntered", exited: "cdkDropListExited", sorted: "cdkDropListSorted" }, host: { properties: { "attr.id": "id", "class.cdk-drop-list-disabled": "disabled", "class.cdk-drop-list-dragging": "_dropListRef.isDragging()", "class.cdk-drop-list-receiving": "_dropListRef.isReceiving()" }, classAttribute: "cdk-drop-list" }, providers: [
             // Prevent child drop lists from picking up the same group as their parent.
             { provide: CDK_DROP_LIST_GROUP, useValue: undefined },
             { provide: CDK_DROP_LIST, useExisting: CdkDropList },
@@ -3925,6 +3983,9 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.1.0-next.1", 
             }], autoScrollStep: [{
                 type: Input,
                 args: ['cdkDropListAutoScrollStep']
+            }], elementContainerSelector: [{
+                type: Input,
+                args: ['cdkDropListElementContainer']
             }], dropped: [{
                 type: Output,
                 args: ['cdkDropListDropped']

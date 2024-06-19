@@ -436,6 +436,21 @@ export declare class CdkDropList<T = any> implements OnDestroy {
     autoScrollDisabled: boolean;
     /** Number of pixels to scroll for each frame when auto-scrolling an element. */
     autoScrollStep: NumberInput;
+    /**
+     * Selector that will be used to resolve an alternate element container for the drop list.
+     * Passing an alternate container is useful for the cases where one might not have control
+     * over the parent node of the draggable items within the list (e.g. due to content projection).
+     * This allows for usages like:
+     *
+     * ```
+     * <div cdkDropList cdkDropListElementContainer=".inner">
+     *   <div class="inner">
+     *     <div cdkDrag></div>
+     *   </div>
+     * </div>
+     * ```
+     */
+    elementContainerSelector: string | null;
     /** Emits when the user drops an item inside the container. */
     readonly dropped: EventEmitter<CdkDragDrop<T, any>>;
     /**
@@ -476,7 +491,7 @@ export declare class CdkDropList<T = any> implements OnDestroy {
     /** Syncs up the registered drag items with underlying drop list ref. */
     private _syncItemsWithRef;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkDropList<any>, [null, null, null, null, { optional: true; }, { optional: true; skipSelf: true; }, { optional: true; }]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDropList<any>, "[cdkDropList], cdk-drop-list", ["cdkDropList"], { "connectedTo": { "alias": "cdkDropListConnectedTo"; "required": false; }; "data": { "alias": "cdkDropListData"; "required": false; }; "orientation": { "alias": "cdkDropListOrientation"; "required": false; }; "id": { "alias": "id"; "required": false; }; "lockAxis": { "alias": "cdkDropListLockAxis"; "required": false; }; "disabled": { "alias": "cdkDropListDisabled"; "required": false; }; "sortingDisabled": { "alias": "cdkDropListSortingDisabled"; "required": false; }; "enterPredicate": { "alias": "cdkDropListEnterPredicate"; "required": false; }; "sortPredicate": { "alias": "cdkDropListSortPredicate"; "required": false; }; "autoScrollDisabled": { "alias": "cdkDropListAutoScrollDisabled"; "required": false; }; "autoScrollStep": { "alias": "cdkDropListAutoScrollStep"; "required": false; }; }, { "dropped": "cdkDropListDropped"; "entered": "cdkDropListEntered"; "exited": "cdkDropListExited"; "sorted": "cdkDropListSorted"; }, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDropList<any>, "[cdkDropList], cdk-drop-list", ["cdkDropList"], { "connectedTo": { "alias": "cdkDropListConnectedTo"; "required": false; }; "data": { "alias": "cdkDropListData"; "required": false; }; "orientation": { "alias": "cdkDropListOrientation"; "required": false; }; "id": { "alias": "id"; "required": false; }; "lockAxis": { "alias": "cdkDropListLockAxis"; "required": false; }; "disabled": { "alias": "cdkDropListDisabled"; "required": false; }; "sortingDisabled": { "alias": "cdkDropListSortingDisabled"; "required": false; }; "enterPredicate": { "alias": "cdkDropListEnterPredicate"; "required": false; }; "sortPredicate": { "alias": "cdkDropListSortPredicate"; "required": false; }; "autoScrollDisabled": { "alias": "cdkDropListAutoScrollDisabled"; "required": false; }; "autoScrollStep": { "alias": "cdkDropListAutoScrollStep"; "required": false; }; "elementContainerSelector": { "alias": "cdkDropListElementContainer"; "required": false; }; }, { "dropped": "cdkDropListDropped"; "entered": "cdkDropListEntered"; "exited": "cdkDropListExited"; "sorted": "cdkDropListSorted"; }, never, never, true, never>;
     static ngAcceptInputType_disabled: unknown;
     static ngAcceptInputType_sortingDisabled: unknown;
     static ngAcceptInputType_autoScrollDisabled: unknown;
@@ -1148,6 +1163,8 @@ export declare class DropListRef<T = any> {
     }>;
     /** Arbitrary data that can be attached to the drop list. */
     data: T;
+    /** Element that is the direct parent of the drag items. */
+    private _container;
     /** Whether an item in the list is being dragged. */
     private _isDragging;
     /** Keeps track of the positions of any parent scrollable elements. */
@@ -1240,6 +1257,14 @@ export declare class DropListRef<T = any> {
      * @param elements Elements that can be scrolled.
      */
     withScrollableParents(elements: HTMLElement[]): this;
+    /**
+     * Configures the drop list so that a different element is used as the container for the
+     * dragged items. This is useful for the cases when one might not have control over the
+     * full DOM that sets up the dragging.
+     * Note that the alternate container needs to be a descendant of the drop list.
+     * @param container New element container to be assigned.
+     */
+    withElementContainer(container: HTMLElement): this;
     /** Gets the scrollable parents that are registered with this drop container. */
     getScrollableParents(): readonly HTMLElement[];
     /**
