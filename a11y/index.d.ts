@@ -228,7 +228,7 @@ export declare class ConfigurableFocusTrap extends FocusTrap implements ManagedF
     /** Whether the FocusTrap is enabled. */
     get enabled(): boolean;
     set enabled(value: boolean);
-    constructor(_element: HTMLElement, _checker: InteractivityChecker, _ngZone: NgZone, _document: Document, _focusTrapManager: FocusTrapManager, _inertStrategy: FocusTrapInertStrategy, config: ConfigurableFocusTrapConfig);
+    constructor(_element: HTMLElement, _checker: InteractivityChecker, _ngZone: NgZone, _document: Document, _focusTrapManager: FocusTrapManager, _inertStrategy: FocusTrapInertStrategy, config: ConfigurableFocusTrapConfig, injector?: Injector);
     /** Notifies the FocusTrapManager that this FocusTrap will be destroyed. */
     destroy(): void;
     /** @docs-private Implemented as part of ManagedFocusTrap. */
@@ -255,6 +255,7 @@ export declare class ConfigurableFocusTrapFactory {
     private _focusTrapManager;
     private _document;
     private _inertStrategy;
+    private readonly _injector;
     constructor(_checker: InteractivityChecker, _ngZone: NgZone, _focusTrapManager: FocusTrapManager, _document: any, _inertStrategy?: FocusTrapInertStrategy);
     /**
      * Creates a focus-trapped region around the given element.
