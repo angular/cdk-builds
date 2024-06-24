@@ -5,7 +5,7 @@ import * as i1 from '@angular/cdk/platform';
 import { Platform, _getFocusedElementPierceShadowDom, normalizePassiveListenerOptions, _getEventTarget, _getShadowRoot } from '@angular/cdk/platform';
 import { Subject, Subscription, BehaviorSubject, of } from 'rxjs';
 import { hasModifierKey, A, Z, ZERO, NINE, PAGE_DOWN, PAGE_UP, END, HOME, LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW, TAB, ALT, CONTROL, MAC_META, META, SHIFT } from '@angular/cdk/keycodes';
-import { tap, debounceTime, filter, map, take, skip, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { tap, debounceTime, filter, map, skip, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import * as i1$1 from '@angular/cdk/observers';
 import { ObserversModule } from '@angular/cdk/observers';
 import { coerceElement } from '@angular/cdk/coercion';
@@ -1160,29 +1160,12 @@ class FocusTrap {
     }
     /** Executes a function when the zone is stable. */
     _executeOnStable(fn) {
-        // TODO(mmalerba): Make this behave consistently across zonefull / zoneless.
-        if (!this._ngZone.isStable) {
-            // Subscribing `onStable` has slightly different behavior than `afterNextRender`.
-            // `afterNextRender` does not wait for state changes queued up in a Promise
-            // to avoid change after checked errors. In most cases we would consider this an
-            // acceptable behavior change, the dialog at least made its best effort to focus the
-            // first element. However, this is particularly problematic when combined with the
-            // current behavior of the mat-radio-group, which adjusts the tabindex of its child
-            // radios based on the selected value of the group. When the selected value is bound
-            // via `[(ngModel)]` it hits this "state change in a promise" edge-case and can wind up
-            // putting the focus on a radio button that is not supposed to be eligible to receive
-            // focus. For now, we side-step this whole sequence of events by continuing to use
-            // `onStable` in zonefull apps, but it should be noted that zoneless apps can still
-            // suffer from this issue.
-            this._ngZone.onStable.pipe(take(1)).subscribe(fn);
+        // TODO: remove this conditional when injector is required in the constructor.
+        if (this._injector) {
+            afterNextRender(fn, { injector: this._injector });
         }
         else {
-            if (this._injector) {
-                afterNextRender(fn, { injector: this._injector });
-            }
-            else {
-                fn();
-            }
+            setTimeout(fn);
         }
     }
 }
@@ -1316,8 +1299,8 @@ class ConfigurableFocusTrap extends FocusTrap {
             this._focusTrapManager.deregister(this);
         }
     }
-    constructor(_element, _checker, _ngZone, _document, _focusTrapManager, _inertStrategy, config) {
-        super(_element, _checker, _ngZone, _document, config.defer);
+    constructor(_element, _checker, _ngZone, _document, _focusTrapManager, _inertStrategy, config, injector) {
+        super(_element, _checker, _ngZone, _document, config.defer, injector);
         this._focusTrapManager = _focusTrapManager;
         this._inertStrategy = _inertStrategy;
         this._focusTrapManager.register(this);
@@ -1338,9 +1321,6 @@ class ConfigurableFocusTrap extends FocusTrap {
         this.toggleAnchors(false);
     }
 }
-
-/** The injection token used to specify the inert strategy. */
-const FOCUS_TRAP_INERT_STRATEGY = new InjectionToken('FOCUS_TRAP_INERT_STRATEGY');
 
 /**
  * Lightweight FocusTrapInertStrategy that adds a document focus event
@@ -1396,6 +1376,9 @@ class EventListenerFocusTrapInertStrategy {
     }
 }
 
+/** The injection token used to specify the inert strategy. */
+const FOCUS_TRAP_INERT_STRATEGY = new InjectionToken('FOCUS_TRAP_INERT_STRATEGY');
+
 /** Injectable that ensures only the most recently enabled FocusTrap is active. */
 class FocusTrapManager {
     constructor() {
@@ -1446,6 +1429,7 @@ class ConfigurableFocusTrapFactory {
         this._checker = _checker;
         this._ngZone = _ngZone;
         this._focusTrapManager = _focusTrapManager;
+        this._injector = inject(Injector);
         this._document = _document;
         // TODO split up the strategies into different modules, similar to DateAdapter.
         this._inertStrategy = _inertStrategy || new EventListenerFocusTrapInertStrategy();
@@ -1458,7 +1442,7 @@ class ConfigurableFocusTrapFactory {
         else {
             configObject = config;
         }
-        return new ConfigurableFocusTrap(element, this._checker, this._ngZone, this._document, this._focusTrapManager, this._inertStrategy, configObject);
+        return new ConfigurableFocusTrap(element, this._checker, this._ngZone, this._document, this._focusTrapManager, this._inertStrategy, configObject, this._injector);
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.1.0-next.3", ngImport: i0, type: ConfigurableFocusTrapFactory, deps: [{ token: InteractivityChecker }, { token: i0.NgZone }, { token: FocusTrapManager }, { token: DOCUMENT }, { token: FOCUS_TRAP_INERT_STRATEGY, optional: true }], target: i0.ɵɵFactoryTarget.Injectable }); }
     static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "18.1.0-next.3", ngImport: i0, type: ConfigurableFocusTrapFactory, providedIn: 'root' }); }
