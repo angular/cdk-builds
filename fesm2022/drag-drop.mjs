@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { signal, Component, ViewEncapsulation, ChangeDetectionStrategy, inject, ApplicationRef, EnvironmentInjector, createComponent, Injectable, Inject, InjectionToken, booleanAttribute, Directive, Optional, SkipSelf, Input, EventEmitter, Injector, afterNextRender, Self, Output, NgModule } from '@angular/core';
+import { signal, Component, ViewEncapsulation, ChangeDetectionStrategy, inject, ApplicationRef, EnvironmentInjector, createComponent, Injectable, Inject, InjectionToken, booleanAttribute, Directive, Optional, SkipSelf, Input, EventEmitter, Injector, afterNextRender, numberAttribute, Self, Output, NgModule } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import * as i1 from '@angular/cdk/scrolling';
 import { CdkScrollableModule } from '@angular/cdk/scrolling';
@@ -501,6 +501,11 @@ class DragRef {
          * pointer down before starting to drag the element.
          */
         this.dragStartDelay = 0;
+        /**
+         * If the parent of the dragged element has a `scale` transform, it can throw off the
+         * positioning when the user starts dragging. Use this input to notify the CDK of the scale.
+         */
+        this.scale = 1;
         this._disabled = false;
         /** Emits as the drag sequence is being prepared. */
         this.beforeStarted = new Subject();
@@ -1292,7 +1297,8 @@ class DragRef {
      * @param y New transform value along the Y axis.
      */
     _applyRootElementTransform(x, y) {
-        const transform = getTransform(x, y);
+        const scale = 1 / this.scale;
+        const transform = getTransform(x * scale, y * scale);
         const styles = this._rootElement.style;
         // Cache the previous transform amount only after the first drag sequence, because
         // we don't want our own transforms to stack on top of each other.
@@ -1614,6 +1620,7 @@ class SingleAxisSortStrategy {
                 : sibling.drag.getRootElement();
             // Update the offset to reflect the new position.
             sibling.offset += offset;
+            const transformAmount = Math.round(sibling.offset * (1 / sibling.drag.scale));
             // Since we're moving the items with a `transform`, we need to adjust their cached
             // client rects to reflect their new position, as well as swap their positions in the cache.
             // Note that we shouldn't use `getBoundingClientRect` here to update the cache, because the
@@ -1621,11 +1628,11 @@ class SingleAxisSortStrategy {
             if (isHorizontal) {
                 // Round the transforms since some browsers will
                 // blur the elements, for sub-pixel transforms.
-                elementToOffset.style.transform = combineTransforms(`translate3d(${Math.round(sibling.offset)}px, 0, 0)`, sibling.initialTransform);
+                elementToOffset.style.transform = combineTransforms(`translate3d(${transformAmount}px, 0, 0)`, sibling.initialTransform);
                 adjustDomRect(sibling.clientRect, 0, offset);
             }
             else {
-                elementToOffset.style.transform = combineTransforms(`translate3d(0, ${Math.round(sibling.offset)}px, 0)`, sibling.initialTransform);
+                elementToOffset.style.transform = combineTransforms(`translate3d(0, ${transformAmount}px, 0)`, sibling.initialTransform);
                 adjustDomRect(sibling.clientRect, offset, 0);
             }
         });
@@ -3186,6 +3193,11 @@ class CdkDrag {
         this._parentDrag = _parentDrag;
         this._destroyed = new Subject();
         this._handles = new BehaviorSubject([]);
+        /**
+         * If the parent of the dragged element has a `scale` transform, it can throw off the
+         * positioning when the user starts dragging. Use this input to notify the CDK of the scale.
+         */
+        this.scale = 1;
         /** Emits when the user starts dragging the item. */
         this.started = new EventEmitter();
         /** Emits when the user has released a drag item, before any animations have started. */
@@ -3242,6 +3254,10 @@ class CdkDrag {
         if (dropContainer) {
             this._dragRef._withDropContainer(dropContainer._dropListRef);
             dropContainer.addItem(this);
+            // The drop container reads this so we need to sync it here.
+            dropContainer._dropListRef.beforeStarted.pipe(takeUntil(this._destroyed)).subscribe(() => {
+                this._dragRef.scale = this.scale;
+            });
         }
         this._syncInputs(this._dragRef);
         this._handleEvents(this._dragRef);
@@ -3396,6 +3412,7 @@ class CdkDrag {
                     : null;
                 ref.disabled = this.disabled;
                 ref.lockAxis = this.lockAxis;
+                ref.scale = this.scale;
                 ref.dragStartDelay =
                     typeof dragStartDelay === 'object' && dragStartDelay
                         ? dragStartDelay
@@ -3534,7 +3551,7 @@ class CdkDrag {
         });
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.1.0-next.3", ngImport: i0, type: CdkDrag, deps: [{ token: i0.ElementRef }, { token: CDK_DROP_LIST, optional: true, skipSelf: true }, { token: DOCUMENT }, { token: i0.NgZone }, { token: i0.ViewContainerRef }, { token: CDK_DRAG_CONFIG, optional: true }, { token: i1$1.Directionality, optional: true }, { token: DragDrop }, { token: i0.ChangeDetectorRef }, { token: CDK_DRAG_HANDLE, optional: true, self: true }, { token: CDK_DRAG_PARENT, optional: true, skipSelf: true }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "18.1.0-next.3", type: CdkDrag, isStandalone: true, selector: "[cdkDrag]", inputs: { data: ["cdkDragData", "data"], lockAxis: ["cdkDragLockAxis", "lockAxis"], rootElementSelector: ["cdkDragRootElement", "rootElementSelector"], boundaryElement: ["cdkDragBoundary", "boundaryElement"], dragStartDelay: ["cdkDragStartDelay", "dragStartDelay"], freeDragPosition: ["cdkDragFreeDragPosition", "freeDragPosition"], disabled: ["cdkDragDisabled", "disabled", booleanAttribute], constrainPosition: ["cdkDragConstrainPosition", "constrainPosition"], previewClass: ["cdkDragPreviewClass", "previewClass"], previewContainer: ["cdkDragPreviewContainer", "previewContainer"] }, outputs: { started: "cdkDragStarted", released: "cdkDragReleased", ended: "cdkDragEnded", entered: "cdkDragEntered", exited: "cdkDragExited", dropped: "cdkDragDropped", moved: "cdkDragMoved" }, host: { properties: { "class.cdk-drag-disabled": "disabled", "class.cdk-drag-dragging": "_dragRef.isDragging()" }, classAttribute: "cdk-drag" }, providers: [{ provide: CDK_DRAG_PARENT, useExisting: CdkDrag }], exportAs: ["cdkDrag"], usesOnChanges: true, ngImport: i0 }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "18.1.0-next.3", type: CdkDrag, isStandalone: true, selector: "[cdkDrag]", inputs: { data: ["cdkDragData", "data"], lockAxis: ["cdkDragLockAxis", "lockAxis"], rootElementSelector: ["cdkDragRootElement", "rootElementSelector"], boundaryElement: ["cdkDragBoundary", "boundaryElement"], dragStartDelay: ["cdkDragStartDelay", "dragStartDelay"], freeDragPosition: ["cdkDragFreeDragPosition", "freeDragPosition"], disabled: ["cdkDragDisabled", "disabled", booleanAttribute], constrainPosition: ["cdkDragConstrainPosition", "constrainPosition"], previewClass: ["cdkDragPreviewClass", "previewClass"], previewContainer: ["cdkDragPreviewContainer", "previewContainer"], scale: ["cdkDragScale", "scale", numberAttribute] }, outputs: { started: "cdkDragStarted", released: "cdkDragReleased", ended: "cdkDragEnded", entered: "cdkDragEntered", exited: "cdkDragExited", dropped: "cdkDragDropped", moved: "cdkDragMoved" }, host: { properties: { "class.cdk-drag-disabled": "disabled", "class.cdk-drag-dragging": "_dragRef.isDragging()" }, classAttribute: "cdk-drag" }, providers: [{ provide: CDK_DRAG_PARENT, useExisting: CdkDrag }], exportAs: ["cdkDrag"], usesOnChanges: true, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.1.0-next.3", ngImport: i0, type: CdkDrag, decorators: [{
             type: Directive,
@@ -3610,6 +3627,9 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.1.0-next.3", 
             }], previewContainer: [{
                 type: Input,
                 args: ['cdkDragPreviewContainer']
+            }], scale: [{
+                type: Input,
+                args: [{ alias: 'cdkDragScale', transform: numberAttribute }]
             }], started: [{
                 type: Output,
                 args: ['cdkDragStarted']

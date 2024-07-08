@@ -141,6 +141,11 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
      * Same advantages and disadvantages as `parent`.
      */
     previewContainer: PreviewContainer;
+    /**
+     * If the parent of the dragged element has a `scale` transform, it can throw off the
+     * positioning when the user starts dragging. Use this input to notify the CDK of the scale.
+     */
+    scale: number;
     /** Emits when the user starts dragging the item. */
     readonly started: EventEmitter<CdkDragStart>;
     /** Emits when the user has released a drag item, before any animations have started. */
@@ -209,8 +214,9 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     /** Sets up the listener that syncs the handles with the drag ref. */
     private _setupHandlesListener;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkDrag<any>, [null, { optional: true; skipSelf: true; }, null, null, null, { optional: true; }, { optional: true; }, null, null, { optional: true; self: true; }, { optional: true; skipSelf: true; }]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDrag<any>, "[cdkDrag]", ["cdkDrag"], { "data": { "alias": "cdkDragData"; "required": false; }; "lockAxis": { "alias": "cdkDragLockAxis"; "required": false; }; "rootElementSelector": { "alias": "cdkDragRootElement"; "required": false; }; "boundaryElement": { "alias": "cdkDragBoundary"; "required": false; }; "dragStartDelay": { "alias": "cdkDragStartDelay"; "required": false; }; "freeDragPosition": { "alias": "cdkDragFreeDragPosition"; "required": false; }; "disabled": { "alias": "cdkDragDisabled"; "required": false; }; "constrainPosition": { "alias": "cdkDragConstrainPosition"; "required": false; }; "previewClass": { "alias": "cdkDragPreviewClass"; "required": false; }; "previewContainer": { "alias": "cdkDragPreviewContainer"; "required": false; }; }, { "started": "cdkDragStarted"; "released": "cdkDragReleased"; "ended": "cdkDragEnded"; "entered": "cdkDragEntered"; "exited": "cdkDragExited"; "dropped": "cdkDragDropped"; "moved": "cdkDragMoved"; }, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDrag<any>, "[cdkDrag]", ["cdkDrag"], { "data": { "alias": "cdkDragData"; "required": false; }; "lockAxis": { "alias": "cdkDragLockAxis"; "required": false; }; "rootElementSelector": { "alias": "cdkDragRootElement"; "required": false; }; "boundaryElement": { "alias": "cdkDragBoundary"; "required": false; }; "dragStartDelay": { "alias": "cdkDragStartDelay"; "required": false; }; "freeDragPosition": { "alias": "cdkDragFreeDragPosition"; "required": false; }; "disabled": { "alias": "cdkDragDisabled"; "required": false; }; "constrainPosition": { "alias": "cdkDragConstrainPosition"; "required": false; }; "previewClass": { "alias": "cdkDragPreviewClass"; "required": false; }; "previewContainer": { "alias": "cdkDragPreviewContainer"; "required": false; }; "scale": { "alias": "cdkDragScale"; "required": false; }; }, { "started": "cdkDragStarted"; "released": "cdkDragReleased"; "ended": "cdkDragEnded"; "entered": "cdkDragEntered"; "exited": "cdkDragExited"; "dropped": "cdkDragDropped"; "moved": "cdkDragMoved"; }, never, never, true, never>;
     static ngAcceptInputType_disabled: unknown;
+    static ngAcceptInputType_scale: unknown;
 }
 
 /** Event emitted when the user drops a draggable item inside a drop container. */
@@ -809,6 +815,11 @@ export declare class DragRef<T = any> {
     };
     /** Class to be added to the preview element. */
     previewClass: string | string[] | undefined;
+    /**
+     * If the parent of the dragged element has a `scale` transform, it can throw off the
+     * positioning when the user starts dragging. Use this input to notify the CDK of the scale.
+     */
+    scale: number;
     /** Whether starting to drag this element is disabled. */
     get disabled(): boolean;
     set disabled(value: boolean);
