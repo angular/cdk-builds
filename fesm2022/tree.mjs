@@ -1,11 +1,18 @@
 import { SelectionModel, isDataSource } from '@angular/cdk/collections';
-import { isObservable, Subject, BehaviorSubject, of } from 'rxjs';
-import { take, filter, takeUntil, map, distinctUntilChanged } from 'rxjs/operators';
+import { isObservable, Subject, BehaviorSubject, of, combineLatest, EMPTY, concat } from 'rxjs';
+import { take, filter, takeUntil, startWith, tap, switchMap, map, reduce, concatMap, distinctUntilChanged } from 'rxjs/operators';
 import * as i0 from '@angular/core';
-import { InjectionToken, Directive, Inject, Optional, Component, ViewEncapsulation, ChangeDetectionStrategy, Input, ViewChild, ContentChildren, inject, ChangeDetectorRef, numberAttribute, booleanAttribute, NgModule } from '@angular/core';
-import * as i2 from '@angular/cdk/bidi';
+import { InjectionToken, Directive, Inject, Optional, inject, Component, ViewEncapsulation, ChangeDetectionStrategy, Input, ViewChild, ContentChildren, EventEmitter, ChangeDetectorRef, booleanAttribute, Output, numberAttribute, NgModule } from '@angular/core';
+import { TREE_KEY_MANAGER } from '@angular/cdk/a11y';
+import * as i1 from '@angular/cdk/bidi';
+import { coerceObservable } from '@angular/cdk/coercion/private';
 
-/** Base tree control. It has basic toggle/expand/collapse operations on a single data node. */
+/**
+ * Base tree control. It has basic toggle/expand/collapse operations on a single data node.
+ *
+ * @deprecated Use one of levelAccessor or childrenAccessor. To be removed in a future version.
+ * @breaking-change 21.0.0
+ */
 class BaseTreeControl {
     constructor() {
         /** A selection model with multi-selection to track expansion status. */
@@ -54,7 +61,13 @@ class BaseTreeControl {
     }
 }
 
-/** Flat tree control. Able to expand/collapse a subtree recursively for flattened tree. */
+/**
+ * Flat tree control. Able to expand/collapse a subtree recursively for flattened tree.
+ *
+ * @deprecated Use one of levelAccessor or childrenAccessor instead. To be removed in a future
+ * version.
+ * @breaking-change 21.0.0
+ */
 class FlatTreeControl extends BaseTreeControl {
     /** Construct with flat tree data node functions getLevel and isExpandable. */
     constructor(getLevel, isExpandable, options) {
@@ -97,7 +110,13 @@ class FlatTreeControl extends BaseTreeControl {
     }
 }
 
-/** Nested tree control. Able to expand/collapse a subtree recursively for NestedNode type. */
+/**
+ * Nested tree control. Able to expand/collapse a subtree recursively for NestedNode type.
+ *
+ * @deprecated Use one of levelAccessor or childrenAccessor instead. To be removed in a future
+ * version.
+ * @breaking-change 21.0.0
+ */
 class NestedTreeControl extends BaseTreeControl {
     /** Construct with nested tree function getChildren. */
     constructor(getChildren, options) {
@@ -106,6 +125,9 @@ class NestedTreeControl extends BaseTreeControl {
         this.options = options;
         if (this.options) {
             this.trackBy = this.options.trackBy;
+        }
+        if (this.options?.isExpandable) {
+            this.isExpandable = this.options.isExpandable;
         }
     }
     /**
@@ -225,18 +247,19 @@ function getTreeMissingMatchingNodeDefError() {
     return Error(`Could not find a matching node definition for the provided node data.`);
 }
 /**
- * Returns an error to be thrown when there are tree control.
+ * Returns an error to be thrown when there is no tree control.
  * @docs-private
  */
 function getTreeControlMissingError() {
-    return Error(`Could not find a tree control for the tree.`);
+    return Error(`Could not find a tree control, levelAccessor, or childrenAccessor for the tree.`);
 }
 /**
- * Returns an error to be thrown when tree control did not implement functions for flat/nested node.
+ * Returns an error to be thrown when there are multiple ways of specifying children or level
+ * provided to the tree.
  * @docs-private
  */
-function getTreeControlFunctionsMissingError() {
-    return Error(`Could not find functions for nested/flat tree in tree control.`);
+function getMultipleTreeControlsError() {
+    return Error(`More than one of tree control, levelAccessor, or childrenAccessor were provided.`);
 }
 
 /**
@@ -257,13 +280,25 @@ class CdkTree {
             this._switchDataSource(dataSource);
         }
     }
-    constructor(_differs, _changeDetectorRef) {
+    constructor(_differs, _changeDetectorRef, _dir) {
         this._differs = _differs;
         this._changeDetectorRef = _changeDetectorRef;
+        this._dir = _dir;
         /** Subject that emits when the component has been destroyed. */
         this._onDestroy = new Subject();
         /** Level of nodes */
         this._levels = new Map();
+        /** The immediate parents for a node. This is `null` if there is no parent. */
+        this._parents = new Map();
+        /**
+         * Nodes grouped into each set, which is a list of nodes displayed together in the DOM.
+         *
+         * Lookup key is the parent of a set. Root nodes have key of null.
+         *
+         * Values is a 'set' of tree nodes. Each tree node maps to a treeitem element. Sets are in the
+         * order that it is rendered. Each set maps directly to aria-posinset and aria-setsize attributes.
+         */
+        this._ariaSets = new Map();
         // TODO(tinayuangao): Setup a listener for scrolling, emit the calculated view to viewChange.
         //     Remove the MAX_VALUE in viewChange
         /**
@@ -274,12 +309,31 @@ class CdkTree {
             start: 0,
             end: Number.MAX_VALUE,
         });
+        /**
+         * Maintain a synchronous cache of flattened data nodes. This will only be
+         * populated after initial render, and in certain cases, will be delayed due to
+         * relying on Observable `getChildren` calls.
+         */
+        this._flattenedNodes = new BehaviorSubject([]);
+        /** The automatically determined node type for the tree. */
+        this._nodeType = new BehaviorSubject(null);
+        /** The mapping between data and the node that is rendered. */
+        this._nodes = new BehaviorSubject(new Map());
+        /**
+         * Synchronous cache of nodes for the `TreeKeyManager`. This is separate
+         * from `_flattenedNodes` so they can be independently updated at different
+         * times.
+         */
+        this._keyManagerNodes = new BehaviorSubject([]);
+        this._keyManagerFactory = inject(TREE_KEY_MANAGER);
+        this._viewInit = false;
     }
-    ngOnInit() {
-        this._dataDiffer = this._differs.find([]).create(this.trackBy);
-        if (!this.treeControl && (typeof ngDevMode === 'undefined' || ngDevMode)) {
-            throw getTreeControlMissingError();
-        }
+    ngAfterContentInit() {
+        this._initializeKeyManager();
+    }
+    ngAfterContentChecked() {
+        this._updateDefaultNodeDefinition();
+        this._subscribeToDataChanges();
     }
     ngOnDestroy() {
         this._nodeOutlet.viewContainer.clear();
@@ -293,19 +347,35 @@ class CdkTree {
             this._dataSubscription.unsubscribe();
             this._dataSubscription = null;
         }
+        // In certain tests, the tree might be destroyed before this is initialized
+        // in `ngAfterContentInit`.
+        this._keyManager?.destroy();
     }
-    ngAfterContentChecked() {
+    ngOnInit() {
+        this._checkTreeControlUsage();
+        this._initializeDataDiffer();
+    }
+    ngAfterViewInit() {
+        this._viewInit = true;
+    }
+    _updateDefaultNodeDefinition() {
         const defaultNodeDefs = this._nodeDefs.filter(def => !def.when);
         if (defaultNodeDefs.length > 1 && (typeof ngDevMode === 'undefined' || ngDevMode)) {
             throw getTreeMultipleDefaultNodeDefsError();
         }
         this._defaultNodeDef = defaultNodeDefs[0];
-        if (this.dataSource && this._nodeDefs && !this._dataSubscription) {
-            this._observeRenderChanges();
+    }
+    /**
+     * Sets the node type for the tree, if it hasn't been set yet.
+     *
+     * This will be called by the first node that's rendered in order for the tree
+     * to determine what data transformations are required.
+     */
+    _setNodeTypeIfUnset(nodeType) {
+        if (this._nodeType.value === null) {
+            this._nodeType.next(nodeType);
         }
     }
-    // TODO(tinayuangao): Work on keyboard traversal and actions, make sure it's working for RTL
-    //     and nested trees.
     /**
      * Switch to the provided data source by resetting the data and unsubscribing from the current
      * render change subscription if one exists. If the data source is null, interpret this by
@@ -325,11 +395,21 @@ class CdkTree {
         }
         this._dataSource = dataSource;
         if (this._nodeDefs) {
-            this._observeRenderChanges();
+            this._subscribeToDataChanges();
         }
     }
+    _getExpansionModel() {
+        if (!this.treeControl) {
+            this._expansionModel ??= new SelectionModel(true);
+            return this._expansionModel;
+        }
+        return this.treeControl.expansionModel;
+    }
     /** Set up a subscription for the data provided by the data source. */
-    _observeRenderChanges() {
+    _subscribeToDataChanges() {
+        if (this._dataSubscription) {
+            return;
+        }
         let dataStream;
         if (isDataSource(this._dataSource)) {
             dataStream = this._dataSource.connect(this);
@@ -340,32 +420,138 @@ class CdkTree {
         else if (Array.isArray(this._dataSource)) {
             dataStream = of(this._dataSource);
         }
-        if (dataStream) {
-            this._dataSubscription = dataStream
-                .pipe(takeUntil(this._onDestroy))
-                .subscribe(data => this.renderNodeChanges(data));
+        if (!dataStream) {
+            if (typeof ngDevMode === 'undefined' || ngDevMode) {
+                throw getTreeNoValidDataSourceError();
+            }
+            return;
         }
-        else if (typeof ngDevMode === 'undefined' || ngDevMode) {
-            throw getTreeNoValidDataSourceError();
+        this._dataSubscription = this._getRenderData(dataStream)
+            .pipe(takeUntil(this._onDestroy))
+            .subscribe(renderingData => {
+            this._renderDataChanges(renderingData);
+        });
+    }
+    /** Given an Observable containing a stream of the raw data, returns an Observable containing the RenderingData */
+    _getRenderData(dataStream) {
+        const expansionModel = this._getExpansionModel();
+        return combineLatest([
+            dataStream,
+            this._nodeType,
+            // We don't use the expansion data directly, however we add it here to essentially
+            // trigger data rendering when expansion changes occur.
+            expansionModel.changed.pipe(startWith(null), tap(expansionChanges => {
+                this._emitExpansionChanges(expansionChanges);
+            })),
+        ]).pipe(switchMap(([data, nodeType]) => {
+            if (nodeType === null) {
+                return of({ renderNodes: data, flattenedNodes: null, nodeType });
+            }
+            // If we're here, then we know what our node type is, and therefore can
+            // perform our usual rendering pipeline, which necessitates converting the data
+            return this._computeRenderingData(data, nodeType).pipe(map(convertedData => ({ ...convertedData, nodeType })));
+        }));
+    }
+    _renderDataChanges(data) {
+        if (data.nodeType === null) {
+            this.renderNodeChanges(data.renderNodes);
+            return;
+        }
+        // If we're here, then we know what our node type is, and therefore can
+        // perform our usual rendering pipeline.
+        this._updateCachedData(data.flattenedNodes);
+        this.renderNodeChanges(data.renderNodes);
+        this._updateKeyManagerItems(data.flattenedNodes);
+    }
+    _emitExpansionChanges(expansionChanges) {
+        if (!expansionChanges) {
+            return;
+        }
+        const nodes = this._nodes.value;
+        for (const added of expansionChanges.added) {
+            const node = nodes.get(added);
+            node?._emitExpansionState(true);
+        }
+        for (const removed of expansionChanges.removed) {
+            const node = nodes.get(removed);
+            node?._emitExpansionState(false);
+        }
+    }
+    _initializeKeyManager() {
+        const items = combineLatest([this._keyManagerNodes, this._nodes]).pipe(map(([keyManagerNodes, renderNodes]) => keyManagerNodes.reduce((items, data) => {
+            const node = renderNodes.get(this._getExpansionKey(data));
+            if (node) {
+                items.push(node);
+            }
+            return items;
+        }, [])));
+        const keyManagerOptions = {
+            trackBy: node => this._getExpansionKey(node.data),
+            skipPredicate: node => !!node.isDisabled,
+            typeAheadDebounceInterval: true,
+            horizontalOrientation: this._dir.value,
+        };
+        this._keyManager = this._keyManagerFactory(items, keyManagerOptions);
+    }
+    _initializeDataDiffer() {
+        // Provide a default trackBy based on `_getExpansionKey` if one isn't provided.
+        const trackBy = this.trackBy ?? ((_index, item) => this._getExpansionKey(item));
+        this._dataDiffer = this._differs.find([]).create(trackBy);
+    }
+    _checkTreeControlUsage() {
+        if (typeof ngDevMode === 'undefined' || ngDevMode) {
+            // Verify that Tree follows API contract of using one of TreeControl, levelAccessor or
+            // childrenAccessor. Throw an appropriate error if contract is not met.
+            let numTreeControls = 0;
+            if (this.treeControl) {
+                numTreeControls++;
+            }
+            if (this.levelAccessor) {
+                numTreeControls++;
+            }
+            if (this.childrenAccessor) {
+                numTreeControls++;
+            }
+            if (!numTreeControls) {
+                throw getTreeControlMissingError();
+            }
+            else if (numTreeControls > 1) {
+                throw getMultipleTreeControlsError();
+            }
         }
     }
     /** Check for changes made in the data and render each change (node added/removed/moved). */
     renderNodeChanges(data, dataDiffer = this._dataDiffer, viewContainer = this._nodeOutlet.viewContainer, parentData) {
         const changes = dataDiffer.diff(data);
-        if (!changes) {
+        // Some tree consumers expect change detection to propagate to nodes
+        // even when the array itself hasn't changed; we explicitly detect changes
+        // anyways in order for nodes to update their data.
+        //
+        // However, if change detection is called while the component's view is
+        // still initing, then the order of child views initing will be incorrect;
+        // to prevent this, we only exit early if the view hasn't initialized yet.
+        if (!changes && !this._viewInit) {
             return;
         }
-        changes.forEachOperation((item, adjustedPreviousIndex, currentIndex) => {
+        changes?.forEachOperation((item, adjustedPreviousIndex, currentIndex) => {
             if (item.previousIndex == null) {
                 this.insertNode(data[currentIndex], currentIndex, viewContainer, parentData);
             }
             else if (currentIndex == null) {
                 viewContainer.remove(adjustedPreviousIndex);
-                this._levels.delete(item.item);
             }
             else {
                 const view = viewContainer.get(adjustedPreviousIndex);
                 viewContainer.move(view, currentIndex);
+            }
+        });
+        // If the data itself changes, but keeps the same trackBy, we need to update the templates'
+        // context to reflect the new object.
+        changes?.forEachIdentityChange((record) => {
+            const newData = record.item;
+            if (record.currentIndex != undefined) {
+                const view = viewContainer.get(record.currentIndex);
+                view.context.$implicit = newData;
             }
         });
         // TODO: change to `this._changeDetectorRef.markForCheck()`, or just switch this component to
@@ -393,21 +579,24 @@ class CdkTree {
      * within the data node view container.
      */
     insertNode(nodeData, index, viewContainer, parentData) {
+        const levelAccessor = this._getLevelAccessor();
         const node = this._getNodeDef(nodeData, index);
+        const key = this._getExpansionKey(nodeData);
         // Node context that will be provided to created embedded view
         const context = new CdkTreeNodeOutletContext(nodeData);
+        parentData ??= this._parents.get(key) ?? undefined;
         // If the tree is flat tree, then use the `getLevel` function in flat tree control
         // Otherwise, use the level of parent node.
-        if (this.treeControl.getLevel) {
-            context.level = this.treeControl.getLevel(nodeData);
+        if (levelAccessor) {
+            context.level = levelAccessor(nodeData);
         }
-        else if (typeof parentData !== 'undefined' && this._levels.has(parentData)) {
-            context.level = this._levels.get(parentData) + 1;
+        else if (parentData !== undefined && this._levels.has(this._getExpansionKey(parentData))) {
+            context.level = this._levels.get(this._getExpansionKey(parentData)) + 1;
         }
         else {
             context.level = 0;
         }
-        this._levels.set(nodeData, context.level);
+        this._levels.set(key, context.level);
         // Use default tree nodeOutlet, or nested node's nodeOutlet
         const container = viewContainer ? viewContainer : this._nodeOutlet.viewContainer;
         container.createEmbeddedView(node.template, context, index);
@@ -418,8 +607,427 @@ class CdkTree {
             CdkTreeNode.mostRecentTreeNode.data = nodeData;
         }
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.1.0-next.3", ngImport: i0, type: CdkTree, deps: [{ token: i0.IterableDiffers }, { token: i0.ChangeDetectorRef }], target: i0.ɵɵFactoryTarget.Component }); }
-    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "18.1.0-next.3", type: CdkTree, isStandalone: true, selector: "cdk-tree", inputs: { dataSource: "dataSource", treeControl: "treeControl", trackBy: "trackBy" }, host: { attributes: { "role": "tree" }, classAttribute: "cdk-tree" }, queries: [{ propertyName: "_nodeDefs", predicate: CdkTreeNodeDef, descendants: true }], viewQueries: [{ propertyName: "_nodeOutlet", first: true, predicate: CdkTreeNodeOutlet, descendants: true, static: true }], exportAs: ["cdkTree"], ngImport: i0, template: `<ng-container cdkTreeNodeOutlet></ng-container>`, isInline: true, dependencies: [{ kind: "directive", type: CdkTreeNodeOutlet, selector: "[cdkTreeNodeOutlet]" }], changeDetection: i0.ChangeDetectionStrategy.Default, encapsulation: i0.ViewEncapsulation.None }); }
+    /** Whether the data node is expanded or collapsed. Returns true if it's expanded. */
+    isExpanded(dataNode) {
+        return !!(this.treeControl?.isExpanded(dataNode) ||
+            this._expansionModel?.isSelected(this._getExpansionKey(dataNode)));
+    }
+    /** If the data node is currently expanded, collapse it. Otherwise, expand it. */
+    toggle(dataNode) {
+        if (this.treeControl) {
+            this.treeControl.toggle(dataNode);
+        }
+        else if (this._expansionModel) {
+            this._expansionModel.toggle(this._getExpansionKey(dataNode));
+        }
+    }
+    /** Expand the data node. If it is already expanded, does nothing. */
+    expand(dataNode) {
+        if (this.treeControl) {
+            this.treeControl.expand(dataNode);
+        }
+        else if (this._expansionModel) {
+            this._expansionModel.select(this._getExpansionKey(dataNode));
+        }
+    }
+    /** Collapse the data node. If it is already collapsed, does nothing. */
+    collapse(dataNode) {
+        if (this.treeControl) {
+            this.treeControl.collapse(dataNode);
+        }
+        else if (this._expansionModel) {
+            this._expansionModel.deselect(this._getExpansionKey(dataNode));
+        }
+    }
+    /**
+     * If the data node is currently expanded, collapse it and all its descendants.
+     * Otherwise, expand it and all its descendants.
+     */
+    toggleDescendants(dataNode) {
+        if (this.treeControl) {
+            this.treeControl.toggleDescendants(dataNode);
+        }
+        else if (this._expansionModel) {
+            if (this.isExpanded(dataNode)) {
+                this.collapseDescendants(dataNode);
+            }
+            else {
+                this.expandDescendants(dataNode);
+            }
+        }
+    }
+    /**
+     * Expand the data node and all its descendants. If they are already expanded, does nothing.
+     */
+    expandDescendants(dataNode) {
+        if (this.treeControl) {
+            this.treeControl.expandDescendants(dataNode);
+        }
+        else if (this._expansionModel) {
+            const expansionModel = this._expansionModel;
+            expansionModel.select(this._getExpansionKey(dataNode));
+            this._getDescendants(dataNode)
+                .pipe(take(1), takeUntil(this._onDestroy))
+                .subscribe(children => {
+                expansionModel.select(...children.map(child => this._getExpansionKey(child)));
+            });
+        }
+    }
+    /** Collapse the data node and all its descendants. If it is already collapsed, does nothing. */
+    collapseDescendants(dataNode) {
+        if (this.treeControl) {
+            this.treeControl.collapseDescendants(dataNode);
+        }
+        else if (this._expansionModel) {
+            const expansionModel = this._expansionModel;
+            expansionModel.deselect(this._getExpansionKey(dataNode));
+            this._getDescendants(dataNode)
+                .pipe(take(1), takeUntil(this._onDestroy))
+                .subscribe(children => {
+                expansionModel.deselect(...children.map(child => this._getExpansionKey(child)));
+            });
+        }
+    }
+    /** Expands all data nodes in the tree. */
+    expandAll() {
+        if (this.treeControl) {
+            this.treeControl.expandAll();
+        }
+        else if (this._expansionModel) {
+            const expansionModel = this._expansionModel;
+            expansionModel.select(...this._flattenedNodes.value.map(child => this._getExpansionKey(child)));
+        }
+    }
+    /** Collapse all data nodes in the tree. */
+    collapseAll() {
+        if (this.treeControl) {
+            this.treeControl.collapseAll();
+        }
+        else if (this._expansionModel) {
+            const expansionModel = this._expansionModel;
+            expansionModel.deselect(...this._flattenedNodes.value.map(child => this._getExpansionKey(child)));
+        }
+    }
+    /** Level accessor, used for compatibility between the old Tree and new Tree */
+    _getLevelAccessor() {
+        return this.treeControl?.getLevel?.bind(this.treeControl) ?? this.levelAccessor;
+    }
+    /** Children accessor, used for compatibility between the old Tree and new Tree */
+    _getChildrenAccessor() {
+        return this.treeControl?.getChildren?.bind(this.treeControl) ?? this.childrenAccessor;
+    }
+    /**
+     * Gets the direct children of a node; used for compatibility between the old tree and the
+     * new tree.
+     */
+    _getDirectChildren(dataNode) {
+        const levelAccessor = this._getLevelAccessor();
+        const expansionModel = this._expansionModel ?? this.treeControl?.expansionModel;
+        if (!expansionModel) {
+            return of([]);
+        }
+        const key = this._getExpansionKey(dataNode);
+        const isExpanded = expansionModel.changed.pipe(switchMap(changes => {
+            if (changes.added.includes(key)) {
+                return of(true);
+            }
+            else if (changes.removed.includes(key)) {
+                return of(false);
+            }
+            return EMPTY;
+        }), startWith(this.isExpanded(dataNode)));
+        if (levelAccessor) {
+            return combineLatest([isExpanded, this._flattenedNodes]).pipe(map(([expanded, flattenedNodes]) => {
+                if (!expanded) {
+                    return [];
+                }
+                return this._findChildrenByLevel(levelAccessor, flattenedNodes, dataNode, 1);
+            }));
+        }
+        const childrenAccessor = this._getChildrenAccessor();
+        if (childrenAccessor) {
+            return coerceObservable(childrenAccessor(dataNode) ?? []);
+        }
+        throw getTreeControlMissingError();
+    }
+    /**
+     * Given the list of flattened nodes, the level accessor, and the level range within
+     * which to consider children, finds the children for a given node.
+     *
+     * For example, for direct children, `levelDelta` would be 1. For all descendants,
+     * `levelDelta` would be Infinity.
+     */
+    _findChildrenByLevel(levelAccessor, flattenedNodes, dataNode, levelDelta) {
+        const key = this._getExpansionKey(dataNode);
+        const startIndex = flattenedNodes.findIndex(node => this._getExpansionKey(node) === key);
+        const dataNodeLevel = levelAccessor(dataNode);
+        const expectedLevel = dataNodeLevel + levelDelta;
+        const results = [];
+        // Goes through flattened tree nodes in the `flattenedNodes` array, and get all
+        // descendants within a certain level range.
+        //
+        // If we reach a node whose level is equal to or less than the level of the tree node,
+        // we hit a sibling or parent's sibling, and should stop.
+        for (let i = startIndex + 1; i < flattenedNodes.length; i++) {
+            const currentLevel = levelAccessor(flattenedNodes[i]);
+            if (currentLevel <= dataNodeLevel) {
+                break;
+            }
+            if (currentLevel <= expectedLevel) {
+                results.push(flattenedNodes[i]);
+            }
+        }
+        return results;
+    }
+    /**
+     * Adds the specified node component to the tree's internal registry.
+     *
+     * This primarily facilitates keyboard navigation.
+     */
+    _registerNode(node) {
+        this._nodes.value.set(this._getExpansionKey(node.data), node);
+        this._nodes.next(this._nodes.value);
+    }
+    /** Removes the specified node component from the tree's internal registry. */
+    _unregisterNode(node) {
+        this._nodes.value.delete(this._getExpansionKey(node.data));
+        this._nodes.next(this._nodes.value);
+    }
+    /**
+     * For the given node, determine the level where this node appears in the tree.
+     *
+     * This is intended to be used for `aria-level` but is 0-indexed.
+     */
+    _getLevel(node) {
+        return this._levels.get(this._getExpansionKey(node));
+    }
+    /**
+     * For the given node, determine the size of the parent's child set.
+     *
+     * This is intended to be used for `aria-setsize`.
+     */
+    _getSetSize(dataNode) {
+        const set = this._getAriaSet(dataNode);
+        return set.length;
+    }
+    /**
+     * For the given node, determine the index (starting from 1) of the node in its parent's child set.
+     *
+     * This is intended to be used for `aria-posinset`.
+     */
+    _getPositionInSet(dataNode) {
+        const set = this._getAriaSet(dataNode);
+        const key = this._getExpansionKey(dataNode);
+        return set.findIndex(node => this._getExpansionKey(node) === key) + 1;
+    }
+    /** Given a CdkTreeNode, gets the node that renders that node's parent's data. */
+    _getNodeParent(node) {
+        const parent = this._parents.get(this._getExpansionKey(node.data));
+        return parent && this._nodes.value.get(this._getExpansionKey(parent));
+    }
+    /** Given a CdkTreeNode, gets the nodes that renders that node's child data. */
+    _getNodeChildren(node) {
+        return this._getDirectChildren(node.data).pipe(map(children => children.reduce((nodes, child) => {
+            const value = this._nodes.value.get(this._getExpansionKey(child));
+            if (value) {
+                nodes.push(value);
+            }
+            return nodes;
+        }, [])));
+    }
+    /** `keydown` event handler; this just passes the event to the `TreeKeyManager`. */
+    _sendKeydownToKeyManager(event) {
+        this._keyManager.onKeydown(event);
+    }
+    /** Gets all nested descendants of a given node. */
+    _getDescendants(dataNode) {
+        if (this.treeControl) {
+            return of(this.treeControl.getDescendants(dataNode));
+        }
+        if (this.levelAccessor) {
+            const results = this._findChildrenByLevel(this.levelAccessor, this._flattenedNodes.value, dataNode, Infinity);
+            return of(results);
+        }
+        if (this.childrenAccessor) {
+            return this._getAllChildrenRecursively(dataNode).pipe(reduce((allChildren, nextChildren) => {
+                allChildren.push(...nextChildren);
+                return allChildren;
+            }, []));
+        }
+        throw getTreeControlMissingError();
+    }
+    /**
+     * Gets all children and sub-children of the provided node.
+     *
+     * This will emit multiple times, in the order that the children will appear
+     * in the tree, and can be combined with a `reduce` operator.
+     */
+    _getAllChildrenRecursively(dataNode) {
+        if (!this.childrenAccessor) {
+            return of([]);
+        }
+        return coerceObservable(this.childrenAccessor(dataNode)).pipe(take(1), switchMap(children => {
+            // Here, we cache the parents of a particular child so that we can compute the levels.
+            for (const child of children) {
+                this._parents.set(this._getExpansionKey(child), dataNode);
+            }
+            return of(...children).pipe(concatMap(child => concat(of([child]), this._getAllChildrenRecursively(child))));
+        }));
+    }
+    _getExpansionKey(dataNode) {
+        // In the case that a key accessor function was not provided by the
+        // tree user, we'll default to using the node object itself as the key.
+        //
+        // This cast is safe since:
+        // - if an expansionKey is provided, TS will infer the type of K to be
+        //   the return type.
+        // - if it's not, then K will be defaulted to T.
+        return this.expansionKey?.(dataNode) ?? dataNode;
+    }
+    _getAriaSet(node) {
+        const key = this._getExpansionKey(node);
+        const parent = this._parents.get(key);
+        const parentKey = parent ? this._getExpansionKey(parent) : null;
+        const set = this._ariaSets.get(parentKey);
+        return set ?? [node];
+    }
+    /**
+     * Finds the parent for the given node. If this is a root node, this
+     * returns null. If we're unable to determine the parent, for example,
+     * if we don't have cached node data, this returns undefined.
+     */
+    _findParentForNode(node, index, cachedNodes) {
+        // In all cases, we have a mapping from node to level; all we need to do here is backtrack in
+        // our flattened list of nodes to determine the first node that's of a level lower than the
+        // provided node.
+        if (!cachedNodes.length) {
+            return null;
+        }
+        const currentLevel = this._levels.get(this._getExpansionKey(node)) ?? 0;
+        for (let parentIndex = index - 1; parentIndex >= 0; parentIndex--) {
+            const parentNode = cachedNodes[parentIndex];
+            const parentLevel = this._levels.get(this._getExpansionKey(parentNode)) ?? 0;
+            if (parentLevel < currentLevel) {
+                return parentNode;
+            }
+        }
+        return null;
+    }
+    /**
+     * Given a set of root nodes and the current node level, flattens any nested
+     * nodes into a single array.
+     *
+     * If any nodes are not expanded, then their children will not be added into the array.
+     * This will still traverse all nested children in order to build up our internal data
+     * models, but will not include them in the returned array.
+     */
+    _flattenNestedNodesWithExpansion(nodes, level = 0) {
+        const childrenAccessor = this._getChildrenAccessor();
+        // If we're using a level accessor, we don't need to flatten anything.
+        if (!childrenAccessor) {
+            return of([...nodes]);
+        }
+        return of(...nodes).pipe(concatMap(node => {
+            const parentKey = this._getExpansionKey(node);
+            if (!this._parents.has(parentKey)) {
+                this._parents.set(parentKey, null);
+            }
+            this._levels.set(parentKey, level);
+            const children = coerceObservable(childrenAccessor(node));
+            return concat(of([node]), children.pipe(take(1), tap(childNodes => {
+                this._ariaSets.set(parentKey, [...(childNodes ?? [])]);
+                for (const child of childNodes ?? []) {
+                    const childKey = this._getExpansionKey(child);
+                    this._parents.set(childKey, node);
+                    this._levels.set(childKey, level + 1);
+                }
+            }), switchMap(childNodes => {
+                if (!childNodes) {
+                    return of([]);
+                }
+                return this._flattenNestedNodesWithExpansion(childNodes, level + 1).pipe(map(nestedNodes => (this.isExpanded(node) ? nestedNodes : [])));
+            })));
+        }), reduce((results, children) => {
+            results.push(...children);
+            return results;
+        }, []));
+    }
+    /**
+     * Converts children for certain tree configurations.
+     *
+     * This also computes parent, level, and group data.
+     */
+    _computeRenderingData(nodes, nodeType) {
+        // The only situations where we have to convert children types is when
+        // they're mismatched; i.e. if the tree is using a childrenAccessor and the
+        // nodes are flat, or if the tree is using a levelAccessor and the nodes are
+        // nested.
+        if (this.childrenAccessor && nodeType === 'flat') {
+            // This flattens children into a single array.
+            this._ariaSets.set(null, [...nodes]);
+            return this._flattenNestedNodesWithExpansion(nodes).pipe(map(flattenedNodes => ({
+                renderNodes: flattenedNodes,
+                flattenedNodes,
+            })));
+        }
+        else if (this.levelAccessor && nodeType === 'nested') {
+            // In the nested case, we only look for root nodes. The CdkNestedNode
+            // itself will handle rendering each individual node's children.
+            const levelAccessor = this.levelAccessor;
+            return of(nodes.filter(node => levelAccessor(node) === 0)).pipe(map(rootNodes => ({
+                renderNodes: rootNodes,
+                flattenedNodes: nodes,
+            })), tap(({ flattenedNodes }) => {
+                this._calculateParents(flattenedNodes);
+            }));
+        }
+        else if (nodeType === 'flat') {
+            // In the case of a TreeControl, we know that the node type matches up
+            // with the TreeControl, and so no conversions are necessary. Otherwise,
+            // we've already confirmed that the data model matches up with the
+            // desired node type here.
+            return of({ renderNodes: nodes, flattenedNodes: nodes }).pipe(tap(({ flattenedNodes }) => {
+                this._calculateParents(flattenedNodes);
+            }));
+        }
+        else {
+            // For nested nodes, we still need to perform the node flattening in order
+            // to maintain our caches for various tree operations.
+            this._ariaSets.set(null, [...nodes]);
+            return this._flattenNestedNodesWithExpansion(nodes).pipe(map(flattenedNodes => ({
+                renderNodes: nodes,
+                flattenedNodes,
+            })));
+        }
+    }
+    _updateCachedData(flattenedNodes) {
+        this._flattenedNodes.next(flattenedNodes);
+    }
+    _updateKeyManagerItems(flattenedNodes) {
+        this._keyManagerNodes.next(flattenedNodes);
+    }
+    /** Traverse the flattened node data and compute parents, levels, and group data. */
+    _calculateParents(flattenedNodes) {
+        const levelAccessor = this._getLevelAccessor();
+        if (!levelAccessor) {
+            return;
+        }
+        this._parents.clear();
+        this._ariaSets.clear();
+        for (let index = 0; index < flattenedNodes.length; index++) {
+            const dataNode = flattenedNodes[index];
+            const key = this._getExpansionKey(dataNode);
+            this._levels.set(key, levelAccessor(dataNode));
+            const parent = this._findParentForNode(dataNode, index, flattenedNodes);
+            this._parents.set(key, parent);
+            const parentKey = parent ? this._getExpansionKey(parent) : null;
+            const group = this._ariaSets.get(parentKey) ?? [];
+            group.splice(index, 0, dataNode);
+            this._ariaSets.set(parentKey, group);
+        }
+    }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.1.0-next.3", ngImport: i0, type: CdkTree, deps: [{ token: i0.IterableDiffers }, { token: i0.ChangeDetectorRef }, { token: i1.Directionality }], target: i0.ɵɵFactoryTarget.Component }); }
+    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "18.1.0-next.3", type: CdkTree, isStandalone: true, selector: "cdk-tree", inputs: { dataSource: "dataSource", treeControl: "treeControl", levelAccessor: "levelAccessor", childrenAccessor: "childrenAccessor", trackBy: "trackBy", expansionKey: "expansionKey" }, host: { attributes: { "role": "tree" }, listeners: { "keydown": "_sendKeydownToKeyManager($event)" }, classAttribute: "cdk-tree" }, queries: [{ propertyName: "_nodeDefs", predicate: CdkTreeNodeDef, descendants: true }], viewQueries: [{ propertyName: "_nodeOutlet", first: true, predicate: CdkTreeNodeOutlet, descendants: true, static: true }], exportAs: ["cdkTree"], ngImport: i0, template: `<ng-container cdkTreeNodeOutlet></ng-container>`, isInline: true, dependencies: [{ kind: "directive", type: CdkTreeNodeOutlet, selector: "[cdkTreeNodeOutlet]" }], changeDetection: i0.ChangeDetectionStrategy.Default, encapsulation: i0.ViewEncapsulation.None }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.1.0-next.3", ngImport: i0, type: CdkTree, decorators: [{
             type: Component,
@@ -430,6 +1038,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.1.0-next.3", 
                     host: {
                         'class': 'cdk-tree',
                         'role': 'tree',
+                        '(keydown)': '_sendKeydownToKeyManager($event)',
                     },
                     encapsulation: ViewEncapsulation.None,
                     // The "OnPush" status for the `CdkTree` component is effectively a noop, so we are removing it.
@@ -440,11 +1049,17 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.1.0-next.3", 
                     standalone: true,
                     imports: [CdkTreeNodeOutlet],
                 }]
-        }], ctorParameters: () => [{ type: i0.IterableDiffers }, { type: i0.ChangeDetectorRef }], propDecorators: { dataSource: [{
+        }], ctorParameters: () => [{ type: i0.IterableDiffers }, { type: i0.ChangeDetectorRef }, { type: i1.Directionality }], propDecorators: { dataSource: [{
                 type: Input
             }], treeControl: [{
                 type: Input
+            }], levelAccessor: [{
+                type: Input
+            }], childrenAccessor: [{
+                type: Input
             }], trackBy: [{
+                type: Input
+            }], expansionKey: [{
                 type: Input
             }], _nodeOutlet: [{
                 type: ViewChild,
@@ -463,16 +1078,42 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.1.0-next.3", 
 class CdkTreeNode {
     /**
      * The role of the tree node.
-     * @deprecated The correct role is 'treeitem', 'group' should not be used. This input will be
-     *   removed in a future version.
-     * @breaking-change 12.0.0 Remove this input
+     *
+     * @deprecated This will be ignored; the tree will automatically determine the appropriate role
+     * for tree node. This input will be removed in a future version.
+     * @breaking-change 21.0.0
      */
     get role() {
         return 'treeitem';
     }
     set role(_role) {
-        // TODO: move to host after View Engine deprecation
-        this._elementRef.nativeElement.setAttribute('role', _role);
+        // ignore any role setting, we handle this internally.
+    }
+    /**
+     * Whether or not this node is expandable.
+     *
+     * If not using `FlatTreeControl`, or if `isExpandable` is not provided to
+     * `NestedTreeControl`, this should be provided for correct node a11y.
+     */
+    get isExpandable() {
+        return this._isExpandable();
+    }
+    set isExpandable(isExpandable) {
+        this._inputIsExpandable = isExpandable;
+    }
+    get isExpanded() {
+        return this._tree.isExpanded(this._data);
+    }
+    set isExpanded(isExpanded) {
+        if (isExpanded) {
+            this.expand();
+        }
+        else {
+            this.collapse();
+        }
+    }
+    getLabel() {
+        return this.typeaheadLabel || this._elementRef.nativeElement.textContent?.trim() || '';
     }
     /**
      * The most recently created `CdkTreeNode`. We save it in static variable so we can retrieve it
@@ -486,54 +1127,101 @@ class CdkTreeNode {
     set data(value) {
         if (value !== this._data) {
             this._data = value;
-            this._setRoleFromData();
             this._dataChanges.next();
         }
-    }
-    get isExpanded() {
-        return this._tree.treeControl.isExpanded(this._data);
     }
     /* If leaf node, return true to not assign aria-expanded attribute */
     get isLeafNode() {
         // If flat tree node data returns false for expandable property, it's a leaf node
-        if (this._tree.treeControl.isExpandable !== undefined &&
+        if (this._tree.treeControl?.isExpandable !== undefined &&
             !this._tree.treeControl.isExpandable(this._data)) {
             return true;
             // If nested tree node data returns 0 descendants, it's a leaf node
         }
-        else if (this._tree.treeControl.isExpandable === undefined &&
-            this._tree.treeControl.getDescendants(this._data).length === 0) {
+        else if (this._tree.treeControl?.isExpandable === undefined &&
+            this._tree.treeControl?.getDescendants(this._data).length === 0) {
             return true;
         }
         return false;
     }
     get level() {
-        // If the treeControl has a getLevel method, use it to get the level. Otherwise read the
+        // If the tree has a levelAccessor, use it to get the level. Otherwise read the
         // aria-level off the parent node and use it as the level for this node (note aria-level is
         // 1-indexed, while this property is 0-indexed, so we don't need to increment).
-        return this._tree.treeControl.getLevel
-            ? this._tree.treeControl.getLevel(this._data)
-            : this._parentNodeAriaLevel;
+        return this._tree._getLevel(this._data) ?? this._parentNodeAriaLevel;
+    }
+    /** Determines if the tree node is expandable. */
+    _isExpandable() {
+        if (this._tree.treeControl) {
+            if (this.isLeafNode) {
+                return false;
+            }
+            // For compatibility with trees created using TreeControl before we added
+            // CdkTreeNode#isExpandable.
+            return true;
+        }
+        return this._inputIsExpandable;
+    }
+    /**
+     * Determines the value for `aria-expanded`.
+     *
+     * For non-expandable nodes, this is `null`.
+     */
+    _getAriaExpanded() {
+        if (!this._isExpandable()) {
+            return null;
+        }
+        return String(this.isExpanded);
+    }
+    /**
+     * Determines the size of this node's parent's child set.
+     *
+     * This is intended to be used for `aria-setsize`.
+     */
+    _getSetSize() {
+        return this._tree._getSetSize(this._data);
+    }
+    /**
+     * Determines the index (starting from 1) of this node in its parent's child set.
+     *
+     * This is intended to be used for `aria-posinset`.
+     */
+    _getPositionInSet() {
+        return this._tree._getPositionInSet(this._data);
     }
     constructor(_elementRef, _tree) {
         this._elementRef = _elementRef;
         this._tree = _tree;
+        this._tabindex = -1;
+        /** This emits when the node has been programatically activated or activated by keyboard. */
+        this.activation = new EventEmitter();
+        /** This emits when the node's expansion status has been changed. */
+        this.expandedChange = new EventEmitter();
         /** Subject that emits when the component has been destroyed. */
         this._destroyed = new Subject();
         /** Emits when the node's data has changed. */
         this._dataChanges = new Subject();
+        this._inputIsExpandable = false;
+        /**
+         * Flag used to determine whether or not we should be focusing the actual element based on
+         * some user interaction (click or focus). On click, we don't forcibly focus the element
+         * since the click could trigger some other component that wants to grab its own focus
+         * (e.g. menu, dialog).
+         */
+        this._shouldFocus = true;
         this._changeDetectorRef = inject(ChangeDetectorRef);
         CdkTreeNode.mostRecentTreeNode = this;
-        this.role = 'treeitem';
     }
     ngOnInit() {
         this._parentNodeAriaLevel = getParentNodeAriaLevel(this._elementRef.nativeElement);
-        this._elementRef.nativeElement.setAttribute('aria-level', `${this.level + 1}`);
-        this._tree.treeControl.expansionModel.changed
-            .pipe(map(() => this.isExpanded), distinctUntilChanged())
+        this._tree
+            ._getExpansionModel()
+            .changed.pipe(map(() => this.isExpanded), distinctUntilChanged())
             .subscribe(() => {
             this._changeDetectorRef.markForCheck();
         });
+        this._tree._setNodeTypeIfUnset('flat');
+        this._tree._registerNode(this);
     }
     ngOnDestroy() {
         // If this is the last tree node being destroyed,
@@ -545,21 +1233,63 @@ class CdkTreeNode {
         this._destroyed.next();
         this._destroyed.complete();
     }
-    /** Focuses the menu item. Implements for FocusableOption. */
-    focus() {
-        this._elementRef.nativeElement.focus();
+    getParent() {
+        return this._tree._getNodeParent(this) ?? null;
     }
-    // TODO: role should eventually just be set in the component host
-    _setRoleFromData() {
-        if (!this._tree.treeControl.isExpandable &&
-            !this._tree.treeControl.getChildren &&
-            (typeof ngDevMode === 'undefined' || ngDevMode)) {
-            throw getTreeControlFunctionsMissingError();
+    getChildren() {
+        return this._tree._getNodeChildren(this);
+    }
+    /** Focuses this data node. Implemented for TreeKeyManagerItem. */
+    focus() {
+        this._tabindex = 0;
+        if (this._shouldFocus) {
+            this._elementRef.nativeElement.focus();
         }
-        this.role = 'treeitem';
+        this._changeDetectorRef.markForCheck();
+    }
+    /** Defocus this data node. */
+    unfocus() {
+        this._tabindex = -1;
+        this._changeDetectorRef.markForCheck();
+    }
+    /** Emits an activation event. Implemented for TreeKeyManagerItem. */
+    activate() {
+        if (this.isDisabled) {
+            return;
+        }
+        this.activation.next(this._data);
+    }
+    /** Collapses this data node. Implemented for TreeKeyManagerItem. */
+    collapse() {
+        if (this.isExpandable) {
+            this._tree.collapse(this._data);
+        }
+    }
+    /** Expands this data node. Implemented for TreeKeyManagerItem. */
+    expand() {
+        if (this.isExpandable) {
+            this._tree.expand(this._data);
+        }
+    }
+    _focusItem() {
+        if (this.isDisabled) {
+            return;
+        }
+        this._tree._keyManager.focusItem(this);
+    }
+    _setActiveItem() {
+        if (this.isDisabled) {
+            return;
+        }
+        this._shouldFocus = false;
+        this._tree._keyManager.focusItem(this);
+        this._shouldFocus = true;
+    }
+    _emitExpansionState(expanded) {
+        this.expandedChange.emit(expanded);
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.1.0-next.3", ngImport: i0, type: CdkTreeNode, deps: [{ token: i0.ElementRef }, { token: CdkTree }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "18.1.0-next.3", type: CdkTreeNode, isStandalone: true, selector: "cdk-tree-node", inputs: { role: "role" }, host: { properties: { "attr.aria-expanded": "isLeafNode ? null : isExpanded" }, classAttribute: "cdk-tree-node" }, exportAs: ["cdkTreeNode"], ngImport: i0 }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "18.1.0-next.3", type: CdkTreeNode, isStandalone: true, selector: "cdk-tree-node", inputs: { role: "role", isExpandable: ["isExpandable", "isExpandable", booleanAttribute], isExpanded: "isExpanded", isDisabled: ["isDisabled", "isDisabled", booleanAttribute], typeaheadLabel: ["cdkTreeNodeTypeaheadLabel", "typeaheadLabel"] }, outputs: { activation: "activation", expandedChange: "expandedChange" }, host: { attributes: { "role": "treeitem" }, listeners: { "click": "_setActiveItem()", "focus": "_focusItem()" }, properties: { "attr.aria-expanded": "_getAriaExpanded()", "attr.aria-level": "level + 1", "attr.aria-posinset": "_getPositionInSet()", "attr.aria-setsize": "_getSetSize()", "tabindex": "_tabindex" }, classAttribute: "cdk-tree-node" }, exportAs: ["cdkTreeNode"], ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.1.0-next.3", ngImport: i0, type: CdkTreeNode, decorators: [{
             type: Directive,
@@ -568,12 +1298,34 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.1.0-next.3", 
                     exportAs: 'cdkTreeNode',
                     host: {
                         'class': 'cdk-tree-node',
-                        '[attr.aria-expanded]': 'isLeafNode ? null : isExpanded',
+                        '[attr.aria-expanded]': '_getAriaExpanded()',
+                        '[attr.aria-level]': 'level + 1',
+                        '[attr.aria-posinset]': '_getPositionInSet()',
+                        '[attr.aria-setsize]': '_getSetSize()',
+                        '[tabindex]': '_tabindex',
+                        'role': 'treeitem',
+                        '(click)': '_setActiveItem()',
+                        '(focus)': '_focusItem()',
                     },
                     standalone: true,
                 }]
         }], ctorParameters: () => [{ type: i0.ElementRef }, { type: CdkTree }], propDecorators: { role: [{
                 type: Input
+            }], isExpandable: [{
+                type: Input,
+                args: [{ transform: booleanAttribute }]
+            }], isExpanded: [{
+                type: Input
+            }], isDisabled: [{
+                type: Input,
+                args: [{ transform: booleanAttribute }]
+            }], typeaheadLabel: [{
+                type: Input,
+                args: ['cdkTreeNodeTypeaheadLabel']
+            }], activation: [{
+                type: Output
+            }], expandedChange: [{
+                type: Output
             }] } });
 function getParentNodeAriaLevel(nodeElement) {
     let parent = nodeElement.parentElement;
@@ -614,18 +1366,10 @@ class CdkNestedTreeNode extends CdkTreeNode {
     }
     ngAfterContentInit() {
         this._dataDiffer = this._differs.find([]).create(this._tree.trackBy);
-        if (!this._tree.treeControl.getChildren && (typeof ngDevMode === 'undefined' || ngDevMode)) {
-            throw getTreeControlFunctionsMissingError();
-        }
-        const childrenNodes = this._tree.treeControl.getChildren(this.data);
-        if (Array.isArray(childrenNodes)) {
-            this.updateChildrenNodes(childrenNodes);
-        }
-        else if (isObservable(childrenNodes)) {
-            childrenNodes
-                .pipe(takeUntil(this._destroyed))
-                .subscribe(result => this.updateChildrenNodes(result));
-        }
+        this._tree
+            ._getDirectChildren(this.data)
+            .pipe(takeUntil(this._destroyed))
+            .subscribe(result => this.updateChildrenNodes(result));
         this.nodeOutlet.changes
             .pipe(takeUntil(this._destroyed))
             .subscribe(() => this.updateChildrenNodes());
@@ -633,6 +1377,7 @@ class CdkNestedTreeNode extends CdkTreeNode {
     // This is a workaround for https://github.com/angular/angular/issues/23091
     // In aot mode, the lifecycle hooks from parent class are not called.
     ngOnInit() {
+        this._tree._setNodeTypeIfUnset('nested');
         super.ngOnInit();
     }
     ngOnDestroy() {
@@ -747,9 +1492,7 @@ class CdkTreeNodePadding {
     }
     /** The padding indent value for the tree node. Returns a string with px numbers if not null. */
     _paddingIndent() {
-        const nodeLevel = this._treeNode.data && this._tree.treeControl.getLevel
-            ? this._tree.treeControl.getLevel(this._treeNode.data)
-            : null;
+        const nodeLevel = (this._treeNode.data && this._tree._getLevel(this._treeNode.data)) ?? null;
         const level = this._level == null ? nodeLevel : this._level;
         return typeof level === 'number' ? `${level * this._indent}${this.indentUnits}` : null;
     }
@@ -795,7 +1538,7 @@ class CdkTreeNodePadding {
         this._indent = numberAttribute(value);
         this._setPadding();
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.1.0-next.3", ngImport: i0, type: CdkTreeNodePadding, deps: [{ token: CdkTreeNode }, { token: CdkTree }, { token: i0.ElementRef }, { token: i2.Directionality, optional: true }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.1.0-next.3", ngImport: i0, type: CdkTreeNodePadding, deps: [{ token: CdkTreeNode }, { token: CdkTree }, { token: i0.ElementRef }, { token: i1.Directionality, optional: true }], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "18.1.0-next.3", type: CdkTreeNodePadding, isStandalone: true, selector: "[cdkTreeNodePadding]", inputs: { level: ["cdkTreeNodePadding", "level", numberAttribute], indent: ["cdkTreeNodePaddingIndent", "indent"] }, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.1.0-next.3", ngImport: i0, type: CdkTreeNodePadding, decorators: [{
@@ -804,7 +1547,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.1.0-next.3", 
                     selector: '[cdkTreeNodePadding]',
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: CdkTreeNode }, { type: CdkTree }, { type: i0.ElementRef }, { type: i2.Directionality, decorators: [{
+        }], ctorParameters: () => [{ type: CdkTreeNode }, { type: CdkTree }, { type: i0.ElementRef }, { type: i1.Directionality, decorators: [{
                     type: Optional
                 }] }], propDecorators: { level: [{
                 type: Input,
@@ -815,7 +1558,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.1.0-next.3", 
             }] } });
 
 /**
- * Node toggle to expand/collapse the node.
+ * Node toggle to expand and collapse the node.
  */
 class CdkTreeNodeToggle {
     constructor(_tree, _treeNode) {
@@ -824,21 +1567,28 @@ class CdkTreeNodeToggle {
         /** Whether expand/collapse the node recursively. */
         this.recursive = false;
     }
-    _toggle(event) {
+    // Toggle the expanded or collapsed state of this node.
+    //
+    // Focus this node with expanding or collapsing it. This ensures that the active node will always
+    // be visible when expanding and collapsing.
+    _toggle() {
         this.recursive
-            ? this._tree.treeControl.toggleDescendants(this._treeNode.data)
-            : this._tree.treeControl.toggle(this._treeNode.data);
-        event.stopPropagation();
+            ? this._tree.toggleDescendants(this._treeNode.data)
+            : this._tree.toggle(this._treeNode.data);
+        this._tree._keyManager.focusItem(this._treeNode);
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.1.0-next.3", ngImport: i0, type: CdkTreeNodeToggle, deps: [{ token: CdkTree }, { token: CdkTreeNode }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "18.1.0-next.3", type: CdkTreeNodeToggle, isStandalone: true, selector: "[cdkTreeNodeToggle]", inputs: { recursive: ["cdkTreeNodeToggleRecursive", "recursive", booleanAttribute] }, host: { listeners: { "click": "_toggle($event)" } }, ngImport: i0 }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "18.1.0-next.3", type: CdkTreeNodeToggle, isStandalone: true, selector: "[cdkTreeNodeToggle]", inputs: { recursive: ["cdkTreeNodeToggleRecursive", "recursive", booleanAttribute] }, host: { attributes: { "tabindex": "-1" }, listeners: { "click": "_toggle(); $event.stopPropagation();", "keydown.Enter": "_toggle(); $event.preventDefault();", "keydown.Space": "_toggle(); $event.preventDefault();" } }, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.1.0-next.3", ngImport: i0, type: CdkTreeNodeToggle, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkTreeNodeToggle]',
                     host: {
-                        '(click)': '_toggle($event)',
+                        '(click)': '_toggle(); $event.stopPropagation();',
+                        '(keydown.Enter)': '_toggle(); $event.preventDefault();',
+                        '(keydown.Space)': '_toggle(); $event.preventDefault();',
+                        'tabindex': '-1',
                     },
                     standalone: true,
                 }]
@@ -885,5 +1635,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.1.0-next.3", 
  * Generated bundle index. Do not edit.
  */
 
-export { BaseTreeControl, CDK_TREE_NODE_OUTLET_NODE, CdkNestedTreeNode, CdkTree, CdkTreeModule, CdkTreeNode, CdkTreeNodeDef, CdkTreeNodeOutlet, CdkTreeNodeOutletContext, CdkTreeNodePadding, CdkTreeNodeToggle, FlatTreeControl, NestedTreeControl, getTreeControlFunctionsMissingError, getTreeControlMissingError, getTreeMissingMatchingNodeDefError, getTreeMultipleDefaultNodeDefsError, getTreeNoValidDataSourceError };
+export { BaseTreeControl, CDK_TREE_NODE_OUTLET_NODE, CdkNestedTreeNode, CdkTree, CdkTreeModule, CdkTreeNode, CdkTreeNodeDef, CdkTreeNodeOutlet, CdkTreeNodeOutletContext, CdkTreeNodePadding, CdkTreeNodeToggle, FlatTreeControl, NestedTreeControl, getMultipleTreeControlsError, getTreeControlMissingError, getTreeMissingMatchingNodeDefError, getTreeMultipleDefaultNodeDefsError, getTreeNoValidDataSourceError };
 //# sourceMappingURL=tree.mjs.map

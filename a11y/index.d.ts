@@ -910,7 +910,6 @@ export declare class ListKeyManager<T extends ListKeyManagerOption> {
     private _activeItemIndex;
     private _activeItem;
     private _wrap;
-    private readonly _letterKeyStream;
     private _typeaheadSubscription;
     private _itemChangesSubscription?;
     private _vertical;
@@ -919,12 +918,12 @@ export declare class ListKeyManager<T extends ListKeyManagerOption> {
     private _homeAndEnd;
     private _pageUpAndDown;
     private _effectRef;
+    private _typeahead?;
     /**
      * Predicate function that can be used to check whether an item should be skipped
      * by the key manager. By default, disabled items are skipped.
      */
     private _skipPredicateFn;
-    private _pressedLetters;
     constructor(items: QueryList<T> | T[] | readonly T[]);
     constructor(items: Signal<T[]> | Signal<readonly T[]>, injector: Injector);
     /**
@@ -1157,6 +1156,68 @@ declare interface ManagedFocusTrap {
 export declare const MESSAGES_CONTAINER_ID = "cdk-describedby-message-container";
 
 /**
+ * @docs-private
+ *
+ * Opt-out of Tree of key manager behavior.
+ *
+ * When provided, Tree has same focus management behavior as before TreeKeyManager was introduced.
+ *  - Tree does not respond to keyboard interaction
+ *  - Tree node allows tabindex to be set by Input binding
+ *  - Tree node allows tabindex to be set by attribute binding
+ *
+ * @deprecated NoopTreeKeyManager deprecated. Use TreeKeyManager or inject a
+ * TreeKeyManagerStrategy instead. To be removed in a future version.
+ *
+ * @breaking-change 21.0.0
+ */
+export declare function NOOP_TREE_KEY_MANAGER_FACTORY<T extends TreeKeyManagerItem>(): TreeKeyManagerFactory<T>;
+
+/**
+ * @docs-private
+ *
+ * Opt-out of Tree of key manager behavior.
+ *
+ * When provided, Tree has same focus management behavior as before TreeKeyManager was introduced.
+ *  - Tree does not respond to keyboard interaction
+ *  - Tree node allows tabindex to be set by Input binding
+ *  - Tree node allows tabindex to be set by attribute binding
+ *
+ * @deprecated NoopTreeKeyManager deprecated. Use TreeKeyManager or inject a
+ * TreeKeyManagerStrategy instead. To be removed in a future version.
+ *
+ * @breaking-change 21.0.0
+ */
+export declare const NOOP_TREE_KEY_MANAGER_FACTORY_PROVIDER: {
+    provide: InjectionToken<TreeKeyManagerFactory<any>>;
+    useFactory: typeof NOOP_TREE_KEY_MANAGER_FACTORY;
+};
+
+/**
+ * @docs-private
+ *
+ * Opt-out of Tree of key manager behavior.
+ *
+ * When provided, Tree has same focus management behavior as before TreeKeyManager was introduced.
+ *  - Tree does not respond to keyboard interaction
+ *  - Tree node allows tabindex to be set by Input binding
+ *  - Tree node allows tabindex to be set by attribute binding
+ *
+ * @deprecated NoopTreeKeyManager deprecated. Use TreeKeyManager or inject a
+ * TreeKeyManagerStrategy instead. To be removed in a future version.
+ *
+ * @breaking-change 21.0.0
+ */
+export declare class NoopTreeKeyManager<T extends TreeKeyManagerItem> implements TreeKeyManagerStrategy<T> {
+    readonly _isNoopTreeKeyManager = true;
+    readonly change: Subject<T | null>;
+    destroy(): void;
+    onKeydown(): void;
+    getActiveItemIndex(): null;
+    getActiveItem(): null;
+    focusItem(): void;
+}
+
+/**
  * Interface used to register message elements and keep a count of how many registrations have
  * the same message and the reference to the message element used for the `aria-describedby`.
  */
@@ -1172,5 +1233,225 @@ export declare interface RegisteredMessage {
  * Used for attributes such as aria-labelledby, aria-owns, etc.
  */
 export declare function removeAriaReferencedId(el: Element, attr: `aria-${string}`, id: string): void;
+
+/** Injection token that determines the key manager to use. */
+export declare const TREE_KEY_MANAGER: InjectionToken<TreeKeyManagerFactory<any>>;
+
+/** @docs-private */
+export declare function TREE_KEY_MANAGER_FACTORY<T extends TreeKeyManagerItem>(): TreeKeyManagerFactory<T>;
+
+/** @docs-private */
+export declare const TREE_KEY_MANAGER_FACTORY_PROVIDER: {
+    provide: InjectionToken<TreeKeyManagerFactory<any>>;
+    useFactory: typeof TREE_KEY_MANAGER_FACTORY;
+};
+
+/**
+ * This class manages keyboard events for trees. If you pass it a QueryList or other list of tree
+ * items, it will set the active item, focus, handle expansion and typeahead correctly when
+ * keyboard events occur.
+ */
+export declare class TreeKeyManager<T extends TreeKeyManagerItem> implements TreeKeyManagerStrategy<T> {
+    /** The index of the currently active (focused) item. */
+    private _activeItemIndex;
+    /** The currently active (focused) item. */
+    private _activeItem;
+    /** Whether or not we activate the item when it's focused. */
+    private _shouldActivationFollowFocus;
+    /**
+     * The orientation that the tree is laid out in. In `rtl` mode, the behavior of Left and
+     * Right arrow are switched.
+     */
+    private _horizontalOrientation;
+    /**
+     * Predicate function that can be used to check whether an item should be skipped
+     * by the key manager.
+     *
+     * The default value for this doesn't skip any elements in order to keep tree items focusable
+     * when disabled. This aligns with ARIA guidelines:
+     * https://www.w3.org/WAI/ARIA/apg/practices/keyboard-interface/#focusabilityofdisabledcontrols.
+     */
+    private _skipPredicateFn;
+    /** Function to determine equivalent items. */
+    private _trackByFn;
+    /** Synchronous cache of the items to manage. */
+    private _items;
+    private _typeahead?;
+    private _typeaheadSubscription;
+    private _hasInitialFocused;
+    private _initialFocus;
+    /**
+     *
+     * @param items List of TreeKeyManager options. Can be synchronous or asynchronous.
+     * @param config Optional configuration options. By default, use 'ltr' horizontal orientation. By
+     * default, do not skip any nodes. By default, key manager only calls `focus` method when items
+     * are focused and does not call `activate`. If `typeaheadDefaultInterval` is `true`, use a
+     * default interval of 200ms.
+     */
+    constructor(items: Observable<T[]> | QueryList<T> | T[], config: TreeKeyManagerOptions<T>);
+    /** Stream that emits any time the focused item changes. */
+    readonly change: Subject<T | null>;
+    /** Cleans up the key manager. */
+    destroy(): void;
+    /**
+     * Handles a keyboard event on the tree.
+     * @param event Keyboard event that represents the user interaction with the tree.
+     */
+    onKeydown(event: KeyboardEvent): void;
+    /** Index of the currently active item. */
+    getActiveItemIndex(): number | null;
+    /** The currently active item. */
+    getActiveItem(): T | null;
+    /** Focus the first available item. */
+    private _focusFirstItem;
+    /** Focus the last available item. */
+    private _focusLastItem;
+    /** Focus the next available item. */
+    private _focusNextItem;
+    /** Focus the previous available item. */
+    private _focusPreviousItem;
+    /**
+     * Focus the provided item by index.
+     * @param index The index of the item to focus.
+     * @param options Additional focusing options.
+     */
+    focusItem(index: number, options?: {
+        emitChangeEvent?: boolean;
+    }): void;
+    focusItem(item: T, options?: {
+        emitChangeEvent?: boolean;
+    }): void;
+    focusItem(itemOrIndex: number | T, options?: {
+        emitChangeEvent?: boolean;
+    }): void;
+    private _updateActiveItemIndex;
+    private _setTypeAhead;
+    private _findNextAvailableItemIndex;
+    private _findPreviousAvailableItemIndex;
+    /**
+     * If the item is already expanded, we collapse the item. Otherwise, we will focus the parent.
+     */
+    private _collapseCurrentItem;
+    /**
+     * If the item is already collapsed, we expand the item. Otherwise, we will focus the first child.
+     */
+    private _expandCurrentItem;
+    private _isCurrentItemExpanded;
+    private _isItemDisabled;
+    /** For all items that are the same level as the current item, we expand those items. */
+    private _expandAllItemsAtCurrentItemLevel;
+    private _activateCurrentItem;
+}
+
+export declare type TreeKeyManagerFactory<T extends TreeKeyManagerItem> = (items: Observable<T[]> | QueryList<T> | T[], options: TreeKeyManagerOptions<T>) => TreeKeyManagerStrategy<T>;
+
+/** Represents an item within a tree that can be passed to a TreeKeyManager. */
+export declare interface TreeKeyManagerItem {
+    /** Whether the item is disabled. */
+    isDisabled?: (() => boolean) | boolean;
+    /** The user-facing label for this item. */
+    getLabel?(): string;
+    /** Perform the main action (i.e. selection) for this item. */
+    activate(): void;
+    /** Retrieves the parent for this item. This is `null` if there is no parent. */
+    getParent(): TreeKeyManagerItem | null;
+    /** Retrieves the children for this item. */
+    getChildren(): TreeKeyManagerItem[] | Observable<TreeKeyManagerItem[]>;
+    /** Determines if the item is currently expanded. */
+    isExpanded: (() => boolean) | boolean;
+    /** Collapses the item, hiding its children. */
+    collapse(): void;
+    /** Expands the item, showing its children. */
+    expand(): void;
+    /**
+     * Focuses the item. This should provide some indication to the user that this item is focused.
+     */
+    focus(): void;
+    /**
+     * Unfocus the item. This should remove the focus state.
+     */
+    unfocus(): void;
+}
+
+/**
+ * Configuration for the TreeKeyManager.
+ */
+export declare interface TreeKeyManagerOptions<T extends TreeKeyManagerItem> {
+    /**
+     * If true, then the key manager will call `activate` in addition to calling `focus` when a
+     * particular item is focused.
+     */
+    shouldActivationFollowFocus?: boolean;
+    /**
+     * The direction in which the tree items are laid out horizontally. This influences which key
+     * will be interpreted as expand or collapse.
+     */
+    horizontalOrientation?: 'rtl' | 'ltr';
+    /**
+     * If provided, navigation "skips" over items that pass the given predicate.
+     *
+     * If the item is to be skipped, predicate function should return false.
+     */
+    skipPredicate?: (item: T) => boolean;
+    /**
+     * If provided, determines how the key manager determines if two items are equivalent.
+     *
+     * It should provide a unique key for each unique tree item. If two tree items are equivalent,
+     * then this function should return the same value.
+     */
+    trackBy?: (treeItem: T) => unknown;
+    /**
+     * If a value is provided, enables typeahead mode, which allows users to set the active item
+     * by typing the visible label of the item.
+     *
+     * If a number is provided, this will be the time to wait after the last keystroke before
+     * setting the active item. If `true` is provided, the default interval of 200ms will be used.
+     */
+    typeAheadDebounceInterval?: true | number;
+}
+
+export declare interface TreeKeyManagerStrategy<T extends TreeKeyManagerItem> {
+    /** Stream that emits any time the focused item changes. */
+    readonly change: Subject<T | null>;
+    /**
+     * Cleans up the key manager.
+     */
+    destroy(): void;
+    /**
+     * Handles a keyboard event on the tree.
+     *
+     * @param event Keyboard event that represents the user interaction with the tree.
+     */
+    onKeydown(event: KeyboardEvent): void;
+    /** Index of the currently active item. */
+    getActiveItemIndex(): number | null;
+    /** The currently active item. */
+    getActiveItem(): T | null;
+    /**
+     * Focus the provided item by index.
+     *
+     * Updates the state of the currently active item. Emits to `change` stream if active item
+     * Changes.
+     * @param index The index of the item to focus.
+     * @param options Additional focusing options.
+     */
+    focusItem(index: number, options?: {
+        emitChangeEvent?: boolean;
+    }): void;
+    /**
+     * Focus the provided item.
+     *
+     * Updates the state of the currently active item. Emits to `change` stream if active item
+     * Changes.
+     * @param item The item to focus. Equality is determined via the trackBy function.
+     * @param options Additional focusing options.
+     */
+    focusItem(item: T, options?: {
+        emitChangeEvent?: boolean;
+    }): void;
+    focusItem(itemOrIndex: number | T, options?: {
+        emitChangeEvent?: boolean;
+    }): void;
+}
 
 export { }

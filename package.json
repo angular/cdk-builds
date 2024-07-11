@@ -80,6 +80,12 @@
       "esm": "./esm2022/coercion/index.mjs",
       "default": "./fesm2022/coercion.mjs"
     },
+    "./coercion/private": {
+      "types": "./coercion/private/index.d.ts",
+      "esm2022": "./esm2022/coercion/private/private_public_index.mjs",
+      "esm": "./esm2022/coercion/private/private_public_index.mjs",
+      "default": "./fesm2022/coercion/private.mjs"
+    },
     "./collections": {
       "types": "./collections/index.d.ts",
       "esm2022": "./esm2022/collections/collections_public_index.mjs",

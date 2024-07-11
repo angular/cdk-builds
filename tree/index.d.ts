@@ -1,12 +1,13 @@
 import { AfterContentChecked } from '@angular/core';
 import { AfterContentInit } from '@angular/core';
+import { AfterViewInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ChangeDetectorRef } from '@angular/core';
 import { CollectionViewer } from '@angular/cdk/collections';
 import { DataSource } from '@angular/cdk/collections';
 import { Directionality } from '@angular/cdk/bidi';
 import { ElementRef } from '@angular/core';
-import { FocusableOption } from '@angular/cdk/a11y';
+import { EventEmitter } from '@angular/core';
 import * as i0 from '@angular/core';
 import { InjectionToken } from '@angular/core';
 import { IterableDiffer } from '@angular/core';
@@ -19,9 +20,16 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Subject } from 'rxjs';
 import { TemplateRef } from '@angular/core';
 import { TrackByFunction } from '@angular/core';
+import { TreeKeyManagerItem } from '@angular/cdk/a11y';
+import { TreeKeyManagerStrategy } from '@angular/cdk/a11y';
 import { ViewContainerRef } from '@angular/core';
 
-/** Base tree control. It has basic toggle/expand/collapse operations on a single data node. */
+/**
+ * Base tree control. It has basic toggle/expand/collapse operations on a single data node.
+ *
+ * @deprecated Use one of levelAccessor or childrenAccessor. To be removed in a future version.
+ * @breaking-change 21.0.0
+ */
 export declare abstract class BaseTreeControl<T, K = T> implements TreeControl<T, K> {
     /** Gets a list of descendent data nodes of a subtree rooted at given data node recursively. */
     abstract getDescendants(dataNode: T): T[];
@@ -105,9 +113,10 @@ export declare class CdkNestedTreeNode<T, K = T> extends CdkTreeNode<T, K> imple
  * CDK tree component that connects with a data source to retrieve data of type `T` and renders
  * dataNodes with hierarchy. Updates the dataNodes when new data is provided by the data source.
  */
-export declare class CdkTree<T, K = T> implements AfterContentChecked, CollectionViewer, OnDestroy, OnInit {
+export declare class CdkTree<T, K = T> implements AfterContentChecked, AfterContentInit, AfterViewInit, CollectionViewer, OnDestroy, OnInit {
     private _differs;
     private _changeDetectorRef;
+    private _dir;
     /** Subject that emits when the component has been destroyed. */
     private readonly _onDestroy;
     /** Differ used to find the changes in the data provided by the data source. */
@@ -118,6 +127,17 @@ export declare class CdkTree<T, K = T> implements AfterContentChecked, Collectio
     private _dataSubscription;
     /** Level of nodes */
     private _levels;
+    /** The immediate parents for a node. This is `null` if there is no parent. */
+    private _parents;
+    /**
+     * Nodes grouped into each set, which is a list of nodes displayed together in the DOM.
+     *
+     * Lookup key is the parent of a set. Root nodes have key of null.
+     *
+     * Values is a 'set' of tree nodes. Each tree node maps to a treeitem element. Sets are in the
+     * order that it is rendered. Each set maps directly to aria-posinset and aria-setsize attributes.
+     */
+    private _ariaSets;
     /**
      * Provides a stream containing the latest data array to render. Influenced by the tree's
      * stream of view window (what dataNodes are currently on screen).
@@ -126,8 +146,28 @@ export declare class CdkTree<T, K = T> implements AfterContentChecked, Collectio
     get dataSource(): DataSource<T> | Observable<T[]> | T[];
     set dataSource(dataSource: DataSource<T> | Observable<T[]> | T[]);
     private _dataSource;
-    /** The tree controller */
-    treeControl: TreeControl<T, K>;
+    /**
+     * The tree controller
+     *
+     * @deprecated Use one of `levelAccessor` or `childrenAccessor` instead. To be removed in a
+     * future version.
+     * @breaking-change 21.0.0
+     */
+    treeControl?: TreeControl<T, K>;
+    /**
+     * Given a data node, determines what tree level the node is at.
+     *
+     * One of levelAccessor or childrenAccessor must be specified, not both.
+     * This is enforced at run-time.
+     */
+    levelAccessor?: (dataNode: T) => number;
+    /**
+     * Given a data node, determines what the children of that node are.
+     *
+     * One of levelAccessor or childrenAccessor must be specified, not both.
+     * This is enforced at run-time.
+     */
+    childrenAccessor?: (dataNode: T) => T[] | Observable<T[]>;
     /**
      * Tracking function that will be used to check the differences in data changes. Used similarly
      * to `ngFor` `trackBy` function. Optimize node operations by identifying a node based on its data
@@ -135,6 +175,10 @@ export declare class CdkTree<T, K = T> implements AfterContentChecked, Collectio
      * Accepts a function that takes two parameters, `index` and `item`.
      */
     trackBy: TrackByFunction<T>;
+    /**
+     * Given a data node, determines the key by which we determine whether or not this node is expanded.
+     */
+    expansionKey?: (dataNode: T) => K;
     _nodeOutlet: CdkTreeNodeOutlet;
     /** The tree node template for the tree */
     _nodeDefs: QueryList<CdkTreeNodeDef<T>>;
@@ -146,18 +190,58 @@ export declare class CdkTree<T, K = T> implements AfterContentChecked, Collectio
         start: number;
         end: number;
     }>;
-    constructor(_differs: IterableDiffers, _changeDetectorRef: ChangeDetectorRef);
-    ngOnInit(): void;
-    ngOnDestroy(): void;
+    /** Keep track of which nodes are expanded. */
+    private _expansionModel?;
+    /**
+     * Maintain a synchronous cache of flattened data nodes. This will only be
+     * populated after initial render, and in certain cases, will be delayed due to
+     * relying on Observable `getChildren` calls.
+     */
+    private _flattenedNodes;
+    /** The automatically determined node type for the tree. */
+    private _nodeType;
+    /** The mapping between data and the node that is rendered. */
+    private _nodes;
+    /**
+     * Synchronous cache of nodes for the `TreeKeyManager`. This is separate
+     * from `_flattenedNodes` so they can be independently updated at different
+     * times.
+     */
+    private _keyManagerNodes;
+    private _keyManagerFactory;
+    /** The key manager for this tree. Handles focus and activation based on user keyboard input. */
+    _keyManager: TreeKeyManagerStrategy<CdkTreeNode<T, K>>;
+    private _viewInit;
+    constructor(_differs: IterableDiffers, _changeDetectorRef: ChangeDetectorRef, _dir: Directionality);
+    ngAfterContentInit(): void;
     ngAfterContentChecked(): void;
+    ngOnDestroy(): void;
+    ngOnInit(): void;
+    ngAfterViewInit(): void;
+    private _updateDefaultNodeDefinition;
+    /**
+     * Sets the node type for the tree, if it hasn't been set yet.
+     *
+     * This will be called by the first node that's rendered in order for the tree
+     * to determine what data transformations are required.
+     */
+    _setNodeTypeIfUnset(nodeType: 'flat' | 'nested'): void;
     /**
      * Switch to the provided data source by resetting the data and unsubscribing from the current
      * render change subscription if one exists. If the data source is null, interpret this by
      * clearing the node outlet. Otherwise start listening for new data.
      */
     private _switchDataSource;
+    _getExpansionModel(): SelectionModel<K>;
     /** Set up a subscription for the data provided by the data source. */
-    private _observeRenderChanges;
+    private _subscribeToDataChanges;
+    /** Given an Observable containing a stream of the raw data, returns an Observable containing the RenderingData */
+    private _getRenderData;
+    private _renderDataChanges;
+    private _emitExpansionChanges;
+    private _initializeKeyManager;
+    private _initializeDataDiffer;
+    private _checkTreeControlUsage;
     /** Check for changes made in the data and render each change (node added/removed/moved). */
     renderNodeChanges(data: readonly T[], dataDiffer?: IterableDiffer<T>, viewContainer?: ViewContainerRef, parentData?: T): void;
     /**
@@ -172,8 +256,116 @@ export declare class CdkTree<T, K = T> implements AfterContentChecked, Collectio
      * within the data node view container.
      */
     insertNode(nodeData: T, index: number, viewContainer?: ViewContainerRef, parentData?: T): void;
+    /** Whether the data node is expanded or collapsed. Returns true if it's expanded. */
+    isExpanded(dataNode: T): boolean;
+    /** If the data node is currently expanded, collapse it. Otherwise, expand it. */
+    toggle(dataNode: T): void;
+    /** Expand the data node. If it is already expanded, does nothing. */
+    expand(dataNode: T): void;
+    /** Collapse the data node. If it is already collapsed, does nothing. */
+    collapse(dataNode: T): void;
+    /**
+     * If the data node is currently expanded, collapse it and all its descendants.
+     * Otherwise, expand it and all its descendants.
+     */
+    toggleDescendants(dataNode: T): void;
+    /**
+     * Expand the data node and all its descendants. If they are already expanded, does nothing.
+     */
+    expandDescendants(dataNode: T): void;
+    /** Collapse the data node and all its descendants. If it is already collapsed, does nothing. */
+    collapseDescendants(dataNode: T): void;
+    /** Expands all data nodes in the tree. */
+    expandAll(): void;
+    /** Collapse all data nodes in the tree. */
+    collapseAll(): void;
+    /** Level accessor, used for compatibility between the old Tree and new Tree */
+    _getLevelAccessor(): ((dataNode: T) => number) | undefined;
+    /** Children accessor, used for compatibility between the old Tree and new Tree */
+    _getChildrenAccessor(): ((dataNode: T) => Observable<T[]> | T[] | undefined | null) | undefined;
+    /**
+     * Gets the direct children of a node; used for compatibility between the old tree and the
+     * new tree.
+     */
+    _getDirectChildren(dataNode: T): Observable<T[]>;
+    /**
+     * Given the list of flattened nodes, the level accessor, and the level range within
+     * which to consider children, finds the children for a given node.
+     *
+     * For example, for direct children, `levelDelta` would be 1. For all descendants,
+     * `levelDelta` would be Infinity.
+     */
+    private _findChildrenByLevel;
+    /**
+     * Adds the specified node component to the tree's internal registry.
+     *
+     * This primarily facilitates keyboard navigation.
+     */
+    _registerNode(node: CdkTreeNode<T, K>): void;
+    /** Removes the specified node component from the tree's internal registry. */
+    _unregisterNode(node: CdkTreeNode<T, K>): void;
+    /**
+     * For the given node, determine the level where this node appears in the tree.
+     *
+     * This is intended to be used for `aria-level` but is 0-indexed.
+     */
+    _getLevel(node: T): number | undefined;
+    /**
+     * For the given node, determine the size of the parent's child set.
+     *
+     * This is intended to be used for `aria-setsize`.
+     */
+    _getSetSize(dataNode: T): number;
+    /**
+     * For the given node, determine the index (starting from 1) of the node in its parent's child set.
+     *
+     * This is intended to be used for `aria-posinset`.
+     */
+    _getPositionInSet(dataNode: T): number;
+    /** Given a CdkTreeNode, gets the node that renders that node's parent's data. */
+    _getNodeParent(node: CdkTreeNode<T, K>): CdkTreeNode<T, K> | null | undefined;
+    /** Given a CdkTreeNode, gets the nodes that renders that node's child data. */
+    _getNodeChildren(node: CdkTreeNode<T, K>): Observable<CdkTreeNode<T, K>[]>;
+    /** `keydown` event handler; this just passes the event to the `TreeKeyManager`. */
+    _sendKeydownToKeyManager(event: KeyboardEvent): void;
+    /** Gets all nested descendants of a given node. */
+    private _getDescendants;
+    /**
+     * Gets all children and sub-children of the provided node.
+     *
+     * This will emit multiple times, in the order that the children will appear
+     * in the tree, and can be combined with a `reduce` operator.
+     */
+    private _getAllChildrenRecursively;
+    private _getExpansionKey;
+    private _getAriaSet;
+    /**
+     * Finds the parent for the given node. If this is a root node, this
+     * returns null. If we're unable to determine the parent, for example,
+     * if we don't have cached node data, this returns undefined.
+     */
+    private _findParentForNode;
+    /**
+     * Given a set of root nodes and the current node level, flattens any nested
+     * nodes into a single array.
+     *
+     * If any nodes are not expanded, then their children will not be added into the array.
+     * This will still traverse all nested children in order to build up our internal data
+     * models, but will not include them in the returned array.
+     */
+    private _flattenNestedNodesWithExpansion;
+    /**
+     * Converts children for certain tree configurations.
+     *
+     * This also computes parent, level, and group data.
+     */
+    private _computeRenderingData;
+    private _updateCachedData;
+    private _updateKeyManagerItems;
+    /** Traverse the flattened node data and compute parents, levels, and group data. */
+    private _calculateParents;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTree<any, any>, never>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<CdkTree<any, any>, "cdk-tree", ["cdkTree"], { "dataSource": { "alias": "dataSource"; "required": false; }; "treeControl": { "alias": "treeControl"; "required": false; }; "trackBy": { "alias": "trackBy"; "required": false; }; }, {}, ["_nodeDefs"], never, true, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<CdkTree<any, any>, "cdk-tree", ["cdkTree"], { "dataSource": { "alias": "dataSource"; "required": false; }; "treeControl": { "alias": "treeControl"; "required": false; }; "levelAccessor": { "alias": "levelAccessor"; "required": false; }; "childrenAccessor": { "alias": "childrenAccessor"; "required": false; }; "trackBy": { "alias": "trackBy"; "required": false; }; "expansionKey": { "alias": "expansionKey"; "required": false; }; }, {}, ["_nodeDefs"], never, true, never>;
 }
 
 export declare class CdkTreeModule {
@@ -185,17 +377,44 @@ export declare class CdkTreeModule {
 /**
  * Tree node for CdkTree. It contains the data in the tree node.
  */
-export declare class CdkTreeNode<T, K = T> implements FocusableOption, OnDestroy, OnInit {
+export declare class CdkTreeNode<T, K = T> implements OnDestroy, OnInit, TreeKeyManagerItem {
     protected _elementRef: ElementRef<HTMLElement>;
     protected _tree: CdkTree<T, K>;
+    protected _tabindex: number | null;
     /**
      * The role of the tree node.
-     * @deprecated The correct role is 'treeitem', 'group' should not be used. This input will be
-     *   removed in a future version.
-     * @breaking-change 12.0.0 Remove this input
+     *
+     * @deprecated This will be ignored; the tree will automatically determine the appropriate role
+     * for tree node. This input will be removed in a future version.
+     * @breaking-change 21.0.0
      */
     get role(): 'treeitem' | 'group';
     set role(_role: 'treeitem' | 'group');
+    /**
+     * Whether or not this node is expandable.
+     *
+     * If not using `FlatTreeControl`, or if `isExpandable` is not provided to
+     * `NestedTreeControl`, this should be provided for correct node a11y.
+     */
+    get isExpandable(): boolean;
+    set isExpandable(isExpandable: boolean);
+    get isExpanded(): boolean;
+    set isExpanded(isExpanded: boolean);
+    /**
+     * Whether or not this node is disabled. If it's disabled, then the user won't be able to focus
+     * or activate this node.
+     */
+    isDisabled: boolean;
+    /**
+     * The text used to locate this item during typeahead. If not specified, the `textContent` will
+     * will be used.
+     */
+    typeaheadLabel: string | null;
+    getLabel(): string;
+    /** This emits when the node has been programatically activated or activated by keyboard. */
+    readonly activation: EventEmitter<T>;
+    /** This emits when the node's expansion status has been changed. */
+    readonly expandedChange: EventEmitter<boolean>;
     /**
      * The most recently created `CdkTreeNode`. We save it in static variable so we can retrieve it
      * in `CdkTree` and set the data to it.
@@ -205,23 +424,64 @@ export declare class CdkTreeNode<T, K = T> implements FocusableOption, OnDestroy
     protected readonly _destroyed: Subject<void>;
     /** Emits when the node's data has changed. */
     readonly _dataChanges: Subject<void>;
+    private _inputIsExpandable;
+    /**
+     * Flag used to determine whether or not we should be focusing the actual element based on
+     * some user interaction (click or focus). On click, we don't forcibly focus the element
+     * since the click could trigger some other component that wants to grab its own focus
+     * (e.g. menu, dialog).
+     */
+    private _shouldFocus;
     private _parentNodeAriaLevel;
     /** The tree node's data. */
     get data(): T;
     set data(value: T);
     protected _data: T;
-    get isExpanded(): boolean;
     get isLeafNode(): boolean;
     get level(): number;
+    /** Determines if the tree node is expandable. */
+    _isExpandable(): boolean;
+    /**
+     * Determines the value for `aria-expanded`.
+     *
+     * For non-expandable nodes, this is `null`.
+     */
+    _getAriaExpanded(): string | null;
+    /**
+     * Determines the size of this node's parent's child set.
+     *
+     * This is intended to be used for `aria-setsize`.
+     */
+    _getSetSize(): number;
+    /**
+     * Determines the index (starting from 1) of this node in its parent's child set.
+     *
+     * This is intended to be used for `aria-posinset`.
+     */
+    _getPositionInSet(): number;
     private _changeDetectorRef;
     constructor(_elementRef: ElementRef<HTMLElement>, _tree: CdkTree<T, K>);
     ngOnInit(): void;
     ngOnDestroy(): void;
-    /** Focuses the menu item. Implements for FocusableOption. */
+    getParent(): CdkTreeNode<T, K> | null;
+    getChildren(): CdkTreeNode<T, K>[] | Observable<CdkTreeNode<T, K>[]>;
+    /** Focuses this data node. Implemented for TreeKeyManagerItem. */
     focus(): void;
-    protected _setRoleFromData(): void;
+    /** Defocus this data node. */
+    unfocus(): void;
+    /** Emits an activation event. Implemented for TreeKeyManagerItem. */
+    activate(): void;
+    /** Collapses this data node. Implemented for TreeKeyManagerItem. */
+    collapse(): void;
+    /** Expands this data node. Implemented for TreeKeyManagerItem. */
+    expand(): void;
+    _focusItem(): void;
+    _setActiveItem(): void;
+    _emitExpansionState(expanded: boolean): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNode<any, any>, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNode<any, any>, "cdk-tree-node", ["cdkTreeNode"], { "role": { "alias": "role"; "required": false; }; }, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNode<any, any>, "cdk-tree-node", ["cdkTreeNode"], { "role": { "alias": "role"; "required": false; }; "isExpandable": { "alias": "isExpandable"; "required": false; }; "isExpanded": { "alias": "isExpanded"; "required": false; }; "isDisabled": { "alias": "isDisabled"; "required": false; }; "typeaheadLabel": { "alias": "cdkTreeNodeTypeaheadLabel"; "required": false; }; }, { "activation": "activation"; "expandedChange": "expandedChange"; }, never, never, true, never>;
+    static ngAcceptInputType_isExpandable: unknown;
+    static ngAcceptInputType_isDisabled: unknown;
 }
 
 /**
@@ -320,7 +580,7 @@ export declare class CdkTreeNodePadding<T, K = T> implements OnDestroy {
 }
 
 /**
- * Node toggle to expand/collapse the node.
+ * Node toggle to expand and collapse the node.
  */
 export declare class CdkTreeNodeToggle<T, K = T> {
     protected _tree: CdkTree<T, K>;
@@ -328,13 +588,19 @@ export declare class CdkTreeNodeToggle<T, K = T> {
     /** Whether expand/collapse the node recursively. */
     recursive: boolean;
     constructor(_tree: CdkTree<T, K>, _treeNode: CdkTreeNode<T, K>);
-    _toggle(event: Event): void;
+    _toggle(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNodeToggle<any, any>, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodeToggle<any, any>, "[cdkTreeNodeToggle]", never, { "recursive": { "alias": "cdkTreeNodeToggleRecursive"; "required": false; }; }, {}, never, never, true, never>;
     static ngAcceptInputType_recursive: unknown;
 }
 
-/** Flat tree control. Able to expand/collapse a subtree recursively for flattened tree. */
+/**
+ * Flat tree control. Able to expand/collapse a subtree recursively for flattened tree.
+ *
+ * @deprecated Use one of levelAccessor or childrenAccessor instead. To be removed in a future
+ * version.
+ * @breaking-change 21.0.0
+ */
 export declare class FlatTreeControl<T, K = T> extends BaseTreeControl<T, K> {
     getLevel: (dataNode: T) => number;
     isExpandable: (dataNode: T) => boolean;
@@ -363,13 +629,14 @@ export declare interface FlatTreeControlOptions<T, K> {
 }
 
 /**
- * Returns an error to be thrown when tree control did not implement functions for flat/nested node.
+ * Returns an error to be thrown when there are multiple ways of specifying children or level
+ * provided to the tree.
  * @docs-private
  */
-export declare function getTreeControlFunctionsMissingError(): Error;
+export declare function getMultipleTreeControlsError(): Error;
 
 /**
- * Returns an error to be thrown when there are tree control.
+ * Returns an error to be thrown when there is no tree control.
  * @docs-private
  */
 export declare function getTreeControlMissingError(): Error;
@@ -432,7 +699,13 @@ declare namespace i6 {
     }
 }
 
-/** Nested tree control. Able to expand/collapse a subtree recursively for NestedNode type. */
+/**
+ * Nested tree control. Able to expand/collapse a subtree recursively for NestedNode type.
+ *
+ * @deprecated Use one of levelAccessor or childrenAccessor instead. To be removed in a future
+ * version.
+ * @breaking-change 21.0.0
+ */
 export declare class NestedTreeControl<T, K = T> extends BaseTreeControl<T, K> {
     getChildren: (dataNode: T) => Observable<T[]> | T[] | undefined | null;
     options?: NestedTreeControlOptions<T, K> | undefined;
@@ -453,6 +726,8 @@ export declare class NestedTreeControl<T, K = T> extends BaseTreeControl<T, K> {
 
 /** Optional set of configuration that can be provided to the NestedTreeControl. */
 export declare interface NestedTreeControlOptions<T, K> {
+    /** Function to determine if the provided node is expandable. */
+    isExpandable?: (dataNode: T) => boolean;
     trackBy?: (dataNode: T) => K;
 }
 
@@ -460,6 +735,9 @@ export declare interface NestedTreeControlOptions<T, K> {
  * Tree control interface. User can implement TreeControl to expand/collapse dataNodes in the tree.
  * The CDKTree will use this TreeControl to expand/collapse a node.
  * User can also use it outside the `<cdk-tree>` to control the expansion status of the tree.
+ *
+ * @deprecated Use one of levelAccessor or childrenAccessor instead. To be removed in a future version.
+ * @breaking-change 21.0.0
  */
 export declare interface TreeControl<T, K = T> {
     /** The saved tree nodes data for `expandAll` action. */

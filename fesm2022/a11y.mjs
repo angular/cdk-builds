@@ -1,11 +1,12 @@
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { inject, APP_ID, Injectable, Inject, QueryList, isSignal, effect, afterNextRender, Injector, booleanAttribute, Directive, Input, InjectionToken, Optional, EventEmitter, Output, NgModule } from '@angular/core';
+import { inject, APP_ID, Injectable, Inject, QueryList, isSignal, effect, InjectionToken, afterNextRender, Injector, booleanAttribute, Directive, Input, Optional, EventEmitter, Output, NgModule } from '@angular/core';
 import * as i1 from '@angular/cdk/platform';
 import { Platform, _getFocusedElementPierceShadowDom, normalizePassiveListenerOptions, _getEventTarget, _getShadowRoot } from '@angular/cdk/platform';
-import { Subject, Subscription, BehaviorSubject, of } from 'rxjs';
-import { hasModifierKey, A, Z, ZERO, NINE, PAGE_DOWN, PAGE_UP, END, HOME, LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW, TAB, ALT, CONTROL, MAC_META, META, SHIFT } from '@angular/cdk/keycodes';
-import { tap, debounceTime, filter, map, skip, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { Subject, Subscription, isObservable, of, BehaviorSubject } from 'rxjs';
+import { A, Z, ZERO, NINE, hasModifierKey, PAGE_DOWN, PAGE_UP, END, HOME, LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW, TAB, ALT, CONTROL, MAC_META, META, SHIFT } from '@angular/cdk/keycodes';
+import { tap, debounceTime, filter, map, take, skip, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { coerceObservable } from '@angular/cdk/coercion/private';
 import * as i1$1 from '@angular/cdk/observers';
 import { ObserversModule } from '@angular/cdk/observers';
 import { coerceElement } from '@angular/cdk/coercion';
@@ -270,6 +271,87 @@ function setMessageId(element, serviceId) {
     }
 }
 
+const DEFAULT_TYPEAHEAD_DEBOUNCE_INTERVAL_MS = 200;
+/**
+ * Selects items based on keyboard inputs. Implements the typeahead functionality of
+ * `role="listbox"` or `role="tree"` and other related roles.
+ */
+class Typeahead {
+    constructor(initialItems, config) {
+        this._letterKeyStream = new Subject();
+        this._items = [];
+        this._selectedItemIndex = -1;
+        /** Buffer for the letters that the user has pressed */
+        this._pressedLetters = [];
+        this._selectedItem = new Subject();
+        this.selectedItem = this._selectedItem;
+        const typeAheadInterval = typeof config?.debounceInterval === 'number'
+            ? config.debounceInterval
+            : DEFAULT_TYPEAHEAD_DEBOUNCE_INTERVAL_MS;
+        if (config?.skipPredicate) {
+            this._skipPredicateFn = config.skipPredicate;
+        }
+        if ((typeof ngDevMode === 'undefined' || ngDevMode) &&
+            initialItems.length &&
+            initialItems.some(item => typeof item.getLabel !== 'function')) {
+            throw new Error('KeyManager items in typeahead mode must implement the `getLabel` method.');
+        }
+        this.setItems(initialItems);
+        this._setupKeyHandler(typeAheadInterval);
+    }
+    destroy() {
+        this._pressedLetters = [];
+        this._letterKeyStream.complete();
+        this._selectedItem.complete();
+    }
+    setCurrentSelectedItemIndex(index) {
+        this._selectedItemIndex = index;
+    }
+    setItems(items) {
+        this._items = items;
+    }
+    handleKey(event) {
+        const keyCode = event.keyCode;
+        // Attempt to use the `event.key` which also maps it to the user's keyboard language,
+        // otherwise fall back to resolving alphanumeric characters via the keyCode.
+        if (event.key && event.key.length === 1) {
+            this._letterKeyStream.next(event.key.toLocaleUpperCase());
+        }
+        else if ((keyCode >= A && keyCode <= Z) || (keyCode >= ZERO && keyCode <= NINE)) {
+            this._letterKeyStream.next(String.fromCharCode(keyCode));
+        }
+    }
+    /** Gets whether the user is currently typing into the manager using the typeahead feature. */
+    isTyping() {
+        return this._pressedLetters.length > 0;
+    }
+    /** Resets the currently stored sequence of typed letters. */
+    reset() {
+        this._pressedLetters = [];
+    }
+    _setupKeyHandler(typeAheadInterval) {
+        // Debounce the presses of non-navigational keys, collect the ones that correspond to letters
+        // and convert those letters back into a string. Afterwards find the first item that starts
+        // with that string and select it.
+        this._letterKeyStream
+            .pipe(tap(letter => this._pressedLetters.push(letter)), debounceTime(typeAheadInterval), filter(() => this._pressedLetters.length > 0), map(() => this._pressedLetters.join('').toLocaleUpperCase()))
+            .subscribe(inputString => {
+            // Start at 1 because we want to start searching at the item immediately
+            // following the current active item.
+            for (let i = 1; i < this._items.length + 1; i++) {
+                const index = (this._selectedItemIndex + i) % this._items.length;
+                const item = this._items[index];
+                if (!this._skipPredicateFn?.(item) &&
+                    item.getLabel?.().toLocaleUpperCase().trim().indexOf(inputString) === 0) {
+                    this._selectedItem.next(item);
+                    break;
+                }
+            }
+            this._pressedLetters = [];
+        });
+    }
+}
+
 /**
  * This class manages keyboard events for selectable lists. If you pass it a query list
  * of items, it will set the active item correctly when arrow events occur.
@@ -280,7 +362,6 @@ class ListKeyManager {
         this._activeItemIndex = -1;
         this._activeItem = null;
         this._wrap = false;
-        this._letterKeyStream = new Subject();
         this._typeaheadSubscription = Subscription.EMPTY;
         this._vertical = true;
         this._allowedModifierKeys = [];
@@ -291,8 +372,6 @@ class ListKeyManager {
          * by the key manager. By default, disabled items are skipped.
          */
         this._skipPredicateFn = (item) => item.disabled;
-        // Buffer for the letters that the user has pressed when the typeahead option is turned on.
-        this._pressedLetters = [];
         /**
          * Stream that emits any time the TAB key is pressed, so components can react
          * when focus is shifted off of the list.
@@ -368,31 +447,19 @@ class ListKeyManager {
             }
         }
         this._typeaheadSubscription.unsubscribe();
-        // Debounce the presses of non-navigational keys, collect the ones that correspond to letters
-        // and convert those letters back into a string. Afterwards find the first item that starts
-        // with that string and select it.
-        this._typeaheadSubscription = this._letterKeyStream
-            .pipe(tap(letter => this._pressedLetters.push(letter)), debounceTime(debounceInterval), filter(() => this._pressedLetters.length > 0), map(() => this._pressedLetters.join('')))
-            .subscribe(inputString => {
-            const items = this._getItemsArray();
-            // Start at 1 because we want to start searching at the item immediately
-            // following the current active item.
-            for (let i = 1; i < items.length + 1; i++) {
-                const index = (this._activeItemIndex + i) % items.length;
-                const item = items[index];
-                if (!this._skipPredicateFn(item) &&
-                    item.getLabel().toUpperCase().trim().indexOf(inputString) === 0) {
-                    this.setActiveItem(index);
-                    break;
-                }
-            }
-            this._pressedLetters = [];
+        const items = this._getItemsArray();
+        this._typeahead = new Typeahead(items, {
+            debounceInterval: typeof debounceInterval === 'number' ? debounceInterval : undefined,
+            skipPredicate: item => this._skipPredicateFn(item),
+        });
+        this._typeaheadSubscription = this._typeahead.selectedItem.subscribe(item => {
+            this.setActiveItem(item);
         });
         return this;
     }
     /** Cancels the current typeahead sequence. */
     cancelTypeahead() {
-        this._pressedLetters = [];
+        this._typeahead?.reset();
         return this;
     }
     /**
@@ -504,20 +571,13 @@ class ListKeyManager {
                 }
             default:
                 if (isModifierAllowed || hasModifierKey(event, 'shiftKey')) {
-                    // Attempt to use the `event.key` which also maps it to the user's keyboard language,
-                    // otherwise fall back to resolving alphanumeric characters via the keyCode.
-                    if (event.key && event.key.length === 1) {
-                        this._letterKeyStream.next(event.key.toLocaleUpperCase());
-                    }
-                    else if ((keyCode >= A && keyCode <= Z) || (keyCode >= ZERO && keyCode <= NINE)) {
-                        this._letterKeyStream.next(String.fromCharCode(keyCode));
-                    }
+                    this._typeahead?.handleKey(event);
                 }
                 // Note that we return here, in order to avoid preventing
                 // the default action of non-navigational keys.
                 return;
         }
-        this._pressedLetters = [];
+        this._typeahead?.reset();
         event.preventDefault();
     }
     /** Index of the currently active item. */
@@ -530,7 +590,7 @@ class ListKeyManager {
     }
     /** Gets whether the user is currently typing into the manager using the typeahead feature. */
     isTyping() {
-        return this._pressedLetters.length > 0;
+        return !!this._typeahead && this._typeahead.isTyping();
     }
     /** Sets the active item to the first enabled item in the list. */
     setFirstItemActive() {
@@ -557,16 +617,16 @@ class ListKeyManager {
         // Explicitly check for `null` and `undefined` because other falsy values are valid.
         this._activeItem = activeItem == null ? null : activeItem;
         this._activeItemIndex = index;
+        this._typeahead?.setCurrentSelectedItemIndex(index);
     }
     /** Cleans up the key manager. */
     destroy() {
         this._typeaheadSubscription.unsubscribe();
         this._itemChangesSubscription?.unsubscribe();
         this._effectRef?.destroy();
-        this._letterKeyStream.complete();
+        this._typeahead?.destroy();
         this.tabOut.complete();
         this.change.complete();
-        this._pressedLetters = [];
     }
     /**
      * This method sets the active item, given a list of items and the delta between the
@@ -627,10 +687,12 @@ class ListKeyManager {
     }
     /** Callback for when the items have changed. */
     _itemsChanged(newItems) {
+        this._typeahead?.setItems(newItems);
         if (this._activeItem) {
             const newIndex = newItems.indexOf(this._activeItem);
             if (newIndex > -1 && newIndex !== this._activeItemIndex) {
                 this._activeItemIndex = newIndex;
+                this._typeahead?.setCurrentSelectedItemIndex(newIndex);
             }
         }
     }
@@ -668,6 +730,424 @@ class FocusKeyManager extends ListKeyManager {
         }
     }
 }
+
+/**
+ * This class manages keyboard events for trees. If you pass it a QueryList or other list of tree
+ * items, it will set the active item, focus, handle expansion and typeahead correctly when
+ * keyboard events occur.
+ */
+class TreeKeyManager {
+    _initialFocus() {
+        if (this._hasInitialFocused) {
+            return;
+        }
+        if (!this._items.length) {
+            return;
+        }
+        let focusIndex = 0;
+        for (let i = 0; i < this._items.length; i++) {
+            if (!this._skipPredicateFn(this._items[i]) && !this._isItemDisabled(this._items[i])) {
+                focusIndex = i;
+                break;
+            }
+        }
+        this.focusItem(focusIndex);
+        this._hasInitialFocused = true;
+    }
+    /**
+     *
+     * @param items List of TreeKeyManager options. Can be synchronous or asynchronous.
+     * @param config Optional configuration options. By default, use 'ltr' horizontal orientation. By
+     * default, do not skip any nodes. By default, key manager only calls `focus` method when items
+     * are focused and does not call `activate`. If `typeaheadDefaultInterval` is `true`, use a
+     * default interval of 200ms.
+     */
+    constructor(items, config) {
+        /** The index of the currently active (focused) item. */
+        this._activeItemIndex = -1;
+        /** The currently active (focused) item. */
+        this._activeItem = null;
+        /** Whether or not we activate the item when it's focused. */
+        this._shouldActivationFollowFocus = false;
+        /**
+         * The orientation that the tree is laid out in. In `rtl` mode, the behavior of Left and
+         * Right arrow are switched.
+         */
+        this._horizontalOrientation = 'ltr';
+        /**
+         * Predicate function that can be used to check whether an item should be skipped
+         * by the key manager.
+         *
+         * The default value for this doesn't skip any elements in order to keep tree items focusable
+         * when disabled. This aligns with ARIA guidelines:
+         * https://www.w3.org/WAI/ARIA/apg/practices/keyboard-interface/#focusabilityofdisabledcontrols.
+         */
+        this._skipPredicateFn = (_item) => false;
+        /** Function to determine equivalent items. */
+        this._trackByFn = (item) => item;
+        /** Synchronous cache of the items to manage. */
+        this._items = [];
+        this._typeaheadSubscription = Subscription.EMPTY;
+        this._hasInitialFocused = false;
+        /** Stream that emits any time the focused item changes. */
+        this.change = new Subject();
+        // We allow for the items to be an array or Observable because, in some cases, the consumer may
+        // not have access to a QueryList of the items they want to manage (e.g. when the
+        // items aren't being collected via `ViewChildren` or `ContentChildren`).
+        if (items instanceof QueryList) {
+            this._items = items.toArray();
+            items.changes.subscribe((newItems) => {
+                this._items = newItems.toArray();
+                this._typeahead?.setItems(this._items);
+                this._updateActiveItemIndex(this._items);
+                this._initialFocus();
+            });
+        }
+        else if (isObservable(items)) {
+            items.subscribe(newItems => {
+                this._items = newItems;
+                this._typeahead?.setItems(newItems);
+                this._updateActiveItemIndex(newItems);
+                this._initialFocus();
+            });
+        }
+        else {
+            this._items = items;
+            this._initialFocus();
+        }
+        if (typeof config.shouldActivationFollowFocus === 'boolean') {
+            this._shouldActivationFollowFocus = config.shouldActivationFollowFocus;
+        }
+        if (config.horizontalOrientation) {
+            this._horizontalOrientation = config.horizontalOrientation;
+        }
+        if (config.skipPredicate) {
+            this._skipPredicateFn = config.skipPredicate;
+        }
+        if (config.trackBy) {
+            this._trackByFn = config.trackBy;
+        }
+        if (typeof config.typeAheadDebounceInterval !== 'undefined') {
+            this._setTypeAhead(config.typeAheadDebounceInterval);
+        }
+    }
+    /** Cleans up the key manager. */
+    destroy() {
+        this._typeaheadSubscription.unsubscribe();
+        this._typeahead?.destroy();
+        this.change.complete();
+    }
+    /**
+     * Handles a keyboard event on the tree.
+     * @param event Keyboard event that represents the user interaction with the tree.
+     */
+    onKeydown(event) {
+        const key = event.key;
+        switch (key) {
+            case 'Tab':
+                // Return early here, in order to allow Tab to actually tab out of the tree
+                return;
+            case 'ArrowDown':
+                this._focusNextItem();
+                break;
+            case 'ArrowUp':
+                this._focusPreviousItem();
+                break;
+            case 'ArrowRight':
+                this._horizontalOrientation === 'rtl'
+                    ? this._collapseCurrentItem()
+                    : this._expandCurrentItem();
+                break;
+            case 'ArrowLeft':
+                this._horizontalOrientation === 'rtl'
+                    ? this._expandCurrentItem()
+                    : this._collapseCurrentItem();
+                break;
+            case 'Home':
+                this._focusFirstItem();
+                break;
+            case 'End':
+                this._focusLastItem();
+                break;
+            case 'Enter':
+            case ' ':
+                this._activateCurrentItem();
+                break;
+            default:
+                if (event.key === '*') {
+                    this._expandAllItemsAtCurrentItemLevel();
+                    break;
+                }
+                this._typeahead?.handleKey(event);
+                // Return here, in order to avoid preventing the default action of non-navigational
+                // keys or resetting the buffer of pressed letters.
+                return;
+        }
+        // Reset the typeahead since the user has used a navigational key.
+        this._typeahead?.reset();
+        event.preventDefault();
+    }
+    /** Index of the currently active item. */
+    getActiveItemIndex() {
+        return this._activeItemIndex;
+    }
+    /** The currently active item. */
+    getActiveItem() {
+        return this._activeItem;
+    }
+    /** Focus the first available item. */
+    _focusFirstItem() {
+        this.focusItem(this._findNextAvailableItemIndex(-1));
+    }
+    /** Focus the last available item. */
+    _focusLastItem() {
+        this.focusItem(this._findPreviousAvailableItemIndex(this._items.length));
+    }
+    /** Focus the next available item. */
+    _focusNextItem() {
+        this.focusItem(this._findNextAvailableItemIndex(this._activeItemIndex));
+    }
+    /** Focus the previous available item. */
+    _focusPreviousItem() {
+        this.focusItem(this._findPreviousAvailableItemIndex(this._activeItemIndex));
+    }
+    focusItem(itemOrIndex, options = {}) {
+        // Set default options
+        options.emitChangeEvent ??= true;
+        let index = typeof itemOrIndex === 'number'
+            ? itemOrIndex
+            : this._items.findIndex(item => this._trackByFn(item) === this._trackByFn(itemOrIndex));
+        if (index < 0 || index >= this._items.length) {
+            return;
+        }
+        const activeItem = this._items[index];
+        // If we're just setting the same item, don't re-call activate or focus
+        if (this._activeItem !== null &&
+            this._trackByFn(activeItem) === this._trackByFn(this._activeItem)) {
+            return;
+        }
+        const previousActiveItem = this._activeItem;
+        this._activeItem = activeItem ?? null;
+        this._activeItemIndex = index;
+        this._typeahead?.setCurrentSelectedItemIndex(index);
+        this._activeItem?.focus();
+        previousActiveItem?.unfocus();
+        if (options.emitChangeEvent) {
+            this.change.next(this._activeItem);
+        }
+        if (this._shouldActivationFollowFocus) {
+            this._activateCurrentItem();
+        }
+    }
+    _updateActiveItemIndex(newItems) {
+        const activeItem = this._activeItem;
+        if (!activeItem) {
+            return;
+        }
+        const newIndex = newItems.findIndex(item => this._trackByFn(item) === this._trackByFn(activeItem));
+        if (newIndex > -1 && newIndex !== this._activeItemIndex) {
+            this._activeItemIndex = newIndex;
+            this._typeahead?.setCurrentSelectedItemIndex(newIndex);
+        }
+    }
+    _setTypeAhead(debounceInterval) {
+        this._typeahead = new Typeahead(this._items, {
+            debounceInterval: typeof debounceInterval === 'number' ? debounceInterval : undefined,
+            skipPredicate: item => this._skipPredicateFn(item),
+        });
+        this._typeaheadSubscription = this._typeahead.selectedItem.subscribe(item => {
+            this.focusItem(item);
+        });
+    }
+    _findNextAvailableItemIndex(startingIndex) {
+        for (let i = startingIndex + 1; i < this._items.length; i++) {
+            if (!this._skipPredicateFn(this._items[i])) {
+                return i;
+            }
+        }
+        return startingIndex;
+    }
+    _findPreviousAvailableItemIndex(startingIndex) {
+        for (let i = startingIndex - 1; i >= 0; i--) {
+            if (!this._skipPredicateFn(this._items[i])) {
+                return i;
+            }
+        }
+        return startingIndex;
+    }
+    /**
+     * If the item is already expanded, we collapse the item. Otherwise, we will focus the parent.
+     */
+    _collapseCurrentItem() {
+        if (!this._activeItem) {
+            return;
+        }
+        if (this._isCurrentItemExpanded()) {
+            this._activeItem.collapse();
+        }
+        else {
+            const parent = this._activeItem.getParent();
+            if (!parent || this._skipPredicateFn(parent)) {
+                return;
+            }
+            this.focusItem(parent);
+        }
+    }
+    /**
+     * If the item is already collapsed, we expand the item. Otherwise, we will focus the first child.
+     */
+    _expandCurrentItem() {
+        if (!this._activeItem) {
+            return;
+        }
+        if (!this._isCurrentItemExpanded()) {
+            this._activeItem.expand();
+        }
+        else {
+            coerceObservable(this._activeItem.getChildren())
+                .pipe(take(1))
+                .subscribe(children => {
+                const firstChild = children.find(child => !this._skipPredicateFn(child));
+                if (!firstChild) {
+                    return;
+                }
+                this.focusItem(firstChild);
+            });
+        }
+    }
+    _isCurrentItemExpanded() {
+        if (!this._activeItem) {
+            return false;
+        }
+        return typeof this._activeItem.isExpanded === 'boolean'
+            ? this._activeItem.isExpanded
+            : this._activeItem.isExpanded();
+    }
+    _isItemDisabled(item) {
+        return typeof item.isDisabled === 'boolean' ? item.isDisabled : item.isDisabled?.();
+    }
+    /** For all items that are the same level as the current item, we expand those items. */
+    _expandAllItemsAtCurrentItemLevel() {
+        if (!this._activeItem) {
+            return;
+        }
+        const parent = this._activeItem.getParent();
+        let itemsToExpand;
+        if (!parent) {
+            itemsToExpand = of(this._items.filter(item => item.getParent() === null));
+        }
+        else {
+            itemsToExpand = coerceObservable(parent.getChildren());
+        }
+        itemsToExpand.pipe(take(1)).subscribe(items => {
+            for (const item of items) {
+                item.expand();
+            }
+        });
+    }
+    _activateCurrentItem() {
+        this._activeItem?.activate();
+    }
+}
+/** @docs-private */
+function TREE_KEY_MANAGER_FACTORY() {
+    return (items, options) => new TreeKeyManager(items, options);
+}
+/** Injection token that determines the key manager to use. */
+const TREE_KEY_MANAGER = new InjectionToken('tree-key-manager', {
+    providedIn: 'root',
+    factory: TREE_KEY_MANAGER_FACTORY,
+});
+/** @docs-private */
+const TREE_KEY_MANAGER_FACTORY_PROVIDER = {
+    provide: TREE_KEY_MANAGER,
+    useFactory: TREE_KEY_MANAGER_FACTORY,
+};
+
+// NoopTreeKeyManager is a "noop" implementation of TreeKeyMangerStrategy. Methods are noops. Does
+// not emit to streams.
+//
+// Used for applications built before TreeKeyManager to opt-out of TreeKeyManager and revert to
+// legacy behavior.
+/**
+ * @docs-private
+ *
+ * Opt-out of Tree of key manager behavior.
+ *
+ * When provided, Tree has same focus management behavior as before TreeKeyManager was introduced.
+ *  - Tree does not respond to keyboard interaction
+ *  - Tree node allows tabindex to be set by Input binding
+ *  - Tree node allows tabindex to be set by attribute binding
+ *
+ * @deprecated NoopTreeKeyManager deprecated. Use TreeKeyManager or inject a
+ * TreeKeyManagerStrategy instead. To be removed in a future version.
+ *
+ * @breaking-change 21.0.0
+ */
+class NoopTreeKeyManager {
+    constructor() {
+        this._isNoopTreeKeyManager = true;
+        // Provide change as required by TreeKeyManagerStrategy. NoopTreeKeyManager is a "noop"
+        // implementation that does not emit to streams.
+        this.change = new Subject();
+    }
+    destroy() {
+        this.change.complete();
+    }
+    onKeydown() {
+        // noop
+    }
+    getActiveItemIndex() {
+        // Always return null. NoopTreeKeyManager is a "noop" implementation that does not maintain
+        // the active item.
+        return null;
+    }
+    getActiveItem() {
+        // Always return null. NoopTreeKeyManager is a "noop" implementation that does not maintain
+        // the active item.
+        return null;
+    }
+    focusItem() {
+        // noop
+    }
+}
+/**
+ * @docs-private
+ *
+ * Opt-out of Tree of key manager behavior.
+ *
+ * When provided, Tree has same focus management behavior as before TreeKeyManager was introduced.
+ *  - Tree does not respond to keyboard interaction
+ *  - Tree node allows tabindex to be set by Input binding
+ *  - Tree node allows tabindex to be set by attribute binding
+ *
+ * @deprecated NoopTreeKeyManager deprecated. Use TreeKeyManager or inject a
+ * TreeKeyManagerStrategy instead. To be removed in a future version.
+ *
+ * @breaking-change 21.0.0
+ */
+function NOOP_TREE_KEY_MANAGER_FACTORY() {
+    return () => new NoopTreeKeyManager();
+}
+/**
+ * @docs-private
+ *
+ * Opt-out of Tree of key manager behavior.
+ *
+ * When provided, Tree has same focus management behavior as before TreeKeyManager was introduced.
+ *  - Tree does not respond to keyboard interaction
+ *  - Tree node allows tabindex to be set by Input binding
+ *  - Tree node allows tabindex to be set by attribute binding
+ *
+ * @deprecated NoopTreeKeyManager deprecated. Use TreeKeyManager or inject a
+ * TreeKeyManagerStrategy instead. To be removed in a future version.
+ *
+ * @breaking-change 21.0.0
+ */
+const NOOP_TREE_KEY_MANAGER_FACTORY_PROVIDER = {
+    provide: TREE_KEY_MANAGER,
+    useFactory: NOOP_TREE_KEY_MANAGER_FACTORY,
+};
 
 /**
  * Configuration for the isFocusable method.
@@ -2424,5 +2904,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.1.0-next.3", 
  * Generated bundle index. Do not edit.
  */
 
-export { A11yModule, ActiveDescendantKeyManager, AriaDescriber, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, CDK_DESCRIBEDBY_ID_PREFIX, CdkAriaLive, CdkMonitorFocus, CdkTrapFocus, ConfigurableFocusTrap, ConfigurableFocusTrapFactory, EventListenerFocusTrapInertStrategy, FOCUS_MONITOR_DEFAULT_OPTIONS, FOCUS_TRAP_INERT_STRATEGY, FocusKeyManager, FocusMonitor, FocusMonitorDetectionMode, FocusTrap, FocusTrapFactory, HighContrastMode, HighContrastModeDetector, INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS, INPUT_MODALITY_DETECTOR_OPTIONS, InputModalityDetector, InteractivityChecker, IsFocusableConfig, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, ListKeyManager, LiveAnnouncer, MESSAGES_CONTAINER_ID, addAriaReferencedId, getAriaReferenceIds, isFakeMousedownFromScreenReader, isFakeTouchstartFromScreenReader, removeAriaReferencedId };
+export { A11yModule, ActiveDescendantKeyManager, AriaDescriber, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, CDK_DESCRIBEDBY_ID_PREFIX, CdkAriaLive, CdkMonitorFocus, CdkTrapFocus, ConfigurableFocusTrap, ConfigurableFocusTrapFactory, EventListenerFocusTrapInertStrategy, FOCUS_MONITOR_DEFAULT_OPTIONS, FOCUS_TRAP_INERT_STRATEGY, FocusKeyManager, FocusMonitor, FocusMonitorDetectionMode, FocusTrap, FocusTrapFactory, HighContrastMode, HighContrastModeDetector, INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS, INPUT_MODALITY_DETECTOR_OPTIONS, InputModalityDetector, InteractivityChecker, IsFocusableConfig, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, ListKeyManager, LiveAnnouncer, MESSAGES_CONTAINER_ID, NOOP_TREE_KEY_MANAGER_FACTORY, NOOP_TREE_KEY_MANAGER_FACTORY_PROVIDER, NoopTreeKeyManager, TREE_KEY_MANAGER, TREE_KEY_MANAGER_FACTORY, TREE_KEY_MANAGER_FACTORY_PROVIDER, TreeKeyManager, addAriaReferencedId, getAriaReferenceIds, isFakeMousedownFromScreenReader, isFakeTouchstartFromScreenReader, removeAriaReferencedId };
 //# sourceMappingURL=a11y.mjs.map
