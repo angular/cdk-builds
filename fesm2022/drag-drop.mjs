@@ -323,6 +323,9 @@ const importantProperties = new Set([
     'position',
 ]);
 class PreviewRef {
+    get element() {
+        return this._preview;
+    }
     constructor(_document, _rootElement, _direction, _initialDomRect, _previewTemplate, _previewClass, _pickupPositionOnPage, _initialTransform, _zIndex) {
         this._document = _document;
         this._rootElement = _rootElement;
@@ -1136,7 +1139,9 @@ class DragRef {
             return new Promise(resolve => {
                 const handler = ((event) => {
                     if (!event ||
-                        (_getEventTarget(event) === this._preview && event.propertyName === 'transform')) {
+                        (this._preview &&
+                            _getEventTarget(event) === this._preview.element &&
+                            event.propertyName === 'transform')) {
                         this._preview?.removeEventListener('transitionend', handler);
                         resolve();
                         clearTimeout(timeout);
