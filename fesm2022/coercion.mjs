@@ -6,7 +6,10 @@ function coerceBooleanProperty(value) {
 }
 
 function coerceNumberProperty(value, fallbackValue = 0) {
-    return _isNumberValue(value) ? Number(value) : fallbackValue;
+    if (_isNumberValue(value)) {
+        return Number(value);
+    }
+    return arguments.length === 2 ? fallbackValue : 0;
 }
 /**
  * Whether the provided value is considered a number.
