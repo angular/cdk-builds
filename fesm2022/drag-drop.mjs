@@ -2682,7 +2682,7 @@ class DropListRef {
     _getShadowRoot() {
         if (!this._cachedShadowRoot) {
             const shadowRoot = _getShadowRoot(this._container);
-            this._cachedShadowRoot = (shadowRoot || this._document);
+            this._cachedShadowRoot = shadowRoot || this._document;
         }
         return this._cachedShadowRoot;
     }
@@ -2801,14 +2801,12 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.0-next.2", 
             type: Component,
             args: [{ standalone: true, encapsulation: ViewEncapsulation.None, template: '', changeDetection: ChangeDetectionStrategy.OnPush, host: { 'cdk-drag-resets-container': '' }, styles: ["@layer cdk-resets{.cdk-drag-preview{background:none;border:none;padding:0;color:inherit}}.cdk-drag-placeholder *,.cdk-drag-preview *{pointer-events:none !important}"] }]
         }] });
+// TODO(crisbeto): remove generics when making breaking changes.
 /**
  * Service that keeps track of all the drag item and drop container
  * instances, and manages global event listeners on the `document`.
  * @docs-private
  */
-// Note: this class is generic, rather than referencing CdkDrag and CdkDropList directly, in order
-// to avoid circular imports. If we were to reference them here, importing the registry into the
-// classes that are registering themselves will introduce a circular import.
 class DragDropRegistry {
     constructor(_ngZone, _document) {
         this._ngZone = _ngZone;
