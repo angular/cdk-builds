@@ -539,7 +539,7 @@ export declare class DragDrop {
     private _ngZone;
     private _viewportRuler;
     private _dragDropRegistry;
-    constructor(_document: any, _ngZone: NgZone, _viewportRuler: ViewportRuler, _dragDropRegistry: DragDropRegistry<DragRef, DropListRef>);
+    constructor(_document: any, _ngZone: NgZone, _viewportRuler: ViewportRuler, _dragDropRegistry: DragDropRegistry);
     /**
      * Turns an element into a draggable item.
      * @param element Element to which to attach the dragging functionality.
@@ -585,9 +585,7 @@ export declare class DragDropModule {
  * instances, and manages global event listeners on the `document`.
  * @docs-private
  */
-export declare class DragDropRegistry<I extends {
-    isDragging(): boolean;
-}, C> implements OnDestroy {
+export declare class DragDropRegistry<_ = unknown, __ = unknown> implements OnDestroy {
     private _ngZone;
     private _document;
     private _appRef;
@@ -623,23 +621,23 @@ export declare class DragDropRegistry<I extends {
     readonly scroll: Subject<Event>;
     constructor(_ngZone: NgZone, _document: any);
     /** Adds a drop container to the registry. */
-    registerDropContainer(drop: C): void;
+    registerDropContainer(drop: DropListRef): void;
     /** Adds a drag item instance to the registry. */
-    registerDragItem(drag: I): void;
+    registerDragItem(drag: DragRef): void;
     /** Removes a drop container from the registry. */
-    removeDropContainer(drop: C): void;
+    removeDropContainer(drop: DropListRef): void;
     /** Removes a drag item instance from the registry. */
-    removeDragItem(drag: I): void;
+    removeDragItem(drag: DragRef): void;
     /**
      * Starts the dragging sequence for a drag instance.
      * @param drag Drag instance which is being dragged.
      * @param event Event that initiated the dragging.
      */
-    startDragging(drag: I, event: TouchEvent | MouseEvent): void;
+    startDragging(drag: DragRef, event: TouchEvent | MouseEvent): void;
     /** Stops dragging a drag item instance. */
-    stopDragging(drag: I): void;
+    stopDragging(drag: DragRef): void;
     /** Gets whether a drag item instance is currently being dragged. */
-    isDragging(drag: I): boolean;
+    isDragging(drag: DragRef): boolean;
     /**
      * Gets a stream that will emit when any element on the page is scrolled while an item is being
      * dragged.
@@ -881,7 +879,7 @@ export declare class DragRef<T = any> {
      * Should return a point describing where the item should be rendered.
      */
     constrainPosition?: (userPointerPosition: Point, dragRef: DragRef, dimensions: DOMRect, pickupPositionInElement: Point) => Point;
-    constructor(element: ElementRef<HTMLElement> | HTMLElement, _config: DragRefConfig, _document: Document, _ngZone: NgZone, _viewportRuler: ViewportRuler, _dragDropRegistry: DragDropRegistry<DragRef, DropListRef>);
+    constructor(element: ElementRef<HTMLElement> | HTMLElement, _config: DragRefConfig, _document: Document, _ngZone: NgZone, _viewportRuler: ViewportRuler, _dragDropRegistry: DragDropRegistry);
     /**
      * Returns the element that is being used as a placeholder
      * while the current element is being dragged.
@@ -1199,7 +1197,7 @@ export declare class DropListRef<T = any> {
     private _initialScrollSnap;
     /** Direction of the list's layout. */
     private _direction;
-    constructor(element: ElementRef<HTMLElement> | HTMLElement, _dragDropRegistry: DragDropRegistry<DragRef, DropListRef>, _document: any, _ngZone: NgZone, _viewportRuler: ViewportRuler);
+    constructor(element: ElementRef<HTMLElement> | HTMLElement, _dragDropRegistry: DragDropRegistry, _document: any, _ngZone: NgZone, _viewportRuler: ViewportRuler);
     /** Removes the drop list functionality from the DOM element. */
     dispose(): void;
     /** Whether an item from this list is currently being dragged. */
