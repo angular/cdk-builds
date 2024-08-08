@@ -61,7 +61,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.0-next.2", 
 /** Used to generate unique ID for each accordion item. */
 let nextId = 0;
 /**
- * An basic directive expected to be extended and decorated as a component.  Sets up all
+ * A basic directive expected to be extended and decorated as a component.  Sets up all
  * events and attributes needed to be managed by a CdkAccordion parent.
  */
 class CdkAccordionItem {
