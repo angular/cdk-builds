@@ -277,7 +277,7 @@ export declare class PortalModule {
     static ɵinj: i0.ɵɵInjectorDeclaration<PortalModule>;
 }
 
-/** A `PortalOutlet` is an space that can contain a single `Portal`. */
+/** A `PortalOutlet` is a space that can contain a single `Portal`. */
 export declare interface PortalOutlet {
     /** Attaches a portal to this outlet. */
     attach(portal: Portal<any>): any;
