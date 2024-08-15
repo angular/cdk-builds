@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { PLATFORM_ID, Injectable, Inject, NgModule } from '@angular/core';
+import { inject, PLATFORM_ID, Injectable, NgModule } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
 // Whether the current platform supports the V8 Break Iterator. The V8 check
@@ -21,8 +21,8 @@ catch {
  * checking browser-specific global properties.
  */
 class Platform {
-    constructor(_platformId) {
-        this._platformId = _platformId;
+    constructor() {
+        this._platformId = inject(PLATFORM_ID);
         // We want to use the Angular platform check because if the Document is shimmed
         // without the navigator, the following checks will fail. This is preferred because
         // sometimes the Document may be shimmed without the user's knowledge or intention
@@ -66,16 +66,13 @@ class Platform {
         /** Whether the current browser is Safari. */
         this.SAFARI = this.isBrowser && /safari/i.test(navigator.userAgent) && this.WEBKIT;
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.2.0-next.2", ngImport: i0, type: Platform, deps: [{ token: PLATFORM_ID }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.2.0-next.2", ngImport: i0, type: Platform, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
     static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "18.2.0-next.2", ngImport: i0, type: Platform, providedIn: 'root' }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.0-next.2", ngImport: i0, type: Platform, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
-        }], ctorParameters: () => [{ type: Object, decorators: [{
-                    type: Inject,
-                    args: [PLATFORM_ID]
-                }] }] });
+        }], ctorParameters: () => [] });
 
 class PlatformModule {
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.2.0-next.2", ngImport: i0, type: PlatformModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule }); }

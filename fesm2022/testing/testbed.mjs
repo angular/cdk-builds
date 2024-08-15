@@ -14,12 +14,13 @@ const stateObservableSymbol = Symbol('ProxyZone_PATCHED#stateObservable');
  * This serves as a workaround for https://github.com/angular/angular/issues/32896.
  */
 class TaskStateZoneInterceptor {
-    constructor(_lastState) {
-        this._lastState = _lastState;
+    constructor(lastState) {
+        this._lastState = null;
         /** Subject that can be used to emit a new state change. */
         this._stateSubject = new BehaviorSubject(this._lastState ? this._getTaskStateFromInternalZoneState(this._lastState) : { stable: true });
         /** Public observable that emits whenever the task state changes. */
         this.state = this._stateSubject;
+        this._lastState = lastState;
     }
     /** This will be called whenever the task state changes in the intercepted zone. */
     onHasTask(delegate, current, target, hasTaskState) {

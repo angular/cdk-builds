@@ -58,7 +58,8 @@ export declare class Platform {
     ANDROID: boolean;
     /** Whether the current browser is Safari. */
     SAFARI: boolean;
-    constructor(_platformId: Object);
+    /** Backwards-compatible constructor. */
+    constructor(..._args: unknown[]);
     static ɵfac: i0.ɵɵFactoryDeclaration<Platform, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<Platform>;
 }
