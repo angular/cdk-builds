@@ -1,0 +1,50 @@
+import * as i0 from '@angular/core';
+import { inject, ApplicationRef, EnvironmentInjector, createComponent, Injectable } from '@angular/core';
+
+/** Apps in which we've loaded styles. */
+const appsWithLoaders = new WeakMap();
+/**
+ * Service that loads structural styles dynamically
+ * and ensures that they're only loaded once per app.
+ */
+class _CdkPrivateStyleLoader {
+    constructor() {
+        this._appRef = inject(ApplicationRef);
+        this._environmentInjector = inject(EnvironmentInjector);
+    }
+    /**
+     * Loads a set of styles.
+     * @param loader Component which will be instantiated to load the styles.
+     */
+    load(loader) {
+        let data = appsWithLoaders.get(this._appRef);
+        // If we haven't loaded for this app before, we have to initialize it.
+        if (!data) {
+            data = { loaders: new Set(), refs: [] };
+            appsWithLoaders.set(this._appRef, data);
+            // When the app is destroyed, we need to clean up all the related loaders.
+            this._appRef.onDestroy(() => {
+                appsWithLoaders.get(this._appRef)?.refs.forEach(ref => ref.destroy());
+                appsWithLoaders.delete(this._appRef);
+            });
+        }
+        // If the loader hasn't been loaded before, we need to instatiate it.
+        if (!data.loaders.has(loader)) {
+            data.loaders.add(loader);
+            data.refs.push(createComponent(loader, { environmentInjector: this._environmentInjector }));
+        }
+    }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.2.0-next.2", ngImport: i0, type: _CdkPrivateStyleLoader, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "18.2.0-next.2", ngImport: i0, type: _CdkPrivateStyleLoader, providedIn: 'root' }); }
+}
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.0-next.2", ngImport: i0, type: _CdkPrivateStyleLoader, decorators: [{
+            type: Injectable,
+            args: [{ providedIn: 'root' }]
+        }] });
+
+/**
+ * Generated bundle index. Do not edit.
+ */
+
+export { _CdkPrivateStyleLoader };
+//# sourceMappingURL=private.mjs.map

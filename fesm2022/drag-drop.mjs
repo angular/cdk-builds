@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { signal, Component, ViewEncapsulation, ChangeDetectionStrategy, inject, ApplicationRef, EnvironmentInjector, createComponent, Injectable, Inject, InjectionToken, booleanAttribute, Directive, Optional, SkipSelf, Input, EventEmitter, Injector, afterNextRender, numberAttribute, Self, Output, NgModule } from '@angular/core';
+import { signal, Component, ViewEncapsulation, ChangeDetectionStrategy, inject, Injectable, Inject, InjectionToken, booleanAttribute, Directive, Optional, SkipSelf, Input, EventEmitter, Injector, afterNextRender, numberAttribute, Self, Output, NgModule } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import * as i1 from '@angular/cdk/scrolling';
 import { CdkScrollableModule } from '@angular/cdk/scrolling';
@@ -8,6 +8,7 @@ import { coerceElement, coerceNumberProperty, coerceArray } from '@angular/cdk/c
 import { _getEventTarget, normalizePassiveListenerOptions, _getShadowRoot } from '@angular/cdk/platform';
 import { Subject, Subscription, interval, animationFrameScheduler, Observable, merge, BehaviorSubject } from 'rxjs';
 import { takeUntil, map, take, tap, switchMap, startWith } from 'rxjs/operators';
+import { _CdkPrivateStyleLoader } from '@angular/cdk/private';
 import * as i1$1 from '@angular/cdk/bidi';
 
 /** Creates a deep clone of an element. */
@@ -2795,8 +2796,6 @@ const activeCapturingEventOptions = normalizePassiveListenerOptions({
     passive: false,
     capture: true,
 });
-/** Keeps track of the apps currently containing drag items. */
-const activeApps = new Set();
 /**
  * Component used to load the drag&drop reset styles.
  * @docs-private
@@ -2818,8 +2817,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.0-next.2", 
 class DragDropRegistry {
     constructor(_ngZone, _document) {
         this._ngZone = _ngZone;
-        this._appRef = inject(ApplicationRef);
-        this._environmentInjector = inject(EnvironmentInjector);
+        this._styleLoader = inject(_CdkPrivateStyleLoader);
         /** Registered drop container instances. */
         this._dropInstances = new Set();
         /** Registered drag item instances. */
@@ -2914,7 +2912,7 @@ class DragDropRegistry {
         if (this._activeDragInstances().indexOf(drag) > -1) {
             return;
         }
-        this._loadResets();
+        this._styleLoader.load(_ResetsLoader);
         this._activeDragInstances.update(instances => [...instances, drag]);
         if (this._activeDragInstances().length === 1) {
             const isTouchEvent = event.type.startsWith('touch');
@@ -3016,22 +3014,6 @@ class DragDropRegistry {
             this._document.removeEventListener(name, config.handler, config.options);
         });
         this._globalListeners.clear();
-    }
-    // TODO(crisbeto): abstract this away into something reusable.
-    /** Loads the CSS resets needed for the module to work correctly. */
-    _loadResets() {
-        if (!activeApps.has(this._appRef)) {
-            activeApps.add(this._appRef);
-            const componentRef = createComponent(_ResetsLoader, {
-                environmentInjector: this._environmentInjector,
-            });
-            this._appRef.onDestroy(() => {
-                activeApps.delete(this._appRef);
-                if (activeApps.size === 0) {
-                    componentRef.destroy();
-                }
-            });
-        }
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.2.0-next.2", ngImport: i0, type: DragDropRegistry, deps: [{ token: i0.NgZone }, { token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Injectable }); }
     static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "18.2.0-next.2", ngImport: i0, type: DragDropRegistry, providedIn: 'root' }); }

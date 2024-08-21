@@ -158,6 +158,12 @@
       "esm": "./esm2022/portal/portal_public_index.mjs",
       "default": "./fesm2022/portal.mjs"
     },
+    "./private": {
+      "types": "./private/index.d.ts",
+      "esm2022": "./esm2022/private/private_public_index.mjs",
+      "esm": "./esm2022/private/private_public_index.mjs",
+      "default": "./fesm2022/private.mjs"
+    },
     "./scrolling": {
       "types": "./scrolling/index.d.ts",
       "esm2022": "./esm2022/scrolling/scrolling_public_index.mjs",

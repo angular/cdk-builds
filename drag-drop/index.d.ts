@@ -594,8 +594,7 @@ export declare class DragDropModule {
 export declare class DragDropRegistry<_ = unknown, __ = unknown> implements OnDestroy {
     private _ngZone;
     private _document;
-    private _appRef;
-    private _environmentInjector;
+    private _styleLoader;
     /** Registered drop container instances. */
     private _dropInstances;
     /** Registered drag item instances. */
@@ -662,8 +661,6 @@ export declare class DragDropRegistry<_ = unknown, __ = unknown> implements OnDe
     private _persistentTouchmoveListener;
     /** Clears out the global event listeners from the `document`. */
     private _clearGlobalListeners;
-    /** Loads the CSS resets needed for the module to work correctly. */
-    private _loadResets;
     static ɵfac: i0.ɵɵFactoryDeclaration<DragDropRegistry<any, any>, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<DragDropRegistry<any, any>>;
 }
