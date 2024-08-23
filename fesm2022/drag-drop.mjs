@@ -939,7 +939,8 @@ class DragRef {
             const parent = element.parentNode;
             const placeholder = (this._placeholder = this._createPlaceholderElement());
             const anchor = (this._anchor =
-                this._anchor || this._document.createComment(ngDevMode ? 'cdk-drag-anchor' : ''));
+                this._anchor ||
+                    this._document.createComment(typeof ngDevMode === 'undefined' || ngDevMode ? 'cdk-drag-anchor' : ''));
             // Insert an anchor node so that we can restore the element's position in the DOM.
             parent.insertBefore(anchor, element);
             // There's no risk of transforms stacking when inside a drop container so
