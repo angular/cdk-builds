@@ -1,3 +1,4 @@
+import { _CdkPrivateStyleLoader } from '@angular/cdk/private';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { ComponentFactoryResolver } from '@angular/core';
 import { ComponentPortal } from '@angular/cdk/portal';
@@ -721,6 +722,7 @@ export declare class Overlay {
     private _outsideClickDispatcher;
     private _animationsModuleType?;
     private _appRef;
+    private _styleLoader;
     constructor(
     /** Scrolling strategies that can be used when creating an overlay. */
     scrollStrategies: ScrollStrategyOptions, _overlayContainer: OverlayContainer, _componentFactoryResolver: ComponentFactoryResolver, _positionBuilder: OverlayPositionBuilder, _keyboardDispatcher: OverlayKeyboardDispatcher, _injector: Injector, _ngZone: NgZone, _document: any, _directionality: Directionality, _location: Location_2, _outsideClickDispatcher: OverlayOutsideClickDispatcher, _animationsModuleType?: string | undefined);
@@ -806,6 +808,7 @@ export declare class OverlayContainer implements OnDestroy {
     protected _platform: Platform;
     protected _containerElement: HTMLElement;
     protected _document: Document;
+    protected _styleLoader: _CdkPrivateStyleLoader;
     constructor(document: any, _platform: Platform);
     ngOnDestroy(): void;
     /**
@@ -820,6 +823,8 @@ export declare class OverlayContainer implements OnDestroy {
      * with the 'cdk-overlay-container' class on the document body.
      */
     protected _createContainer(): void;
+    /** Loads the structural styles necessary for the overlay to work. */
+    protected _loadStyles(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<OverlayContainer, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<OverlayContainer>;
 }

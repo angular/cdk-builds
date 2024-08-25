@@ -1,11 +1,22 @@
 import * as i1 from '@angular/cdk/platform';
 import { normalizePassiveListenerOptions } from '@angular/cdk/platform';
 import * as i0 from '@angular/core';
-import { Injectable, EventEmitter, Directive, Output, booleanAttribute, Optional, Inject, Input, NgModule } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewEncapsulation, inject, Injectable, EventEmitter, Directive, Output, booleanAttribute, Optional, Inject, Input, NgModule } from '@angular/core';
+import { _CdkPrivateStyleLoader } from '@angular/cdk/private';
 import { coerceElement, coerceNumberProperty } from '@angular/cdk/coercion';
 import { EMPTY, Subject, fromEvent } from 'rxjs';
-import { auditTime, takeUntil } from 'rxjs/operators';
 import { DOCUMENT } from '@angular/common';
+import { auditTime, takeUntil } from 'rxjs/operators';
+
+/** Component used to load the structural styles of the text field. */
+class _CdkTextFieldStyleLoader {
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.2.0-next.2", ngImport: i0, type: _CdkTextFieldStyleLoader, deps: [], target: i0.ɵɵFactoryTarget.Component }); }
+    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "18.2.0-next.2", type: _CdkTextFieldStyleLoader, isStandalone: true, selector: "ng-component", host: { attributes: { "cdk-text-field-style-loader": "" } }, ngImport: i0, template: '', isInline: true, styles: ["textarea.cdk-textarea-autosize{resize:none}textarea.cdk-textarea-autosize-measuring{padding:2px 0 !important;box-sizing:content-box !important;height:auto !important;overflow:hidden !important}textarea.cdk-textarea-autosize-measuring-firefox{padding:2px 0 !important;box-sizing:content-box !important;height:0 !important}@keyframes cdk-text-field-autofill-start{/*!*/}@keyframes cdk-text-field-autofill-end{/*!*/}.cdk-text-field-autofill-monitored:-webkit-autofill{animation:cdk-text-field-autofill-start 0s 1ms}.cdk-text-field-autofill-monitored:not(:-webkit-autofill){animation:cdk-text-field-autofill-end 0s 1ms}"], changeDetection: i0.ChangeDetectionStrategy.OnPush, encapsulation: i0.ViewEncapsulation.None }); }
+}
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.0-next.2", ngImport: i0, type: _CdkTextFieldStyleLoader, decorators: [{
+            type: Component,
+            args: [{ template: '', changeDetection: ChangeDetectionStrategy.OnPush, encapsulation: ViewEncapsulation.None, standalone: true, host: { 'cdk-text-field-style-loader': '' }, styles: ["textarea.cdk-textarea-autosize{resize:none}textarea.cdk-textarea-autosize-measuring{padding:2px 0 !important;box-sizing:content-box !important;height:auto !important;overflow:hidden !important}textarea.cdk-textarea-autosize-measuring-firefox{padding:2px 0 !important;box-sizing:content-box !important;height:0 !important}@keyframes cdk-text-field-autofill-start{/*!*/}@keyframes cdk-text-field-autofill-end{/*!*/}.cdk-text-field-autofill-monitored:-webkit-autofill{animation:cdk-text-field-autofill-start 0s 1ms}.cdk-text-field-autofill-monitored:not(:-webkit-autofill){animation:cdk-text-field-autofill-end 0s 1ms}"] }]
+        }] });
 
 /** Options to pass to the animationstart listener. */
 const listenerOptions = normalizePassiveListenerOptions({ passive: true });
@@ -18,12 +29,14 @@ class AutofillMonitor {
     constructor(_platform, _ngZone) {
         this._platform = _platform;
         this._ngZone = _ngZone;
+        this._styleLoader = inject(_CdkPrivateStyleLoader);
         this._monitoredElements = new Map();
     }
     monitor(elementOrRef) {
         if (!this._platform.isBrowser) {
             return EMPTY;
         }
+        this._styleLoader.load(_CdkTextFieldStyleLoader);
         const element = coerceElement(elementOrRef);
         const info = this._monitoredElements.get(element);
         if (info) {
@@ -169,6 +182,8 @@ class CdkTextareaAutosize {
         this._handleFocusEvent = (event) => {
             this._hasFocus = event.type === 'focus';
         };
+        const styleLoader = inject(_CdkPrivateStyleLoader);
+        styleLoader.load(_CdkTextFieldStyleLoader);
         this._document = document;
         this._textareaElement = this._elementRef.nativeElement;
     }

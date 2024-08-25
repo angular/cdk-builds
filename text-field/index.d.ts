@@ -26,6 +26,7 @@ export declare type AutofillEvent = {
 export declare class AutofillMonitor implements OnDestroy {
     private _platform;
     private _ngZone;
+    private _styleLoader;
     private _monitoredElements;
     constructor(_platform: Platform, _ngZone: NgZone);
     /**

@@ -4,7 +4,7 @@ export { CdkScrollable, ScrollDispatcher, ViewportRuler } from '@angular/cdk/scr
 import * as i6 from '@angular/common';
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { Injectable, Inject, Optional, untracked, afterRender, afterNextRender, ElementRef, EnvironmentInjector, ApplicationRef, ANIMATION_MODULE_TYPE, InjectionToken, inject, Directive, NgZone, EventEmitter, booleanAttribute, Input, Output, NgModule } from '@angular/core';
+import { Injectable, Inject, Optional, Component, ChangeDetectionStrategy, ViewEncapsulation, inject, untracked, afterRender, afterNextRender, ElementRef, EnvironmentInjector, ApplicationRef, ANIMATION_MODULE_TYPE, InjectionToken, Directive, NgZone, EventEmitter, booleanAttribute, Input, Output, NgModule } from '@angular/core';
 import { coerceCssPixelValue, coerceArray } from '@angular/cdk/coercion';
 import * as i1$1 from '@angular/cdk/platform';
 import { supportsScrollBehavior, _getEventTarget, _isTestEnvironment } from '@angular/cdk/platform';
@@ -12,6 +12,7 @@ import { filter, takeUntil, takeWhile } from 'rxjs/operators';
 import * as i5 from '@angular/cdk/bidi';
 import { BidiModule } from '@angular/cdk/bidi';
 import { DomPortalOutlet, TemplatePortal, PortalModule } from '@angular/cdk/portal';
+import { _CdkPrivateStyleLoader } from '@angular/cdk/private';
 import { Subject, Subscription, merge } from 'rxjs';
 import { ESCAPE, hasModifierKey } from '@angular/cdk/keycodes';
 
@@ -658,10 +659,19 @@ function containsPierceShadowDom(parent, child) {
     return false;
 }
 
+class _CdkOverlayStyleLoader {
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.2.0-next.2", ngImport: i0, type: _CdkOverlayStyleLoader, deps: [], target: i0.ɵɵFactoryTarget.Component }); }
+    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "18.2.0-next.2", type: _CdkOverlayStyleLoader, isStandalone: true, selector: "ng-component", host: { attributes: { "cdk-overlay-style-loader": "" } }, ngImport: i0, template: '', isInline: true, styles: [".cdk-overlay-container,.cdk-global-overlay-wrapper{pointer-events:none;top:0;left:0;height:100%;width:100%}.cdk-overlay-container{position:fixed;z-index:1000}.cdk-overlay-container:empty{display:none}.cdk-global-overlay-wrapper{display:flex;position:absolute;z-index:1000}.cdk-overlay-pane{position:absolute;pointer-events:auto;box-sizing:border-box;z-index:1000;display:flex;max-width:100%;max-height:100%}.cdk-overlay-backdrop{position:absolute;top:0;bottom:0;left:0;right:0;z-index:1000;pointer-events:auto;-webkit-tap-highlight-color:rgba(0,0,0,0);transition:opacity 400ms cubic-bezier(0.25, 0.8, 0.25, 1);opacity:0}.cdk-overlay-backdrop-showing{opacity:1}.cdk-high-contrast-active .cdk-overlay-backdrop-showing{opacity:.6}.cdk-overlay-dark-backdrop{background:var(--cdk-overlay-backdrop-dark-color, rgba(0, 0, 0, 0.32))}.cdk-overlay-transparent-backdrop{transition:visibility 1ms linear,opacity 1ms linear;visibility:hidden;opacity:1}.cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing,.cdk-high-contrast-active .cdk-overlay-transparent-backdrop{opacity:0;visibility:visible}.cdk-overlay-backdrop-noop-animation{transition:none}.cdk-overlay-connected-position-bounding-box{position:absolute;z-index:1000;display:flex;flex-direction:column;min-width:1px;min-height:1px}.cdk-global-scrollblock{position:fixed;width:100%;overflow-y:scroll}"], changeDetection: i0.ChangeDetectionStrategy.OnPush, encapsulation: i0.ViewEncapsulation.None }); }
+}
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.0-next.2", ngImport: i0, type: _CdkOverlayStyleLoader, decorators: [{
+            type: Component,
+            args: [{ template: '', changeDetection: ChangeDetectionStrategy.OnPush, encapsulation: ViewEncapsulation.None, standalone: true, host: { 'cdk-overlay-style-loader': '' }, styles: [".cdk-overlay-container,.cdk-global-overlay-wrapper{pointer-events:none;top:0;left:0;height:100%;width:100%}.cdk-overlay-container{position:fixed;z-index:1000}.cdk-overlay-container:empty{display:none}.cdk-global-overlay-wrapper{display:flex;position:absolute;z-index:1000}.cdk-overlay-pane{position:absolute;pointer-events:auto;box-sizing:border-box;z-index:1000;display:flex;max-width:100%;max-height:100%}.cdk-overlay-backdrop{position:absolute;top:0;bottom:0;left:0;right:0;z-index:1000;pointer-events:auto;-webkit-tap-highlight-color:rgba(0,0,0,0);transition:opacity 400ms cubic-bezier(0.25, 0.8, 0.25, 1);opacity:0}.cdk-overlay-backdrop-showing{opacity:1}.cdk-high-contrast-active .cdk-overlay-backdrop-showing{opacity:.6}.cdk-overlay-dark-backdrop{background:var(--cdk-overlay-backdrop-dark-color, rgba(0, 0, 0, 0.32))}.cdk-overlay-transparent-backdrop{transition:visibility 1ms linear,opacity 1ms linear;visibility:hidden;opacity:1}.cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing,.cdk-high-contrast-active .cdk-overlay-transparent-backdrop{opacity:0;visibility:visible}.cdk-overlay-backdrop-noop-animation{transition:none}.cdk-overlay-connected-position-bounding-box{position:absolute;z-index:1000;display:flex;flex-direction:column;min-width:1px;min-height:1px}.cdk-global-scrollblock{position:fixed;width:100%;overflow-y:scroll}"] }]
+        }] });
 /** Container inside which all overlays will render. */
 class OverlayContainer {
     constructor(document, _platform) {
         this._platform = _platform;
+        this._styleLoader = inject(_CdkPrivateStyleLoader);
         this._document = document;
     }
     ngOnDestroy() {
@@ -674,6 +684,7 @@ class OverlayContainer {
      * @returns the container element
      */
     getContainerElement() {
+        this._loadStyles();
         if (!this._containerElement) {
             this._createContainer();
         }
@@ -715,6 +726,10 @@ class OverlayContainer {
         }
         this._document.body.appendChild(container);
         this._containerElement = container;
+    }
+    /** Loads the structural styles necessary for the overlay to work. */
+    _loadStyles() {
+        this._styleLoader.load(_CdkOverlayStyleLoader);
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.2.0-next.2", ngImport: i0, type: OverlayContainer, deps: [{ token: DOCUMENT }, { token: i1$1.Platform }], target: i0.ɵɵFactoryTarget.Injectable }); }
     static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "18.2.0-next.2", ngImport: i0, type: OverlayContainer, providedIn: 'root' }); }
@@ -2433,6 +2448,7 @@ class Overlay {
         this._location = _location;
         this._outsideClickDispatcher = _outsideClickDispatcher;
         this._animationsModuleType = _animationsModuleType;
+        this._styleLoader = inject(_CdkPrivateStyleLoader);
     }
     /**
      * Creates an overlay.
@@ -2440,6 +2456,9 @@ class Overlay {
      * @returns Reference to the created overlay.
      */
     create(config) {
+        // This is done in the overlay container as well, but we have it here
+        // since it's common to mock out the overlay container in tests.
+        this._styleLoader.load(_CdkOverlayStyleLoader);
         const host = this._createHostElement();
         const pane = this._createPaneElement(host);
         const portalOutlet = this._createPortalOutlet(pane);

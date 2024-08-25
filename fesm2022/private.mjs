@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { inject, ApplicationRef, EnvironmentInjector, createComponent, Injectable } from '@angular/core';
+import { inject, Injector, EnvironmentInjector, ApplicationRef, createComponent, Injectable } from '@angular/core';
 
 /** Apps in which we've loaded styles. */
 const appsWithLoaders = new WeakMap();
@@ -9,7 +9,7 @@ const appsWithLoaders = new WeakMap();
  */
 class _CdkPrivateStyleLoader {
     constructor() {
-        this._appRef = inject(ApplicationRef);
+        this._injector = inject(Injector);
         this._environmentInjector = inject(EnvironmentInjector);
     }
     /**
@@ -17,15 +17,17 @@ class _CdkPrivateStyleLoader {
      * @param loader Component which will be instantiated to load the styles.
      */
     load(loader) {
-        let data = appsWithLoaders.get(this._appRef);
+        // Resolve the app ref lazily to avoid circular dependency errors if this is called too early.
+        const appRef = (this._appRef = this._appRef || this._injector.get(ApplicationRef));
+        let data = appsWithLoaders.get(appRef);
         // If we haven't loaded for this app before, we have to initialize it.
         if (!data) {
             data = { loaders: new Set(), refs: [] };
-            appsWithLoaders.set(this._appRef, data);
+            appsWithLoaders.set(appRef, data);
             // When the app is destroyed, we need to clean up all the related loaders.
-            this._appRef.onDestroy(() => {
-                appsWithLoaders.get(this._appRef)?.refs.forEach(ref => ref.destroy());
-                appsWithLoaders.delete(this._appRef);
+            appRef.onDestroy(() => {
+                appsWithLoaders.get(appRef)?.refs.forEach(ref => ref.destroy());
+                appsWithLoaders.delete(appRef);
             });
         }
         // If the loader hasn't been loaded before, we need to instatiate it.

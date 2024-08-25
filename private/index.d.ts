@@ -7,6 +7,7 @@ import { Type } from '@angular/core';
  */
 export declare class _CdkPrivateStyleLoader {
     private _appRef;
+    private _injector;
     private _environmentInjector;
     /**
      * Loads a set of styles.
