@@ -1284,6 +1284,11 @@ class CdkTreeNode {
             this._tree.expand(this._data);
         }
     }
+    /** Makes the node focusable. Implemented for TreeKeyManagerItem. */
+    makeFocusable() {
+        this._tabindex = 0;
+        this._changeDetectorRef.markForCheck();
+    }
     _focusItem() {
         if (this.isDisabled) {
             return;
