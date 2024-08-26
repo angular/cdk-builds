@@ -475,6 +475,8 @@ export declare class CdkTreeNode<T, K = T> implements OnDestroy, OnInit, TreeKey
     collapse(): void;
     /** Expands this data node. Implemented for TreeKeyManagerItem. */
     expand(): void;
+    /** Makes the node focusable. Implemented for TreeKeyManagerItem. */
+    makeFocusable(): void;
     _focusItem(): void;
     _setActiveItem(): void;
     _emitExpansionState(expanded: boolean): void;

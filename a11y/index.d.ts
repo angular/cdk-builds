@@ -1279,7 +1279,7 @@ export declare class TreeKeyManager<T extends TreeKeyManagerItem> implements Tre
     private _typeahead?;
     private _typeaheadSubscription;
     private _hasInitialFocused;
-    private _initialFocus;
+    private _initializeFocus;
     /**
      *
      * @param items List of TreeKeyManager options. Can be synchronous or asynchronous.
@@ -1371,6 +1371,10 @@ export declare interface TreeKeyManagerItem {
      * Unfocus the item. This should remove the focus state.
      */
     unfocus(): void;
+    /**
+     * Sets the item to be focusable without actually focusing it.
+     */
+    makeFocusable?(): void;
 }
 
 /**
