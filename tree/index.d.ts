@@ -212,7 +212,7 @@ export declare class CdkTree<T, K = T> implements AfterContentChecked, AfterCont
     /** The key manager for this tree. Handles focus and activation based on user keyboard input. */
     _keyManager: TreeKeyManagerStrategy<CdkTreeNode<T, K>>;
     private _viewInit;
-    constructor(_differs: IterableDiffers, _changeDetectorRef: ChangeDetectorRef, _dir: Directionality);
+    constructor(_differs: IterableDiffers, _changeDetectorRef: ChangeDetectorRef);
     ngAfterContentInit(): void;
     ngAfterContentChecked(): void;
     ngOnDestroy(): void;
