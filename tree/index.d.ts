@@ -425,6 +425,7 @@ export declare class CdkTreeNode<T, K = T> implements OnDestroy, OnInit, TreeKey
     /** Emits when the node's data has changed. */
     readonly _dataChanges: Subject<void>;
     private _inputIsExpandable;
+    private _inputIsExpanded;
     /**
      * Flag used to determine whether or not we should be focusing the actual element based on
      * some user interaction (click or focus). On click, we don't forcibly focus the element

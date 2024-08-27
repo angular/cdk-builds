@@ -1100,11 +1100,23 @@ class CdkTreeNode {
     }
     set isExpandable(isExpandable) {
         this._inputIsExpandable = isExpandable;
+        if ((this.data && !this._isExpandable) || !this._inputIsExpandable) {
+            return;
+        }
+        // If the node is being set to expandable, ensure that the status of the
+        // node is propagated
+        if (this._inputIsExpanded) {
+            this.expand();
+        }
+        else if (this._inputIsExpanded === false) {
+            this.collapse();
+        }
     }
     get isExpanded() {
         return this._tree.isExpanded(this._data);
     }
     set isExpanded(isExpanded) {
+        this._inputIsExpanded = isExpanded;
         if (isExpanded) {
             this.expand();
         }
@@ -1202,6 +1214,7 @@ class CdkTreeNode {
         /** Emits when the node's data has changed. */
         this._dataChanges = new Subject();
         this._inputIsExpandable = false;
+        this._inputIsExpanded = undefined;
         /**
          * Flag used to determine whether or not we should be focusing the actual element based on
          * some user interaction (click or focus). On click, we don't forcibly focus the element
