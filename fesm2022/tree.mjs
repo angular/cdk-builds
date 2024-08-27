@@ -4,7 +4,8 @@ import { take, filter, takeUntil, startWith, tap, switchMap, map, reduce, concat
 import * as i0 from '@angular/core';
 import { InjectionToken, Directive, Inject, Optional, inject, Component, ViewEncapsulation, ChangeDetectionStrategy, Input, ViewChild, ContentChildren, EventEmitter, ChangeDetectorRef, booleanAttribute, Output, numberAttribute, NgModule } from '@angular/core';
 import { TREE_KEY_MANAGER } from '@angular/cdk/a11y';
-import * as i1 from '@angular/cdk/bidi';
+import * as i2 from '@angular/cdk/bidi';
+import { Directionality } from '@angular/cdk/bidi';
 import { coerceObservable } from '@angular/cdk/coercion/private';
 
 /**
@@ -280,10 +281,10 @@ class CdkTree {
             this._switchDataSource(dataSource);
         }
     }
-    constructor(_differs, _changeDetectorRef, _dir) {
+    constructor(_differs, _changeDetectorRef) {
         this._differs = _differs;
         this._changeDetectorRef = _changeDetectorRef;
-        this._dir = _dir;
+        this._dir = inject(Directionality);
         /** Subject that emits when the component has been destroyed. */
         this._onDestroy = new Subject();
         /** Level of nodes */
@@ -1026,7 +1027,7 @@ class CdkTree {
             this._ariaSets.set(parentKey, group);
         }
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.2.0-next.2", ngImport: i0, type: CdkTree, deps: [{ token: i0.IterableDiffers }, { token: i0.ChangeDetectorRef }, { token: i1.Directionality }], target: i0.ɵɵFactoryTarget.Component }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.2.0-next.2", ngImport: i0, type: CdkTree, deps: [{ token: i0.IterableDiffers }, { token: i0.ChangeDetectorRef }], target: i0.ɵɵFactoryTarget.Component }); }
     static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "18.2.0-next.2", type: CdkTree, isStandalone: true, selector: "cdk-tree", inputs: { dataSource: "dataSource", treeControl: "treeControl", levelAccessor: "levelAccessor", childrenAccessor: "childrenAccessor", trackBy: "trackBy", expansionKey: "expansionKey" }, host: { attributes: { "role": "tree" }, listeners: { "keydown": "_sendKeydownToKeyManager($event)" }, classAttribute: "cdk-tree" }, queries: [{ propertyName: "_nodeDefs", predicate: CdkTreeNodeDef, descendants: true }], viewQueries: [{ propertyName: "_nodeOutlet", first: true, predicate: CdkTreeNodeOutlet, descendants: true, static: true }], exportAs: ["cdkTree"], ngImport: i0, template: `<ng-container cdkTreeNodeOutlet></ng-container>`, isInline: true, dependencies: [{ kind: "directive", type: CdkTreeNodeOutlet, selector: "[cdkTreeNodeOutlet]" }], changeDetection: i0.ChangeDetectionStrategy.Default, encapsulation: i0.ViewEncapsulation.None }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.0-next.2", ngImport: i0, type: CdkTree, decorators: [{
@@ -1049,7 +1050,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.0-next.2", 
                     standalone: true,
                     imports: [CdkTreeNodeOutlet],
                 }]
-        }], ctorParameters: () => [{ type: i0.IterableDiffers }, { type: i0.ChangeDetectorRef }, { type: i1.Directionality }], propDecorators: { dataSource: [{
+        }], ctorParameters: () => [{ type: i0.IterableDiffers }, { type: i0.ChangeDetectorRef }], propDecorators: { dataSource: [{
                 type: Input
             }], treeControl: [{
                 type: Input
@@ -1556,7 +1557,7 @@ class CdkTreeNodePadding {
         this._indent = numberAttribute(value);
         this._setPadding();
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.2.0-next.2", ngImport: i0, type: CdkTreeNodePadding, deps: [{ token: CdkTreeNode }, { token: CdkTree }, { token: i0.ElementRef }, { token: i1.Directionality, optional: true }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.2.0-next.2", ngImport: i0, type: CdkTreeNodePadding, deps: [{ token: CdkTreeNode }, { token: CdkTree }, { token: i0.ElementRef }, { token: i2.Directionality, optional: true }], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "18.2.0-next.2", type: CdkTreeNodePadding, isStandalone: true, selector: "[cdkTreeNodePadding]", inputs: { level: ["cdkTreeNodePadding", "level", numberAttribute], indent: ["cdkTreeNodePaddingIndent", "indent"] }, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.0-next.2", ngImport: i0, type: CdkTreeNodePadding, decorators: [{
@@ -1565,7 +1566,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.0-next.2", 
                     selector: '[cdkTreeNodePadding]',
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: CdkTreeNode }, { type: CdkTree }, { type: i0.ElementRef }, { type: i1.Directionality, decorators: [{
+        }], ctorParameters: () => [{ type: CdkTreeNode }, { type: CdkTree }, { type: i0.ElementRef }, { type: i2.Directionality, decorators: [{
                     type: Optional
                 }] }], propDecorators: { level: [{
                 type: Input,
