@@ -282,7 +282,7 @@ export declare class CdkTree<T, K = T> implements AfterContentChecked, AfterCont
     /** Level accessor, used for compatibility between the old Tree and new Tree */
     _getLevelAccessor(): ((dataNode: T) => number) | undefined;
     /** Children accessor, used for compatibility between the old Tree and new Tree */
-    _getChildrenAccessor(): ((dataNode: T) => Observable<T[]> | T[] | undefined | null) | undefined;
+    _getChildrenAccessor(): ((dataNode: T) => T[] | Observable<T[]> | null | undefined) | undefined;
     /**
      * Gets the direct children of a node; used for compatibility between the old tree and the
      * new tree.
@@ -513,8 +513,8 @@ export declare class CdkTreeNodeDef<T> {
  */
 export declare class CdkTreeNodeOutlet {
     viewContainer: ViewContainerRef;
-    _node?: any | undefined;
-    constructor(viewContainer: ViewContainerRef, _node?: any | undefined);
+    _node?: any;
+    constructor(viewContainer: ViewContainerRef, _node?: any);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNodeOutlet, [null, { optional: true; }]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodeOutlet, "[cdkTreeNodeOutlet]", never, {}, {}, never, never, true, never>;
 }
