@@ -809,9 +809,13 @@ class OverlayRef {
         if (this._scrollStrategy) {
             this._scrollStrategy.enable();
         }
+        // We need to clean this up ourselves, because we're passing in an
+        // `EnvironmentInjector` below which won't ever be destroyed.
+        // Otherwise it causes some callbacks to be retained (see #29696).
+        this._afterNextRenderRef?.destroy();
         // Update the position once the overlay is fully rendered before attempting to position it,
         // as the position may depend on the size of the rendered content.
-        afterNextRender(() => {
+        this._afterNextRenderRef = afterNextRender(() => {
             // The overlay could've been detached before the callback executed.
             if (this.hasAttached()) {
                 this.updatePosition();
@@ -901,6 +905,7 @@ class OverlayRef {
         this._outsidePointerEvents.complete();
         this._outsideClickDispatcher.remove(this);
         this._host?.remove();
+        this._afterNextRenderRef?.destroy();
         this._previousHostParent = this._pane = this._host = null;
         if (isAttached) {
             this._detachments.next();
