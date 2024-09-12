@@ -1,12 +1,11 @@
-import * as i1 from '@angular/cdk/bidi';
+import { Directionality } from '@angular/cdk/bidi';
 import { _VIEW_REPEATER_STRATEGY, _RecycleViewRepeaterStrategy, isDataSource, _ViewRepeaterOperation, _DisposeViewRepeaterStrategy } from '@angular/cdk/collections';
 export { DataSource } from '@angular/cdk/collections';
-import * as i2 from '@angular/cdk/platform';
-import * as i3 from '@angular/cdk/scrolling';
-import { ScrollingModule } from '@angular/cdk/scrolling';
+import { Platform } from '@angular/cdk/platform';
+import { ViewportRuler, ScrollingModule } from '@angular/cdk/scrolling';
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { InjectionToken, Directive, booleanAttribute, Inject, Optional, Input, ContentChild, inject, NgZone, Injectable, Component, ChangeDetectionStrategy, ViewEncapsulation, EmbeddedViewRef, EventEmitter, Injector, afterNextRender, Attribute, SkipSelf, Output, ContentChildren, ViewChild, NgModule } from '@angular/core';
+import { InjectionToken, inject, TemplateRef, Directive, booleanAttribute, Input, ContentChild, ElementRef, NgZone, Injectable, IterableDiffers, ViewContainerRef, Component, ChangeDetectionStrategy, ViewEncapsulation, EmbeddedViewRef, ChangeDetectorRef, EventEmitter, Injector, HostAttributeToken, afterNextRender, Output, ContentChildren, ViewChild, NgModule } from '@angular/core';
 import { Subject, BehaviorSubject, isObservable, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
@@ -24,10 +23,11 @@ const TEXT_COLUMN_OPTIONS = new InjectionToken('text-column-options');
  * Captures the template of a column's data row cell as well as cell-specific properties.
  */
 class CdkCellDef {
-    constructor(/** @docs-private */ template) {
-        this.template = template;
+    constructor() {
+        /** @docs-private */
+        this.template = inject(TemplateRef);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkCellDef, deps: [{ token: i0.TemplateRef }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkCellDef, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.3", type: CdkCellDef, isStandalone: true, selector: "[cdkCellDef]", ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkCellDef, decorators: [{
@@ -36,16 +36,17 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     selector: '[cdkCellDef]',
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: i0.TemplateRef }] });
+        }], ctorParameters: () => [] });
 /**
  * Header cell definition for a CDK table.
  * Captures the template of a column's header cell and as well as cell-specific properties.
  */
 class CdkHeaderCellDef {
-    constructor(/** @docs-private */ template) {
-        this.template = template;
+    constructor() {
+        /** @docs-private */
+        this.template = inject(TemplateRef);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkHeaderCellDef, deps: [{ token: i0.TemplateRef }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkHeaderCellDef, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.3", type: CdkHeaderCellDef, isStandalone: true, selector: "[cdkHeaderCellDef]", ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkHeaderCellDef, decorators: [{
@@ -54,16 +55,17 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     selector: '[cdkHeaderCellDef]',
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: i0.TemplateRef }] });
+        }], ctorParameters: () => [] });
 /**
  * Footer cell definition for a CDK table.
  * Captures the template of a column's footer cell and as well as cell-specific properties.
  */
 class CdkFooterCellDef {
-    constructor(/** @docs-private */ template) {
-        this.template = template;
+    constructor() {
+        /** @docs-private */
+        this.template = inject(TemplateRef);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkFooterCellDef, deps: [{ token: i0.TemplateRef }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkFooterCellDef, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.3", type: CdkFooterCellDef, isStandalone: true, selector: "[cdkFooterCellDef]", ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkFooterCellDef, decorators: [{
@@ -72,7 +74,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     selector: '[cdkFooterCellDef]',
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: i0.TemplateRef }] });
+        }], ctorParameters: () => [] });
 /**
  * Column definition for the CDK table.
  * Defines a set of cells available for a table column.
@@ -109,8 +111,8 @@ class CdkColumnDef {
             this._hasStickyChanged = true;
         }
     }
-    constructor(_table) {
-        this._table = _table;
+    constructor() {
+        this._table = inject(CDK_TABLE, { optional: true });
         this._hasStickyChanged = false;
         this._sticky = false;
         this._stickyEnd = false;
@@ -150,7 +152,7 @@ class CdkColumnDef {
             this._updateColumnCssClassName();
         }
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkColumnDef, deps: [{ token: CDK_TABLE, optional: true }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkColumnDef, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "19.0.0-next.3", type: CdkColumnDef, isStandalone: true, selector: "[cdkColumnDef]", inputs: { name: ["cdkColumnDef", "name"], sticky: ["sticky", "sticky", booleanAttribute], stickyEnd: ["stickyEnd", "stickyEnd", booleanAttribute] }, providers: [{ provide: 'MAT_SORT_HEADER_COLUMN_DEF', useExisting: CdkColumnDef }], queries: [{ propertyName: "cell", first: true, predicate: CdkCellDef, descendants: true }, { propertyName: "headerCell", first: true, predicate: CdkHeaderCellDef, descendants: true }, { propertyName: "footerCell", first: true, predicate: CdkFooterCellDef, descendants: true }], ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkColumnDef, decorators: [{
@@ -160,12 +162,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     providers: [{ provide: 'MAT_SORT_HEADER_COLUMN_DEF', useExisting: CdkColumnDef }],
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: undefined, decorators: [{
-                    type: Inject,
-                    args: [CDK_TABLE]
-                }, {
-                    type: Optional
-                }] }], propDecorators: { name: [{
+        }], ctorParameters: () => [], propDecorators: { name: [{
                 type: Input,
                 args: ['cdkColumnDef']
             }], sticky: [{
@@ -192,10 +189,10 @@ class BaseCdkCell {
 }
 /** Header cell template container that adds the right classes and role. */
 class CdkHeaderCell extends BaseCdkCell {
-    constructor(columnDef, elementRef) {
-        super(columnDef, elementRef);
+    constructor() {
+        super(inject(CdkColumnDef), inject(ElementRef));
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkHeaderCell, deps: [{ token: CdkColumnDef }, { token: i0.ElementRef }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkHeaderCell, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.3", type: CdkHeaderCell, isStandalone: true, selector: "cdk-header-cell, th[cdk-header-cell]", host: { attributes: { "role": "columnheader" }, classAttribute: "cdk-header-cell" }, usesInheritance: true, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkHeaderCell, decorators: [{
@@ -208,17 +205,19 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     },
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: CdkColumnDef }, { type: i0.ElementRef }] });
+        }], ctorParameters: () => [] });
 /** Footer cell template container that adds the right classes and role. */
 class CdkFooterCell extends BaseCdkCell {
-    constructor(columnDef, elementRef) {
+    constructor() {
+        const columnDef = inject(CdkColumnDef);
+        const elementRef = inject(ElementRef);
         super(columnDef, elementRef);
         const role = columnDef._table?._getCellRole();
         if (role) {
             elementRef.nativeElement.setAttribute('role', role);
         }
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkFooterCell, deps: [{ token: CdkColumnDef }, { token: i0.ElementRef }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkFooterCell, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.3", type: CdkFooterCell, isStandalone: true, selector: "cdk-footer-cell, td[cdk-footer-cell]", host: { classAttribute: "cdk-footer-cell" }, usesInheritance: true, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkFooterCell, decorators: [{
@@ -230,17 +229,19 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     },
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: CdkColumnDef }, { type: i0.ElementRef }] });
+        }], ctorParameters: () => [] });
 /** Cell template container that adds the right classes and role. */
 class CdkCell extends BaseCdkCell {
-    constructor(columnDef, elementRef) {
+    constructor() {
+        const columnDef = inject(CdkColumnDef);
+        const elementRef = inject(ElementRef);
         super(columnDef, elementRef);
         const role = columnDef._table?._getCellRole();
         if (role) {
             elementRef.nativeElement.setAttribute('role', role);
         }
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkCell, deps: [{ token: CdkColumnDef }, { token: i0.ElementRef }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkCell, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.3", type: CdkCell, isStandalone: true, selector: "cdk-cell, td[cdk-cell]", host: { classAttribute: "cdk-cell" }, usesInheritance: true, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkCell, decorators: [{
@@ -252,7 +253,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     },
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: CdkColumnDef }, { type: i0.ElementRef }] });
+        }], ctorParameters: () => [] });
 
 /**
  * @docs-private
@@ -273,7 +274,7 @@ const _COALESCED_STYLE_SCHEDULER = new InjectionToken('_COALESCED_STYLE_SCHEDULE
  * @docs-private
  */
 class _CoalescedStyleScheduler {
-    constructor(_unusedNgZone) {
+    constructor() {
         this._currentSchedule = null;
         this._ngZone = inject(NgZone);
     }
@@ -317,12 +318,12 @@ class _CoalescedStyleScheduler {
             this._currentSchedule = null;
         }));
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: _CoalescedStyleScheduler, deps: [{ token: i0.NgZone }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: _CoalescedStyleScheduler, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
     static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: _CoalescedStyleScheduler }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: _CoalescedStyleScheduler, decorators: [{
             type: Injectable
-        }], ctorParameters: () => [{ type: i0.NgZone }] });
+        }], ctorParameters: () => [] });
 
 /**
  * The row template that can be used by the mat-table. Should not be used outside of the
@@ -334,10 +335,9 @@ const CDK_ROW_TEMPLATE = `<ng-container cdkCellOutlet></ng-container>`;
  * for changes and notifying the table.
  */
 class BaseRowDef {
-    constructor(
-    /** @docs-private */ template, _differs) {
-        this.template = template;
-        this._differs = _differs;
+    constructor() {
+        this.template = inject(TemplateRef);
+        this._differs = inject(IterableDiffers);
     }
     ngOnChanges(changes) {
         // Create a new columns differ if one does not yet exist. Initialize it based on initial value
@@ -367,12 +367,12 @@ class BaseRowDef {
             return column.cell.template;
         }
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: BaseRowDef, deps: [{ token: i0.TemplateRef }, { token: i0.IterableDiffers }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: BaseRowDef, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.3", type: BaseRowDef, usesOnChanges: true, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: BaseRowDef, decorators: [{
             type: Directive
-        }], ctorParameters: () => [{ type: i0.TemplateRef }, { type: i0.IterableDiffers }] });
+        }], ctorParameters: () => [] });
 /**
  * Header row definition for the CDK table.
  * Captures the header row's template and other header properties such as the columns to display.
@@ -388,9 +388,9 @@ class CdkHeaderRowDef extends BaseRowDef {
             this._hasStickyChanged = true;
         }
     }
-    constructor(template, _differs, _table) {
-        super(template, _differs);
-        this._table = _table;
+    constructor() {
+        super(inject(TemplateRef), inject(IterableDiffers));
+        this._table = inject(CDK_TABLE, { optional: true });
         this._hasStickyChanged = false;
         this._sticky = false;
     }
@@ -409,7 +409,7 @@ class CdkHeaderRowDef extends BaseRowDef {
     resetStickyChanged() {
         this._hasStickyChanged = false;
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkHeaderRowDef, deps: [{ token: i0.TemplateRef }, { token: i0.IterableDiffers }, { token: CDK_TABLE, optional: true }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkHeaderRowDef, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "19.0.0-next.3", type: CdkHeaderRowDef, isStandalone: true, selector: "[cdkHeaderRowDef]", inputs: { columns: ["cdkHeaderRowDef", "columns"], sticky: ["cdkHeaderRowDefSticky", "sticky", booleanAttribute] }, usesInheritance: true, usesOnChanges: true, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkHeaderRowDef, decorators: [{
@@ -419,12 +419,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     inputs: [{ name: 'columns', alias: 'cdkHeaderRowDef' }],
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: i0.TemplateRef }, { type: i0.IterableDiffers }, { type: undefined, decorators: [{
-                    type: Inject,
-                    args: [CDK_TABLE]
-                }, {
-                    type: Optional
-                }] }], propDecorators: { sticky: [{
+        }], ctorParameters: () => [], propDecorators: { sticky: [{
                 type: Input,
                 args: [{ alias: 'cdkHeaderRowDefSticky', transform: booleanAttribute }]
             }] } });
@@ -443,9 +438,9 @@ class CdkFooterRowDef extends BaseRowDef {
             this._hasStickyChanged = true;
         }
     }
-    constructor(template, _differs, _table) {
-        super(template, _differs);
-        this._table = _table;
+    constructor() {
+        super(inject(TemplateRef), inject(IterableDiffers));
+        this._table = inject(CDK_TABLE, { optional: true });
         this._hasStickyChanged = false;
         this._sticky = false;
     }
@@ -464,7 +459,7 @@ class CdkFooterRowDef extends BaseRowDef {
     resetStickyChanged() {
         this._hasStickyChanged = false;
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkFooterRowDef, deps: [{ token: i0.TemplateRef }, { token: i0.IterableDiffers }, { token: CDK_TABLE, optional: true }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkFooterRowDef, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "19.0.0-next.3", type: CdkFooterRowDef, isStandalone: true, selector: "[cdkFooterRowDef]", inputs: { columns: ["cdkFooterRowDef", "columns"], sticky: ["cdkFooterRowDefSticky", "sticky", booleanAttribute] }, usesInheritance: true, usesOnChanges: true, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkFooterRowDef, decorators: [{
@@ -474,12 +469,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     inputs: [{ name: 'columns', alias: 'cdkFooterRowDef' }],
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: i0.TemplateRef }, { type: i0.IterableDiffers }, { type: undefined, decorators: [{
-                    type: Inject,
-                    args: [CDK_TABLE]
-                }, {
-                    type: Optional
-                }] }], propDecorators: { sticky: [{
+        }], ctorParameters: () => [], propDecorators: { sticky: [{
                 type: Input,
                 args: [{ alias: 'cdkFooterRowDefSticky', transform: booleanAttribute }]
             }] } });
@@ -489,13 +479,13 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
  * a when predicate that describes when this row should be used.
  */
 class CdkRowDef extends BaseRowDef {
-    // TODO(andrewseguin): Add an input for providing a switch function to determine
-    //   if this template should be used.
-    constructor(template, _differs, _table) {
-        super(template, _differs);
-        this._table = _table;
+    constructor() {
+        // TODO(andrewseguin): Add an input for providing a switch function to determine
+        //   if this template should be used.
+        super(inject(TemplateRef), inject(IterableDiffers));
+        this._table = inject(CDK_TABLE, { optional: true });
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkRowDef, deps: [{ token: i0.TemplateRef }, { token: i0.IterableDiffers }, { token: CDK_TABLE, optional: true }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkRowDef, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.3", type: CdkRowDef, isStandalone: true, selector: "[cdkRowDef]", inputs: { columns: ["cdkRowDefColumns", "columns"], when: ["cdkRowDefWhen", "when"] }, usesInheritance: true, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkRowDef, decorators: [{
@@ -508,12 +498,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     ],
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: i0.TemplateRef }, { type: i0.IterableDiffers }, { type: undefined, decorators: [{
-                    type: Inject,
-                    args: [CDK_TABLE]
-                }, {
-                    type: Optional
-                }] }] });
+        }], ctorParameters: () => [] });
 /**
  * Outlet for rendering cells inside of a row or header row.
  * @docs-private
@@ -527,8 +512,8 @@ class CdkCellOutlet {
      * construct the cells with the provided context.
      */
     static { this.mostRecentCellOutlet = null; }
-    constructor(_viewContainer) {
-        this._viewContainer = _viewContainer;
+    constructor() {
+        this._viewContainer = inject(ViewContainerRef);
         CdkCellOutlet.mostRecentCellOutlet = this;
     }
     ngOnDestroy() {
@@ -538,7 +523,7 @@ class CdkCellOutlet {
             CdkCellOutlet.mostRecentCellOutlet = null;
         }
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkCellOutlet, deps: [{ token: i0.ViewContainerRef }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkCellOutlet, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.3", type: CdkCellOutlet, isStandalone: true, selector: "[cdkCellOutlet]", ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkCellOutlet, decorators: [{
@@ -547,7 +532,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     selector: '[cdkCellOutlet]',
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: i0.ViewContainerRef }] });
+        }], ctorParameters: () => [] });
 /** Header template container that contains the cell outlet. Adds the right class and role. */
 class CdkHeaderRow {
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkHeaderRow, deps: [], target: i0.ɵɵFactoryTarget.Component }); }
@@ -616,11 +601,11 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
         }] });
 /** Row that can be used to display a message when no data is shown in the table. */
 class CdkNoDataRow {
-    constructor(templateRef) {
-        this.templateRef = templateRef;
+    constructor() {
+        this.templateRef = inject(TemplateRef);
         this._contentClassName = 'cdk-no-data-row';
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkNoDataRow, deps: [{ token: i0.TemplateRef }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkNoDataRow, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.3", type: CdkNoDataRow, isStandalone: true, selector: "ng-template[cdkNoDataRow]", ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkNoDataRow, decorators: [{
@@ -629,7 +614,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     selector: 'ng-template[cdkNoDataRow]',
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: i0.TemplateRef }] });
+        }], ctorParameters: () => [] });
 
 /**
  * List of all possible directions that can be used for sticky positioning.
@@ -1055,14 +1040,14 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
  * @docs-private
  */
 class DataRowOutlet {
-    constructor(viewContainer, elementRef) {
-        this.viewContainer = viewContainer;
-        this.elementRef = elementRef;
+    constructor() {
+        this.viewContainer = inject(ViewContainerRef);
+        this.elementRef = inject(ElementRef);
         const table = inject(CDK_TABLE);
         table._rowOutlet = this;
         table._outletAssigned();
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: DataRowOutlet, deps: [{ token: i0.ViewContainerRef }, { token: i0.ElementRef }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: DataRowOutlet, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.3", type: DataRowOutlet, isStandalone: true, selector: "[rowOutlet]", ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: DataRowOutlet, decorators: [{
@@ -1071,20 +1056,20 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     selector: '[rowOutlet]',
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: i0.ViewContainerRef }, { type: i0.ElementRef }] });
+        }], ctorParameters: () => [] });
 /**
  * Provides a handle for the table to grab the view container's ng-container to insert the header.
  * @docs-private
  */
 class HeaderRowOutlet {
-    constructor(viewContainer, elementRef) {
-        this.viewContainer = viewContainer;
-        this.elementRef = elementRef;
+    constructor() {
+        this.viewContainer = inject(ViewContainerRef);
+        this.elementRef = inject(ElementRef);
         const table = inject(CDK_TABLE);
         table._headerRowOutlet = this;
         table._outletAssigned();
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: HeaderRowOutlet, deps: [{ token: i0.ViewContainerRef }, { token: i0.ElementRef }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: HeaderRowOutlet, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.3", type: HeaderRowOutlet, isStandalone: true, selector: "[headerRowOutlet]", ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: HeaderRowOutlet, decorators: [{
@@ -1093,20 +1078,20 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     selector: '[headerRowOutlet]',
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: i0.ViewContainerRef }, { type: i0.ElementRef }] });
+        }], ctorParameters: () => [] });
 /**
  * Provides a handle for the table to grab the view container's ng-container to insert the footer.
  * @docs-private
  */
 class FooterRowOutlet {
-    constructor(viewContainer, elementRef) {
-        this.viewContainer = viewContainer;
-        this.elementRef = elementRef;
+    constructor() {
+        this.viewContainer = inject(ViewContainerRef);
+        this.elementRef = inject(ElementRef);
         const table = inject(CDK_TABLE);
         table._footerRowOutlet = this;
         table._outletAssigned();
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: FooterRowOutlet, deps: [{ token: i0.ViewContainerRef }, { token: i0.ElementRef }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: FooterRowOutlet, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.3", type: FooterRowOutlet, isStandalone: true, selector: "[footerRowOutlet]", ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: FooterRowOutlet, decorators: [{
@@ -1115,21 +1100,21 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     selector: '[footerRowOutlet]',
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: i0.ViewContainerRef }, { type: i0.ElementRef }] });
+        }], ctorParameters: () => [] });
 /**
  * Provides a handle for the table to grab the view
  * container's ng-container to insert the no data row.
  * @docs-private
  */
 class NoDataRowOutlet {
-    constructor(viewContainer, elementRef) {
-        this.viewContainer = viewContainer;
-        this.elementRef = elementRef;
+    constructor() {
+        this.viewContainer = inject(ViewContainerRef);
+        this.elementRef = inject(ElementRef);
         const table = inject(CDK_TABLE);
         table._noDataRowOutlet = this;
         table._outletAssigned();
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: NoDataRowOutlet, deps: [{ token: i0.ViewContainerRef }, { token: i0.ElementRef }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: NoDataRowOutlet, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.3", type: NoDataRowOutlet, isStandalone: true, selector: "[noDataRowOutlet]", ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: NoDataRowOutlet, decorators: [{
@@ -1138,7 +1123,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     selector: '[noDataRowOutlet]',
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: i0.ViewContainerRef }, { type: i0.ElementRef }] });
+        }], ctorParameters: () => [] });
 /**
  * The table template that can be used by the mat-table. Should not be used outside of the
  * material library.
@@ -1274,26 +1259,17 @@ class CdkTable {
         this._forceRecalculateCellWidths = true;
         this._stickyColumnStylesNeedReset = true;
     }
-    constructor(_differs, _changeDetectorRef, _elementRef, role, _dir, _document, _platform, _viewRepeater, _coalescedStyleScheduler, _viewportRuler, 
-    /**
-     * @deprecated `_stickyPositioningListener` parameter to become required.
-     * @breaking-change 13.0.0
-     */
-    _stickyPositioningListener, 
-    /**
-     * @deprecated `_unusedNgZone` parameter to be removed.
-     * @breaking-change 19.0.0
-     */
-    _unusedNgZone) {
-        this._differs = _differs;
-        this._changeDetectorRef = _changeDetectorRef;
-        this._elementRef = _elementRef;
-        this._dir = _dir;
-        this._platform = _platform;
-        this._viewRepeater = _viewRepeater;
-        this._coalescedStyleScheduler = _coalescedStyleScheduler;
-        this._viewportRuler = _viewportRuler;
-        this._stickyPositioningListener = _stickyPositioningListener;
+    constructor() {
+        this._differs = inject(IterableDiffers);
+        this._changeDetectorRef = inject(ChangeDetectorRef);
+        this._elementRef = inject(ElementRef);
+        this._dir = inject(Directionality, { optional: true });
+        this._platform = inject(Platform);
+        this._viewRepeater = inject(_VIEW_REPEATER_STRATEGY);
+        this._coalescedStyleScheduler = inject(_COALESCED_STYLE_SCHEDULER);
+        this._viewportRuler = inject(ViewportRuler);
+        this._stickyPositioningListener = inject(STICKY_POSITIONING_LISTENER, { optional: true, skipSelf: true });
+        this._document = inject(DOCUMENT);
         /** Subject that emits when the component has been destroyed. */
         this._onDestroy = new Subject();
         /**
@@ -1399,12 +1375,12 @@ class CdkTable {
             end: Number.MAX_VALUE,
         });
         this._injector = inject(Injector);
+        const role = inject(new HostAttributeToken('role'), { optional: true });
         if (!role) {
-            _elementRef.nativeElement.setAttribute('role', 'table');
+            this._elementRef.nativeElement.setAttribute('role', 'table');
         }
-        this._document = _document;
-        this._isServer = !_platform.isBrowser;
-        this._isNativeHtmlTable = _elementRef.nativeElement.nodeName === 'TABLE';
+        this._isServer = !this._platform.isBrowser;
+        this._isNativeHtmlTable = this._elementRef.nativeElement.nodeName === 'TABLE';
     }
     ngOnInit() {
         this._setupStickyStyler();
@@ -2053,7 +2029,7 @@ class CdkTable {
         this._isShowingNoDataRow = shouldShow;
         this._changeDetectorRef.markForCheck();
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkTable, deps: [{ token: i0.IterableDiffers }, { token: i0.ChangeDetectorRef }, { token: i0.ElementRef }, { token: 'role', attribute: true }, { token: i1.Directionality, optional: true }, { token: DOCUMENT }, { token: i2.Platform }, { token: _VIEW_REPEATER_STRATEGY }, { token: _COALESCED_STYLE_SCHEDULER }, { token: i3.ViewportRuler }, { token: STICKY_POSITIONING_LISTENER, optional: true, skipSelf: true }, { token: i0.NgZone, optional: true }], target: i0.ɵɵFactoryTarget.Component }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkTable, deps: [], target: i0.ɵɵFactoryTarget.Component }); }
     static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "17.0.0", version: "19.0.0-next.3", type: CdkTable, isStandalone: true, selector: "cdk-table, table[cdk-table]", inputs: { trackBy: "trackBy", dataSource: "dataSource", multiTemplateDataRows: ["multiTemplateDataRows", "multiTemplateDataRows", booleanAttribute], fixedLayout: ["fixedLayout", "fixedLayout", booleanAttribute] }, outputs: { contentChanged: "contentChanged" }, host: { properties: { "class.cdk-table-fixed-layout": "fixedLayout" }, classAttribute: "cdk-table" }, providers: [
             { provide: CDK_TABLE, useExisting: CdkTable },
             { provide: _VIEW_REPEATER_STRATEGY, useClass: _DisposeViewRepeaterStrategy },
@@ -2074,30 +2050,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                         // Prevent nested tables from seeing this table's StickyPositioningListener.
                         { provide: STICKY_POSITIONING_LISTENER, useValue: null },
                     ], standalone: true, imports: [HeaderRowOutlet, DataRowOutlet, NoDataRowOutlet, FooterRowOutlet], styles: [".cdk-table-fixed-layout{table-layout:fixed}"] }]
-        }], ctorParameters: () => [{ type: i0.IterableDiffers }, { type: i0.ChangeDetectorRef }, { type: i0.ElementRef }, { type: undefined, decorators: [{
-                    type: Attribute,
-                    args: ['role']
-                }] }, { type: i1.Directionality, decorators: [{
-                    type: Optional
-                }] }, { type: undefined, decorators: [{
-                    type: Inject,
-                    args: [DOCUMENT]
-                }] }, { type: i2.Platform }, { type: undefined, decorators: [{
-                    type: Inject,
-                    args: [_VIEW_REPEATER_STRATEGY]
-                }] }, { type: _CoalescedStyleScheduler, decorators: [{
-                    type: Inject,
-                    args: [_COALESCED_STYLE_SCHEDULER]
-                }] }, { type: i3.ViewportRuler }, { type: undefined, decorators: [{
-                    type: Optional
-                }, {
-                    type: SkipSelf
-                }, {
-                    type: Inject,
-                    args: [STICKY_POSITIONING_LISTENER]
-                }] }, { type: i0.NgZone, decorators: [{
-                    type: Optional
-                }] }], propDecorators: { trackBy: [{
+        }], ctorParameters: () => [], propDecorators: { trackBy: [{
                 type: Input
             }], dataSource: [{
                 type: Input
@@ -2175,16 +2128,12 @@ class CdkTextColumn {
         // available. In that case, we defer the synchronization until "ngOnInit" fires.
         this._syncColumnDefName();
     }
-    constructor(
-    // `CdkTextColumn` is always requiring a table, but we just assert it manually
-    // for better error reporting.
-    // tslint:disable-next-line: lightweight-tokens
-    _table, _options) {
-        this._table = _table;
-        this._options = _options;
+    constructor() {
+        this._table = inject(CdkTable, { optional: true });
+        this._options = inject(TEXT_COLUMN_OPTIONS, { optional: true });
         /** Alignment of the cell values. */
         this.justify = 'start';
-        this._options = _options || {};
+        this._options = this._options || {};
     }
     ngOnInit() {
         this._syncColumnDefName();
@@ -2232,7 +2181,7 @@ class CdkTextColumn {
             this.columnDef.name = this.name;
         }
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkTextColumn, deps: [{ token: CdkTable, optional: true }, { token: TEXT_COLUMN_OPTIONS, optional: true }], target: i0.ɵɵFactoryTarget.Component }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkTextColumn, deps: [], target: i0.ɵɵFactoryTarget.Component }); }
     static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "19.0.0-next.3", type: CdkTextColumn, isStandalone: true, selector: "cdk-text-column", inputs: { name: "name", headerText: "headerText", dataAccessor: "dataAccessor", justify: "justify" }, viewQueries: [{ propertyName: "columnDef", first: true, predicate: CdkColumnDef, descendants: true, static: true }, { propertyName: "cell", first: true, predicate: CdkCellDef, descendants: true, static: true }, { propertyName: "headerCell", first: true, predicate: CdkHeaderCellDef, descendants: true, static: true }], ngImport: i0, template: `
     <ng-container cdkColumnDef>
       <th cdk-header-cell *cdkHeaderCellDef [style.text-align]="justify">
@@ -2269,14 +2218,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     standalone: true,
                     imports: [CdkColumnDef, CdkHeaderCellDef, CdkHeaderCell, CdkCellDef, CdkCell],
                 }]
-        }], ctorParameters: () => [{ type: CdkTable, decorators: [{
-                    type: Optional
-                }] }, { type: undefined, decorators: [{
-                    type: Optional
-                }, {
-                    type: Inject,
-                    args: [TEXT_COLUMN_OPTIONS]
-                }] }], propDecorators: { name: [{
+        }], ctorParameters: () => [], propDecorators: { name: [{
                 type: Input
             }], headerText: [{
                 type: Input

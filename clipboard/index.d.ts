@@ -1,7 +1,6 @@
 import { EventEmitter } from '@angular/core';
 import * as i0 from '@angular/core';
 import { InjectionToken } from '@angular/core';
-import { NgZone } from '@angular/core';
 import { OnDestroy } from '@angular/core';
 
 /** Injection token that can be used to provide the default options to `CdkCopyToClipboard`. */
@@ -32,11 +31,11 @@ export declare class CdkCopyToClipboard implements OnDestroy {
     private _destroyed;
     /** Timeout for the current copy attempt. */
     private _currentTimeout;
-    constructor(_clipboard: Clipboard_2, _ngZone: NgZone, config?: CdkCopyToClipboardConfig);
+    constructor(...args: unknown[]);
     /** Copies the current text to the clipboard. */
     copy(attempts?: number): void;
     ngOnDestroy(): void;
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkCopyToClipboard, [null, null, { optional: true; }]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkCopyToClipboard, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkCopyToClipboard, "[cdkCopyToClipboard]", never, { "text": { "alias": "cdkCopyToClipboard"; "required": false; }; "attempts": { "alias": "cdkCopyToClipboardAttempts"; "required": false; }; }, { "copied": "cdkCopyToClipboardCopied"; }, never, never, true, never>;
 }
 
@@ -51,7 +50,7 @@ export declare interface CdkCopyToClipboardConfig {
  */
 declare class Clipboard_2 {
     private readonly _document;
-    constructor(document: any);
+    constructor(...args: unknown[]);
     /**
      * Copies the provided text into the user's clipboard.
      *

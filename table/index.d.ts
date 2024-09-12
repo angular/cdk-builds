@@ -14,18 +14,15 @@ import { InjectionToken } from '@angular/core';
 import { IterableChanges } from '@angular/core';
 import { IterableDiffer } from '@angular/core';
 import { IterableDiffers } from '@angular/core';
-import { NgZone } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OnChanges } from '@angular/core';
 import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
-import { Platform } from '@angular/cdk/platform';
 import { QueryList } from '@angular/core';
 import { SimpleChanges } from '@angular/core';
 import { TemplateRef } from '@angular/core';
 import { TrackByFunction } from '@angular/core';
 import { ViewContainerRef } from '@angular/core';
-import { ViewportRuler } from '@angular/cdk/scrolling';
 import { _ViewRepeater } from '@angular/cdk/collections';
 
 /** Base class for the cells. Adds a CSS classname that identifies the column it renders in. */
@@ -38,14 +35,13 @@ export declare class BaseCdkCell {
  * for changes and notifying the table.
  */
 export declare abstract class BaseRowDef implements OnChanges {
-    /** @docs-private */ template: TemplateRef<any>;
+    template: TemplateRef<any>;
     protected _differs: IterableDiffers;
     /** The columns to be displayed on this row. */
     columns: Iterable<string>;
     /** Differ used to check if any changes were made to the columns. */
     protected _columnsDiffer: IterableDiffer<any>;
-    constructor(
-    /** @docs-private */ template: TemplateRef<any>, _differs: IterableDiffers);
+    constructor(...args: unknown[]);
     ngOnChanges(changes: SimpleChanges): void;
     /**
      * Returns the difference between the current columns and the columns from the last diff, or null
@@ -97,7 +93,7 @@ export declare const CDK_TABLE_TEMPLATE = "\n  <ng-content select=\"caption\"/>\
 
 /** Cell template container that adds the right classes and role. */
 export declare class CdkCell extends BaseCdkCell {
-    constructor(columnDef: CdkColumnDef, elementRef: ElementRef);
+    constructor(...args: unknown[]);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkCell, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkCell, "cdk-cell, td[cdk-cell]", never, {}, {}, never, never, true, never>;
 }
@@ -107,8 +103,9 @@ export declare class CdkCell extends BaseCdkCell {
  * Captures the template of a column's data row cell as well as cell-specific properties.
  */
 export declare class CdkCellDef implements CellDef {
+    /** @docs-private */
     template: TemplateRef<any>;
-    constructor(/** @docs-private */ template: TemplateRef<any>);
+    constructor(...args: unknown[]);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkCellDef, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkCellDef, "[cdkCellDef]", never, {}, {}, never, never, true, never>;
 }
@@ -131,7 +128,7 @@ export declare class CdkCellOutlet implements OnDestroy {
      * construct the cells with the provided context.
      */
     static mostRecentCellOutlet: CdkCellOutlet | null;
-    constructor(_viewContainer: ViewContainerRef);
+    constructor(...args: unknown[]);
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkCellOutlet, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkCellOutlet, "[cdkCellOutlet]", never, {}, {}, never, never, true, never>;
@@ -219,7 +216,7 @@ export declare class CdkColumnDef implements CanStick {
      * @docs-private
      */
     _columnCssClassName: string[];
-    constructor(_table?: any);
+    constructor(...args: unknown[]);
     /** Whether the sticky state has changed. */
     hasStickyChanged(): boolean;
     /** Resets the sticky changed state. */
@@ -239,7 +236,7 @@ export declare class CdkColumnDef implements CanStick {
      * @docs-private
      */
     protected _setNameInput(value: string): void;
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkColumnDef, [{ optional: true; }]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkColumnDef, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkColumnDef, "[cdkColumnDef]", never, { "name": { "alias": "cdkColumnDef"; "required": false; }; "sticky": { "alias": "sticky"; "required": false; }; "stickyEnd": { "alias": "stickyEnd"; "required": false; }; }, {}, ["cell", "headerCell", "footerCell"], never, true, never>;
     static ngAcceptInputType_sticky: unknown;
     static ngAcceptInputType_stickyEnd: unknown;
@@ -247,7 +244,7 @@ export declare class CdkColumnDef implements CanStick {
 
 /** Footer cell template container that adds the right classes and role. */
 export declare class CdkFooterCell extends BaseCdkCell {
-    constructor(columnDef: CdkColumnDef, elementRef: ElementRef);
+    constructor(...args: unknown[]);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkFooterCell, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkFooterCell, "cdk-footer-cell, td[cdk-footer-cell]", never, {}, {}, never, never, true, never>;
 }
@@ -257,8 +254,9 @@ export declare class CdkFooterCell extends BaseCdkCell {
  * Captures the template of a column's footer cell and as well as cell-specific properties.
  */
 export declare class CdkFooterCellDef implements CellDef {
+    /** @docs-private */
     template: TemplateRef<any>;
-    constructor(/** @docs-private */ template: TemplateRef<any>);
+    constructor(...args: unknown[]);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkFooterCellDef, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkFooterCellDef, "[cdkFooterCellDef]", never, {}, {}, never, never, true, never>;
 }
@@ -280,20 +278,20 @@ export declare class CdkFooterRowDef extends BaseRowDef implements CanStick, OnC
     get sticky(): boolean;
     set sticky(value: boolean);
     private _sticky;
-    constructor(template: TemplateRef<any>, _differs: IterableDiffers, _table?: any);
+    constructor(...args: unknown[]);
     ngOnChanges(changes: SimpleChanges): void;
     /** Whether the sticky state has changed. */
     hasStickyChanged(): boolean;
     /** Resets the sticky changed state. */
     resetStickyChanged(): void;
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkFooterRowDef, [null, null, { optional: true; }]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkFooterRowDef, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkFooterRowDef, "[cdkFooterRowDef]", never, { "columns": { "alias": "cdkFooterRowDef"; "required": false; }; "sticky": { "alias": "cdkFooterRowDefSticky"; "required": false; }; }, {}, never, never, true, never>;
     static ngAcceptInputType_sticky: unknown;
 }
 
 /** Header cell template container that adds the right classes and role. */
 export declare class CdkHeaderCell extends BaseCdkCell {
-    constructor(columnDef: CdkColumnDef, elementRef: ElementRef);
+    constructor(...args: unknown[]);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkHeaderCell, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkHeaderCell, "cdk-header-cell, th[cdk-header-cell]", never, {}, {}, never, never, true, never>;
 }
@@ -303,8 +301,9 @@ export declare class CdkHeaderCell extends BaseCdkCell {
  * Captures the template of a column's header cell and as well as cell-specific properties.
  */
 export declare class CdkHeaderCellDef implements CellDef {
+    /** @docs-private */
     template: TemplateRef<any>;
-    constructor(/** @docs-private */ template: TemplateRef<any>);
+    constructor(...args: unknown[]);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkHeaderCellDef, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkHeaderCellDef, "[cdkHeaderCellDef]", never, {}, {}, never, never, true, never>;
 }
@@ -326,13 +325,13 @@ export declare class CdkHeaderRowDef extends BaseRowDef implements CanStick, OnC
     get sticky(): boolean;
     set sticky(value: boolean);
     private _sticky;
-    constructor(template: TemplateRef<any>, _differs: IterableDiffers, _table?: any);
+    constructor(...args: unknown[]);
     ngOnChanges(changes: SimpleChanges): void;
     /** Whether the sticky state has changed. */
     hasStickyChanged(): boolean;
     /** Resets the sticky changed state. */
     resetStickyChanged(): void;
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkHeaderRowDef, [null, null, { optional: true; }]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkHeaderRowDef, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkHeaderRowDef, "[cdkHeaderRowDef]", never, { "columns": { "alias": "cdkHeaderRowDef"; "required": false; }; "sticky": { "alias": "cdkHeaderRowDefSticky"; "required": false; }; }, {}, never, never, true, never>;
     static ngAcceptInputType_sticky: unknown;
 }
@@ -341,7 +340,7 @@ export declare class CdkHeaderRowDef extends BaseRowDef implements CanStick, OnC
 export declare class CdkNoDataRow {
     templateRef: TemplateRef<any>;
     _contentClassName: string;
-    constructor(templateRef: TemplateRef<any>);
+    constructor(...args: unknown[]);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkNoDataRow, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkNoDataRow, "ng-template[cdkNoDataRow]", never, {}, {}, never, never, true, never>;
 }
@@ -375,8 +374,8 @@ export declare class CdkRowDef<T> extends BaseRowDef {
      * For every row, there must be at least one when function that passes or an undefined to default.
      */
     when: (index: number, rowData: T) => boolean;
-    constructor(template: TemplateRef<any>, _differs: IterableDiffers, _table?: any);
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkRowDef<any>, [null, null, { optional: true; }]>;
+    constructor(...args: unknown[]);
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkRowDef<any>, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkRowDef<any>, "[cdkRowDef]", never, { "columns": { "alias": "cdkRowDefColumns"; "required": false; }; "when": { "alias": "cdkRowDefWhen"; "required": false; }; }, {}, never, never, true, never>;
 }
 
@@ -389,16 +388,12 @@ export declare class CdkRowDef<T> extends BaseRowDef {
 export declare class CdkTable<T> implements AfterContentInit, AfterContentChecked, CollectionViewer, OnDestroy, OnInit {
     protected readonly _differs: IterableDiffers;
     protected readonly _changeDetectorRef: ChangeDetectorRef;
-    protected readonly _elementRef: ElementRef;
-    protected readonly _dir: Directionality;
+    protected readonly _elementRef: ElementRef<any>;
+    protected readonly _dir: Directionality | null;
     private _platform;
     protected readonly _viewRepeater: _ViewRepeater<T, RenderRow<T>, RowContext<T>>;
     protected readonly _coalescedStyleScheduler: _CoalescedStyleScheduler;
     private readonly _viewportRuler;
-    /**
-     * @deprecated `_stickyPositioningListener` parameter to become required.
-     * @breaking-change 13.0.0
-     */
     protected readonly _stickyPositioningListener: StickyPositioningListener;
     private _document;
     /** Latest data provided by the data source. */
@@ -607,17 +602,7 @@ export declare class CdkTable<T> implements AfterContentInit, AfterContentChecke
     /** Row definition that will only be rendered if there's no data in the table. */
     _noDataRow: CdkNoDataRow;
     private _injector;
-    constructor(_differs: IterableDiffers, _changeDetectorRef: ChangeDetectorRef, _elementRef: ElementRef, role: string, _dir: Directionality, _document: any, _platform: Platform, _viewRepeater: _ViewRepeater<T, RenderRow<T>, RowContext<T>>, _coalescedStyleScheduler: _CoalescedStyleScheduler, _viewportRuler: ViewportRuler, 
-    /**
-     * @deprecated `_stickyPositioningListener` parameter to become required.
-     * @breaking-change 13.0.0
-     */
-    _stickyPositioningListener: StickyPositioningListener, 
-    /**
-     * @deprecated `_unusedNgZone` parameter to be removed.
-     * @breaking-change 19.0.0
-     */
-    _unusedNgZone?: NgZone);
+    constructor(...args: unknown[]);
     ngOnInit(): void;
     ngAfterContentInit(): void;
     ngAfterContentChecked(): void;
@@ -769,7 +754,7 @@ export declare class CdkTable<T> implements AfterContentInit, AfterContentChecke
     private _getOwnDefs;
     /** Creates or removes the no data row, depending on whether any data is being shown. */
     private _updateNoDataRow;
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkTable<any>, [null, null, null, { attribute: "role"; }, { optional: true; }, null, null, null, null, null, { optional: true; skipSelf: true; }, { optional: true; }]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkTable<any>, never>;
     static ɵcmp: i0.ɵɵComponentDeclaration<CdkTable<any>, "cdk-table, table[cdk-table]", ["cdkTable"], { "trackBy": { "alias": "trackBy"; "required": false; }; "dataSource": { "alias": "dataSource"; "required": false; }; "multiTemplateDataRows": { "alias": "multiTemplateDataRows"; "required": false; }; "fixedLayout": { "alias": "fixedLayout"; "required": false; }; }, { "contentChanged": "contentChanged"; }, ["_noDataRow", "_contentColumnDefs", "_contentRowDefs", "_contentHeaderRowDefs", "_contentFooterRowDefs"], ["caption", "colgroup, col", "*"], true, never>;
     static ngAcceptInputType_multiTemplateDataRows: unknown;
     static ngAcceptInputType_fixedLayout: unknown;
@@ -832,7 +817,7 @@ export declare class CdkTextColumn<T> implements OnDestroy, OnInit {
      * @docs-private
      */
     headerCell: CdkHeaderCellDef;
-    constructor(_table: CdkTable<T>, _options: TextColumnOptions<T>);
+    constructor(...args: unknown[]);
     ngOnInit(): void;
     ngOnDestroy(): void;
     /**
@@ -842,7 +827,7 @@ export declare class CdkTextColumn<T> implements OnDestroy, OnInit {
     _createDefaultHeaderText(): string;
     /** Synchronizes the column definition name with the text column name. */
     private _syncColumnDefName;
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkTextColumn<any>, [{ optional: true; }, { optional: true; }]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkTextColumn<any>, never>;
     static ɵcmp: i0.ɵɵComponentDeclaration<CdkTextColumn<any>, "cdk-text-column", never, { "name": { "alias": "name"; "required": false; }; "headerText": { "alias": "headerText"; "required": false; }; "dataAccessor": { "alias": "dataAccessor"; "required": false; }; "justify": { "alias": "justify"; "required": false; }; }, {}, never, never, true, never>;
 }
 
@@ -864,7 +849,7 @@ export declare const _COALESCED_STYLE_SCHEDULER: InjectionToken<_CoalescedStyleS
 export declare class _CoalescedStyleScheduler {
     private _currentSchedule;
     private _ngZone;
-    constructor(_unusedNgZone?: NgZone);
+    constructor(...args: unknown[]);
     /**
      * Schedules the specified task to run at the end of the current VM turn.
      */
@@ -889,8 +874,8 @@ export declare type Constructor<T> = new (...args: any[]) => T;
  */
 export declare class DataRowOutlet implements RowOutlet {
     viewContainer: ViewContainerRef;
-    elementRef: ElementRef;
-    constructor(viewContainer: ViewContainerRef, elementRef: ElementRef);
+    elementRef: ElementRef<any>;
+    constructor(...args: unknown[]);
     static ɵfac: i0.ɵɵFactoryDeclaration<DataRowOutlet, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<DataRowOutlet, "[rowOutlet]", never, {}, {}, never, never, true, never>;
 }
@@ -903,8 +888,8 @@ export { DataSource }
  */
 export declare class FooterRowOutlet implements RowOutlet {
     viewContainer: ViewContainerRef;
-    elementRef: ElementRef;
-    constructor(viewContainer: ViewContainerRef, elementRef: ElementRef);
+    elementRef: ElementRef<any>;
+    constructor(...args: unknown[]);
     static ɵfac: i0.ɵɵFactoryDeclaration<FooterRowOutlet, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<FooterRowOutlet, "[footerRowOutlet]", never, {}, {}, never, never, true, never>;
 }
@@ -915,8 +900,8 @@ export declare class FooterRowOutlet implements RowOutlet {
  */
 export declare class HeaderRowOutlet implements RowOutlet {
     viewContainer: ViewContainerRef;
-    elementRef: ElementRef;
-    constructor(viewContainer: ViewContainerRef, elementRef: ElementRef);
+    elementRef: ElementRef<any>;
+    constructor(...args: unknown[]);
     static ɵfac: i0.ɵɵFactoryDeclaration<HeaderRowOutlet, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<HeaderRowOutlet, "[headerRowOutlet]", never, {}, {}, never, never, true, never>;
 }
@@ -991,8 +976,8 @@ export declare function mixinHasStickyInput<T extends Constructor<{}>>(base: T):
  */
 export declare class NoDataRowOutlet implements RowOutlet {
     viewContainer: ViewContainerRef;
-    elementRef: ElementRef;
-    constructor(viewContainer: ViewContainerRef, elementRef: ElementRef);
+    elementRef: ElementRef<any>;
+    constructor(...args: unknown[]);
     static ɵfac: i0.ɵɵFactoryDeclaration<NoDataRowOutlet, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<NoDataRowOutlet, "[noDataRowOutlet]", never, {}, {}, never, never, true, never>;
 }

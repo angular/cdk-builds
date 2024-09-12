@@ -1,7 +1,5 @@
 import { AfterViewInit } from '@angular/core';
-import { ChangeDetectorRef } from '@angular/core';
 import { Direction } from '@angular/cdk/bidi';
-import { Directionality } from '@angular/cdk/bidi';
 import { ElementRef } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import * as i0 from '@angular/core';
@@ -12,7 +10,6 @@ import { NumberInput } from '@angular/cdk/coercion';
 import { Observable } from 'rxjs';
 import { OnChanges } from '@angular/core';
 import { OnDestroy } from '@angular/core';
-import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import { SimpleChanges } from '@angular/core';
 import { Subject } from 'rxjs';
 import { TemplateRef } from '@angular/core';
@@ -70,16 +67,14 @@ export declare const CDK_DROP_LIST_GROUP: InjectionToken<CdkDropListGroup<unknow
 
 /** Element that can be moved inside a CdkDropList container. */
 export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDestroy {
-    /** Element that the draggable is attached to. */
     element: ElementRef<HTMLElement>;
-    /** Droppable container that the draggable is a part of. */
-    dropContainer: CdkDropList;
+    dropContainer: CdkDropList<any>;
     private _ngZone;
     private _viewContainerRef;
     private _dir;
     private _changeDetectorRef;
-    private _selfHandle?;
-    private _parentDrag?;
+    private _selfHandle;
+    private _parentDrag;
     private readonly _destroyed;
     private static _dragInstances;
     private _handles;
@@ -164,16 +159,7 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
      */
     readonly moved: Observable<CdkDragMove<T>>;
     private _injector;
-    constructor(
-    /** Element that the draggable is attached to. */
-    element: ElementRef<HTMLElement>, 
-    /** Droppable container that the draggable is a part of. */
-    dropContainer: CdkDropList, 
-    /**
-     * @deprecated `_document` parameter no longer being used and will be removed.
-     * @breaking-change 12.0.0
-     */
-    _document: any, _ngZone: NgZone, _viewContainerRef: ViewContainerRef, config: DragDropConfig, _dir: Directionality, dragDrop: DragDrop, _changeDetectorRef: ChangeDetectorRef, _selfHandle?: CdkDragHandle | undefined, _parentDrag?: CdkDrag | undefined);
+    constructor(...args: unknown[]);
     /**
      * Returns the element that is being used as a placeholder
      * while the current element is being dragged.
@@ -213,7 +199,7 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     private _assignDefaults;
     /** Sets up the listener that syncs the handles with the drag ref. */
     private _setupHandlesListener;
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkDrag<any>, [null, { optional: true; skipSelf: true; }, null, null, null, { optional: true; }, { optional: true; }, null, null, { optional: true; self: true; }, { optional: true; skipSelf: true; }]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkDrag<any>, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDrag<any>, "[cdkDrag]", ["cdkDrag"], { "data": { "alias": "cdkDragData"; "required": false; }; "lockAxis": { "alias": "cdkDragLockAxis"; "required": false; }; "rootElementSelector": { "alias": "cdkDragRootElement"; "required": false; }; "boundaryElement": { "alias": "cdkDragBoundary"; "required": false; }; "dragStartDelay": { "alias": "cdkDragStartDelay"; "required": false; }; "freeDragPosition": { "alias": "cdkDragFreeDragPosition"; "required": false; }; "disabled": { "alias": "cdkDragDisabled"; "required": false; }; "constrainPosition": { "alias": "cdkDragConstrainPosition"; "required": false; }; "previewClass": { "alias": "cdkDragPreviewClass"; "required": false; }; "previewContainer": { "alias": "cdkDragPreviewContainer"; "required": false; }; "scale": { "alias": "cdkDragScale"; "required": false; }; }, { "started": "cdkDragStarted"; "released": "cdkDragReleased"; "ended": "cdkDragEnded"; "entered": "cdkDragEntered"; "exited": "cdkDragExited"; "dropped": "cdkDragDropped"; "moved": "cdkDragMoved"; }, never, never, true, never>;
     static ngAcceptInputType_disabled: unknown;
     static ngAcceptInputType_scale: unknown;
@@ -289,16 +275,16 @@ export declare interface CdkDragExit<T = any, I = T> {
 /** Handle that can be used to drag a CdkDrag instance. */
 export declare class CdkDragHandle implements OnDestroy {
     element: ElementRef<HTMLElement>;
-    private _parentDrag?;
+    private _parentDrag;
     /** Emits when the state of the handle has changed. */
     readonly _stateChanges: Subject<CdkDragHandle>;
     /** Whether starting to drag through this handle is disabled. */
     get disabled(): boolean;
     set disabled(value: boolean);
     private _disabled;
-    constructor(element: ElementRef<HTMLElement>, _parentDrag?: CdkDrag | undefined);
+    constructor(...args: unknown[]);
     ngOnDestroy(): void;
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkDragHandle, [null, { optional: true; skipSelf: true; }]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkDragHandle, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDragHandle, "[cdkDragHandle]", never, { "disabled": { "alias": "cdkDragHandleDisabled"; "required": false; }; }, {}, never, never, true, never>;
     static ngAcceptInputType_disabled: unknown;
 }
@@ -340,7 +326,7 @@ export declare class CdkDragPlaceholder<T = any> implements OnDestroy {
     private _drag;
     /** Context data to be added to the placeholder template instance. */
     data: T;
-    constructor(templateRef: TemplateRef<T>);
+    constructor(...args: unknown[]);
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkDragPlaceholder<any>, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDragPlaceholder<any>, "ng-template[cdkDragPlaceholder]", never, { "data": { "alias": "data"; "required": false; }; }, {}, never, never, true, never>;
@@ -357,7 +343,7 @@ export declare class CdkDragPreview<T = any> implements OnDestroy {
     data: T;
     /** Whether the preview should preserve the same size as the item that is being dragged. */
     matchSize: boolean;
-    constructor(templateRef: TemplateRef<T>);
+    constructor(...args: unknown[]);
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkDragPreview<any>, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDragPreview<any>, "ng-template[cdkDragPreview]", never, { "data": { "alias": "data"; "required": false; }; "matchSize": { "alias": "matchSize"; "required": false; }; }, {}, never, never, true, never>;
@@ -394,12 +380,11 @@ export declare interface CdkDragStart<T = any> {
 
 /** Container that wraps a set of draggable items. */
 export declare class CdkDropList<T = any> implements OnDestroy {
-    /** Element that the drop list is attached to. */
     element: ElementRef<HTMLElement>;
     private _changeDetectorRef;
     private _scrollDispatcher;
-    private _dir?;
-    private _group?;
+    private _dir;
+    private _group;
     /** Emits when the list has been destroyed. */
     private readonly _destroyed;
     /** Whether the element's scrollable parents have been resolved. */
@@ -478,9 +463,7 @@ export declare class CdkDropList<T = any> implements OnDestroy {
      * and then we sort them based on their position in the DOM.
      */
     private _unsortedItems;
-    constructor(
-    /** Element that the drop list is attached to. */
-    element: ElementRef<HTMLElement>, dragDrop: DragDrop, _changeDetectorRef: ChangeDetectorRef, _scrollDispatcher: ScrollDispatcher, _dir?: Directionality | undefined, _group?: CdkDropListGroup<CdkDropList> | undefined, config?: DragDropConfig);
+    constructor(...args: unknown[]);
     /** Registers an items with the drop list. */
     addItem(item: CdkDrag): void;
     /** Removes an item from the drop list. */
@@ -496,7 +479,7 @@ export declare class CdkDropList<T = any> implements OnDestroy {
     private _assignDefaults;
     /** Syncs up the registered drag items with underlying drop list ref. */
     private _syncItemsWithRef;
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkDropList<any>, [null, null, null, null, { optional: true; }, { optional: true; skipSelf: true; }, { optional: true; }]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkDropList<any>, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDropList<any>, "[cdkDropList], cdk-drop-list", ["cdkDropList"], { "connectedTo": { "alias": "cdkDropListConnectedTo"; "required": false; }; "data": { "alias": "cdkDropListData"; "required": false; }; "orientation": { "alias": "cdkDropListOrientation"; "required": false; }; "id": { "alias": "id"; "required": false; }; "lockAxis": { "alias": "cdkDropListLockAxis"; "required": false; }; "disabled": { "alias": "cdkDropListDisabled"; "required": false; }; "sortingDisabled": { "alias": "cdkDropListSortingDisabled"; "required": false; }; "enterPredicate": { "alias": "cdkDropListEnterPredicate"; "required": false; }; "sortPredicate": { "alias": "cdkDropListSortPredicate"; "required": false; }; "autoScrollDisabled": { "alias": "cdkDropListAutoScrollDisabled"; "required": false; }; "autoScrollStep": { "alias": "cdkDropListAutoScrollStep"; "required": false; }; "elementContainerSelector": { "alias": "cdkDropListElementContainer"; "required": false; }; }, { "dropped": "cdkDropListDropped"; "entered": "cdkDropListEntered"; "exited": "cdkDropListExited"; "sorted": "cdkDropListSorted"; }, never, never, true, never>;
     static ngAcceptInputType_disabled: unknown;
     static ngAcceptInputType_sortingDisabled: unknown;
@@ -545,7 +528,7 @@ export declare class DragDrop {
     private _ngZone;
     private _viewportRuler;
     private _dragDropRegistry;
-    constructor(_document: any, _ngZone: NgZone, _viewportRuler: ViewportRuler, _dragDropRegistry: DragDropRegistry);
+    constructor(...args: unknown[]);
     /**
      * Turns an element into a draggable item.
      * @param element Element to which to attach the dragging functionality.
@@ -624,7 +607,7 @@ export declare class DragDropRegistry<_ = unknown, __ = unknown> implements OnDe
      * @breaking-change 13.0.0
      */
     readonly scroll: Subject<Event>;
-    constructor(_ngZone: NgZone, _document: any);
+    constructor(...args: unknown[]);
     /** Adds a drop container to the registry. */
     registerDropContainer(drop: DropListRef): void;
     /** Adds a drag item instance to the registry. */

@@ -1,9 +1,9 @@
 import * as i0 from '@angular/core';
-import { NgModule, CSP_NONCE, Injectable, Optional, Inject } from '@angular/core';
+import { NgModule, inject, CSP_NONCE, Injectable, NgZone } from '@angular/core';
 import { coerceArray } from '@angular/cdk/coercion';
 import { Subject, combineLatest, concat, Observable } from 'rxjs';
 import { take, skip, debounceTime, map, startWith, takeUntil } from 'rxjs/operators';
-import * as i1 from '@angular/cdk/platform';
+import { Platform } from '@angular/cdk/platform';
 
 class LayoutModule {
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: LayoutModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule }); }
@@ -21,9 +21,9 @@ const mediaQueriesForWebkitCompatibility = new Set();
 let mediaQueryStyleNode;
 /** A utility for calling matchMedia queries. */
 class MediaMatcher {
-    constructor(_platform, _nonce) {
-        this._platform = _platform;
-        this._nonce = _nonce;
+    constructor() {
+        this._platform = inject(Platform);
+        this._nonce = inject(CSP_NONCE, { optional: true });
         this._matchMedia =
             this._platform.isBrowser && window.matchMedia
                 ? // matchMedia is bound to the window scope intentionally as it is an illegal invocation to
@@ -43,18 +43,13 @@ class MediaMatcher {
         }
         return this._matchMedia(query);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: MediaMatcher, deps: [{ token: i1.Platform }, { token: CSP_NONCE, optional: true }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: MediaMatcher, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
     static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: MediaMatcher, providedIn: 'root' }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: MediaMatcher, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
-        }], ctorParameters: () => [{ type: i1.Platform }, { type: undefined, decorators: [{
-                    type: Optional
-                }, {
-                    type: Inject,
-                    args: [CSP_NONCE]
-                }] }] });
+        }], ctorParameters: () => [] });
 /**
  * Creates an empty stylesheet that is used to work around browser inconsistencies related to
  * `matchMedia`. At the time of writing, it handles the following cases:
@@ -98,11 +93,11 @@ function noopMatchMedia(query) {
     };
 }
 
-/** Utility for checking the matching state of @media queries. */
+/** Utility for checking the matching state of `@media` queries. */
 class BreakpointObserver {
-    constructor(_mediaMatcher, _zone) {
-        this._mediaMatcher = _mediaMatcher;
-        this._zone = _zone;
+    constructor() {
+        this._mediaMatcher = inject(MediaMatcher);
+        this._zone = inject(NgZone);
         /**  A map of all media queries currently being listened for. */
         this._queries = new Map();
         /** A subject for all other observables to takeUntil based on. */
@@ -171,13 +166,13 @@ class BreakpointObserver {
         this._queries.set(query, output);
         return output;
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: BreakpointObserver, deps: [{ token: MediaMatcher }, { token: i0.NgZone }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: BreakpointObserver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
     static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: BreakpointObserver, providedIn: 'root' }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: BreakpointObserver, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
-        }], ctorParameters: () => [{ type: MediaMatcher }, { type: i0.NgZone }] });
+        }], ctorParameters: () => [] });
 /**
  * Split each query string into separate query strings if two queries are provided as comma
  * separated.

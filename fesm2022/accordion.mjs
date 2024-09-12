@@ -1,6 +1,6 @@
 import * as i0 from '@angular/core';
-import { InjectionToken, booleanAttribute, Directive, Input, EventEmitter, Optional, Inject, SkipSelf, Output, NgModule } from '@angular/core';
-import * as i1 from '@angular/cdk/collections';
+import { InjectionToken, booleanAttribute, Directive, Input, inject, ChangeDetectorRef, EventEmitter, Output, NgModule } from '@angular/core';
+import { UniqueSelectionDispatcher } from '@angular/cdk/collections';
 import { Subject, Subscription } from 'rxjs';
 
 /** Used to generate unique ID for each accordion. */
@@ -91,10 +91,10 @@ class CdkAccordionItem {
             this._changeDetectorRef.markForCheck();
         }
     }
-    constructor(accordion, _changeDetectorRef, _expansionDispatcher) {
-        this.accordion = accordion;
-        this._changeDetectorRef = _changeDetectorRef;
-        this._expansionDispatcher = _expansionDispatcher;
+    constructor() {
+        this.accordion = inject(CDK_ACCORDION, { optional: true, skipSelf: true });
+        this._changeDetectorRef = inject(ChangeDetectorRef);
+        this._expansionDispatcher = inject(UniqueSelectionDispatcher);
         /** Subscription to openAll/closeAll events. */
         this._openCloseAllSubscription = Subscription.EMPTY;
         /** Event emitted every time the AccordionItem is closed. */
@@ -116,7 +116,9 @@ class CdkAccordionItem {
         this.disabled = false;
         /** Unregister function for _expansionDispatcher. */
         this._removeUniqueSelectionListener = () => { };
-        this._removeUniqueSelectionListener = _expansionDispatcher.listen((id, accordionId) => {
+    }
+    ngOnInit() {
+        this._removeUniqueSelectionListener = this._expansionDispatcher.listen((id, accordionId) => {
             if (this.accordion &&
                 !this.accordion.multi &&
                 this.accordion.id === accordionId &&
@@ -164,7 +166,7 @@ class CdkAccordionItem {
             }
         });
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkAccordionItem, deps: [{ token: CDK_ACCORDION, optional: true, skipSelf: true }, { token: i0.ChangeDetectorRef }, { token: i1.UniqueSelectionDispatcher }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkAccordionItem, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "19.0.0-next.3", type: CdkAccordionItem, isStandalone: true, selector: "cdk-accordion-item, [cdkAccordionItem]", inputs: { expanded: ["expanded", "expanded", booleanAttribute], disabled: ["disabled", "disabled", booleanAttribute] }, outputs: { closed: "closed", opened: "opened", destroyed: "destroyed", expandedChange: "expandedChange" }, providers: [
             // Provide `CDK_ACCORDION` as undefined to prevent nested accordion items from
             // registering to the same accordion.
@@ -183,14 +185,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     ],
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: CdkAccordion, decorators: [{
-                    type: Optional
-                }, {
-                    type: Inject,
-                    args: [CDK_ACCORDION]
-                }, {
-                    type: SkipSelf
-                }] }, { type: i0.ChangeDetectorRef }, { type: i1.UniqueSelectionDispatcher }], propDecorators: { closed: [{
+        }], ctorParameters: () => [], propDecorators: { closed: [{
                 type: Output
             }], opened: [{
                 type: Output

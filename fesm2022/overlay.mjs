@@ -1,16 +1,12 @@
-import * as i1 from '@angular/cdk/scrolling';
-import { ScrollingModule } from '@angular/cdk/scrolling';
+import { ScrollDispatcher, ViewportRuler, ScrollingModule } from '@angular/cdk/scrolling';
 export { CdkScrollable, ScrollDispatcher, ViewportRuler } from '@angular/cdk/scrolling';
-import * as i6 from '@angular/common';
-import { DOCUMENT } from '@angular/common';
+import { DOCUMENT, Location } from '@angular/common';
 import * as i0 from '@angular/core';
-import { Injectable, Inject, Optional, Component, ChangeDetectionStrategy, ViewEncapsulation, inject, untracked, afterRender, afterNextRender, ElementRef, EnvironmentInjector, ApplicationRef, ANIMATION_MODULE_TYPE, InjectionToken, Directive, NgZone, EventEmitter, booleanAttribute, Input, Output, NgModule } from '@angular/core';
+import { inject, NgZone, Injectable, Component, ChangeDetectionStrategy, ViewEncapsulation, untracked, afterRender, afterNextRender, ElementRef, ComponentFactoryResolver, Injector, ANIMATION_MODULE_TYPE, EnvironmentInjector, ApplicationRef, InjectionToken, Directive, EventEmitter, TemplateRef, ViewContainerRef, booleanAttribute, Input, Output, NgModule } from '@angular/core';
 import { coerceCssPixelValue, coerceArray } from '@angular/cdk/coercion';
-import * as i1$1 from '@angular/cdk/platform';
-import { supportsScrollBehavior, _getEventTarget, _isTestEnvironment } from '@angular/cdk/platform';
+import { supportsScrollBehavior, Platform, _getEventTarget, _isTestEnvironment } from '@angular/cdk/platform';
 import { filter, takeUntil, takeWhile } from 'rxjs/operators';
-import * as i5 from '@angular/cdk/bidi';
-import { BidiModule } from '@angular/cdk/bidi';
+import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { DomPortalOutlet, TemplatePortal, PortalModule } from '@angular/cdk/portal';
 import { _CdkPrivateStyleLoader } from '@angular/cdk/private';
 import { Subject, Subscription, merge } from 'rxjs';
@@ -259,10 +255,11 @@ class RepositionScrollStrategy {
  * behaviors. This class primarily acts as a factory for ScrollStrategy instances.
  */
 class ScrollStrategyOptions {
-    constructor(_scrollDispatcher, _viewportRuler, _ngZone, document) {
-        this._scrollDispatcher = _scrollDispatcher;
-        this._viewportRuler = _viewportRuler;
-        this._ngZone = _ngZone;
+    constructor() {
+        this._scrollDispatcher = inject(ScrollDispatcher);
+        this._viewportRuler = inject(ViewportRuler);
+        this._ngZone = inject(NgZone);
+        this._document = inject(DOCUMENT);
         /** Do nothing on scroll. */
         this.noop = () => new NoopScrollStrategy();
         /**
@@ -278,18 +275,14 @@ class ScrollStrategyOptions {
          * Allows debouncing the reposition calls.
          */
         this.reposition = (config) => new RepositionScrollStrategy(this._scrollDispatcher, this._viewportRuler, this._ngZone, config);
-        this._document = document;
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: ScrollStrategyOptions, deps: [{ token: i1.ScrollDispatcher }, { token: i1.ViewportRuler }, { token: i0.NgZone }, { token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: ScrollStrategyOptions, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
     static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: ScrollStrategyOptions, providedIn: 'root' }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: ScrollStrategyOptions, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
-        }], ctorParameters: () => [{ type: i1.ScrollDispatcher }, { type: i1.ViewportRuler }, { type: i0.NgZone }, { type: undefined, decorators: [{
-                    type: Inject,
-                    args: [DOCUMENT]
-                }] }] });
+        }], ctorParameters: () => [] });
 
 /** Initial configuration used when creating an overlay. */
 class OverlayConfig {
@@ -415,10 +408,10 @@ function validateHorizontalPosition(property, value) {
  * on event target and order of overlay opens.
  */
 class BaseOverlayDispatcher {
-    constructor(document) {
+    constructor() {
         /** Currently attached overlays in the order they were attached. */
         this._attachedOverlays = [];
-        this._document = document;
+        this._document = inject(DOCUMENT);
     }
     ngOnDestroy() {
         this.detach();
@@ -440,16 +433,13 @@ class BaseOverlayDispatcher {
             this.detach();
         }
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: BaseOverlayDispatcher, deps: [{ token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: BaseOverlayDispatcher, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
     static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: BaseOverlayDispatcher, providedIn: 'root' }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: BaseOverlayDispatcher, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
-        }], ctorParameters: () => [{ type: undefined, decorators: [{
-                    type: Inject,
-                    args: [DOCUMENT]
-                }] }] });
+        }], ctorParameters: () => [] });
 
 /**
  * Service for dispatching keyboard events that land on the body to appropriate overlay ref,
@@ -457,11 +447,9 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
  * on event target and order of overlay opens.
  */
 class OverlayKeyboardDispatcher extends BaseOverlayDispatcher {
-    constructor(document, 
-    /** @breaking-change 14.0.0 _ngZone will be required. */
-    _ngZone) {
-        super(document);
-        this._ngZone = _ngZone;
+    constructor() {
+        super(...arguments);
+        this._ngZone = inject(NgZone, { optional: true });
         /** Keyboard event listener that will be attached to the body. */
         this._keydownListener = (event) => {
             const overlays = this._attachedOverlays;
@@ -508,18 +496,13 @@ class OverlayKeyboardDispatcher extends BaseOverlayDispatcher {
             this._isAttached = false;
         }
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: OverlayKeyboardDispatcher, deps: [{ token: DOCUMENT }, { token: i0.NgZone, optional: true }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: OverlayKeyboardDispatcher, deps: null, target: i0.ɵɵFactoryTarget.Injectable }); }
     static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: OverlayKeyboardDispatcher, providedIn: 'root' }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: OverlayKeyboardDispatcher, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
-        }], ctorParameters: () => [{ type: undefined, decorators: [{
-                    type: Inject,
-                    args: [DOCUMENT]
-                }] }, { type: i0.NgZone, decorators: [{
-                    type: Optional
-                }] }] });
+        }] });
 
 /**
  * Service for dispatching mouse click events that land on the body to appropriate overlay ref,
@@ -527,12 +510,10 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
  * on event target and order of overlay opens.
  */
 class OverlayOutsideClickDispatcher extends BaseOverlayDispatcher {
-    constructor(document, _platform, 
-    /** @breaking-change 14.0.0 _ngZone will be required. */
-    _ngZone) {
-        super(document);
-        this._platform = _platform;
-        this._ngZone = _ngZone;
+    constructor() {
+        super(...arguments);
+        this._platform = inject(Platform);
+        this._ngZone = inject(NgZone, { optional: true });
         this._cursorStyleIsSet = false;
         /** Store pointerdown event target to track origin of click. */
         this._pointerDownListener = (event) => {
@@ -633,18 +614,13 @@ class OverlayOutsideClickDispatcher extends BaseOverlayDispatcher {
         body.addEventListener('auxclick', this._clickListener, true);
         body.addEventListener('contextmenu', this._clickListener, true);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: OverlayOutsideClickDispatcher, deps: [{ token: DOCUMENT }, { token: i1$1.Platform }, { token: i0.NgZone, optional: true }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: OverlayOutsideClickDispatcher, deps: null, target: i0.ɵɵFactoryTarget.Injectable }); }
     static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: OverlayOutsideClickDispatcher, providedIn: 'root' }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: OverlayOutsideClickDispatcher, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
-        }], ctorParameters: () => [{ type: undefined, decorators: [{
-                    type: Inject,
-                    args: [DOCUMENT]
-                }] }, { type: i1$1.Platform }, { type: i0.NgZone, decorators: [{
-                    type: Optional
-                }] }] });
+        }] });
 /** Version of `Element.contains` that transcends shadow DOM boundaries. */
 function containsPierceShadowDom(parent, child) {
     const supportsShadowRoot = typeof ShadowRoot !== 'undefined' && ShadowRoot;
@@ -669,10 +645,10 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
         }] });
 /** Container inside which all overlays will render. */
 class OverlayContainer {
-    constructor(document, _platform) {
-        this._platform = _platform;
+    constructor() {
+        this._platform = inject(Platform);
+        this._document = inject(DOCUMENT);
         this._styleLoader = inject(_CdkPrivateStyleLoader);
-        this._document = document;
     }
     ngOnDestroy() {
         this._containerElement?.remove();
@@ -731,16 +707,13 @@ class OverlayContainer {
     _loadStyles() {
         this._styleLoader.load(_CdkOverlayStyleLoader);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: OverlayContainer, deps: [{ token: DOCUMENT }, { token: i1$1.Platform }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: OverlayContainer, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
     static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: OverlayContainer, providedIn: 'root' }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: OverlayContainer, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
-        }], ctorParameters: () => [{ type: undefined, decorators: [{
-                    type: Inject,
-                    args: [DOCUMENT]
-                }] }, { type: i1$1.Platform }] });
+        }], ctorParameters: () => [] });
 
 /**
  * Reference to an overlay that has been created with the Overlay service.
@@ -2395,11 +2368,11 @@ class GlobalPositionStrategy {
 
 /** Builder for overlay position strategy. */
 class OverlayPositionBuilder {
-    constructor(_viewportRuler, _document, _platform, _overlayContainer) {
-        this._viewportRuler = _viewportRuler;
-        this._document = _document;
-        this._platform = _platform;
-        this._overlayContainer = _overlayContainer;
+    constructor() {
+        this._viewportRuler = inject(ViewportRuler);
+        this._document = inject(DOCUMENT);
+        this._platform = inject(Platform);
+        this._overlayContainer = inject(OverlayContainer);
     }
     /**
      * Creates a global position strategy.
@@ -2414,16 +2387,13 @@ class OverlayPositionBuilder {
     flexibleConnectedTo(origin) {
         return new FlexibleConnectedPositionStrategy(origin, this._viewportRuler, this._document, this._platform, this._overlayContainer);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: OverlayPositionBuilder, deps: [{ token: i1.ViewportRuler }, { token: DOCUMENT }, { token: i1$1.Platform }, { token: OverlayContainer }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: OverlayPositionBuilder, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
     static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: OverlayPositionBuilder, providedIn: 'root' }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: OverlayPositionBuilder, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
-        }], ctorParameters: () => [{ type: i1.ViewportRuler }, { type: undefined, decorators: [{
-                    type: Inject,
-                    args: [DOCUMENT]
-                }] }, { type: i1$1.Platform }, { type: OverlayContainer }] });
+        }], ctorParameters: () => [] });
 
 /** Next overlay unique ID. */
 let nextUniqueId = 0;
@@ -2438,21 +2408,19 @@ let nextUniqueId = 0;
  * An overlay *is* a PortalOutlet, so any kind of Portal can be loaded into one.
  */
 class Overlay {
-    constructor(
-    /** Scrolling strategies that can be used when creating an overlay. */
-    scrollStrategies, _overlayContainer, _componentFactoryResolver, _positionBuilder, _keyboardDispatcher, _injector, _ngZone, _document, _directionality, _location, _outsideClickDispatcher, _animationsModuleType) {
-        this.scrollStrategies = scrollStrategies;
-        this._overlayContainer = _overlayContainer;
-        this._componentFactoryResolver = _componentFactoryResolver;
-        this._positionBuilder = _positionBuilder;
-        this._keyboardDispatcher = _keyboardDispatcher;
-        this._injector = _injector;
-        this._ngZone = _ngZone;
-        this._document = _document;
-        this._directionality = _directionality;
-        this._location = _location;
-        this._outsideClickDispatcher = _outsideClickDispatcher;
-        this._animationsModuleType = _animationsModuleType;
+    constructor() {
+        this.scrollStrategies = inject(ScrollStrategyOptions);
+        this._overlayContainer = inject(OverlayContainer);
+        this._componentFactoryResolver = inject(ComponentFactoryResolver);
+        this._positionBuilder = inject(OverlayPositionBuilder);
+        this._keyboardDispatcher = inject(OverlayKeyboardDispatcher);
+        this._injector = inject(Injector);
+        this._ngZone = inject(NgZone);
+        this._document = inject(DOCUMENT);
+        this._directionality = inject(Directionality);
+        this._location = inject(Location);
+        this._outsideClickDispatcher = inject(OverlayOutsideClickDispatcher);
+        this._animationsModuleType = inject(ANIMATION_MODULE_TYPE, { optional: true });
         this._styleLoader = inject(_CdkPrivateStyleLoader);
     }
     /**
@@ -2513,21 +2481,13 @@ class Overlay {
         }
         return new DomPortalOutlet(pane, this._componentFactoryResolver, this._appRef, this._injector, this._document);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: Overlay, deps: [{ token: ScrollStrategyOptions }, { token: OverlayContainer }, { token: i0.ComponentFactoryResolver }, { token: OverlayPositionBuilder }, { token: OverlayKeyboardDispatcher }, { token: i0.Injector }, { token: i0.NgZone }, { token: DOCUMENT }, { token: i5.Directionality }, { token: i6.Location }, { token: OverlayOutsideClickDispatcher }, { token: ANIMATION_MODULE_TYPE, optional: true }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: Overlay, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
     static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: Overlay, providedIn: 'root' }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: Overlay, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
-        }], ctorParameters: () => [{ type: ScrollStrategyOptions }, { type: OverlayContainer }, { type: i0.ComponentFactoryResolver }, { type: OverlayPositionBuilder }, { type: OverlayKeyboardDispatcher }, { type: i0.Injector }, { type: i0.NgZone }, { type: undefined, decorators: [{
-                    type: Inject,
-                    args: [DOCUMENT]
-                }] }, { type: i5.Directionality }, { type: i6.Location }, { type: OverlayOutsideClickDispatcher }, { type: undefined, decorators: [{
-                    type: Inject,
-                    args: [ANIMATION_MODULE_TYPE]
-                }, {
-                    type: Optional
-                }] }] });
+        }], ctorParameters: () => [] });
 
 /** Default set of positions for the overlay. Follows the behavior of a dropdown. */
 const defaultPositionList = [
@@ -2569,12 +2529,10 @@ const CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY = new InjectionToken('cdk-connected-
  * ConnectedPositionStrategy.
  */
 class CdkOverlayOrigin {
-    constructor(
-    /** Reference to the element on which the directive is applied. */
-    elementRef) {
-        this.elementRef = elementRef;
+    constructor() {
+        this.elementRef = inject(ElementRef);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkOverlayOrigin, deps: [{ token: i0.ElementRef }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkOverlayOrigin, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.3", type: CdkOverlayOrigin, isStandalone: true, selector: "[cdk-overlay-origin], [overlay-origin], [cdkOverlayOrigin]", exportAs: ["cdkOverlayOrigin"], ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkOverlayOrigin, decorators: [{
@@ -2584,7 +2542,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     exportAs: 'cdkOverlayOrigin',
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: i0.ElementRef }] });
+        }], ctorParameters: () => [] });
 /**
  * Directive to facilitate declarative creation of an
  * Overlay using a FlexibleConnectedPositionStrategy.
@@ -2618,13 +2576,14 @@ class CdkConnectedOverlay {
         this._disposeOnNavigation = value;
     }
     // TODO(jelbourn): inputs for size, scroll behavior, animation, etc.
-    constructor(_overlay, templateRef, viewContainerRef, scrollStrategyFactory, _dir) {
-        this._overlay = _overlay;
-        this._dir = _dir;
+    constructor() {
+        this._overlay = inject(Overlay);
+        this._dir = inject(Directionality, { optional: true });
         this._backdropSubscription = Subscription.EMPTY;
         this._attachSubscription = Subscription.EMPTY;
         this._detachSubscription = Subscription.EMPTY;
         this._positionSubscription = Subscription.EMPTY;
+        this._scrollStrategyFactory = inject(CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY);
         this._disposeOnNavigation = false;
         this._ngZone = inject(NgZone);
         /** Margin between the overlay and the viewport edges. */
@@ -2655,8 +2614,9 @@ class CdkConnectedOverlay {
         this.overlayKeydown = new EventEmitter();
         /** Emits when there are mouse outside click events that are targeted at the overlay. */
         this.overlayOutsideClick = new EventEmitter();
+        const templateRef = inject(TemplateRef);
+        const viewContainerRef = inject(ViewContainerRef);
         this._templatePortal = new TemplatePortal(templateRef, viewContainerRef);
-        this._scrollStrategyFactory = scrollStrategyFactory;
         this.scrollStrategy = this._scrollStrategyFactory();
     }
     /** The associated overlay reference. */
@@ -2721,7 +2681,7 @@ class CdkConnectedOverlay {
         const positionStrategy = (this._position =
             this.positionStrategy || this._createPositionStrategy());
         const overlayConfig = new OverlayConfig({
-            direction: this._dir,
+            direction: this._dir || 'ltr',
             positionStrategy,
             scrollStrategy: this.scrollStrategy,
             hasBackdrop: this.hasBackdrop,
@@ -2836,7 +2796,7 @@ class CdkConnectedOverlay {
         this._backdropSubscription.unsubscribe();
         this._positionSubscription.unsubscribe();
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkConnectedOverlay, deps: [{ token: Overlay }, { token: i0.TemplateRef }, { token: i0.ViewContainerRef }, { token: CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY }, { token: i5.Directionality, optional: true }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkConnectedOverlay, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "19.0.0-next.3", type: CdkConnectedOverlay, isStandalone: true, selector: "[cdk-connected-overlay], [connected-overlay], [cdkConnectedOverlay]", inputs: { origin: ["cdkConnectedOverlayOrigin", "origin"], positions: ["cdkConnectedOverlayPositions", "positions"], positionStrategy: ["cdkConnectedOverlayPositionStrategy", "positionStrategy"], offsetX: ["cdkConnectedOverlayOffsetX", "offsetX"], offsetY: ["cdkConnectedOverlayOffsetY", "offsetY"], width: ["cdkConnectedOverlayWidth", "width"], height: ["cdkConnectedOverlayHeight", "height"], minWidth: ["cdkConnectedOverlayMinWidth", "minWidth"], minHeight: ["cdkConnectedOverlayMinHeight", "minHeight"], backdropClass: ["cdkConnectedOverlayBackdropClass", "backdropClass"], panelClass: ["cdkConnectedOverlayPanelClass", "panelClass"], viewportMargin: ["cdkConnectedOverlayViewportMargin", "viewportMargin"], scrollStrategy: ["cdkConnectedOverlayScrollStrategy", "scrollStrategy"], open: ["cdkConnectedOverlayOpen", "open"], disableClose: ["cdkConnectedOverlayDisableClose", "disableClose"], transformOriginSelector: ["cdkConnectedOverlayTransformOriginOn", "transformOriginSelector"], hasBackdrop: ["cdkConnectedOverlayHasBackdrop", "hasBackdrop", booleanAttribute], lockPosition: ["cdkConnectedOverlayLockPosition", "lockPosition", booleanAttribute], flexibleDimensions: ["cdkConnectedOverlayFlexibleDimensions", "flexibleDimensions", booleanAttribute], growAfterOpen: ["cdkConnectedOverlayGrowAfterOpen", "growAfterOpen", booleanAttribute], push: ["cdkConnectedOverlayPush", "push", booleanAttribute], disposeOnNavigation: ["cdkConnectedOverlayDisposeOnNavigation", "disposeOnNavigation", booleanAttribute] }, outputs: { backdropClick: "backdropClick", positionChange: "positionChange", attach: "attach", detach: "detach", overlayKeydown: "overlayKeydown", overlayOutsideClick: "overlayOutsideClick" }, exportAs: ["cdkConnectedOverlay"], usesOnChanges: true, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkConnectedOverlay, decorators: [{
@@ -2846,12 +2806,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     exportAs: 'cdkConnectedOverlay',
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: Overlay }, { type: i0.TemplateRef }, { type: i0.ViewContainerRef }, { type: undefined, decorators: [{
-                    type: Inject,
-                    args: [CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY]
-                }] }, { type: i5.Directionality, decorators: [{
-                    type: Optional
-                }] }], propDecorators: { origin: [{
+        }], ctorParameters: () => [], propDecorators: { origin: [{
                 type: Input,
                 args: ['cdkConnectedOverlayOrigin']
             }], positions: [{
@@ -2963,8 +2918,8 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
  * Should be provided in the root component.
  */
 class FullscreenOverlayContainer extends OverlayContainer {
-    constructor(_document, platform) {
-        super(_document, platform);
+    constructor() {
+        super();
     }
     ngOnDestroy() {
         super.ngOnDestroy();
@@ -3025,16 +2980,13 @@ class FullscreenOverlayContainer extends OverlayContainer {
             _document.msFullscreenElement ||
             null);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: FullscreenOverlayContainer, deps: [{ token: DOCUMENT }, { token: i1$1.Platform }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: FullscreenOverlayContainer, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
     static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: FullscreenOverlayContainer, providedIn: 'root' }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: FullscreenOverlayContainer, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
-        }], ctorParameters: () => [{ type: undefined, decorators: [{
-                    type: Inject,
-                    args: [DOCUMENT]
-                }] }, { type: i1$1.Platform }] });
+        }], ctorParameters: () => [] });
 
 /**
  * Generated bundle index. Do not edit.

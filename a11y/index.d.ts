@@ -1,6 +1,5 @@
 import { AfterContentInit } from '@angular/core';
 import { AfterViewInit } from '@angular/core';
-import { ContentObserver } from '@angular/cdk/observers';
 import { DoCheck } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { EventEmitter } from '@angular/core';
@@ -12,14 +11,13 @@ import { NgZone } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OnChanges } from '@angular/core';
 import { OnDestroy } from '@angular/core';
-import { Platform } from '@angular/cdk/platform';
 import { QueryList } from '@angular/core';
 import { Signal } from '@angular/core';
 import { SimpleChanges } from '@angular/core';
 import { Subject } from 'rxjs';
 
 export declare class A11yModule {
-    constructor(highContrastModeDetector: HighContrastModeDetector);
+    constructor();
     static ɵfac: i0.ɵɵFactoryDeclaration<A11yModule, never>;
     static ɵmod: i0.ɵɵNgModuleDeclaration<A11yModule, never, [typeof i1.ObserversModule, typeof i2.CdkAriaLive, typeof i3.CdkTrapFocus, typeof i4.CdkMonitorFocus], [typeof i2.CdkAriaLive, typeof i3.CdkTrapFocus, typeof i4.CdkMonitorFocus]>;
     static ɵinj: i0.ɵɵInjectorDeclaration<A11yModule>;
@@ -55,11 +53,7 @@ export declare function addAriaReferencedId(el: Element, attr: `aria-${string}`,
  * content.
  */
 export declare class AriaDescriber implements OnDestroy {
-    /**
-     * @deprecated To be turned into a required parameter.
-     * @breaking-change 14.0.0
-     */
-    private _platform?;
+    private _platform;
     private _document;
     /** Map of all registered message elements that have been placed into the document. */
     private _messageRegistry;
@@ -67,12 +61,7 @@ export declare class AriaDescriber implements OnDestroy {
     private _messagesContainer;
     /** Unique ID for the service. */
     private readonly _id;
-    constructor(_document: any, 
-    /**
-     * @deprecated To be turned into a required parameter.
-     * @breaking-change 14.0.0
-     */
-    _platform?: Platform | undefined);
+    constructor(...args: unknown[]);
     /**
      * Adds to the host element an aria-describedby reference to a hidden element that contains
      * the message. If the same message has already been registered, then it will reuse the created
@@ -154,7 +143,7 @@ export declare class CdkAriaLive implements OnDestroy {
     duration: number;
     private _previousAnnouncedText?;
     private _subscription;
-    constructor(_elementRef: ElementRef, _liveAnnouncer: LiveAnnouncer, _contentObserver: ContentObserver, _ngZone: NgZone);
+    constructor(...args: unknown[]);
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkAriaLive, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkAriaLive, "[cdkAriaLive]", ["cdkAriaLive"], { "politeness": { "alias": "cdkAriaLive"; "required": false; }; "duration": { "alias": "cdkAriaLiveDuration"; "required": false; }; }, {}, never, never, true, never>;
@@ -175,7 +164,7 @@ export declare class CdkMonitorFocus implements AfterViewInit, OnDestroy {
     private _monitorSubscription;
     private _focusOrigin;
     readonly cdkFocusChange: EventEmitter<FocusOrigin>;
-    constructor(_elementRef: ElementRef<HTMLElement>, _focusMonitor: FocusMonitor);
+    constructor(...args: unknown[]);
     get focusOrigin(): FocusOrigin;
     ngAfterViewInit(): void;
     ngOnDestroy(): void;
@@ -199,12 +188,7 @@ export declare class CdkTrapFocus implements OnDestroy, AfterContentInit, OnChan
      * initialization and return focus to the previous activeElement upon destruction.
      */
     autoCapture: boolean;
-    constructor(_elementRef: ElementRef<HTMLElement>, _focusTrapFactory: FocusTrapFactory, 
-    /**
-     * @deprecated No longer being used. To be removed.
-     * @breaking-change 13.0.0
-     */
-    _document: any);
+    constructor(...args: unknown[]);
     ngOnDestroy(): void;
     ngAfterContentInit(): void;
     ngDoCheck(): void;
@@ -256,7 +240,7 @@ export declare class ConfigurableFocusTrapFactory {
     private _document;
     private _inertStrategy;
     private readonly _injector;
-    constructor(_checker: InteractivityChecker, _ngZone: NgZone, _focusTrapManager: FocusTrapManager, _document: any, _inertStrategy?: FocusTrapInertStrategy);
+    constructor(...args: unknown[]);
     /**
      * Creates a focus-trapped region around the given element.
      * @param element The element around which focus will be trapped.
@@ -269,7 +253,7 @@ export declare class ConfigurableFocusTrapFactory {
      * @breaking-change 11.0.0
      */
     create(element: HTMLElement, deferCaptureElements: boolean): ConfigurableFocusTrap;
-    static ɵfac: i0.ɵɵFactoryDeclaration<ConfigurableFocusTrapFactory, [null, null, null, null, { optional: true; }]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<ConfigurableFocusTrapFactory, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<ConfigurableFocusTrapFactory>;
 }
 
@@ -372,12 +356,10 @@ export declare class FocusMonitor implements OnDestroy {
      */
     private _windowFocusListener;
     /** Used to reference correct document/window */
-    protected _document?: Document;
+    protected _document?: Document | null | undefined;
     /** Subject for stopping our InputModalityDetector subscription. */
     private readonly _stopInputModalityDetector;
-    constructor(_ngZone: NgZone, _platform: Platform, _inputModalityDetector: InputModalityDetector, 
-    /** @breaking-change 11.0.0 make document required */
-    document: any | null, options: FocusMonitorOptions | null);
+    constructor(...args: unknown[]);
     /**
      * Event listener for `focus` and 'blur' events on the document.
      * Needs to be an arrow function in order to preserve the context when it gets bound.
@@ -481,7 +463,7 @@ export declare class FocusMonitor implements OnDestroy {
      * @param focusEventTarget Target currently receiving focus.
      */
     private _isLastInteractionFromInputLabel;
-    static ɵfac: i0.ɵɵFactoryDeclaration<FocusMonitor, [null, null, null, { optional: true; }, { optional: true; }]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<FocusMonitor, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<FocusMonitor>;
 }
 
@@ -626,7 +608,7 @@ export declare class FocusTrapFactory {
     private _ngZone;
     private _document;
     private _injector;
-    constructor(_checker: InteractivityChecker, _ngZone: NgZone, _document: any);
+    constructor(...args: unknown[]);
     /**
      * Creates a focus-trapped region around the given element.
      * @param element The element around which focus will be trapped.
@@ -700,7 +682,7 @@ export declare class HighContrastModeDetector implements OnDestroy {
     private _hasCheckedHighContrastMode;
     private _document;
     private _breakpointSubscription;
-    constructor(_platform: Platform, document: any);
+    constructor(...args: unknown[]);
     /** Gets the current high-contrast-mode for the page. */
     getHighContrastMode(): HighContrastMode;
     ngOnDestroy(): void;
@@ -829,9 +811,9 @@ export declare class InputModalityDetector implements OnDestroy {
      * gets bound.
      */
     private _onTouchstart;
-    constructor(_platform: Platform, ngZone: NgZone, document: Document, options?: InputModalityDetectorOptions);
+    constructor(...args: unknown[]);
     ngOnDestroy(): void;
-    static ɵfac: i0.ɵɵFactoryDeclaration<InputModalityDetector, [null, null, null, { optional: true; }]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<InputModalityDetector, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<InputModalityDetector>;
 }
 
@@ -847,7 +829,7 @@ export declare interface InputModalityDetectorOptions {
  */
 export declare class InteractivityChecker {
     private _platform;
-    constructor(_platform: Platform);
+    constructor(...args: unknown[]);
     /**
      * Gets whether an element is disabled.
      *
@@ -1073,13 +1055,13 @@ export declare function LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY(): null;
 
 export declare class LiveAnnouncer implements OnDestroy {
     private _ngZone;
-    private _defaultOptions?;
+    private _defaultOptions;
     private _liveElement;
     private _document;
     private _previousTimeout;
     private _currentPromise;
     private _currentResolve;
-    constructor(elementToken: any, _ngZone: NgZone, _document: any, _defaultOptions?: LiveAnnouncerDefaultOptions | undefined);
+    constructor(...args: unknown[]);
     /**
      * Announces a message to screen readers.
      * @param message Message to be announced to the screen reader.
@@ -1126,7 +1108,7 @@ export declare class LiveAnnouncer implements OnDestroy {
      * pointing the `aria-owns` of all modals to the live announcer element.
      */
     private _exposeAnnouncerToModals;
-    static ɵfac: i0.ɵɵFactoryDeclaration<LiveAnnouncer, [{ optional: true; }, null, null, { optional: true; }]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<LiveAnnouncer, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<LiveAnnouncer>;
 }
 

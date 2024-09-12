@@ -9,7 +9,6 @@ import { Direction } from '@angular/cdk/bidi';
 import { DomPortal } from '@angular/cdk/portal';
 import { ElementRef } from '@angular/core';
 import { EmbeddedViewRef } from '@angular/core';
-import { FocusMonitor } from '@angular/cdk/a11y';
 import { FocusOrigin } from '@angular/cdk/a11y';
 import { FocusTrapFactory } from '@angular/cdk/a11y';
 import * as i0 from '@angular/core';
@@ -18,12 +17,10 @@ import * as i2 from '@angular/cdk/portal';
 import * as i3 from '@angular/cdk/a11y';
 import { InjectionToken } from '@angular/core';
 import { Injector } from '@angular/core';
-import { InteractivityChecker } from '@angular/cdk/a11y';
 import { NgZone } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OnDestroy } from '@angular/core';
 import { Overlay } from '@angular/cdk/overlay';
-import { OverlayContainer } from '@angular/cdk/overlay';
 import { OverlayRef } from '@angular/cdk/overlay';
 import { PositionStrategy } from '@angular/cdk/overlay';
 import { ScrollStrategy } from '@angular/cdk/overlay';
@@ -42,13 +39,13 @@ export declare type AutoFocusTarget = 'dialog' | 'first-tabbable' | 'first-headi
  * @docs-private
  */
 export declare class CdkDialogContainer<C extends DialogConfig = DialogConfig> extends BasePortalOutlet implements OnDestroy {
-    protected _elementRef: ElementRef;
+    protected _elementRef: ElementRef<any>;
     protected _focusTrapFactory: FocusTrapFactory;
     readonly _config: C;
     private _interactivityChecker;
     protected _ngZone: NgZone;
     private _overlayRef;
-    private _focusMonitor?;
+    private _focusMonitor;
     private _platform;
     protected _document: Document;
     /** The portal outlet inside of this container into which the dialog content will be loaded. */
@@ -73,7 +70,7 @@ export declare class CdkDialogContainer<C extends DialogConfig = DialogConfig> e
     protected readonly _changeDetectorRef: ChangeDetectorRef;
     private _injector;
     private _isDestroyed;
-    constructor(_elementRef: ElementRef, _focusTrapFactory: FocusTrapFactory, _document: any, _config: C, _interactivityChecker: InteractivityChecker, _ngZone: NgZone, _overlayRef: OverlayRef, _focusMonitor?: FocusMonitor | undefined);
+    constructor(...args: unknown[]);
     _addAriaLabelledBy(id: string): void;
     _removeAriaLabelledBy(id: string): void;
     protected _contentAttached(): void;
@@ -128,7 +125,7 @@ export declare class CdkDialogContainer<C extends DialogConfig = DialogConfig> e
     private _initializeFocusTrap;
     /** Sets up the listener that handles clicks on the dialog backdrop. */
     private _handleBackdropClicks;
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkDialogContainer<any>, [null, null, { optional: true; }, null, null, null, null, null]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkDialogContainer<any>, never>;
     static ɵcmp: i0.ɵɵComponentDeclaration<CdkDialogContainer<any>, "cdk-dialog-container", never, {}, {}, never, never, true, never>;
 }
 
@@ -155,7 +152,7 @@ export declare class Dialog implements OnDestroy {
      * Will emit on subscribe if there are no open dialogs to begin with.
      */
     readonly afterAllClosed: Observable<void>;
-    constructor(_overlay: Overlay, _injector: Injector, _defaultOptions: DialogConfig, _parentDialog: Dialog, _overlayContainer: OverlayContainer, scrollStrategy: any);
+    constructor(...args: unknown[]);
     /**
      * Opens a modal dialog containing the given component.
      * @param component Type of the component to load into the dialog.
@@ -223,7 +220,7 @@ export declare class Dialog implements OnDestroy {
     /** Hides all of the content that isn't an overlay from assistive technology. */
     private _hideNonDialogContentFromAssistiveTechnology;
     private _getAfterAllClosed;
-    static ɵfac: i0.ɵɵFactoryDeclaration<Dialog, [null, null, { optional: true; }, { optional: true; skipSelf: true; }, null, null]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<Dialog, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<Dialog>;
 }
 

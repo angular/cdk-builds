@@ -1,14 +1,11 @@
 import { coerceNumberProperty, coerceElement } from '@angular/cdk/coercion';
 import * as i0 from '@angular/core';
-import { InjectionToken, forwardRef, Directive, Input, Injectable, Optional, Inject, inject, Injector, afterNextRender, booleanAttribute, Component, ViewEncapsulation, ChangeDetectionStrategy, Output, ViewChild, SkipSelf, ElementRef, NgModule } from '@angular/core';
+import { InjectionToken, forwardRef, Directive, Input, inject, NgZone, Injectable, ElementRef, ChangeDetectorRef, Injector, afterNextRender, booleanAttribute, Optional, Inject, Component, ViewEncapsulation, ChangeDetectionStrategy, Output, ViewChild, ViewContainerRef, TemplateRef, IterableDiffers, NgModule } from '@angular/core';
 import { Subject, of, Observable, fromEvent, animationFrameScheduler, asapScheduler, Subscription, isObservable } from 'rxjs';
 import { distinctUntilChanged, auditTime, filter, takeUntil, startWith, pairwise, switchMap, shareReplay } from 'rxjs/operators';
-import * as i1 from '@angular/cdk/platform';
-import { getRtlScrollAxisType, RtlScrollAxisType, supportsScrollBehavior, Platform } from '@angular/cdk/platform';
+import { Platform, getRtlScrollAxisType, RtlScrollAxisType, supportsScrollBehavior } from '@angular/cdk/platform';
 import { DOCUMENT } from '@angular/common';
-import * as i2 from '@angular/cdk/bidi';
-import { BidiModule } from '@angular/cdk/bidi';
-import * as i2$1 from '@angular/cdk/collections';
+import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { isDataSource, ArrayDataSource, _VIEW_REPEATER_STRATEGY, _RecycleViewRepeaterStrategy } from '@angular/cdk/collections';
 
 /** The injection token used to specify the virtual scrolling strategy. */
@@ -226,9 +223,11 @@ const DEFAULT_SCROLL_TIME = 20;
  * Scrollable references emit a scrolled event.
  */
 class ScrollDispatcher {
-    constructor(_ngZone, _platform, document) {
-        this._ngZone = _ngZone;
-        this._platform = _platform;
+    constructor() {
+        this._ngZone = inject(NgZone);
+        this._platform = inject(Platform);
+        /** Used to reference correct document/window */
+        this._document = inject(DOCUMENT, { optional: true });
         /** Subject for notifying that a registered scrollable reference element has been scrolled. */
         this._scrolled = new Subject();
         /** Keeps track of the global `scroll` and `resize` subscriptions. */
@@ -240,7 +239,6 @@ class ScrollDispatcher {
          * scroll event subscriptions.
          */
         this.scrollContainers = new Map();
-        this._document = document;
     }
     /**
      * Registers a scrollable instance with the service and listens for its scrolled events. When the
@@ -354,18 +352,13 @@ class ScrollDispatcher {
             this._globalSubscription = null;
         }
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: ScrollDispatcher, deps: [{ token: i0.NgZone }, { token: i1.Platform }, { token: DOCUMENT, optional: true }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: ScrollDispatcher, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
     static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: ScrollDispatcher, providedIn: 'root' }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: ScrollDispatcher, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
-        }], ctorParameters: () => [{ type: i0.NgZone }, { type: i1.Platform }, { type: undefined, decorators: [{
-                    type: Optional
-                }, {
-                    type: Inject,
-                    args: [DOCUMENT]
-                }] }] });
+        }], ctorParameters: () => [] });
 
 /**
  * Sends an event when the directive's element is scrolled. Registers itself with the
@@ -373,11 +366,11 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
  * can be listened to through the service.
  */
 class CdkScrollable {
-    constructor(elementRef, scrollDispatcher, ngZone, dir) {
-        this.elementRef = elementRef;
-        this.scrollDispatcher = scrollDispatcher;
-        this.ngZone = ngZone;
-        this.dir = dir;
+    constructor() {
+        this.elementRef = inject(ElementRef);
+        this.scrollDispatcher = inject(ScrollDispatcher);
+        this.ngZone = inject(NgZone);
+        this.dir = inject(Directionality, { optional: true });
         this._destroyed = new Subject();
         this._elementScrolled = new Observable((observer) => this.ngZone.runOutsideAngular(() => fromEvent(this.elementRef.nativeElement, 'scroll')
             .pipe(takeUntil(this._destroyed))
@@ -515,7 +508,7 @@ class CdkScrollable {
             }
         }
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkScrollable, deps: [{ token: i0.ElementRef }, { token: ScrollDispatcher }, { token: i0.NgZone }, { token: i2.Directionality, optional: true }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkScrollable, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.3", type: CdkScrollable, isStandalone: true, selector: "[cdk-scrollable], [cdkScrollable]", ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkScrollable, decorators: [{
@@ -524,9 +517,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     selector: '[cdk-scrollable], [cdkScrollable]',
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: i0.ElementRef }, { type: ScrollDispatcher }, { type: i0.NgZone }, { type: i2.Directionality, decorators: [{
-                    type: Optional
-                }] }] });
+        }], ctorParameters: () => [] });
 
 /** Time in ms to throttle the resize events by default. */
 const DEFAULT_RESIZE_TIME = 20;
@@ -535,17 +526,19 @@ const DEFAULT_RESIZE_TIME = 20;
  * @docs-private
  */
 class ViewportRuler {
-    constructor(_platform, ngZone, document) {
-        this._platform = _platform;
+    constructor() {
+        this._platform = inject(Platform);
         /** Stream of viewport change events. */
         this._change = new Subject();
         /** Event listener that will be used to handle the viewport change events. */
         this._changeListener = (event) => {
             this._change.next(event);
         };
-        this._document = document;
+        /** Used to reference correct document/window */
+        this._document = inject(DOCUMENT, { optional: true });
+        const ngZone = inject(NgZone);
         ngZone.runOutsideAngular(() => {
-            if (_platform.isBrowser) {
+            if (this._platform.isBrowser) {
                 const window = this._getWindow();
                 // Note that bind the events ourselves, rather than going through something like RxJS's
                 // `fromEvent` so that we can ensure that they're bound outside of the NgZone.
@@ -647,26 +640,21 @@ class ViewportRuler {
             ? { width: window.innerWidth, height: window.innerHeight }
             : { width: 0, height: 0 };
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: ViewportRuler, deps: [{ token: i1.Platform }, { token: i0.NgZone }, { token: DOCUMENT, optional: true }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: ViewportRuler, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
     static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: ViewportRuler, providedIn: 'root' }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: ViewportRuler, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
-        }], ctorParameters: () => [{ type: i1.Platform }, { type: i0.NgZone }, { type: undefined, decorators: [{
-                    type: Optional
-                }, {
-                    type: Inject,
-                    args: [DOCUMENT]
-                }] }] });
+        }], ctorParameters: () => [] });
 
 const VIRTUAL_SCROLLABLE = new InjectionToken('VIRTUAL_SCROLLABLE');
 /**
  * Extending the {@link CdkScrollable} to be used as scrolling container for virtual scrolling.
  */
 class CdkVirtualScrollable extends CdkScrollable {
-    constructor(elementRef, scrollDispatcher, ngZone, dir) {
-        super(elementRef, scrollDispatcher, ngZone, dir);
+    constructor() {
+        super();
     }
     /**
      * Measure the viewport size for the provided orientation.
@@ -677,14 +665,12 @@ class CdkVirtualScrollable extends CdkScrollable {
         const viewportEl = this.elementRef.nativeElement;
         return orientation === 'horizontal' ? viewportEl.clientWidth : viewportEl.clientHeight;
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkVirtualScrollable, deps: [{ token: i0.ElementRef }, { token: ScrollDispatcher }, { token: i0.NgZone }, { token: i2.Directionality, optional: true }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkVirtualScrollable, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.3", type: CdkVirtualScrollable, usesInheritance: true, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkVirtualScrollable, decorators: [{
             type: Directive
-        }], ctorParameters: () => [{ type: i0.ElementRef }, { type: ScrollDispatcher }, { type: i0.NgZone }, { type: i2.Directionality, decorators: [{
-                    type: Optional
-                }] }] });
+        }], ctorParameters: () => [] });
 
 /** Checks if the given ranges are equal. */
 function rangesEqual(r1, r2) {
@@ -708,12 +694,14 @@ class CdkVirtualScrollViewport extends CdkVirtualScrollable {
             this._calculateSpacerSize();
         }
     }
-    constructor(elementRef, _changeDetectorRef, ngZone, _scrollStrategy, dir, scrollDispatcher, viewportRuler, scrollable) {
-        super(elementRef, scrollDispatcher, ngZone, dir);
-        this.elementRef = elementRef;
-        this._changeDetectorRef = _changeDetectorRef;
-        this._scrollStrategy = _scrollStrategy;
-        this.scrollable = scrollable;
+    constructor() {
+        super();
+        this.elementRef = inject(ElementRef);
+        this._changeDetectorRef = inject(ChangeDetectorRef);
+        this._scrollStrategy = inject(VIRTUAL_SCROLL_STRATEGY, {
+            optional: true,
+        });
+        this.scrollable = inject(VIRTUAL_SCROLLABLE, { optional: true });
         this._platform = inject(Platform);
         /** Emits when the viewport is detached from a CdkVirtualForOf. */
         this._detachedSubject = new Subject();
@@ -762,7 +750,8 @@ class CdkVirtualScrollViewport extends CdkVirtualScrollable {
         this._viewportChanges = Subscription.EMPTY;
         this._injector = inject(Injector);
         this._isDestroyed = false;
-        if (!_scrollStrategy && (typeof ngDevMode === 'undefined' || ngDevMode)) {
+        const viewportRuler = inject(ViewportRuler);
+        if (!this._scrollStrategy && (typeof ngDevMode === 'undefined' || ngDevMode)) {
             throw Error('Error: cdk-virtual-scroll-viewport requires the "itemSize" property to be set.');
         }
         this._viewportChanges = viewportRuler.change().subscribe(() => {
@@ -1063,7 +1052,7 @@ class CdkVirtualScrollViewport extends CdkVirtualScrollable {
         this._totalContentWidth =
             this.orientation === 'horizontal' ? `${this._totalContentSize}px` : '';
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkVirtualScrollViewport, deps: [{ token: i0.ElementRef }, { token: i0.ChangeDetectorRef }, { token: i0.NgZone }, { token: VIRTUAL_SCROLL_STRATEGY, optional: true }, { token: i2.Directionality, optional: true }, { token: ScrollDispatcher }, { token: ViewportRuler }, { token: VIRTUAL_SCROLLABLE, optional: true }], target: i0.ɵɵFactoryTarget.Component }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkVirtualScrollViewport, deps: [], target: i0.ɵɵFactoryTarget.Component }); }
     static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "16.1.0", version: "19.0.0-next.3", type: CdkVirtualScrollViewport, isStandalone: true, selector: "cdk-virtual-scroll-viewport", inputs: { orientation: "orientation", appendOnly: ["appendOnly", "appendOnly", booleanAttribute] }, outputs: { scrolledIndexChange: "scrolledIndexChange" }, host: { properties: { "class.cdk-virtual-scroll-orientation-horizontal": "orientation === \"horizontal\"", "class.cdk-virtual-scroll-orientation-vertical": "orientation !== \"horizontal\"" }, classAttribute: "cdk-virtual-scroll-viewport" }, providers: [
             {
                 provide: CdkScrollable,
@@ -1085,19 +1074,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                             deps: [[new Optional(), new Inject(VIRTUAL_SCROLLABLE)], CdkVirtualScrollViewport],
                         },
                     ], template: "<!--\n  Wrap the rendered content in an element that will be used to offset it based on the scroll\n  position.\n-->\n<div #contentWrapper class=\"cdk-virtual-scroll-content-wrapper\">\n  <ng-content></ng-content>\n</div>\n<!--\n  Spacer used to force the scrolling container to the correct size for the *total* number of items\n  so that the scrollbar captures the size of the entire data set.\n-->\n<div class=\"cdk-virtual-scroll-spacer\"\n     [style.width]=\"_totalContentWidth\" [style.height]=\"_totalContentHeight\"></div>\n", styles: ["cdk-virtual-scroll-viewport{display:block;position:relative;transform:translateZ(0)}.cdk-virtual-scrollable{overflow:auto;will-change:scroll-position;contain:strict;-webkit-overflow-scrolling:touch}.cdk-virtual-scroll-content-wrapper{position:absolute;top:0;left:0;contain:content}[dir=rtl] .cdk-virtual-scroll-content-wrapper{right:0;left:auto}.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper{min-height:100%}.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]){padding-left:0;padding-right:0;margin-left:0;margin-right:0;border-left-width:0;border-right-width:0;outline:none}.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper{min-width:100%}.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]){padding-top:0;padding-bottom:0;margin-top:0;margin-bottom:0;border-top-width:0;border-bottom-width:0;outline:none}.cdk-virtual-scroll-spacer{height:1px;transform-origin:0 0;flex:0 0 auto}[dir=rtl] .cdk-virtual-scroll-spacer{transform-origin:100% 0}"] }]
-        }], ctorParameters: () => [{ type: i0.ElementRef }, { type: i0.ChangeDetectorRef }, { type: i0.NgZone }, { type: undefined, decorators: [{
-                    type: Optional
-                }, {
-                    type: Inject,
-                    args: [VIRTUAL_SCROLL_STRATEGY]
-                }] }, { type: i2.Directionality, decorators: [{
-                    type: Optional
-                }] }, { type: ScrollDispatcher }, { type: ViewportRuler }, { type: CdkVirtualScrollable, decorators: [{
-                    type: Optional
-                }, {
-                    type: Inject,
-                    args: [VIRTUAL_SCROLLABLE]
-                }] }], propDecorators: { orientation: [{
+        }], ctorParameters: () => [], propDecorators: { orientation: [{
                 type: Input
             }], appendOnly: [{
                 type: Input,
@@ -1170,22 +1147,12 @@ class CdkVirtualForOf {
     set cdkVirtualForTemplateCacheSize(size) {
         this._viewRepeater.viewCacheSize = coerceNumberProperty(size);
     }
-    constructor(
-    /** The view container to add items to. */
-    _viewContainerRef, 
-    /** The template to use when stamping out new items. */
-    _template, 
-    /** The set of available differs. */
-    _differs, 
-    /** The strategy used to render items in the virtual scroll viewport. */
-    _viewRepeater, 
-    /** The virtual scrolling viewport that these items are being rendered in. */
-    _viewport, ngZone) {
-        this._viewContainerRef = _viewContainerRef;
-        this._template = _template;
-        this._differs = _differs;
-        this._viewRepeater = _viewRepeater;
-        this._viewport = _viewport;
+    constructor() {
+        this._viewContainerRef = inject(ViewContainerRef);
+        this._template = inject(TemplateRef);
+        this._differs = inject(IterableDiffers);
+        this._viewRepeater = inject(_VIEW_REPEATER_STRATEGY);
+        this._viewport = inject(CdkVirtualScrollViewport, { skipSelf: true });
         /** Emits when the rendered view of the data changes. */
         this.viewChange = new Subject();
         /** Subject that emits when a new DataSource instance is given. */
@@ -1207,6 +1174,7 @@ class CdkVirtualForOf {
         /** Whether the rendered data should be updated during the next ngDoCheck cycle. */
         this._needsUpdate = false;
         this._destroyed = new Subject();
+        const ngZone = inject(NgZone);
         this.dataStream.subscribe(data => {
             this._data = data;
             this._onRenderedDataChange();
@@ -1370,7 +1338,7 @@ class CdkVirtualForOf {
     static ngTemplateContextGuard(directive, context) {
         return true;
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkVirtualForOf, deps: [{ token: i0.ViewContainerRef }, { token: i0.TemplateRef }, { token: i0.IterableDiffers }, { token: _VIEW_REPEATER_STRATEGY }, { token: CdkVirtualScrollViewport, skipSelf: true }, { token: i0.NgZone }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkVirtualForOf, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.3", type: CdkVirtualForOf, isStandalone: true, selector: "[cdkVirtualFor][cdkVirtualForOf]", inputs: { cdkVirtualForOf: "cdkVirtualForOf", cdkVirtualForTrackBy: "cdkVirtualForTrackBy", cdkVirtualForTemplate: "cdkVirtualForTemplate", cdkVirtualForTemplateCacheSize: "cdkVirtualForTemplateCacheSize" }, providers: [{ provide: _VIEW_REPEATER_STRATEGY, useClass: _RecycleViewRepeaterStrategy }], ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkVirtualForOf, decorators: [{
@@ -1380,12 +1348,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     providers: [{ provide: _VIEW_REPEATER_STRATEGY, useClass: _RecycleViewRepeaterStrategy }],
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: i0.ViewContainerRef }, { type: i0.TemplateRef }, { type: i0.IterableDiffers }, { type: i2$1._RecycleViewRepeaterStrategy, decorators: [{
-                    type: Inject,
-                    args: [_VIEW_REPEATER_STRATEGY]
-                }] }, { type: CdkVirtualScrollViewport, decorators: [{
-                    type: SkipSelf
-                }] }, { type: i0.NgZone }], propDecorators: { cdkVirtualForOf: [{
+        }], ctorParameters: () => [], propDecorators: { cdkVirtualForOf: [{
                 type: Input
             }], cdkVirtualForTrackBy: [{
                 type: Input
@@ -1399,14 +1362,14 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
  * Provides a virtual scrollable for the element it is attached to.
  */
 class CdkVirtualScrollableElement extends CdkVirtualScrollable {
-    constructor(elementRef, scrollDispatcher, ngZone, dir) {
-        super(elementRef, scrollDispatcher, ngZone, dir);
+    constructor() {
+        super();
     }
     measureBoundingClientRectWithScrollOffset(from) {
         return (this.getElementRef().nativeElement.getBoundingClientRect()[from] -
             this.measureScrollOffset(from));
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkVirtualScrollableElement, deps: [{ token: i0.ElementRef }, { token: ScrollDispatcher }, { token: i0.NgZone }, { token: i2.Directionality, optional: true }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkVirtualScrollableElement, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.3", type: CdkVirtualScrollableElement, isStandalone: true, selector: "[cdkVirtualScrollingElement]", host: { classAttribute: "cdk-virtual-scrollable" }, providers: [{ provide: VIRTUAL_SCROLLABLE, useExisting: CdkVirtualScrollableElement }], usesInheritance: true, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkVirtualScrollableElement, decorators: [{
@@ -1419,22 +1382,21 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                         'class': 'cdk-virtual-scrollable',
                     },
                 }]
-        }], ctorParameters: () => [{ type: i0.ElementRef }, { type: ScrollDispatcher }, { type: i0.NgZone }, { type: i2.Directionality, decorators: [{
-                    type: Optional
-                }] }] });
+        }], ctorParameters: () => [] });
 
 /**
  * Provides as virtual scrollable for the global / window scrollbar.
  */
 class CdkVirtualScrollableWindow extends CdkVirtualScrollable {
-    constructor(scrollDispatcher, ngZone, dir) {
-        super(new ElementRef(document.documentElement), scrollDispatcher, ngZone, dir);
+    constructor() {
+        super();
         this._elementScrolled = new Observable((observer) => this.ngZone.runOutsideAngular(() => fromEvent(document, 'scroll').pipe(takeUntil(this._destroyed)).subscribe(observer)));
+        this.elementRef = new ElementRef(document.documentElement);
     }
     measureBoundingClientRectWithScrollOffset(from) {
         return this.getElementRef().nativeElement.getBoundingClientRect()[from];
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkVirtualScrollableWindow, deps: [{ token: ScrollDispatcher }, { token: i0.NgZone }, { token: i2.Directionality, optional: true }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkVirtualScrollableWindow, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.3", type: CdkVirtualScrollableWindow, isStandalone: true, selector: "cdk-virtual-scroll-viewport[scrollWindow]", providers: [{ provide: VIRTUAL_SCROLLABLE, useExisting: CdkVirtualScrollableWindow }], usesInheritance: true, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkVirtualScrollableWindow, decorators: [{
@@ -1444,9 +1406,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     providers: [{ provide: VIRTUAL_SCROLLABLE, useExisting: CdkVirtualScrollableWindow }],
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: ScrollDispatcher }, { type: i0.NgZone }, { type: i2.Directionality, decorators: [{
-                    type: Optional
-                }] }] });
+        }], ctorParameters: () => [] });
 
 class CdkScrollableModule {
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkScrollableModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule }); }

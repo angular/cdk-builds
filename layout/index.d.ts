@@ -1,10 +1,8 @@
 import * as i0 from '@angular/core';
-import { NgZone } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OnDestroy } from '@angular/core';
-import { Platform } from '@angular/cdk/platform';
 
-/** Utility for checking the matching state of @media queries. */
+/** Utility for checking the matching state of `@media` queries. */
 export declare class BreakpointObserver implements OnDestroy {
     private _mediaMatcher;
     private _zone;
@@ -12,7 +10,7 @@ export declare class BreakpointObserver implements OnDestroy {
     private _queries;
     /** A subject for all other observables to takeUntil based on. */
     private readonly _destroySubject;
-    constructor(_mediaMatcher: MediaMatcher, _zone: NgZone);
+    constructor(...args: unknown[]);
     /** Completes the active subject, signalling to all other observables to complete. */
     ngOnDestroy(): void;
     /**
@@ -74,10 +72,10 @@ export declare class LayoutModule {
 /** A utility for calling matchMedia queries. */
 export declare class MediaMatcher {
     private _platform;
-    private _nonce?;
+    private _nonce;
     /** The internal matchMedia method to return back a MediaQueryList like object. */
     private _matchMedia;
-    constructor(_platform: Platform, _nonce?: (string | null) | undefined);
+    constructor(...args: unknown[]);
     /**
      * Evaluates the given media query and returns the native MediaQueryList from which results
      * can be retrieved.
@@ -85,7 +83,7 @@ export declare class MediaMatcher {
      * MediaQueryList for the query provided.
      */
     matchMedia(query: string): MediaQueryList;
-    static ɵfac: i0.ɵɵFactoryDeclaration<MediaMatcher, [null, { optional: true; }]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<MediaMatcher, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<MediaMatcher>;
 }
 

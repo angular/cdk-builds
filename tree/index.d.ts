@@ -2,10 +2,8 @@ import { AfterContentChecked } from '@angular/core';
 import { AfterContentInit } from '@angular/core';
 import { AfterViewInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { ChangeDetectorRef } from '@angular/core';
 import { CollectionViewer } from '@angular/cdk/collections';
 import { DataSource } from '@angular/cdk/collections';
-import { Directionality } from '@angular/cdk/bidi';
 import { ElementRef } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import * as i0 from '@angular/core';
@@ -95,7 +93,7 @@ export declare class CdkNestedTreeNode<T, K = T> extends CdkTreeNode<T, K> imple
     protected _children: T[];
     /** The children node placeholder. */
     nodeOutlet: QueryList<CdkTreeNodeOutlet>;
-    constructor(elementRef: ElementRef<HTMLElement>, tree: CdkTree<T, K>, _differs: IterableDiffers);
+    constructor(...args: unknown[]);
     ngAfterContentInit(): void;
     ngOnInit(): void;
     ngOnDestroy(): void;
@@ -212,7 +210,7 @@ export declare class CdkTree<T, K = T> implements AfterContentChecked, AfterCont
     /** The key manager for this tree. Handles focus and activation based on user keyboard input. */
     _keyManager: TreeKeyManagerStrategy<CdkTreeNode<T, K>>;
     private _viewInit;
-    constructor(_differs: IterableDiffers, _changeDetectorRef: ChangeDetectorRef);
+    constructor(...args: unknown[]);
     ngAfterContentInit(): void;
     ngAfterContentChecked(): void;
     ngOnDestroy(): void;
@@ -461,7 +459,7 @@ export declare class CdkTreeNode<T, K = T> implements OnDestroy, OnInit, TreeKey
      */
     _getPositionInSet(): number;
     private _changeDetectorRef;
-    constructor(_elementRef: ElementRef<HTMLElement>, _tree: CdkTree<T, K>);
+    constructor(...args: unknown[]);
     ngOnInit(): void;
     ngOnDestroy(): void;
     getParent(): CdkTreeNode<T, K> | null;
@@ -492,6 +490,7 @@ export declare class CdkTreeNode<T, K = T> implements OnDestroy, OnInit, TreeKey
  * Captures the node's template and a when predicate that describes when this node should be used.
  */
 export declare class CdkTreeNodeDef<T> {
+    /** @docs-private */
     template: TemplateRef<any>;
     /**
      * Function that should return true if this node template should be used for the provided node
@@ -501,8 +500,7 @@ export declare class CdkTreeNodeDef<T> {
      * default.
      */
     when: (index: number, nodeData: T) => boolean;
-    /** @docs-private */
-    constructor(template: TemplateRef<any>);
+    constructor(...args: unknown[]);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNodeDef<any>, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodeDef<any>, "[cdkTreeNodeDef]", never, { "when": { "alias": "cdkTreeNodeDefWhen"; "required": false; }; }, {}, never, never, true, never>;
 }
@@ -513,9 +511,9 @@ export declare class CdkTreeNodeDef<T> {
  */
 export declare class CdkTreeNodeOutlet {
     viewContainer: ViewContainerRef;
-    _node?: any;
-    constructor(viewContainer: ViewContainerRef, _node?: any);
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNodeOutlet, [null, { optional: true; }]>;
+    _node?: {} | null | undefined;
+    constructor(...args: unknown[]);
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNodeOutlet, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodeOutlet, "[cdkTreeNodeOutlet]", never, {}, {}, never, never, true, never>;
 }
 
@@ -558,7 +556,7 @@ export declare class CdkTreeNodePadding<T, K = T> implements OnDestroy {
     get indent(): number | string;
     set indent(indent: number | string);
     _indent: number;
-    constructor(_treeNode: CdkTreeNode<T, K>, _tree: CdkTree<T, K>, _element: ElementRef<HTMLElement>, _dir: Directionality);
+    constructor(...args: unknown[]);
     ngOnDestroy(): void;
     /** The padding indent value for the tree node. Returns a string with px numbers if not null. */
     _paddingIndent(): string | null;
@@ -577,7 +575,7 @@ export declare class CdkTreeNodePadding<T, K = T> implements OnDestroy {
      * @docs-private
      */
     protected _setIndentInput(indent: number | string): void;
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNodePadding<any, any>, [null, null, null, { optional: true; }]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNodePadding<any, any>, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodePadding<any, any>, "[cdkTreeNodePadding]", never, { "level": { "alias": "cdkTreeNodePadding"; "required": false; }; "indent": { "alias": "cdkTreeNodePaddingIndent"; "required": false; }; }, {}, never, never, true, never>;
     static ngAcceptInputType_level: unknown;
 }
@@ -590,7 +588,7 @@ export declare class CdkTreeNodeToggle<T, K = T> {
     protected _treeNode: CdkTreeNode<T, K>;
     /** Whether expand/collapse the node recursively. */
     recursive: boolean;
-    constructor(_tree: CdkTree<T, K>, _treeNode: CdkTreeNode<T, K>);
+    constructor(...args: unknown[]);
     _toggle(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNodeToggle<any, any>, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodeToggle<any, any>, "[cdkTreeNodeToggle]", never, { "recursive": { "alias": "cdkTreeNodeToggleRecursive"; "required": false; }; }, {}, never, never, true, never>;

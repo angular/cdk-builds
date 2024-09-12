@@ -1,7 +1,6 @@
-import * as i1 from '@angular/cdk/platform';
-import { normalizePassiveListenerOptions } from '@angular/cdk/platform';
+import { normalizePassiveListenerOptions, Platform } from '@angular/cdk/platform';
 import * as i0 from '@angular/core';
-import { Component, ChangeDetectionStrategy, ViewEncapsulation, inject, Injectable, EventEmitter, Directive, Output, booleanAttribute, Optional, Inject, Input, NgModule } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewEncapsulation, inject, NgZone, Injectable, ElementRef, EventEmitter, Directive, Output, booleanAttribute, Input, NgModule } from '@angular/core';
 import { _CdkPrivateStyleLoader } from '@angular/cdk/private';
 import { coerceElement, coerceNumberProperty } from '@angular/cdk/coercion';
 import { EMPTY, Subject, fromEvent } from 'rxjs';
@@ -26,9 +25,9 @@ const listenerOptions = normalizePassiveListenerOptions({ passive: true });
  * https://medium.com/@brunn/detecting-autofilled-fields-in-javascript-aed598d25da7
  */
 class AutofillMonitor {
-    constructor(_platform, _ngZone) {
-        this._platform = _platform;
-        this._ngZone = _ngZone;
+    constructor() {
+        this._platform = inject(Platform);
+        this._ngZone = inject(NgZone);
         this._styleLoader = inject(_CdkPrivateStyleLoader);
         this._monitoredElements = new Map();
     }
@@ -85,18 +84,18 @@ class AutofillMonitor {
     ngOnDestroy() {
         this._monitoredElements.forEach((_info, element) => this.stopMonitoring(element));
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: AutofillMonitor, deps: [{ token: i1.Platform }, { token: i0.NgZone }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: AutofillMonitor, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
     static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: AutofillMonitor, providedIn: 'root' }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: AutofillMonitor, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
-        }], ctorParameters: () => [{ type: i1.Platform }, { type: i0.NgZone }] });
+        }], ctorParameters: () => [] });
 /** A directive that can be used to monitor the autofill state of an input. */
 class CdkAutofill {
-    constructor(_elementRef, _autofillMonitor) {
-        this._elementRef = _elementRef;
-        this._autofillMonitor = _autofillMonitor;
+    constructor() {
+        this._elementRef = inject(ElementRef);
+        this._autofillMonitor = inject(AutofillMonitor);
         /** Emits when the autofill state of the element changes. */
         this.cdkAutofill = new EventEmitter();
     }
@@ -108,7 +107,7 @@ class CdkAutofill {
     ngOnDestroy() {
         this._autofillMonitor.stopMonitoring(this._elementRef);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkAutofill, deps: [{ token: i0.ElementRef }, { token: AutofillMonitor }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkAutofill, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.3", type: CdkAutofill, isStandalone: true, selector: "[cdkAutofill]", outputs: { cdkAutofill: "cdkAutofill" }, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkAutofill, decorators: [{
@@ -117,7 +116,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     selector: '[cdkAutofill]',
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: i0.ElementRef }, { type: AutofillMonitor }], propDecorators: { cdkAutofill: [{
+        }], ctorParameters: () => [], propDecorators: { cdkAutofill: [{
                 type: Output
             }] } });
 
@@ -163,12 +162,10 @@ class CdkTextareaAutosize {
         }
         this._cacheTextareaPlaceholderHeight();
     }
-    constructor(_elementRef, _platform, _ngZone, 
-    /** @breaking-change 11.0.0 make document required */
-    document) {
-        this._elementRef = _elementRef;
-        this._platform = _platform;
-        this._ngZone = _ngZone;
+    constructor() {
+        this._elementRef = inject(ElementRef);
+        this._platform = inject(Platform);
+        this._ngZone = inject(NgZone);
         this._destroyed = new Subject();
         this._enabled = true;
         /**
@@ -177,6 +174,8 @@ class CdkTextareaAutosize {
          * does not have the same problem because it does not affect the textarea's scrollHeight.
          */
         this._previousMinRows = -1;
+        /** Used to reference correct document/window */
+        this._document = inject(DOCUMENT, { optional: true });
         this._isViewInited = false;
         /** Handles `focus` and `blur` events. */
         this._handleFocusEvent = (event) => {
@@ -184,7 +183,6 @@ class CdkTextareaAutosize {
         };
         const styleLoader = inject(_CdkPrivateStyleLoader);
         styleLoader.load(_CdkTextFieldStyleLoader);
-        this._document = document;
         this._textareaElement = this._elementRef.nativeElement;
     }
     /** Sets the minimum height of the textarea as determined by minRows. */
@@ -382,7 +380,7 @@ class CdkTextareaAutosize {
             textarea.setSelectionRange(selectionStart, selectionEnd);
         }
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkTextareaAutosize, deps: [{ token: i0.ElementRef }, { token: i1.Platform }, { token: i0.NgZone }, { token: DOCUMENT, optional: true }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkTextareaAutosize, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "19.0.0-next.3", type: CdkTextareaAutosize, isStandalone: true, selector: "textarea[cdkTextareaAutosize]", inputs: { minRows: ["cdkAutosizeMinRows", "minRows"], maxRows: ["cdkAutosizeMaxRows", "maxRows"], enabled: ["cdkTextareaAutosize", "enabled", booleanAttribute], placeholder: "placeholder" }, host: { attributes: { "rows": "1" }, listeners: { "input": "_noopInputHandler()" }, classAttribute: "cdk-textarea-autosize" }, exportAs: ["cdkTextareaAutosize"], ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkTextareaAutosize, decorators: [{
@@ -399,12 +397,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     },
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: i0.ElementRef }, { type: i1.Platform }, { type: i0.NgZone }, { type: undefined, decorators: [{
-                    type: Optional
-                }, {
-                    type: Inject,
-                    args: [DOCUMENT]
-                }] }], propDecorators: { minRows: [{
+        }], ctorParameters: () => [], propDecorators: { minRows: [{
                 type: Input,
                 args: ['cdkAutosizeMinRows']
             }], maxRows: [{

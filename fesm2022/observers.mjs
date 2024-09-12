@@ -1,6 +1,6 @@
 import { coerceElement, coerceNumberProperty } from '@angular/cdk/coercion';
 import * as i0 from '@angular/core';
-import { Injectable, inject, NgZone, EventEmitter, booleanAttribute, Directive, Output, Input, NgModule } from '@angular/core';
+import { Injectable, inject, NgZone, ElementRef, EventEmitter, booleanAttribute, Directive, Output, Input, NgModule } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { map, filter, debounceTime } from 'rxjs/operators';
 
@@ -47,8 +47,8 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
         }] });
 /** An injectable service that allows watching elements for changes to their content. */
 class ContentObserver {
-    constructor(_mutationObserverFactory) {
-        this._mutationObserverFactory = _mutationObserverFactory;
+    constructor() {
+        this._mutationObserverFactory = inject(MutationObserverFactory);
         /** Keeps track of the existing MutationObservers so they can be reused. */
         this._observedElements = new Map();
         this._ngZone = inject(NgZone);
@@ -120,13 +120,13 @@ class ContentObserver {
             this._observedElements.delete(element);
         }
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: ContentObserver, deps: [{ token: MutationObserverFactory }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: ContentObserver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
     static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: ContentObserver, providedIn: 'root' }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: ContentObserver, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
-        }], ctorParameters: () => [{ type: MutationObserverFactory }] });
+        }], ctorParameters: () => [] });
 /**
  * Directive that triggers a callback whenever the content of
  * its associated element has changed.
@@ -151,9 +151,9 @@ class CdkObserveContent {
         this._debounce = coerceNumberProperty(value);
         this._subscribe();
     }
-    constructor(_contentObserver, _elementRef) {
-        this._contentObserver = _contentObserver;
-        this._elementRef = _elementRef;
+    constructor() {
+        this._contentObserver = inject(ContentObserver);
+        this._elementRef = inject(ElementRef);
         /** Event emitted for each change in the element's content. */
         this.event = new EventEmitter();
         this._disabled = false;
@@ -175,7 +175,7 @@ class CdkObserveContent {
     _unsubscribe() {
         this._currentSubscription?.unsubscribe();
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkObserveContent, deps: [{ token: ContentObserver }, { token: i0.ElementRef }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkObserveContent, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "19.0.0-next.3", type: CdkObserveContent, isStandalone: true, selector: "[cdkObserveContent]", inputs: { disabled: ["cdkObserveContentDisabled", "disabled", booleanAttribute], debounce: "debounce" }, outputs: { event: "cdkObserveContent" }, exportAs: ["cdkObserveContent"], ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkObserveContent, decorators: [{
@@ -185,7 +185,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     exportAs: 'cdkObserveContent',
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: ContentObserver }, { type: i0.ElementRef }], propDecorators: { event: [{
+        }], ctorParameters: () => [], propDecorators: { event: [{
                 type: Output,
                 args: ['cdkObserveContent']
             }], disabled: [{

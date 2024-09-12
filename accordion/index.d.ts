@@ -1,9 +1,9 @@
-import { ChangeDetectorRef } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import * as i0 from '@angular/core';
 import { InjectionToken } from '@angular/core';
 import { OnChanges } from '@angular/core';
 import { OnDestroy } from '@angular/core';
+import { OnInit } from '@angular/core';
 import { SimpleChanges } from '@angular/core';
 import { Subject } from 'rxjs';
 import { UniqueSelectionDispatcher } from '@angular/cdk/collections';
@@ -42,7 +42,7 @@ export declare class CdkAccordion implements OnDestroy, OnChanges {
  * A basic directive expected to be extended and decorated as a component.  Sets up all
  * events and attributes needed to be managed by a CdkAccordion parent.
  */
-export declare class CdkAccordionItem implements OnDestroy {
+export declare class CdkAccordionItem implements OnInit, OnDestroy {
     accordion: CdkAccordion;
     private _changeDetectorRef;
     protected _expansionDispatcher: UniqueSelectionDispatcher;
@@ -70,7 +70,8 @@ export declare class CdkAccordionItem implements OnDestroy {
     disabled: boolean;
     /** Unregister function for _expansionDispatcher. */
     private _removeUniqueSelectionListener;
-    constructor(accordion: CdkAccordion, _changeDetectorRef: ChangeDetectorRef, _expansionDispatcher: UniqueSelectionDispatcher);
+    constructor(...args: unknown[]);
+    ngOnInit(): void;
     /** Emits an event for the accordion item being destroyed. */
     ngOnDestroy(): void;
     /** Toggles the expanded state of the accordion item. */
@@ -80,7 +81,7 @@ export declare class CdkAccordionItem implements OnDestroy {
     /** Sets the expanded state of the accordion item to true. */
     open(): void;
     private _subscribeToOpenCloseAllActions;
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkAccordionItem, [{ optional: true; skipSelf: true; }, null, null]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkAccordionItem, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkAccordionItem, "cdk-accordion-item, [cdkAccordionItem]", ["cdkAccordionItem"], { "expanded": { "alias": "expanded"; "required": false; }; "disabled": { "alias": "disabled"; "required": false; }; }, { "closed": "closed"; "opened": "opened"; "destroyed": "destroyed"; "expandedChange": "expandedChange"; }, never, never, true, never>;
     static ngAcceptInputType_expanded: unknown;
     static ngAcceptInputType_disabled: unknown;

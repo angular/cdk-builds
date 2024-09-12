@@ -3,12 +3,10 @@ import { DoCheck } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import * as i0 from '@angular/core';
-import { NgZone } from '@angular/core';
 import { NumberInput } from '@angular/cdk/coercion';
 import { Observable } from 'rxjs';
 import { OnDestroy } from '@angular/core';
 import { OnInit } from '@angular/core';
-import { Platform } from '@angular/cdk/platform';
 
 /** An event that is emitted when the autofill state of an input changes. */
 export declare type AutofillEvent = {
@@ -28,7 +26,7 @@ export declare class AutofillMonitor implements OnDestroy {
     private _ngZone;
     private _styleLoader;
     private _monitoredElements;
-    constructor(_platform: Platform, _ngZone: NgZone);
+    constructor(...args: unknown[]);
     /**
      * Monitor for changes in the autofill state of the given input element.
      * @param element The element to monitor.
@@ -62,7 +60,7 @@ export declare class CdkAutofill implements OnDestroy, OnInit {
     private _autofillMonitor;
     /** Emits when the autofill state of the element changes. */
     readonly cdkAutofill: EventEmitter<AutofillEvent>;
-    constructor(_elementRef: ElementRef<HTMLElement>, _autofillMonitor: AutofillMonitor);
+    constructor(...args: unknown[]);
     ngOnInit(): void;
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkAutofill, never>;
@@ -104,12 +102,10 @@ export declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDe
     /** Cached height of a textarea with only the placeholder. */
     private _cachedPlaceholderHeight?;
     /** Used to reference correct document/window */
-    protected _document?: Document;
+    protected _document?: Document | null | undefined;
     private _hasFocus;
     private _isViewInited;
-    constructor(_elementRef: ElementRef<HTMLElement>, _platform: Platform, _ngZone: NgZone, 
-    /** @breaking-change 11.0.0 make document required */
-    document?: any);
+    constructor(...args: unknown[]);
     /** Sets the minimum height of the textarea as determined by minRows. */
     _setMinHeight(): void;
     /** Sets the maximum height of the textarea as determined by maxRows. */
@@ -150,7 +146,7 @@ export declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDe
      * in order for it to scroll to the proper position.
      */
     private _scrollToCaretPosition;
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkTextareaAutosize, [null, null, null, { optional: true; }]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkTextareaAutosize, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTextareaAutosize, "textarea[cdkTextareaAutosize]", ["cdkTextareaAutosize"], { "minRows": { "alias": "cdkAutosizeMinRows"; "required": false; }; "maxRows": { "alias": "cdkAutosizeMaxRows"; "required": false; }; "enabled": { "alias": "cdkTextareaAutosize"; "required": false; }; "placeholder": { "alias": "placeholder"; "required": false; }; }, {}, never, never, true, never>;
     static ngAcceptInputType_enabled: unknown;
 }

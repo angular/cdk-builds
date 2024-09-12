@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { InjectionToken, inject, EventEmitter, Injectable, Optional, Inject, Directive, Output, Input, NgModule } from '@angular/core';
+import { InjectionToken, inject, EventEmitter, Injectable, Directive, Output, Input, NgModule } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 /**
@@ -41,11 +41,12 @@ function _resolveDirectionality(rawValue) {
  * Exposes the current direction and a stream of direction changes.
  */
 class Directionality {
-    constructor(_document) {
+    constructor() {
         /** The current 'ltr' or 'rtl' value. */
         this.value = 'ltr';
         /** Stream that emits whenever the 'ltr' / 'rtl' state changes. */
         this.change = new EventEmitter();
+        const _document = inject(DIR_DOCUMENT, { optional: true });
         if (_document) {
             const bodyDir = _document.body ? _document.body.dir : null;
             const htmlDir = _document.documentElement ? _document.documentElement.dir : null;
@@ -55,18 +56,13 @@ class Directionality {
     ngOnDestroy() {
         this.change.complete();
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: Directionality, deps: [{ token: DIR_DOCUMENT, optional: true }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: Directionality, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
     static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: Directionality, providedIn: 'root' }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: Directionality, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
-        }], ctorParameters: () => [{ type: undefined, decorators: [{
-                    type: Optional
-                }, {
-                    type: Inject,
-                    args: [DIR_DOCUMENT]
-                }] }] });
+        }], ctorParameters: () => [] });
 
 /**
  * Directive to listen for changes of direction of part of the DOM.

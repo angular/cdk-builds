@@ -1,12 +1,10 @@
-import * as i1 from '@angular/cdk/a11y';
-import { A11yModule } from '@angular/cdk/a11y';
-import * as i1$1 from '@angular/cdk/overlay';
-import { Overlay, OverlayConfig, OverlayRef, OverlayModule } from '@angular/cdk/overlay';
+import { FocusTrapFactory, InteractivityChecker, FocusMonitor, A11yModule } from '@angular/cdk/a11y';
+import { OverlayRef, Overlay, OverlayContainer, OverlayConfig, OverlayModule } from '@angular/cdk/overlay';
 import { Platform, _getFocusedElementPierceShadowDom } from '@angular/cdk/platform';
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, TemplatePortal, PortalModule } from '@angular/cdk/portal';
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { inject, ChangeDetectorRef, Injector, afterNextRender, Component, ViewEncapsulation, ChangeDetectionStrategy, Optional, Inject, ViewChild, InjectionToken, TemplateRef, Injectable, SkipSelf, NgModule } from '@angular/core';
+import { inject, ElementRef, NgZone, ChangeDetectorRef, Injector, afterNextRender, Component, ViewEncapsulation, ChangeDetectionStrategy, ViewChild, InjectionToken, TemplateRef, Injectable, NgModule } from '@angular/core';
 import { ESCAPE, hasModifierKey } from '@angular/cdk/keycodes';
 import { Subject, defer, of } from 'rxjs';
 import { Directionality } from '@angular/cdk/bidi';
@@ -83,16 +81,16 @@ function throwDialogContentAlreadyAttachedError() {
  * @docs-private
  */
 class CdkDialogContainer extends BasePortalOutlet {
-    constructor(_elementRef, _focusTrapFactory, _document, _config, _interactivityChecker, _ngZone, _overlayRef, _focusMonitor) {
+    constructor() {
         super();
-        this._elementRef = _elementRef;
-        this._focusTrapFactory = _focusTrapFactory;
-        this._config = _config;
-        this._interactivityChecker = _interactivityChecker;
-        this._ngZone = _ngZone;
-        this._overlayRef = _overlayRef;
-        this._focusMonitor = _focusMonitor;
+        this._elementRef = inject(ElementRef);
+        this._focusTrapFactory = inject(FocusTrapFactory);
+        this._interactivityChecker = inject(InteractivityChecker);
+        this._ngZone = inject(NgZone);
+        this._overlayRef = inject(OverlayRef);
+        this._focusMonitor = inject(FocusMonitor);
         this._platform = inject(Platform);
+        this._document = inject(DOCUMENT, { optional: true });
         /** The class that traps and manages focus within the dialog. */
         this._focusTrap = null;
         /** Element that was focused before the dialog was opened. Save this to restore upon close. */
@@ -127,7 +125,9 @@ class CdkDialogContainer extends BasePortalOutlet {
             this._contentAttached();
             return result;
         };
-        this._document = _document;
+        // Callback is primarily for some internal tests
+        // that were instantiating the dialog container manually.
+        this._config = (inject(DialogConfig, { optional: true }) || new DialogConfig());
         if (this._config.ariaLabelledBy) {
             this._ariaLabelledByQueue.push(this._config.ariaLabelledBy);
         }
@@ -338,7 +338,7 @@ class CdkDialogContainer extends BasePortalOutlet {
             }
         });
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkDialogContainer, deps: [{ token: i0.ElementRef }, { token: i1.FocusTrapFactory }, { token: DOCUMENT, optional: true }, { token: DialogConfig }, { token: i1.InteractivityChecker }, { token: i0.NgZone }, { token: i1$1.OverlayRef }, { token: i1.FocusMonitor }], target: i0.ɵɵFactoryTarget.Component }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkDialogContainer, deps: [], target: i0.ɵɵFactoryTarget.Component }); }
     static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "19.0.0-next.3", type: CdkDialogContainer, isStandalone: true, selector: "cdk-dialog-container", host: { attributes: { "tabindex": "-1" }, properties: { "attr.id": "_config.id || null", "attr.role": "_config.role", "attr.aria-modal": "_config.ariaModal", "attr.aria-labelledby": "_config.ariaLabel ? null : _ariaLabelledByQueue[0]", "attr.aria-label": "_config.ariaLabel", "attr.aria-describedby": "_config.ariaDescribedBy || null" }, classAttribute: "cdk-dialog-container" }, viewQueries: [{ propertyName: "_portalOutlet", first: true, predicate: CdkPortalOutlet, descendants: true, static: true }], usesInheritance: true, ngImport: i0, template: "<ng-template cdkPortalOutlet />\n", styles: [".cdk-dialog-container{display:block;width:100%;height:100%;min-height:inherit;max-height:inherit}"], dependencies: [{ kind: "directive", type: CdkPortalOutlet, selector: "[cdkPortalOutlet]", inputs: ["cdkPortalOutlet"], outputs: ["attached"], exportAs: ["cdkPortalOutlet"] }], changeDetection: i0.ChangeDetectionStrategy.Default, encapsulation: i0.ViewEncapsulation.None }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkDialogContainer, decorators: [{
@@ -353,15 +353,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                         '[attr.aria-label]': '_config.ariaLabel',
                         '[attr.aria-describedby]': '_config.ariaDescribedBy || null',
                     }, template: "<ng-template cdkPortalOutlet />\n", styles: [".cdk-dialog-container{display:block;width:100%;height:100%;min-height:inherit;max-height:inherit}"] }]
-        }], ctorParameters: () => [{ type: i0.ElementRef }, { type: i1.FocusTrapFactory }, { type: undefined, decorators: [{
-                    type: Optional
-                }, {
-                    type: Inject,
-                    args: [DOCUMENT]
-                }] }, { type: undefined, decorators: [{
-                    type: Inject,
-                    args: [DialogConfig]
-                }] }, { type: i1.InteractivityChecker }, { type: i0.NgZone }, { type: i1$1.OverlayRef }, { type: i1.FocusMonitor }], propDecorators: { _portalOutlet: [{
+        }], ctorParameters: () => [], propDecorators: { _portalOutlet: [{
                 type: ViewChild,
                 args: [CdkPortalOutlet, { static: true }]
             }] } });
@@ -484,16 +476,17 @@ class Dialog {
     get afterOpened() {
         return this._parentDialog ? this._parentDialog.afterOpened : this._afterOpenedAtThisLevel;
     }
-    constructor(_overlay, _injector, _defaultOptions, _parentDialog, _overlayContainer, scrollStrategy) {
-        this._overlay = _overlay;
-        this._injector = _injector;
-        this._defaultOptions = _defaultOptions;
-        this._parentDialog = _parentDialog;
-        this._overlayContainer = _overlayContainer;
+    constructor() {
+        this._overlay = inject(Overlay);
+        this._injector = inject(Injector);
+        this._defaultOptions = inject(DEFAULT_DIALOG_CONFIG, { optional: true });
+        this._parentDialog = inject(Dialog, { optional: true, skipSelf: true });
+        this._overlayContainer = inject(OverlayContainer);
         this._openDialogsAtThisLevel = [];
         this._afterAllClosedAtThisLevel = new Subject();
         this._afterOpenedAtThisLevel = new Subject();
         this._ariaHiddenElements = new Map();
+        this._scrollStrategy = inject(DIALOG_SCROLL_STRATEGY);
         /**
          * Stream that emits when all open dialog have finished closing.
          * Will emit on subscribe if there are no open dialogs to begin with.
@@ -501,7 +494,6 @@ class Dialog {
         this.afterAllClosed = defer(() => this.openDialogs.length
             ? this._getAfterAllClosed()
             : this._getAfterAllClosed().pipe(startWith(undefined)));
-        this._scrollStrategy = scrollStrategy;
     }
     open(componentOrTemplateRef, config) {
         const defaults = (this._defaultOptions || new DialogConfig());
@@ -726,25 +718,13 @@ class Dialog {
         const parent = this._parentDialog;
         return parent ? parent._getAfterAllClosed() : this._afterAllClosedAtThisLevel;
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: Dialog, deps: [{ token: i1$1.Overlay }, { token: i0.Injector }, { token: DEFAULT_DIALOG_CONFIG, optional: true }, { token: Dialog, optional: true, skipSelf: true }, { token: i1$1.OverlayContainer }, { token: DIALOG_SCROLL_STRATEGY }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: Dialog, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
     static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: Dialog, providedIn: 'root' }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: Dialog, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
-        }], ctorParameters: () => [{ type: i1$1.Overlay }, { type: i0.Injector }, { type: DialogConfig, decorators: [{
-                    type: Optional
-                }, {
-                    type: Inject,
-                    args: [DEFAULT_DIALOG_CONFIG]
-                }] }, { type: Dialog, decorators: [{
-                    type: Optional
-                }, {
-                    type: SkipSelf
-                }] }, { type: i1$1.OverlayContainer }, { type: undefined, decorators: [{
-                    type: Inject,
-                    args: [DIALOG_SCROLL_STRATEGY]
-                }] }] });
+        }], ctorParameters: () => [] });
 /**
  * Executes a callback against all elements in an array while iterating in reverse.
  * Useful if the array is being modified as it is being iterated.

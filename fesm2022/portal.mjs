@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { ElementRef, Injector, Directive, EventEmitter, Inject, Input, Output, NgModule } from '@angular/core';
+import { ElementRef, Injector, inject, TemplateRef, ViewContainerRef, Directive, ComponentFactoryResolver, EventEmitter, Input, Output, NgModule } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 /**
@@ -380,10 +380,12 @@ class DomPortalHost extends DomPortalOutlet {
  * the directive instance itself can be attached to a host, enabling declarative use of portals.
  */
 class CdkPortal extends TemplatePortal {
-    constructor(templateRef, viewContainerRef) {
+    constructor() {
+        const templateRef = inject(TemplateRef);
+        const viewContainerRef = inject(ViewContainerRef);
         super(templateRef, viewContainerRef);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkPortal, deps: [{ token: i0.TemplateRef }, { token: i0.ViewContainerRef }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkPortal, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.3", type: CdkPortal, isStandalone: true, selector: "[cdkPortal]", exportAs: ["cdkPortal"], usesInheritance: true, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkPortal, decorators: [{
@@ -393,7 +395,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     exportAs: 'cdkPortal',
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: i0.TemplateRef }, { type: i0.ViewContainerRef }] });
+        }], ctorParameters: () => [] });
 /**
  * @deprecated Use `CdkPortal` instead.
  * @breaking-change 9.0.0
@@ -429,15 +431,11 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
  * `<ng-template [cdkPortalOutlet]="greeting"></ng-template>`
  */
 class CdkPortalOutlet extends BasePortalOutlet {
-    constructor(_componentFactoryResolver, _viewContainerRef, 
-    /**
-     * @deprecated `_document` parameter to be made required.
-     * @breaking-change 9.0.0
-     */
-    _document) {
+    constructor() {
         super();
-        this._componentFactoryResolver = _componentFactoryResolver;
-        this._viewContainerRef = _viewContainerRef;
+        this._componentFactoryResolver = inject(ComponentFactoryResolver);
+        this._viewContainerRef = inject(ViewContainerRef);
+        this._document = inject(DOCUMENT);
         /** Whether the portal component is initialized. */
         this._isInitialized = false;
         /** Emits when a portal is attached to the outlet. */
@@ -471,7 +469,6 @@ class CdkPortalOutlet extends BasePortalOutlet {
                 }
             });
         };
-        this._document = _document;
     }
     /** Portal associated with the Portal outlet. */
     get portal() {
@@ -555,7 +552,7 @@ class CdkPortalOutlet extends BasePortalOutlet {
             ? nativeElement
             : nativeElement.parentNode);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkPortalOutlet, deps: [{ token: i0.ComponentFactoryResolver }, { token: i0.ViewContainerRef }, { token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkPortalOutlet, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.3", type: CdkPortalOutlet, isStandalone: true, selector: "[cdkPortalOutlet]", inputs: { portal: ["cdkPortalOutlet", "portal"] }, outputs: { attached: "attached" }, exportAs: ["cdkPortalOutlet"], usesInheritance: true, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkPortalOutlet, decorators: [{
@@ -565,10 +562,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     exportAs: 'cdkPortalOutlet',
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: i0.ComponentFactoryResolver }, { type: i0.ViewContainerRef }, { type: undefined, decorators: [{
-                    type: Inject,
-                    args: [DOCUMENT]
-                }] }], propDecorators: { portal: [{
+        }], ctorParameters: () => [], propDecorators: { portal: [{
                 type: Input,
                 args: ['cdkPortalOutlet']
             }], attached: [{

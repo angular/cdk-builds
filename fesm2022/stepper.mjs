@@ -1,22 +1,21 @@
 import { FocusKeyManager } from '@angular/cdk/a11y';
-import * as i1 from '@angular/cdk/bidi';
-import { BidiModule } from '@angular/cdk/bidi';
+import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { hasModifierKey, SPACE, ENTER } from '@angular/cdk/keycodes';
 import * as i0 from '@angular/core';
-import { Directive, InjectionToken, EventEmitter, forwardRef, booleanAttribute, TemplateRef, Component, ViewEncapsulation, ChangeDetectionStrategy, Inject, Optional, ContentChild, ViewChild, Input, Output, QueryList, numberAttribute, ContentChildren, NgModule } from '@angular/core';
+import { inject, ElementRef, Directive, TemplateRef, InjectionToken, EventEmitter, booleanAttribute, Component, ViewEncapsulation, ChangeDetectionStrategy, ContentChild, ViewChild, Input, Output, ChangeDetectorRef, QueryList, numberAttribute, ContentChildren, NgModule } from '@angular/core';
 import { _getFocusedElementPierceShadowDom } from '@angular/cdk/platform';
 import { Subject, of } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
 
 class CdkStepHeader {
-    constructor(_elementRef) {
-        this._elementRef = _elementRef;
+    constructor() {
+        this._elementRef = inject(ElementRef);
     }
     /** Focuses the step header. */
     focus() {
         this._elementRef.nativeElement.focus();
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkStepHeader, deps: [{ token: i0.ElementRef }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkStepHeader, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.3", type: CdkStepHeader, isStandalone: true, selector: "[cdkStepHeader]", host: { attributes: { "role": "tab" } }, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkStepHeader, decorators: [{
@@ -28,13 +27,13 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     },
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: i0.ElementRef }] });
+        }], ctorParameters: () => [] });
 
 class CdkStepLabel {
-    constructor(/** @docs-private */ template) {
-        this.template = template;
+    constructor() {
+        this.template = inject(TemplateRef);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkStepLabel, deps: [{ token: i0.TemplateRef }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkStepLabel, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.3", type: CdkStepLabel, isStandalone: true, selector: "[cdkStepLabel]", ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkStepLabel, decorators: [{
@@ -43,7 +42,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     selector: '[cdkStepLabel]',
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: i0.TemplateRef }] });
+        }], ctorParameters: () => [] });
 
 /** Used to generate unique ID for each stepper component. */
 let nextId = 0;
@@ -80,8 +79,8 @@ class CdkStep {
     _getDefaultError() {
         return this.stepControl && this.stepControl.invalid && this.interacted;
     }
-    constructor(_stepper, stepperOptions) {
-        this._stepper = _stepper;
+    constructor() {
+        this._stepper = inject(CdkStepper);
         /** Whether user has attempted to move away from the step. */
         this.interacted = false;
         /** Emits when the user has attempted to move away from the step. */
@@ -92,6 +91,7 @@ class CdkStep {
         this.optional = false;
         this._completedOverride = null;
         this._customError = null;
+        const stepperOptions = inject(STEPPER_GLOBAL_OPTIONS, { optional: true });
         this._stepperOptions = stepperOptions ? stepperOptions : {};
         this._displayDefaultIndicatorType = this._stepperOptions.displayDefaultIndicatorType !== false;
     }
@@ -129,7 +129,7 @@ class CdkStep {
         // global options, or if they've explicitly set it through the `hasError` input.
         return this._stepperOptions.showError ?? this._customError != null;
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkStep, deps: [{ token: forwardRef(() => CdkStepper) }, { token: STEPPER_GLOBAL_OPTIONS, optional: true }], target: i0.ɵɵFactoryTarget.Component }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkStep, deps: [], target: i0.ɵɵFactoryTarget.Component }); }
     static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "16.1.0", version: "19.0.0-next.3", type: CdkStep, isStandalone: true, selector: "cdk-step", inputs: { stepControl: "stepControl", label: "label", errorMessage: "errorMessage", ariaLabel: ["aria-label", "ariaLabel"], ariaLabelledby: ["aria-labelledby", "ariaLabelledby"], state: "state", editable: ["editable", "editable", booleanAttribute], optional: ["optional", "optional", booleanAttribute], completed: ["completed", "completed", booleanAttribute], hasError: ["hasError", "hasError", booleanAttribute] }, outputs: { interactedStream: "interacted" }, queries: [{ propertyName: "stepLabel", first: true, predicate: CdkStepLabel, descendants: true }], viewQueries: [{ propertyName: "content", first: true, predicate: TemplateRef, descendants: true, static: true }], exportAs: ["cdkStep"], usesOnChanges: true, ngImport: i0, template: '<ng-template><ng-content></ng-content></ng-template>', isInline: true, changeDetection: i0.ChangeDetectionStrategy.OnPush, encapsulation: i0.ViewEncapsulation.None }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkStep, decorators: [{
@@ -142,15 +142,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     changeDetection: ChangeDetectionStrategy.OnPush,
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: CdkStepper, decorators: [{
-                    type: Inject,
-                    args: [forwardRef(() => CdkStepper)]
-                }] }, { type: undefined, decorators: [{
-                    type: Optional
-                }, {
-                    type: Inject,
-                    args: [STEPPER_GLOBAL_OPTIONS]
-                }] }], propDecorators: { stepLabel: [{
+        }], ctorParameters: () => [], propDecorators: { stepLabel: [{
                 type: ContentChild,
                 args: [CdkStepLabel]
             }], content: [{
@@ -226,10 +218,10 @@ class CdkStepper {
             this._keyManager.withVerticalOrientation(value === 'vertical');
         }
     }
-    constructor(_dir, _changeDetectorRef, _elementRef) {
-        this._dir = _dir;
-        this._changeDetectorRef = _changeDetectorRef;
-        this._elementRef = _elementRef;
+    constructor() {
+        this._dir = inject(Directionality, { optional: true });
+        this._changeDetectorRef = inject(ChangeDetectorRef);
+        this._elementRef = inject(ElementRef);
         /** Emits when the component is destroyed. */
         this._destroyed = new Subject();
         /** Steps that belong to the current stepper, excluding ones from nested steppers. */
@@ -243,8 +235,9 @@ class CdkStepper {
         this.selectionChange = new EventEmitter();
         /** Output to support two-way binding on `[(selectedIndex)]` */
         this.selectedIndexChange = new EventEmitter();
-        this._orientation = 'horizontal';
+        /** Used to track unique ID for each stepper component. */
         this._groupId = nextId++;
+        this._orientation = 'horizontal';
     }
     ngAfterContentInit() {
         this._steps.changes
@@ -445,7 +438,7 @@ class CdkStepper {
     _isValidIndex(index) {
         return index > -1 && (!this.steps || index < this.steps.length);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkStepper, deps: [{ token: i1.Directionality, optional: true }, { token: i0.ChangeDetectorRef }, { token: i0.ElementRef }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkStepper, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "19.0.0-next.3", type: CdkStepper, isStandalone: true, selector: "[cdkStepper]", inputs: { linear: ["linear", "linear", booleanAttribute], selectedIndex: ["selectedIndex", "selectedIndex", numberAttribute], selected: "selected", orientation: "orientation" }, outputs: { selectionChange: "selectionChange", selectedIndexChange: "selectedIndexChange" }, queries: [{ propertyName: "_steps", predicate: CdkStep, descendants: true }, { propertyName: "_stepHeader", predicate: CdkStepHeader, descendants: true }], exportAs: ["cdkStepper"], ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkStepper, decorators: [{
@@ -455,9 +448,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     exportAs: 'cdkStepper',
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: i1.Directionality, decorators: [{
-                    type: Optional
-                }] }, { type: i0.ChangeDetectorRef }, { type: i0.ElementRef }], propDecorators: { _steps: [{
+        }], ctorParameters: () => [], propDecorators: { _steps: [{
                 type: ContentChildren,
                 args: [CdkStep, { descendants: true }]
             }], _stepHeader: [{
@@ -481,12 +472,12 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
 
 /** Button that moves to the next step in a stepper workflow. */
 class CdkStepperNext {
-    constructor(_stepper) {
-        this._stepper = _stepper;
+    constructor() {
+        this._stepper = inject(CdkStepper);
         /** Type of the next button. Defaults to "submit" if not specified. */
         this.type = 'submit';
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkStepperNext, deps: [{ token: CdkStepper }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkStepperNext, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.3", type: CdkStepperNext, isStandalone: true, selector: "button[cdkStepperNext]", inputs: { type: "type" }, host: { listeners: { "click": "_stepper.next()" }, properties: { "type": "type" } }, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkStepperNext, decorators: [{
@@ -499,17 +490,17 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     },
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: CdkStepper }], propDecorators: { type: [{
+        }], ctorParameters: () => [], propDecorators: { type: [{
                 type: Input
             }] } });
 /** Button that moves to the previous step in a stepper workflow. */
 class CdkStepperPrevious {
-    constructor(_stepper) {
-        this._stepper = _stepper;
+    constructor() {
+        this._stepper = inject(CdkStepper);
         /** Type of the previous button. Defaults to "button" if not specified. */
         this.type = 'button';
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkStepperPrevious, deps: [{ token: CdkStepper }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkStepperPrevious, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.3", type: CdkStepperPrevious, isStandalone: true, selector: "button[cdkStepperPrevious]", inputs: { type: "type" }, host: { listeners: { "click": "_stepper.previous()" }, properties: { "type": "type" } }, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", ngImport: i0, type: CdkStepperPrevious, decorators: [{
@@ -522,7 +513,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
                     },
                     standalone: true,
                 }]
-        }], ctorParameters: () => [{ type: CdkStepper }], propDecorators: { type: [{
+        }], ctorParameters: () => [], propDecorators: { type: [{
                 type: Input
             }] } });
 
