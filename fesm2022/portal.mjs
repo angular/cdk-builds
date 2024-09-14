@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { ElementRef, Injector, inject, TemplateRef, ViewContainerRef, Directive, ComponentFactoryResolver, EventEmitter, Input, Output, NgModule } from '@angular/core';
+import { ElementRef, NgModuleRef, createComponent, Injector, inject, TemplateRef, ViewContainerRef, Directive, EventEmitter, Input, Output, NgModule } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 /**
@@ -91,12 +91,16 @@ class Portal {
  * A `ComponentPortal` is a portal that instantiates some Component upon attachment.
  */
 class ComponentPortal extends Portal {
-    constructor(component, viewContainerRef, injector, componentFactoryResolver, projectableNodes) {
+    constructor(component, viewContainerRef, injector, 
+    /**
+     * @deprecated No longer in use. To be removed.
+     * @breaking-change 18.0.0
+     */
+    _componentFactoryResolver, projectableNodes) {
         super();
         this.component = component;
         this.viewContainerRef = viewContainerRef;
         this.injector = injector;
-        this.componentFactoryResolver = componentFactoryResolver;
         this.projectableNodes = projectableNodes;
     }
 }
@@ -244,7 +248,12 @@ class DomPortalOutlet extends BasePortalOutlet {
      */
     constructor(
     /** Element into which the content is projected. */
-    outletElement, _componentFactoryResolver, _appRef, _defaultInjector, 
+    outletElement, 
+    /**
+     * @deprecated No longer in use. To be removed.
+     * @breaking-change 18.0.0
+     */
+    _componentFactoryResolver, _appRef, _defaultInjector, 
     /**
      * @deprecated `_document` Parameter to be made required.
      * @breaking-change 10.0.0
@@ -252,7 +261,6 @@ class DomPortalOutlet extends BasePortalOutlet {
     _document) {
         super();
         this.outletElement = outletElement;
-        this._componentFactoryResolver = _componentFactoryResolver;
         this._appRef = _appRef;
         this._defaultInjector = _defaultInjector;
         /**
@@ -287,30 +295,36 @@ class DomPortalOutlet extends BasePortalOutlet {
         this._document = _document;
     }
     /**
-     * Attach the given ComponentPortal to DOM element using the ComponentFactoryResolver.
+     * Attach the given ComponentPortal to DOM element.
      * @param portal Portal to be attached
      * @returns Reference to the created component.
      */
     attachComponentPortal(portal) {
-        const resolver = (portal.componentFactoryResolver || this._componentFactoryResolver);
-        if ((typeof ngDevMode === 'undefined' || ngDevMode) && !resolver) {
-            throw Error('Cannot attach component portal to outlet without a ComponentFactoryResolver.');
-        }
-        const componentFactory = resolver.resolveComponentFactory(portal.component);
         let componentRef;
         // If the portal specifies a ViewContainerRef, we will use that as the attachment point
         // for the component (in terms of Angular's component tree, not rendering).
         // When the ViewContainerRef is missing, we use the factory to create the component directly
         // and then manually attach the view to the application.
         if (portal.viewContainerRef) {
-            componentRef = portal.viewContainerRef.createComponent(componentFactory, portal.viewContainerRef.length, portal.injector || portal.viewContainerRef.injector, portal.projectableNodes || undefined);
+            const injector = portal.injector || portal.viewContainerRef.injector;
+            const ngModuleRef = injector.get(NgModuleRef, null, { optional: true }) || undefined;
+            componentRef = portal.viewContainerRef.createComponent(portal.component, {
+                index: portal.viewContainerRef.length,
+                injector,
+                ngModuleRef,
+                projectableNodes: portal.projectableNodes || undefined,
+            });
             this.setDisposeFn(() => componentRef.destroy());
         }
         else {
             if ((typeof ngDevMode === 'undefined' || ngDevMode) && !this._appRef) {
                 throw Error('Cannot attach component portal to outlet without an ApplicationRef.');
             }
-            componentRef = componentFactory.create(portal.injector || this._defaultInjector || Injector.NULL);
+            componentRef = createComponent(portal.component, {
+                elementInjector: portal.injector || this._defaultInjector || Injector.NULL,
+                environmentInjector: this._appRef.injector,
+                projectableNodes: portal.projectableNodes || undefined,
+            });
             this._appRef.attachView(componentRef.hostView);
             this.setDisposeFn(() => {
                 // Verify that the ApplicationRef has registered views before trying to detach a host view.
@@ -433,9 +447,9 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.3", 
 class CdkPortalOutlet extends BasePortalOutlet {
     constructor() {
         super();
-        this._componentFactoryResolver = inject(ComponentFactoryResolver);
-        this._viewContainerRef = inject(ViewContainerRef);
+        this._moduleRef = inject(NgModuleRef, { optional: true });
         this._document = inject(DOCUMENT);
+        this._viewContainerRef = inject(ViewContainerRef);
         /** Whether the portal component is initialized. */
         this._isInitialized = false;
         /** Emits when a portal is attached to the outlet. */
@@ -502,7 +516,7 @@ class CdkPortalOutlet extends BasePortalOutlet {
         this._attachedRef = this._attachedPortal = null;
     }
     /**
-     * Attach the given ComponentPortal to this PortalOutlet using the ComponentFactoryResolver.
+     * Attach the given ComponentPortal to this PortalOutlet.
      *
      * @param portal Portal to be attached to the portal outlet.
      * @returns Reference to the created component.
@@ -512,9 +526,12 @@ class CdkPortalOutlet extends BasePortalOutlet {
         // If the portal specifies an origin, use that as the logical location of the component
         // in the application tree. Otherwise use the location of this PortalOutlet.
         const viewContainerRef = portal.viewContainerRef != null ? portal.viewContainerRef : this._viewContainerRef;
-        const resolver = portal.componentFactoryResolver || this._componentFactoryResolver;
-        const componentFactory = resolver.resolveComponentFactory(portal.component);
-        const ref = viewContainerRef.createComponent(componentFactory, viewContainerRef.length, portal.injector || viewContainerRef.injector, portal.projectableNodes || undefined);
+        const ref = viewContainerRef.createComponent(portal.component, {
+            index: viewContainerRef.length,
+            injector: portal.injector || viewContainerRef.injector,
+            projectableNodes: portal.projectableNodes || undefined,
+            ngModuleRef: this._moduleRef || undefined,
+        });
         // If we're using a view container that's different from the injected one (e.g. when the portal
         // specifies its own) we need to move the component into the outlet, otherwise it'll be rendered
         // inside of the alternate view container.

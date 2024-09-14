@@ -1,5 +1,4 @@
 import { ApplicationRef } from '@angular/core';
-import { ComponentFactoryResolver } from '@angular/core';
 import { ComponentRef } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { EmbeddedViewRef } from '@angular/core';
@@ -64,9 +63,9 @@ export declare class CdkPortal extends TemplatePortal {
  * `<ng-template [cdkPortalOutlet]="greeting"></ng-template>`
  */
 export declare class CdkPortalOutlet extends BasePortalOutlet implements OnInit, OnDestroy {
-    private _componentFactoryResolver;
-    private _viewContainerRef;
+    private _moduleRef;
     private _document;
+    private _viewContainerRef;
     /** Whether the portal component is initialized. */
     private _isInitialized;
     /** Reference to the currently-attached component/view ref. */
@@ -82,7 +81,7 @@ export declare class CdkPortalOutlet extends BasePortalOutlet implements OnInit,
     ngOnInit(): void;
     ngOnDestroy(): void;
     /**
-     * Attach the given ComponentPortal to this PortalOutlet using the ComponentFactoryResolver.
+     * Attach the given ComponentPortal to this PortalOutlet.
      *
      * @param portal Portal to be attached to the portal outlet.
      * @returns Reference to the created component.
@@ -127,15 +126,20 @@ export declare class ComponentPortal<T> extends Portal<ComponentRef<T>> {
     /** Injector used for the instantiation of the component. */
     injector?: Injector | null;
     /**
-     * Alternate `ComponentFactoryResolver` to use when resolving the associated component.
-     * Defaults to using the resolver from the outlet that the portal is attached to.
+     * @deprecated No longer in use. To be removed.
+     * @breaking-change 18.0.0
      */
-    componentFactoryResolver?: ComponentFactoryResolver | null;
+    componentFactoryResolver?: any;
     /**
      * List of DOM nodes that should be projected through `<ng-content>` of the attached component.
      */
     projectableNodes?: Node[][] | null;
-    constructor(component: ComponentType<T>, viewContainerRef?: ViewContainerRef | null, injector?: Injector | null, componentFactoryResolver?: ComponentFactoryResolver | null, projectableNodes?: Node[][] | null);
+    constructor(component: ComponentType<T>, viewContainerRef?: ViewContainerRef | null, injector?: Injector | null, 
+    /**
+     * @deprecated No longer in use. To be removed.
+     * @breaking-change 18.0.0
+     */
+    _componentFactoryResolver?: any, projectableNodes?: Node[][] | null);
 }
 
 /** Interface that can be used to generically type a class. */
@@ -168,7 +172,6 @@ export declare class DomPortalHost extends DomPortalOutlet {
 export declare class DomPortalOutlet extends BasePortalOutlet {
     /** Element into which the content is projected. */
     outletElement: Element;
-    private _componentFactoryResolver?;
     private _appRef?;
     private _defaultInjector?;
     private _document;
@@ -185,14 +188,19 @@ export declare class DomPortalOutlet extends BasePortalOutlet {
      */
     constructor(
     /** Element into which the content is projected. */
-    outletElement: Element, _componentFactoryResolver?: ComponentFactoryResolver | undefined, _appRef?: ApplicationRef | undefined, _defaultInjector?: Injector | undefined, 
+    outletElement: Element, 
+    /**
+     * @deprecated No longer in use. To be removed.
+     * @breaking-change 18.0.0
+     */
+    _componentFactoryResolver?: any, _appRef?: ApplicationRef | undefined, _defaultInjector?: Injector | undefined, 
     /**
      * @deprecated `_document` Parameter to be made required.
      * @breaking-change 10.0.0
      */
     _document?: any);
     /**
-     * Attach the given ComponentPortal to DOM element using the ComponentFactoryResolver.
+     * Attach the given ComponentPortal to DOM element.
      * @param portal Portal to be attached
      * @returns Reference to the created component.
      */
