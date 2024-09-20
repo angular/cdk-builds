@@ -18,4 +18,13 @@ export declare class _CdkPrivateStyleLoader {
     static ɵprov: i0.ɵɵInjectableDeclaration<_CdkPrivateStyleLoader>;
 }
 
+/**
+ * Component used to load the .cdk-visually-hidden styles.
+ * @docs-private
+ */
+export declare class _VisuallyHiddenLoader {
+    static ɵfac: i0.ɵɵFactoryDeclaration<_VisuallyHiddenLoader, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<_VisuallyHiddenLoader, "ng-component", ["cdkVisuallyHidden"], {}, {}, never, never, true, never>;
+}
+
 export { }
