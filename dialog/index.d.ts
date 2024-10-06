@@ -1,7 +1,6 @@
 import { BasePortalOutlet } from '@angular/cdk/portal';
 import { CdkPortalOutlet } from '@angular/cdk/portal';
 import { ChangeDetectorRef } from '@angular/core';
-import { ComponentFactoryResolver } from '@angular/core';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { ComponentRef } from '@angular/core';
 import { ComponentType } from '@angular/cdk/overlay';
@@ -344,8 +343,12 @@ export declare class DialogConfig<D = unknown, R = unknown, C extends BasePortal
      * browser location changes.
      */
     closeOnOverlayDetachments?: boolean;
-    /** Alternate `ComponentFactoryResolver` to use when resolving the associated component. */
-    componentFactoryResolver?: ComponentFactoryResolver;
+    /**
+     * Alternate `ComponentFactoryResolver` to use when resolving the associated component.
+     * @deprecated No longer used. Will be removed.
+     * @breaking-change 20.0.0
+     */
+    componentFactoryResolver?: unknown;
     /**
      * Providers that will be exposed to the contents of the dialog. Can also
      * be provided as a function in order to generate the providers lazily.

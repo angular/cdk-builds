@@ -703,7 +703,6 @@ export declare interface OriginConnectionPosition {
 export declare class Overlay {
     scrollStrategies: ScrollStrategyOptions;
     private _overlayContainer;
-    private _componentFactoryResolver;
     private _positionBuilder;
     private _keyboardDispatcher;
     private _injector;
