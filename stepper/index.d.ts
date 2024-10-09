@@ -1,3 +1,4 @@
+import { AbstractControl } from '@angular/forms';
 import { AfterContentInit } from '@angular/core';
 import { AfterViewInit } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
@@ -5,70 +6,16 @@ import { Directionality } from '@angular/cdk/bidi';
 import { ElementRef } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import { FocusableOption } from '@angular/cdk/a11y';
+import { FormGroupDirective } from '@angular/forms';
 import * as i0 from '@angular/core';
 import * as i1 from '@angular/cdk/bidi';
 import { InjectionToken } from '@angular/core';
-import { Observable } from 'rxjs';
+import { NgForm } from '@angular/forms';
 import { OnChanges } from '@angular/core';
 import { OnDestroy } from '@angular/core';
 import { QueryList } from '@angular/core';
 import { Subject } from 'rxjs';
 import { TemplateRef } from '@angular/core';
-
-/**
- * Simplified representation of an "AbstractControl" from @angular/forms.
- * Used to avoid having to bring in @angular/forms for a single optional interface.
- * @docs-private
- */
-declare interface AbstractControlLike {
-    asyncValidator: ((control: any) => any) | null;
-    dirty: boolean;
-    disabled: boolean;
-    enabled: boolean;
-    errors: {
-        [key: string]: any;
-    } | null;
-    invalid: boolean;
-    parent: any;
-    pending: boolean;
-    pristine: boolean;
-    root: AbstractControlLike;
-    status: string;
-    readonly statusChanges: Observable<any>;
-    touched: boolean;
-    untouched: boolean;
-    updateOn: any;
-    valid: boolean;
-    validator: ((control: any) => any) | null;
-    value: any;
-    readonly valueChanges: Observable<any>;
-    clearAsyncValidators(): void;
-    clearValidators(): void;
-    disable(opts?: any): void;
-    enable(opts?: any): void;
-    get(path: (string | number)[] | string): AbstractControlLike | null;
-    getError(errorCode: string, path?: (string | number)[] | string): any;
-    hasError(errorCode: string, path?: (string | number)[] | string): boolean;
-    markAllAsTouched(): void;
-    markAsDirty(opts?: any): void;
-    markAsPending(opts?: any): void;
-    markAsPristine(opts?: any): void;
-    markAsTouched(opts?: any): void;
-    markAsUntouched(opts?: any): void;
-    patchValue(value: any, options?: Object): void;
-    reset(value?: any, options?: Object): void;
-    setAsyncValidators(newValidator: (control: any) => any | ((control: any) => any)[] | null): void;
-    setErrors(errors: {
-        [key: string]: any;
-    } | null, opts?: any): void;
-    setParent(parent: any): void;
-    setValidators(newValidator: (control: any) => any | ((control: any) => any)[] | null): void;
-    setValue(value: any, options?: Object): void;
-    updateValueAndValidity(opts?: any): void;
-    patchValue(value: any, options?: any): void;
-    reset(formState?: any, options?: any): void;
-    setValue(value: any, options?: any): void;
-}
 
 export declare class CdkStep implements OnChanges {
     _stepper: CdkStepper;
@@ -76,10 +23,12 @@ export declare class CdkStep implements OnChanges {
     _displayDefaultIndicatorType: boolean;
     /** Template for step label if it exists. */
     stepLabel: CdkStepLabel;
+    /** Forms that have been projected into the step. */
+    protected _childForms: QueryList<Partial<NgForm | FormGroupDirective>> | undefined;
     /** Template for step content. */
     content: TemplateRef<any>;
     /** The top level abstract control of the step. */
-    stepControl: AbstractControlLike;
+    stepControl: AbstractControl;
     /** Whether user has attempted to move away from the step. */
     interacted: boolean;
     /** Emits when the user has attempted to move away from the step. */
@@ -121,7 +70,7 @@ export declare class CdkStep implements OnChanges {
     /** Determines whether the error state can be shown. */
     _showError(): boolean;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkStep, [null, { optional: true; }]>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<CdkStep, "cdk-step", ["cdkStep"], { "stepControl": { "alias": "stepControl"; "required": false; }; "label": { "alias": "label"; "required": false; }; "errorMessage": { "alias": "errorMessage"; "required": false; }; "ariaLabel": { "alias": "aria-label"; "required": false; }; "ariaLabelledby": { "alias": "aria-labelledby"; "required": false; }; "state": { "alias": "state"; "required": false; }; "editable": { "alias": "editable"; "required": false; }; "optional": { "alias": "optional"; "required": false; }; "completed": { "alias": "completed"; "required": false; }; "hasError": { "alias": "hasError"; "required": false; }; }, { "interactedStream": "interacted"; }, ["stepLabel"], ["*"], true, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<CdkStep, "cdk-step", ["cdkStep"], { "stepControl": { "alias": "stepControl"; "required": false; }; "label": { "alias": "label"; "required": false; }; "errorMessage": { "alias": "errorMessage"; "required": false; }; "ariaLabel": { "alias": "aria-label"; "required": false; }; "ariaLabelledby": { "alias": "aria-labelledby"; "required": false; }; "state": { "alias": "state"; "required": false; }; "editable": { "alias": "editable"; "required": false; }; "optional": { "alias": "optional"; "required": false; }; "completed": { "alias": "completed"; "required": false; }; "hasError": { "alias": "hasError"; "required": false; }; }, { "interactedStream": "interacted"; }, ["stepLabel", "_childForms"], ["*"], true, never>;
     static ngAcceptInputType_editable: unknown;
     static ngAcceptInputType_optional: unknown;
     static ngAcceptInputType_completed: unknown;

@@ -3,7 +3,8 @@ import * as i1 from '@angular/cdk/bidi';
 import { BidiModule } from '@angular/cdk/bidi';
 import { hasModifierKey, SPACE, ENTER } from '@angular/cdk/keycodes';
 import * as i0 from '@angular/core';
-import { Directive, InjectionToken, EventEmitter, forwardRef, booleanAttribute, TemplateRef, Component, ViewEncapsulation, ChangeDetectionStrategy, Inject, Optional, ContentChild, ViewChild, Input, Output, QueryList, numberAttribute, ContentChildren, NgModule } from '@angular/core';
+import { Directive, InjectionToken, EventEmitter, forwardRef, booleanAttribute, TemplateRef, Component, ViewEncapsulation, ChangeDetectionStrategy, Inject, Optional, ContentChild, ContentChildren, ViewChild, Input, Output, QueryList, numberAttribute, NgModule } from '@angular/core';
+import { ControlContainer } from '@angular/forms';
 import { _getFocusedElementPierceShadowDom } from '@angular/cdk/platform';
 import { Subject, of } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
@@ -109,6 +110,10 @@ class CdkStep {
             this._customError = false;
         }
         if (this.stepControl) {
+            // Reset the forms since the default error state matchers will show errors on submit and we
+            // want the form to be back to its initial state (see #29781). Submitted state is on the
+            // individual directives, rather than the control, so we need to reset them ourselves.
+            this._childForms?.forEach(form => form.resetForm?.());
             this.stepControl.reset();
         }
     }
@@ -130,14 +135,19 @@ class CdkStep {
         return this._stepperOptions.showError ?? this._customError != null;
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.2.0-next.2", ngImport: i0, type: CdkStep, deps: [{ token: forwardRef(() => CdkStepper) }, { token: STEPPER_GLOBAL_OPTIONS, optional: true }], target: i0.ɵɵFactoryTarget.Component }); }
-    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "16.1.0", version: "18.2.0-next.2", type: CdkStep, isStandalone: true, selector: "cdk-step", inputs: { stepControl: "stepControl", label: "label", errorMessage: "errorMessage", ariaLabel: ["aria-label", "ariaLabel"], ariaLabelledby: ["aria-labelledby", "ariaLabelledby"], state: "state", editable: ["editable", "editable", booleanAttribute], optional: ["optional", "optional", booleanAttribute], completed: ["completed", "completed", booleanAttribute], hasError: ["hasError", "hasError", booleanAttribute] }, outputs: { interactedStream: "interacted" }, queries: [{ propertyName: "stepLabel", first: true, predicate: CdkStepLabel, descendants: true }], viewQueries: [{ propertyName: "content", first: true, predicate: TemplateRef, descendants: true, static: true }], exportAs: ["cdkStep"], usesOnChanges: true, ngImport: i0, template: '<ng-template><ng-content></ng-content></ng-template>', isInline: true, changeDetection: i0.ChangeDetectionStrategy.OnPush, encapsulation: i0.ViewEncapsulation.None }); }
+    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "16.1.0", version: "18.2.0-next.2", type: CdkStep, isStandalone: true, selector: "cdk-step", inputs: { stepControl: "stepControl", label: "label", errorMessage: "errorMessage", ariaLabel: ["aria-label", "ariaLabel"], ariaLabelledby: ["aria-labelledby", "ariaLabelledby"], state: "state", editable: ["editable", "editable", booleanAttribute], optional: ["optional", "optional", booleanAttribute], completed: ["completed", "completed", booleanAttribute], hasError: ["hasError", "hasError", booleanAttribute] }, outputs: { interactedStream: "interacted" }, queries: [{ propertyName: "stepLabel", first: true, predicate: CdkStepLabel, descendants: true }, { propertyName: "_childForms", predicate: 
+                // Note: we look for `ControlContainer` here, because both `NgForm` and `FormGroupDirective`
+                // provides themselves as such, but we don't want to have a concrete reference to both of
+                // the directives. The type is marked as `Partial` in case we run into a class that provides
+                // itself as `ControlContainer` but doesn't have the same interface as the directives.
+                ControlContainer, descendants: true }], viewQueries: [{ propertyName: "content", first: true, predicate: TemplateRef, descendants: true, static: true }], exportAs: ["cdkStep"], usesOnChanges: true, ngImport: i0, template: '<ng-template><ng-content/></ng-template>', isInline: true, changeDetection: i0.ChangeDetectionStrategy.OnPush, encapsulation: i0.ViewEncapsulation.None }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.0-next.2", ngImport: i0, type: CdkStep, decorators: [{
             type: Component,
             args: [{
                     selector: 'cdk-step',
                     exportAs: 'cdkStep',
-                    template: '<ng-template><ng-content></ng-content></ng-template>',
+                    template: '<ng-template><ng-content/></ng-template>',
                     encapsulation: ViewEncapsulation.None,
                     changeDetection: ChangeDetectionStrategy.OnPush,
                     standalone: true,
@@ -153,6 +163,17 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.2.0-next.2", 
                 }] }], propDecorators: { stepLabel: [{
                 type: ContentChild,
                 args: [CdkStepLabel]
+            }], _childForms: [{
+                type: ContentChildren,
+                args: [
+                    // Note: we look for `ControlContainer` here, because both `NgForm` and `FormGroupDirective`
+                    // provides themselves as such, but we don't want to have a concrete reference to both of
+                    // the directives. The type is marked as `Partial` in case we run into a class that provides
+                    // itself as `ControlContainer` but doesn't have the same interface as the directives.
+                    ControlContainer,
+                    {
+                        descendants: true,
+                    }]
             }], content: [{
                 type: ViewChild,
                 args: [TemplateRef, { static: true }]
