@@ -2,7 +2,7 @@ import { SelectionModel, isDataSource } from '@angular/cdk/collections';
 import { isObservable, Subject, BehaviorSubject, of, combineLatest, EMPTY, concat } from 'rxjs';
 import { take, filter, takeUntil, startWith, tap, switchMap, map, reduce, concatMap, distinctUntilChanged } from 'rxjs/operators';
 import * as i0 from '@angular/core';
-import { InjectionToken, inject, ViewContainerRef, Directive, TemplateRef, IterableDiffers, ChangeDetectorRef, Component, ViewEncapsulation, ChangeDetectionStrategy, Input, ViewChild, ContentChildren, ElementRef, EventEmitter, booleanAttribute, Output, numberAttribute, NgModule } from '@angular/core';
+import { InjectionToken, inject, ViewContainerRef, Directive, TemplateRef, IterableDiffers, ChangeDetectorRef, ElementRef, Component, ViewEncapsulation, ChangeDetectionStrategy, Input, ViewChild, ContentChildren, EventEmitter, booleanAttribute, Output, numberAttribute, NgModule } from '@angular/core';
 import { TREE_KEY_MANAGER } from '@angular/cdk/a11y';
 import { Directionality } from '@angular/cdk/bidi';
 import { coerceObservable } from '@angular/cdk/coercion/private';
@@ -278,6 +278,7 @@ class CdkTree {
     constructor() {
         this._differs = inject(IterableDiffers);
         this._changeDetectorRef = inject(ChangeDetectorRef);
+        this._elementRef = inject(ElementRef);
         this._dir = inject(Directionality);
         /** Subject that emits when the component has been destroyed. */
         this._onDestroy = new Subject();
@@ -839,7 +840,20 @@ class CdkTree {
     }
     /** `keydown` event handler; this just passes the event to the `TreeKeyManager`. */
     _sendKeydownToKeyManager(event) {
-        this._keyManager.onKeydown(event);
+        // Only handle events directly on the tree or directly on one of the nodes, otherwise
+        // we risk interfering with events in the projected content (see #29828).
+        if (event.target === this._elementRef.nativeElement) {
+            this._keyManager.onKeydown(event);
+        }
+        else {
+            const nodes = this._nodes.getValue();
+            for (const [, node] of nodes) {
+                if (event.target === node._elementRef.nativeElement) {
+                    this._keyManager.onKeydown(event);
+                    break;
+                }
+            }
+        }
     }
     /** Gets all nested descendants of a given node. */
     _getDescendants(dataNode) {
