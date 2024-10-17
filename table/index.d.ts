@@ -51,7 +51,7 @@ export declare abstract class BaseRowDef implements OnChanges {
     /** Gets this row def's relevant cell template from the provided column def. */
     extractCellTemplate(column: CdkColumnDef): TemplateRef<any>;
     static ɵfac: i0.ɵɵFactoryDeclaration<BaseRowDef, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<BaseRowDef, never, never, {}, {}, never, never, false, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<BaseRowDef, never, never, {}, {}, never, never, true, never>;
 }
 
 /**

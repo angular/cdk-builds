@@ -207,7 +207,7 @@ export declare abstract class CdkVirtualScrollable extends CdkScrollable {
      */
     abstract measureBoundingClientRectWithScrollOffset(from: 'left' | 'top' | 'right' | 'bottom'): number;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkVirtualScrollable, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkVirtualScrollable, never, never, {}, {}, never, never, false, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkVirtualScrollable, never, never, {}, {}, never, never, true, never>;
 }
 
 /**
