@@ -2,6 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
 import { inject, APP_ID, Injectable, QueryList, isSignal, effect, InjectionToken, afterNextRender, NgZone, Injector, ElementRef, booleanAttribute, Directive, Input, EventEmitter, Output, NgModule } from '@angular/core';
 import { Platform, _getFocusedElementPierceShadowDom, normalizePassiveListenerOptions, _getEventTarget, _getShadowRoot } from '@angular/cdk/platform';
+import { _CdkPrivateStyleLoader, _VisuallyHiddenLoader } from '@angular/cdk/private';
 import { Subject, Subscription, isObservable, of, BehaviorSubject } from 'rxjs';
 import { A, Z, ZERO, NINE, hasModifierKey, PAGE_DOWN, PAGE_UP, END, HOME, LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW, TAB, ALT, CONTROL, MAC_META, META, SHIFT } from '@angular/cdk/keycodes';
 import { tap, debounceTime, filter, map, take, skip, distinctUntilChanged, takeUntil } from 'rxjs/operators';
@@ -85,6 +86,7 @@ class AriaDescriber {
         this._messagesContainer = null;
         /** Unique ID for the service. */
         this._id = `${nextId++}`;
+        inject(_CdkPrivateStyleLoader).load(_VisuallyHiddenLoader);
         this._id = inject(APP_ID) + '-' + nextId++;
     }
     describe(hostElement, message, role) {
@@ -1657,6 +1659,7 @@ class FocusTrapFactory {
         this._ngZone = inject(NgZone);
         this._document = inject(DOCUMENT);
         this._injector = inject(Injector);
+        inject(_CdkPrivateStyleLoader).load(_VisuallyHiddenLoader);
     }
     /**
      * Creates a focus-trapped region around the given element.
@@ -2268,6 +2271,7 @@ class CdkAriaLive {
         this._contentObserver = inject(ContentObserver);
         this._ngZone = inject(NgZone);
         this._politeness = 'polite';
+        inject(_CdkPrivateStyleLoader).load(_VisuallyHiddenLoader);
     }
     ngOnDestroy() {
         if (this._subscription) {
