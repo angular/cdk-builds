@@ -1078,6 +1078,10 @@ export declare class StickyStyler {
     private _isBrowser;
     private readonly _needsPositionStickyOnElement;
     private readonly _positionListener?;
+    private _elemSizeCache;
+    private _resizeObserver;
+    private _updatedStickyColumnsParamsToReplay;
+    private _stickyColumnsReplayTimeout;
     private _cachedCellWidths;
     private readonly _borderCellCss;
     /**
@@ -1112,8 +1116,9 @@ export declare class StickyStyler {
      *     in this index position should be stuck to the end of the row.
      * @param recalculateCellWidths Whether the sticky styler should recalculate the width of each
      *     column cell. If `false` cached widths will be used instead.
+     * @param replay Whether to enqueue this call for replay after a ResizeObserver update.
      */
-    updateStickyColumns(rows: HTMLElement[], stickyStartStates: boolean[], stickyEndStates: boolean[], recalculateCellWidths?: boolean): void;
+    updateStickyColumns(rows: HTMLElement[], stickyStartStates: boolean[], stickyEndStates: boolean[], recalculateCellWidths?: boolean, replay?: boolean): void;
     /**
      * Applies sticky positioning to the row's cells if using the native table layout, and to the
      * row itself otherwise.
@@ -1171,6 +1176,20 @@ export declare class StickyStyler {
      * Non-sticky cells do not need to have a value set since their positions will not be applied.
      */
     _getStickyEndColumnPositions(widths: number[], stickyStates: boolean[]): number[];
+    /**
+     * Retreives the most recently observed size of the specified element from the cache, or
+     * meaures it directly if not yet cached.
+     */
+    private _retrieveElementSize;
+    /**
+     * Conditionally enqueue the requested sticky update and clear previously queued updates
+     * for the same rows.
+     */
+    private _updateStickyColumnReplayQueue;
+    /** Remove updates for the specified rows from the queue. */
+    private _removeFromStickyColumnReplayQueue;
+    /** Update _elemSizeCache with the observed sizes. */
+    private _updateCachedSizes;
 }
 
 export declare interface StickyUpdate {
