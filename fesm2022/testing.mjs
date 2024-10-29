@@ -100,6 +100,7 @@ async function parallel(values) {
  * should be inherited when defining user's own harness.
  */
 class ComponentHarness {
+    locatorFactory;
     constructor(locatorFactory) {
         this.locatorFactory = locatorFactory;
     }
@@ -254,10 +255,12 @@ class ContentContainerComponentHarness extends ComponentHarness {
  * filter instances of the class.
  */
 class HarnessPredicate {
+    harnessType;
+    _predicates = [];
+    _descriptions = [];
+    _ancestor;
     constructor(harnessType, options) {
         this.harnessType = harnessType;
-        this._predicates = [];
-        this._descriptions = [];
         this._addBaseOptions(options);
     }
     /**
@@ -421,6 +424,7 @@ function _restoreSelector(selector, placeholders) {
  * element type, `E`, used by the particular test environment.
  */
 class HarnessEnvironment {
+    rawRootElement;
     // Implemented as part of the `LocatorFactory` interface.
     get rootElement() {
         this._rootElement = this._rootElement || this.createTestElement(this.rawRootElement);
@@ -429,6 +433,7 @@ class HarnessEnvironment {
     set rootElement(element) {
         this._rootElement = element;
     }
+    _rootElement;
     constructor(rawRootElement) {
         this.rawRootElement = rawRootElement;
     }

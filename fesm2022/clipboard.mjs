@@ -16,6 +16,8 @@ import { inject, Injectable, InjectionToken, NgZone, EventEmitter, Directive, In
  * called.
  */
 class PendingCopy {
+    _document;
+    _textarea;
     constructor(text, _document) {
         this._document = _document;
         const textarea = (this._textarea = this._document.createElement('textarea'));
@@ -70,9 +72,8 @@ class PendingCopy {
  * A service for copying text to the clipboard.
  */
 class Clipboard {
-    constructor() {
-        this._document = inject(DOCUMENT);
-    }
+    _document = inject(DOCUMENT);
+    constructor() { }
     /**
      * Copies the provided text into the user's clipboard.
      *
@@ -97,8 +98,8 @@ class Clipboard {
     beginCopy(text) {
         return new PendingCopy(text, this._document);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: Clipboard, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: Clipboard, providedIn: 'root' }); }
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: Clipboard, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: Clipboard, providedIn: 'root' });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: Clipboard, decorators: [{
             type: Injectable,
@@ -112,23 +113,27 @@ const CDK_COPY_TO_CLIPBOARD_CONFIG = new InjectionToken('CDK_COPY_TO_CLIPBOARD_C
  * clipboard.
  */
 class CdkCopyToClipboard {
+    _clipboard = inject(Clipboard);
+    _ngZone = inject(NgZone);
+    /** Content to be copied. */
+    text = '';
+    /**
+     * How many times to attempt to copy the text. This may be necessary for longer text, because
+     * the browser needs time to fill an intermediate textarea element and copy the content.
+     */
+    attempts = 1;
+    /**
+     * Emits when some text is copied to the clipboard. The
+     * emitted value indicates whether copying was successful.
+     */
+    copied = new EventEmitter();
+    /** Copies that are currently being attempted. */
+    _pending = new Set();
+    /** Whether the directive has been destroyed. */
+    _destroyed;
+    /** Timeout for the current copy attempt. */
+    _currentTimeout;
     constructor() {
-        this._clipboard = inject(Clipboard);
-        this._ngZone = inject(NgZone);
-        /** Content to be copied. */
-        this.text = '';
-        /**
-         * How many times to attempt to copy the text. This may be necessary for longer text, because
-         * the browser needs time to fill an intermediate textarea element and copy the content.
-         */
-        this.attempts = 1;
-        /**
-         * Emits when some text is copied to the clipboard. The
-         * emitted value indicates whether copying was successful.
-         */
-        this.copied = new EventEmitter();
-        /** Copies that are currently being attempted. */
-        this._pending = new Set();
         const config = inject(CDK_COPY_TO_CLIPBOARD_CONFIG, { optional: true });
         if (config && config.attempts != null) {
             this.attempts = config.attempts;
@@ -167,8 +172,8 @@ class CdkCopyToClipboard {
         this._pending.clear();
         this._destroyed = true;
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: CdkCopyToClipboard, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.10", type: CdkCopyToClipboard, isStandalone: true, selector: "[cdkCopyToClipboard]", inputs: { text: ["cdkCopyToClipboard", "text"], attempts: ["cdkCopyToClipboardAttempts", "attempts"] }, outputs: { copied: "cdkCopyToClipboardCopied" }, host: { listeners: { "click": "copy()" } }, ngImport: i0 }); }
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: CdkCopyToClipboard, deps: [], target: i0.ɵɵFactoryTarget.Directive });
+    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.10", type: CdkCopyToClipboard, isStandalone: true, selector: "[cdkCopyToClipboard]", inputs: { text: ["cdkCopyToClipboard", "text"], attempts: ["cdkCopyToClipboardAttempts", "attempts"] }, outputs: { copied: "cdkCopyToClipboardCopied" }, host: { listeners: { "click": "copy()" } }, ngImport: i0 });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: CdkCopyToClipboard, decorators: [{
             type: Directive,
@@ -190,9 +195,9 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10",
             }] } });
 
 class ClipboardModule {
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: ClipboardModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule }); }
-    static { this.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "19.0.0-next.10", ngImport: i0, type: ClipboardModule, imports: [CdkCopyToClipboard], exports: [CdkCopyToClipboard] }); }
-    static { this.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: ClipboardModule }); }
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: ClipboardModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+    static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "19.0.0-next.10", ngImport: i0, type: ClipboardModule, imports: [CdkCopyToClipboard], exports: [CdkCopyToClipboard] });
+    static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: ClipboardModule });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: ClipboardModule, decorators: [{
             type: NgModule,

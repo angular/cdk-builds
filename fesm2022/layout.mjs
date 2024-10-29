@@ -6,9 +6,9 @@ import { take, skip, debounceTime, map, startWith, takeUntil } from 'rxjs/operat
 import { Platform } from '@angular/cdk/platform';
 
 class LayoutModule {
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: LayoutModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule }); }
-    static { this.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "19.0.0-next.10", ngImport: i0, type: LayoutModule }); }
-    static { this.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: LayoutModule }); }
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: LayoutModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+    static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "19.0.0-next.10", ngImport: i0, type: LayoutModule });
+    static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: LayoutModule });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: LayoutModule, decorators: [{
             type: NgModule,
@@ -21,9 +21,11 @@ const mediaQueriesForWebkitCompatibility = new Set();
 let mediaQueryStyleNode;
 /** A utility for calling matchMedia queries. */
 class MediaMatcher {
+    _platform = inject(Platform);
+    _nonce = inject(CSP_NONCE, { optional: true });
+    /** The internal matchMedia method to return back a MediaQueryList like object. */
+    _matchMedia;
     constructor() {
-        this._platform = inject(Platform);
-        this._nonce = inject(CSP_NONCE, { optional: true });
         this._matchMedia =
             this._platform.isBrowser && window.matchMedia
                 ? // matchMedia is bound to the window scope intentionally as it is an illegal invocation to
@@ -43,8 +45,8 @@ class MediaMatcher {
         }
         return this._matchMedia(query);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: MediaMatcher, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: MediaMatcher, providedIn: 'root' }); }
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: MediaMatcher, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: MediaMatcher, providedIn: 'root' });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: MediaMatcher, decorators: [{
             type: Injectable,
@@ -95,14 +97,13 @@ function noopMatchMedia(query) {
 
 /** Utility for checking the matching state of `@media` queries. */
 class BreakpointObserver {
-    constructor() {
-        this._mediaMatcher = inject(MediaMatcher);
-        this._zone = inject(NgZone);
-        /**  A map of all media queries currently being listened for. */
-        this._queries = new Map();
-        /** A subject for all other observables to takeUntil based on. */
-        this._destroySubject = new Subject();
-    }
+    _mediaMatcher = inject(MediaMatcher);
+    _zone = inject(NgZone);
+    /**  A map of all media queries currently being listened for. */
+    _queries = new Map();
+    /** A subject for all other observables to takeUntil based on. */
+    _destroySubject = new Subject();
+    constructor() { }
     /** Completes the active subject, signalling to all other observables to complete. */
     ngOnDestroy() {
         this._destroySubject.next();
@@ -166,8 +167,8 @@ class BreakpointObserver {
         this._queries.set(query, output);
         return output;
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: BreakpointObserver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: BreakpointObserver, providedIn: 'root' }); }
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: BreakpointObserver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: BreakpointObserver, providedIn: 'root' });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: BreakpointObserver, decorators: [{
             type: Injectable,

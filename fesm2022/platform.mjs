@@ -21,53 +21,52 @@ catch {
  * checking browser-specific global properties.
  */
 class Platform {
-    constructor() {
-        this._platformId = inject(PLATFORM_ID);
-        // We want to use the Angular platform check because if the Document is shimmed
-        // without the navigator, the following checks will fail. This is preferred because
-        // sometimes the Document may be shimmed without the user's knowledge or intention
-        /** Whether the Angular application is being rendered in the browser. */
-        this.isBrowser = this._platformId
-            ? isPlatformBrowser(this._platformId)
-            : typeof document === 'object' && !!document;
-        /** Whether the current browser is Microsoft Edge. */
-        this.EDGE = this.isBrowser && /(edge)/i.test(navigator.userAgent);
-        /** Whether the current rendering engine is Microsoft Trident. */
-        this.TRIDENT = this.isBrowser && /(msie|trident)/i.test(navigator.userAgent);
-        // EdgeHTML and Trident mock Blink specific things and need to be excluded from this check.
-        /** Whether the current rendering engine is Blink. */
-        this.BLINK = this.isBrowser &&
-            !!(window.chrome || hasV8BreakIterator) &&
-            typeof CSS !== 'undefined' &&
-            !this.EDGE &&
-            !this.TRIDENT;
-        // Webkit is part of the userAgent in EdgeHTML, Blink and Trident. Therefore we need to
-        // ensure that Webkit runs standalone and is not used as another engine's base.
-        /** Whether the current rendering engine is WebKit. */
-        this.WEBKIT = this.isBrowser &&
-            /AppleWebKit/i.test(navigator.userAgent) &&
-            !this.BLINK &&
-            !this.EDGE &&
-            !this.TRIDENT;
-        /** Whether the current platform is Apple iOS. */
-        this.IOS = this.isBrowser && /iPad|iPhone|iPod/.test(navigator.userAgent) && !('MSStream' in window);
-        // It's difficult to detect the plain Gecko engine, because most of the browsers identify
-        // them self as Gecko-like browsers and modify the userAgent's according to that.
-        // Since we only cover one explicit Firefox case, we can simply check for Firefox
-        // instead of having an unstable check for Gecko.
-        /** Whether the current browser is Firefox. */
-        this.FIREFOX = this.isBrowser && /(firefox|minefield)/i.test(navigator.userAgent);
-        /** Whether the current platform is Android. */
-        // Trident on mobile adds the android platform to the userAgent to trick detections.
-        this.ANDROID = this.isBrowser && /android/i.test(navigator.userAgent) && !this.TRIDENT;
-        // Safari browsers will include the Safari keyword in their userAgent. Some browsers may fake
-        // this and just place the Safari keyword in the userAgent. To be more safe about Safari every
-        // Safari browser should also use Webkit as its layout engine.
-        /** Whether the current browser is Safari. */
-        this.SAFARI = this.isBrowser && /safari/i.test(navigator.userAgent) && this.WEBKIT;
-    }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: Platform, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: Platform, providedIn: 'root' }); }
+    _platformId = inject(PLATFORM_ID);
+    // We want to use the Angular platform check because if the Document is shimmed
+    // without the navigator, the following checks will fail. This is preferred because
+    // sometimes the Document may be shimmed without the user's knowledge or intention
+    /** Whether the Angular application is being rendered in the browser. */
+    isBrowser = this._platformId
+        ? isPlatformBrowser(this._platformId)
+        : typeof document === 'object' && !!document;
+    /** Whether the current browser is Microsoft Edge. */
+    EDGE = this.isBrowser && /(edge)/i.test(navigator.userAgent);
+    /** Whether the current rendering engine is Microsoft Trident. */
+    TRIDENT = this.isBrowser && /(msie|trident)/i.test(navigator.userAgent);
+    // EdgeHTML and Trident mock Blink specific things and need to be excluded from this check.
+    /** Whether the current rendering engine is Blink. */
+    BLINK = this.isBrowser &&
+        !!(window.chrome || hasV8BreakIterator) &&
+        typeof CSS !== 'undefined' &&
+        !this.EDGE &&
+        !this.TRIDENT;
+    // Webkit is part of the userAgent in EdgeHTML, Blink and Trident. Therefore we need to
+    // ensure that Webkit runs standalone and is not used as another engine's base.
+    /** Whether the current rendering engine is WebKit. */
+    WEBKIT = this.isBrowser &&
+        /AppleWebKit/i.test(navigator.userAgent) &&
+        !this.BLINK &&
+        !this.EDGE &&
+        !this.TRIDENT;
+    /** Whether the current platform is Apple iOS. */
+    IOS = this.isBrowser && /iPad|iPhone|iPod/.test(navigator.userAgent) && !('MSStream' in window);
+    // It's difficult to detect the plain Gecko engine, because most of the browsers identify
+    // them self as Gecko-like browsers and modify the userAgent's according to that.
+    // Since we only cover one explicit Firefox case, we can simply check for Firefox
+    // instead of having an unstable check for Gecko.
+    /** Whether the current browser is Firefox. */
+    FIREFOX = this.isBrowser && /(firefox|minefield)/i.test(navigator.userAgent);
+    /** Whether the current platform is Android. */
+    // Trident on mobile adds the android platform to the userAgent to trick detections.
+    ANDROID = this.isBrowser && /android/i.test(navigator.userAgent) && !this.TRIDENT;
+    // Safari browsers will include the Safari keyword in their userAgent. Some browsers may fake
+    // this and just place the Safari keyword in the userAgent. To be more safe about Safari every
+    // Safari browser should also use Webkit as its layout engine.
+    /** Whether the current browser is Safari. */
+    SAFARI = this.isBrowser && /safari/i.test(navigator.userAgent) && this.WEBKIT;
+    constructor() { }
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: Platform, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: Platform, providedIn: 'root' });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: Platform, decorators: [{
             type: Injectable,
@@ -75,9 +74,9 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10",
         }], ctorParameters: () => [] });
 
 class PlatformModule {
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: PlatformModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule }); }
-    static { this.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "19.0.0-next.10", ngImport: i0, type: PlatformModule }); }
-    static { this.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: PlatformModule }); }
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: PlatformModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+    static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "19.0.0-next.10", ngImport: i0, type: PlatformModule });
+    static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: PlatformModule });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: PlatformModule, decorators: [{
             type: NgModule,

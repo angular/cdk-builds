@@ -38,8 +38,8 @@ class MutationObserverFactory {
     create(callback) {
         return typeof MutationObserver === 'undefined' ? null : new MutationObserver(callback);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: MutationObserverFactory, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: MutationObserverFactory, providedIn: 'root' }); }
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: MutationObserverFactory, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: MutationObserverFactory, providedIn: 'root' });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: MutationObserverFactory, decorators: [{
             type: Injectable,
@@ -47,12 +47,11 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10",
         }] });
 /** An injectable service that allows watching elements for changes to their content. */
 class ContentObserver {
-    constructor() {
-        this._mutationObserverFactory = inject(MutationObserverFactory);
-        /** Keeps track of the existing MutationObservers so they can be reused. */
-        this._observedElements = new Map();
-        this._ngZone = inject(NgZone);
-    }
+    _mutationObserverFactory = inject(MutationObserverFactory);
+    /** Keeps track of the existing MutationObservers so they can be reused. */
+    _observedElements = new Map();
+    _ngZone = inject(NgZone);
+    constructor() { }
     ngOnDestroy() {
         this._observedElements.forEach((_, element) => this._cleanupObserver(element));
     }
@@ -120,8 +119,8 @@ class ContentObserver {
             this._observedElements.delete(element);
         }
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: ContentObserver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: ContentObserver, providedIn: 'root' }); }
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: ContentObserver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: ContentObserver, providedIn: 'root' });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: ContentObserver, decorators: [{
             type: Injectable,
@@ -132,6 +131,10 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10",
  * its associated element has changed.
  */
 class CdkObserveContent {
+    _contentObserver = inject(ContentObserver);
+    _elementRef = inject(ElementRef);
+    /** Event emitted for each change in the element's content. */
+    event = new EventEmitter();
     /**
      * Whether observing content is disabled. This option can be used
      * to disconnect the underlying MutationObserver until it is needed.
@@ -143,6 +146,7 @@ class CdkObserveContent {
         this._disabled = value;
         this._disabled ? this._unsubscribe() : this._subscribe();
     }
+    _disabled = false;
     /** Debounce interval for emitting the changes. */
     get debounce() {
         return this._debounce;
@@ -151,14 +155,9 @@ class CdkObserveContent {
         this._debounce = coerceNumberProperty(value);
         this._subscribe();
     }
-    constructor() {
-        this._contentObserver = inject(ContentObserver);
-        this._elementRef = inject(ElementRef);
-        /** Event emitted for each change in the element's content. */
-        this.event = new EventEmitter();
-        this._disabled = false;
-        this._currentSubscription = null;
-    }
+    _debounce;
+    _currentSubscription = null;
+    constructor() { }
     ngAfterContentInit() {
         if (!this._currentSubscription && !this.disabled) {
             this._subscribe();
@@ -175,8 +174,8 @@ class CdkObserveContent {
     _unsubscribe() {
         this._currentSubscription?.unsubscribe();
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: CdkObserveContent, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "19.0.0-next.10", type: CdkObserveContent, isStandalone: true, selector: "[cdkObserveContent]", inputs: { disabled: ["cdkObserveContentDisabled", "disabled", booleanAttribute], debounce: "debounce" }, outputs: { event: "cdkObserveContent" }, exportAs: ["cdkObserveContent"], ngImport: i0 }); }
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: CdkObserveContent, deps: [], target: i0.ɵɵFactoryTarget.Directive });
+    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "19.0.0-next.10", type: CdkObserveContent, isStandalone: true, selector: "[cdkObserveContent]", inputs: { disabled: ["cdkObserveContentDisabled", "disabled", booleanAttribute], debounce: "debounce" }, outputs: { event: "cdkObserveContent" }, exportAs: ["cdkObserveContent"], ngImport: i0 });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: CdkObserveContent, decorators: [{
             type: Directive,
@@ -194,9 +193,9 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10",
                 type: Input
             }] } });
 class ObserversModule {
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: ObserversModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule }); }
-    static { this.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "19.0.0-next.10", ngImport: i0, type: ObserversModule, imports: [CdkObserveContent], exports: [CdkObserveContent] }); }
-    static { this.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: ObserversModule, providers: [MutationObserverFactory] }); }
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: ObserversModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+    static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "19.0.0-next.10", ngImport: i0, type: ObserversModule, imports: [CdkObserveContent], exports: [CdkObserveContent] });
+    static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: ObserversModule, providers: [MutationObserverFactory] });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: ObserversModule, decorators: [{
             type: NgModule,

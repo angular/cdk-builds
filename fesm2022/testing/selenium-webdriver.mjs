@@ -58,6 +58,8 @@ function getSeleniumWebDriverModifierKeys(modifiers) {
 
 /** A `TestElement` implementation for WebDriver. */
 class SeleniumWebDriverElement {
+    element;
+    _stabilize;
     constructor(element, _stabilize) {
         this.element = element;
         this._stabilize = _stabilize;
@@ -287,6 +289,10 @@ async function waitForAngularReady(wd) {
 }
 /** A `HarnessEnvironment` implementation for WebDriver. */
 class SeleniumWebDriverHarnessEnvironment extends HarnessEnvironment {
+    /** The options for this environment. */
+    _options;
+    /** Environment stabilization callback passed to the created test elements. */
+    _stabilizeCallback;
     constructor(rawRootElement, options) {
         super(rawRootElement);
         this._options = { ...defaultEnvironmentOptions, ...options };

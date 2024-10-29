@@ -41,11 +41,11 @@ function _resolveDirectionality(rawValue) {
  * Exposes the current direction and a stream of direction changes.
  */
 class Directionality {
+    /** The current 'ltr' or 'rtl' value. */
+    value = 'ltr';
+    /** Stream that emits whenever the 'ltr' / 'rtl' state changes. */
+    change = new EventEmitter();
     constructor() {
-        /** The current 'ltr' or 'rtl' value. */
-        this.value = 'ltr';
-        /** Stream that emits whenever the 'ltr' / 'rtl' state changes. */
-        this.change = new EventEmitter();
         const _document = inject(DIR_DOCUMENT, { optional: true });
         if (_document) {
             const bodyDir = _document.body ? _document.body.dir : null;
@@ -56,8 +56,8 @@ class Directionality {
     ngOnDestroy() {
         this.change.complete();
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: Directionality, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: Directionality, providedIn: 'root' }); }
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: Directionality, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: Directionality, providedIn: 'root' });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: Directionality, decorators: [{
             type: Injectable,
@@ -71,14 +71,14 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10",
  * Directionality to get the closest direction.
  */
 class Dir {
-    constructor() {
-        /** Normalized direction that accounts for invalid/unsupported values. */
-        this._dir = 'ltr';
-        /** Whether the `value` has been set to its initial value. */
-        this._isInitialized = false;
-        /** Event emitted when the direction changes. */
-        this.change = new EventEmitter();
-    }
+    /** Normalized direction that accounts for invalid/unsupported values. */
+    _dir = 'ltr';
+    /** Whether the `value` has been set to its initial value. */
+    _isInitialized = false;
+    /** Direction as passed in by the consumer. */
+    _rawDir;
+    /** Event emitted when the direction changes. */
+    change = new EventEmitter();
     /** @docs-private */
     get dir() {
         return this._dir;
@@ -105,8 +105,8 @@ class Dir {
     ngOnDestroy() {
         this.change.complete();
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: Dir, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.10", type: Dir, isStandalone: true, selector: "[dir]", inputs: { dir: "dir" }, outputs: { change: "dirChange" }, host: { properties: { "attr.dir": "_rawDir" } }, providers: [{ provide: Directionality, useExisting: Dir }], exportAs: ["dir"], ngImport: i0 }); }
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: Dir, deps: [], target: i0.ɵɵFactoryTarget.Directive });
+    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.10", type: Dir, isStandalone: true, selector: "[dir]", inputs: { dir: "dir" }, outputs: { change: "dirChange" }, host: { properties: { "attr.dir": "_rawDir" } }, providers: [{ provide: Directionality, useExisting: Dir }], exportAs: ["dir"], ngImport: i0 });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: Dir, decorators: [{
             type: Directive,
@@ -124,9 +124,9 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10",
             }] } });
 
 class BidiModule {
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: BidiModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule }); }
-    static { this.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "19.0.0-next.10", ngImport: i0, type: BidiModule, imports: [Dir], exports: [Dir] }); }
-    static { this.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: BidiModule }); }
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: BidiModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+    static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "19.0.0-next.10", ngImport: i0, type: BidiModule, imports: [Dir], exports: [Dir] });
+    static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: BidiModule });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: BidiModule, decorators: [{
             type: NgModule,
