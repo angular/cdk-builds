@@ -15,6 +15,7 @@ function isDataSource(value) {
 
 /** DataSource wrapper for a native array. */
 class ArrayDataSource extends DataSource {
+    _data;
     constructor(_data) {
         super();
         this._data = _data;
@@ -95,21 +96,19 @@ class _DisposeViewRepeaterStrategy {
  * @template C The type for the context passed to each embedded view.
  */
 class _RecycleViewRepeaterStrategy {
-    constructor() {
-        /**
-         * The size of the cache used to store unused views.
-         * Setting the cache size to `0` will disable caching. Defaults to 20 views.
-         */
-        this.viewCacheSize = 20;
-        /**
-         * View cache that stores embedded view instances that have been previously stamped out,
-         * but don't are not currently rendered. The view repeater will reuse these views rather than
-         * creating brand new ones.
-         *
-         * TODO(michaeljamesparsons) Investigate whether using a linked list would improve performance.
-         */
-        this._viewCache = [];
-    }
+    /**
+     * The size of the cache used to store unused views.
+     * Setting the cache size to `0` will disable caching. Defaults to 20 views.
+     */
+    viewCacheSize = 20;
+    /**
+     * View cache that stores embedded view instances that have been previously stamped out,
+     * but don't are not currently rendered. The view repeater will reuse these views rather than
+     * creating brand new ones.
+     *
+     * TODO(michaeljamesparsons) Investigate whether using a linked list would improve performance.
+     */
+    _viewCache = [];
     /** Apply changes to the DOM. */
     applyChanges(changes, viewContainerRef, itemContextFactory, itemValueResolver, itemViewChanged) {
         // Rearrange the views to put them in the right location.
@@ -208,6 +207,17 @@ class _RecycleViewRepeaterStrategy {
  * Class to be used to power selecting one or more options from a list.
  */
 class SelectionModel {
+    _multiple;
+    _emitChanges;
+    compareWith;
+    /** Currently-selected values. */
+    _selection = new Set();
+    /** Keeps track of the deselected options that haven't been emitted by the change event. */
+    _deselectedToEmit = [];
+    /** Keeps track of the selected options that haven't been emitted by the change event. */
+    _selectedToEmit = [];
+    /** Cache for the array value of the selected items. */
+    _selected;
     /** Selected values. */
     get selected() {
         if (!this._selected) {
@@ -215,18 +225,12 @@ class SelectionModel {
         }
         return this._selected;
     }
+    /** Event emitted when the value has changed. */
+    changed = new Subject();
     constructor(_multiple = false, initiallySelectedValues, _emitChanges = true, compareWith) {
         this._multiple = _multiple;
         this._emitChanges = _emitChanges;
         this.compareWith = compareWith;
-        /** Currently-selected values. */
-        this._selection = new Set();
-        /** Keeps track of the deselected options that haven't been emitted by the change event. */
-        this._deselectedToEmit = [];
-        /** Keeps track of the selected options that haven't been emitted by the change event. */
-        this._selectedToEmit = [];
-        /** Event emitted when the value has changed. */
-        this.changed = new Subject();
         if (initiallySelectedValues && initiallySelectedValues.length) {
             if (_multiple) {
                 initiallySelectedValues.forEach(value => this._markSelected(value));
@@ -431,9 +435,7 @@ function getMultipleValuesInSingleSelectionError() {
  * less error-prone if they are simply passed through when the events occur.
  */
 class UniqueSelectionDispatcher {
-    constructor() {
-        this._listeners = [];
-    }
+    _listeners = [];
     /**
      * Notify other items that selection for the given name has been set.
      * @param id ID of the item.
@@ -459,8 +461,8 @@ class UniqueSelectionDispatcher {
     ngOnDestroy() {
         this._listeners = [];
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: UniqueSelectionDispatcher, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: UniqueSelectionDispatcher, providedIn: 'root' }); }
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: UniqueSelectionDispatcher, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: UniqueSelectionDispatcher, providedIn: 'root' });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: UniqueSelectionDispatcher, decorators: [{
             type: Injectable,

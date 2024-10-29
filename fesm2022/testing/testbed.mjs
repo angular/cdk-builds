@@ -14,12 +14,12 @@ const stateObservableSymbol = Symbol('ProxyZone_PATCHED#stateObservable');
  * This serves as a workaround for https://github.com/angular/angular/issues/32896.
  */
 class TaskStateZoneInterceptor {
+    _lastState = null;
+    /** Subject that can be used to emit a new state change. */
+    _stateSubject = new BehaviorSubject(this._lastState ? this._getTaskStateFromInternalZoneState(this._lastState) : { stable: true });
+    /** Public observable that emits whenever the task state changes. */
+    state = this._stateSubject;
     constructor(lastState) {
-        this._lastState = null;
-        /** Subject that can be used to emit a new state change. */
-        this._stateSubject = new BehaviorSubject(this._lastState ? this._getTaskStateFromInternalZoneState(this._lastState) : { stable: true });
-        /** Public observable that emits whenever the task state changes. */
-        this.state = this._stateSubject;
         this._lastState = lastState;
     }
     /** This will be called whenever the task state changes in the intercepted zone. */
@@ -400,6 +400,8 @@ const keyMap = {
 };
 /** A `TestElement` implementation for unit tests. */
 class UnitTestElement {
+    element;
+    _stabilize;
     constructor(element, _stabilize) {
         this.element = element;
         this._stabilize = _stabilize;
@@ -666,11 +668,18 @@ async function detectChanges(fixture) {
 }
 /** A `HarnessEnvironment` implementation for Angular's Testbed. */
 class TestbedHarnessEnvironment extends HarnessEnvironment {
+    _fixture;
+    /** Whether the environment has been destroyed. */
+    _destroyed = false;
+    /** Observable that emits whenever the test task state changes. */
+    _taskState;
+    /** The options for this environment. */
+    _options;
+    /** Environment stabilization callback passed to the created test elements. */
+    _stabilizeCallback;
     constructor(rawRootElement, _fixture, options) {
         super(rawRootElement);
         this._fixture = _fixture;
-        /** Whether the environment has been destroyed. */
-        this._destroyed = false;
         this._options = { ...defaultEnvironmentOptions, ...options };
         if (typeof Zone !== 'undefined') {
             this._taskState = TaskStateZoneInterceptor.setup();

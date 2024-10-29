@@ -51,6 +51,7 @@ function throwNoPortalAttachedError() {
  * It can be attach to / detached from a `PortalOutlet`.
  */
 class Portal {
+    _attachedHost;
     /** Attach this portal to a host. */
     attach(host) {
         if (typeof ngDevMode === 'undefined' || ngDevMode) {
@@ -91,6 +92,25 @@ class Portal {
  * A `ComponentPortal` is a portal that instantiates some Component upon attachment.
  */
 class ComponentPortal extends Portal {
+    /** The type of the component that will be instantiated for attachment. */
+    component;
+    /**
+     * Where the attached component should live in Angular's *logical* component tree.
+     * This is different from where the component *renders*, which is determined by the PortalOutlet.
+     * The origin is necessary when the host is outside of the Angular application context.
+     */
+    viewContainerRef;
+    /** Injector used for the instantiation of the component. */
+    injector;
+    /**
+     * @deprecated No longer in use. To be removed.
+     * @breaking-change 18.0.0
+     */
+    componentFactoryResolver;
+    /**
+     * List of DOM nodes that should be projected through `<ng-content>` of the attached component.
+     */
+    projectableNodes;
     constructor(component, viewContainerRef, injector, 
     /**
      * @deprecated No longer in use. To be removed.
@@ -108,6 +128,10 @@ class ComponentPortal extends Portal {
  * A `TemplatePortal` is a portal that represents some embedded template (TemplateRef).
  */
 class TemplatePortal extends Portal {
+    templateRef;
+    viewContainerRef;
+    context;
+    injector;
     constructor(
     /** The embedded template that will be used to instantiate an embedded View in the host. */
     templateRef, 
@@ -146,6 +170,8 @@ class TemplatePortal extends Portal {
  * will be restored to its original position.
  */
 class DomPortal extends Portal {
+    /** DOM node hosting the portal's content. */
+    element;
     constructor(element) {
         super();
         this.element = element instanceof ElementRef ? element.nativeElement : element;
@@ -156,12 +182,12 @@ class DomPortal extends Portal {
  * ComponentPortal and TemplatePortal.
  */
 class BasePortalOutlet {
-    constructor() {
-        /** Whether this host has already been permanently disposed. */
-        this._isDisposed = false;
-        // @breaking-change 10.0.0 `attachDomPortal` to become a required abstract method.
-        this.attachDomPortal = null;
-    }
+    /** The portal currently attached to the host. */
+    _attachedPortal;
+    /** A function that will permanently dispose this host. */
+    _disposeFn;
+    /** Whether this host has already been permanently disposed. */
+    _isDisposed = false;
     /** Whether this host has an attached portal. */
     hasAttached() {
         return !!this._attachedPortal;
@@ -196,6 +222,8 @@ class BasePortalOutlet {
             throwUnknownPortalTypeError();
         }
     }
+    // @breaking-change 10.0.0 `attachDomPortal` to become a required abstract method.
+    attachDomPortal = null;
     /** Detaches a previously attached portal. */
     detach() {
         if (this._attachedPortal) {
@@ -235,6 +263,10 @@ class BasePortalHost extends BasePortalOutlet {
  * application context.
  */
 class DomPortalOutlet extends BasePortalOutlet {
+    outletElement;
+    _appRef;
+    _defaultInjector;
+    _document;
     /**
      * @param outletElement Element into which the content is projected.
      * @param _unusedComponentFactoryResolver Used to resolve the component factory.
@@ -263,30 +295,6 @@ class DomPortalOutlet extends BasePortalOutlet {
         this.outletElement = outletElement;
         this._appRef = _appRef;
         this._defaultInjector = _defaultInjector;
-        /**
-         * Attaches a DOM portal by transferring its content into the outlet.
-         * @param portal Portal to be attached.
-         * @deprecated To be turned into a method.
-         * @breaking-change 10.0.0
-         */
-        this.attachDomPortal = (portal) => {
-            const element = portal.element;
-            if (!element.parentNode && (typeof ngDevMode === 'undefined' || ngDevMode)) {
-                throw Error('DOM portal content must be attached to a parent node.');
-            }
-            // Anchor used to save the element's previous position so
-            // that we can restore it when the portal is detached.
-            const anchorNode = this._document.createComment('dom-portal');
-            element.parentNode.insertBefore(anchorNode, element);
-            this.outletElement.appendChild(element);
-            this._attachedPortal = portal;
-            super.setDisposeFn(() => {
-                // We can't use `replaceWith` here because IE doesn't support it.
-                if (anchorNode.parentNode) {
-                    anchorNode.parentNode.replaceChild(element, anchorNode);
-                }
-            });
-        };
         this._document = _document;
     }
     /**
@@ -366,6 +374,30 @@ class DomPortalOutlet extends BasePortalOutlet {
         return viewRef;
     }
     /**
+     * Attaches a DOM portal by transferring its content into the outlet.
+     * @param portal Portal to be attached.
+     * @deprecated To be turned into a method.
+     * @breaking-change 10.0.0
+     */
+    attachDomPortal = (portal) => {
+        const element = portal.element;
+        if (!element.parentNode && (typeof ngDevMode === 'undefined' || ngDevMode)) {
+            throw Error('DOM portal content must be attached to a parent node.');
+        }
+        // Anchor used to save the element's previous position so
+        // that we can restore it when the portal is detached.
+        const anchorNode = this._document.createComment('dom-portal');
+        element.parentNode.insertBefore(anchorNode, element);
+        this.outletElement.appendChild(element);
+        this._attachedPortal = portal;
+        super.setDisposeFn(() => {
+            // We can't use `replaceWith` here because IE doesn't support it.
+            if (anchorNode.parentNode) {
+                anchorNode.parentNode.replaceChild(element, anchorNode);
+            }
+        });
+    };
+    /**
      * Clears out a portal from the DOM.
      */
     dispose() {
@@ -394,8 +426,8 @@ class CdkPortal extends TemplatePortal {
         const viewContainerRef = inject(ViewContainerRef);
         super(templateRef, viewContainerRef);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: CdkPortal, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.10", type: CdkPortal, isStandalone: true, selector: "[cdkPortal]", exportAs: ["cdkPortal"], usesInheritance: true, ngImport: i0 }); }
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: CdkPortal, deps: [], target: i0.ɵɵFactoryTarget.Directive });
+    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.10", type: CdkPortal, isStandalone: true, selector: "[cdkPortal]", exportAs: ["cdkPortal"], usesInheritance: true, ngImport: i0 });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: CdkPortal, decorators: [{
             type: Directive,
@@ -409,13 +441,13 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10",
  * @breaking-change 9.0.0
  */
 class TemplatePortalDirective extends CdkPortal {
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: TemplatePortalDirective, deps: null, target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.10", type: TemplatePortalDirective, isStandalone: true, selector: "[cdk-portal], [portal]", providers: [
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: TemplatePortalDirective, deps: null, target: i0.ɵɵFactoryTarget.Directive });
+    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.10", type: TemplatePortalDirective, isStandalone: true, selector: "[cdk-portal], [portal]", providers: [
             {
                 provide: CdkPortal,
                 useExisting: TemplatePortalDirective,
             },
-        ], exportAs: ["cdkPortal"], usesInheritance: true, ngImport: i0 }); }
+        ], exportAs: ["cdkPortal"], usesInheritance: true, ngImport: i0 });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: TemplatePortalDirective, decorators: [{
             type: Directive,
@@ -438,39 +470,15 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10",
  * `<ng-template [cdkPortalOutlet]="greeting"></ng-template>`
  */
 class CdkPortalOutlet extends BasePortalOutlet {
+    _moduleRef = inject(NgModuleRef, { optional: true });
+    _document = inject(DOCUMENT);
+    _viewContainerRef = inject(ViewContainerRef);
+    /** Whether the portal component is initialized. */
+    _isInitialized = false;
+    /** Reference to the currently-attached component/view ref. */
+    _attachedRef;
     constructor() {
         super();
-        this._moduleRef = inject(NgModuleRef, { optional: true });
-        this._document = inject(DOCUMENT);
-        this._viewContainerRef = inject(ViewContainerRef);
-        /** Whether the portal component is initialized. */
-        this._isInitialized = false;
-        /** Emits when a portal is attached to the outlet. */
-        this.attached = new EventEmitter();
-        /**
-         * Attaches the given DomPortal to this PortalHost by moving all of the portal content into it.
-         * @param portal Portal to be attached.
-         * @deprecated To be turned into a method.
-         * @breaking-change 10.0.0
-         */
-        this.attachDomPortal = (portal) => {
-            const element = portal.element;
-            if (!element.parentNode && (typeof ngDevMode === 'undefined' || ngDevMode)) {
-                throw Error('DOM portal content must be attached to a parent node.');
-            }
-            // Anchor used to save the element's previous position so
-            // that we can restore it when the portal is detached.
-            const anchorNode = this._document.createComment('dom-portal');
-            portal.setAttachedHost(this);
-            element.parentNode.insertBefore(anchorNode, element);
-            this._getRootNode().appendChild(element);
-            this._attachedPortal = portal;
-            super.setDisposeFn(() => {
-                if (anchorNode.parentNode) {
-                    anchorNode.parentNode.replaceChild(element, anchorNode);
-                }
-            });
-        };
     }
     /** Portal associated with the Portal outlet. */
     get portal() {
@@ -492,6 +500,8 @@ class CdkPortalOutlet extends BasePortalOutlet {
         }
         this._attachedPortal = portal || null;
     }
+    /** Emits when a portal is attached to the outlet. */
+    attached = new EventEmitter();
     /** Component or view reference that is attached to the portal. */
     get attachedRef() {
         return this._attachedRef;
@@ -548,6 +558,30 @@ class CdkPortalOutlet extends BasePortalOutlet {
         this.attached.emit(viewRef);
         return viewRef;
     }
+    /**
+     * Attaches the given DomPortal to this PortalHost by moving all of the portal content into it.
+     * @param portal Portal to be attached.
+     * @deprecated To be turned into a method.
+     * @breaking-change 10.0.0
+     */
+    attachDomPortal = (portal) => {
+        const element = portal.element;
+        if (!element.parentNode && (typeof ngDevMode === 'undefined' || ngDevMode)) {
+            throw Error('DOM portal content must be attached to a parent node.');
+        }
+        // Anchor used to save the element's previous position so
+        // that we can restore it when the portal is detached.
+        const anchorNode = this._document.createComment('dom-portal');
+        portal.setAttachedHost(this);
+        element.parentNode.insertBefore(anchorNode, element);
+        this._getRootNode().appendChild(element);
+        this._attachedPortal = portal;
+        super.setDisposeFn(() => {
+            if (anchorNode.parentNode) {
+                anchorNode.parentNode.replaceChild(element, anchorNode);
+            }
+        });
+    };
     /** Gets the root node of the portal outlet. */
     _getRootNode() {
         const nativeElement = this._viewContainerRef.element.nativeElement;
@@ -557,8 +591,8 @@ class CdkPortalOutlet extends BasePortalOutlet {
             ? nativeElement
             : nativeElement.parentNode);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: CdkPortalOutlet, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.10", type: CdkPortalOutlet, isStandalone: true, selector: "[cdkPortalOutlet]", inputs: { portal: ["cdkPortalOutlet", "portal"] }, outputs: { attached: "attached" }, exportAs: ["cdkPortalOutlet"], usesInheritance: true, ngImport: i0 }); }
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: CdkPortalOutlet, deps: [], target: i0.ɵɵFactoryTarget.Directive });
+    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.10", type: CdkPortalOutlet, isStandalone: true, selector: "[cdkPortalOutlet]", inputs: { portal: ["cdkPortalOutlet", "portal"] }, outputs: { attached: "attached" }, exportAs: ["cdkPortalOutlet"], usesInheritance: true, ngImport: i0 });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: CdkPortalOutlet, decorators: [{
             type: Directive,
@@ -577,13 +611,13 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10",
  * @breaking-change 9.0.0
  */
 class PortalHostDirective extends CdkPortalOutlet {
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: PortalHostDirective, deps: null, target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.10", type: PortalHostDirective, isStandalone: true, selector: "[cdkPortalHost], [portalHost]", inputs: { portal: ["cdkPortalHost", "portal"] }, providers: [
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: PortalHostDirective, deps: null, target: i0.ɵɵFactoryTarget.Directive });
+    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0-next.10", type: PortalHostDirective, isStandalone: true, selector: "[cdkPortalHost], [portalHost]", inputs: { portal: ["cdkPortalHost", "portal"] }, providers: [
             {
                 provide: CdkPortalOutlet,
                 useExisting: PortalHostDirective,
             },
-        ], exportAs: ["cdkPortalHost"], usesInheritance: true, ngImport: i0 }); }
+        ], exportAs: ["cdkPortalHost"], usesInheritance: true, ngImport: i0 });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: PortalHostDirective, decorators: [{
             type: Directive,
@@ -600,9 +634,9 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10",
                 }]
         }] });
 class PortalModule {
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: PortalModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule }); }
-    static { this.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "19.0.0-next.10", ngImport: i0, type: PortalModule, imports: [CdkPortal, CdkPortalOutlet, TemplatePortalDirective, PortalHostDirective], exports: [CdkPortal, CdkPortalOutlet, TemplatePortalDirective, PortalHostDirective] }); }
-    static { this.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: PortalModule }); }
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: PortalModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+    static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "19.0.0-next.10", ngImport: i0, type: PortalModule, imports: [CdkPortal, CdkPortalOutlet, TemplatePortalDirective, PortalHostDirective], exports: [CdkPortal, CdkPortalOutlet, TemplatePortalDirective, PortalHostDirective] });
+    static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: PortalModule });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: PortalModule, decorators: [{
             type: NgModule,
@@ -620,6 +654,8 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10",
  * @breaking-change 11.0.0
  */
 class PortalInjector {
+    _parentInjector;
+    _customTokens;
     constructor(_parentInjector, _customTokens) {
         this._parentInjector = _parentInjector;
         this._customTokens = _customTokens;

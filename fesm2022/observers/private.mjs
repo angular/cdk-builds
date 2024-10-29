@@ -18,16 +18,19 @@ const loopLimitExceededErrorHandler = (e) => {
  * device-pixel-content-box)
  */
 class SingleBoxSharedResizeObserver {
+    _box;
+    /** Stream that emits when the shared observer is destroyed. */
+    _destroyed = new Subject();
+    /** Stream of all events from the ResizeObserver. */
+    _resizeSubject = new Subject();
+    /** ResizeObserver used to observe element resize events. */
+    _resizeObserver;
+    /** A map of elements to streams of their resize events. */
+    _elementObservables = new Map();
     constructor(
     /** The box type to observe for resizes. */
     _box) {
         this._box = _box;
-        /** Stream that emits when the shared observer is destroyed. */
-        this._destroyed = new Subject();
-        /** Stream of all events from the ResizeObserver. */
-        this._resizeSubject = new Subject();
-        /** A map of elements to streams of their resize events. */
-        this._elementObservables = new Map();
         if (typeof ResizeObserver !== 'undefined') {
             this._resizeObserver = new ResizeObserver(entries => this._resizeSubject.next(entries));
         }
@@ -74,11 +77,11 @@ class SingleBoxSharedResizeObserver {
  * earlier calls.
  */
 class SharedResizeObserver {
+    /** Map of box type to shared resize observer. */
+    _observers = new Map();
+    /** The Angular zone. */
+    _ngZone = inject(NgZone);
     constructor() {
-        /** Map of box type to shared resize observer. */
-        this._observers = new Map();
-        /** The Angular zone. */
-        this._ngZone = inject(NgZone);
         if (typeof ResizeObserver !== 'undefined' && (typeof ngDevMode === 'undefined' || ngDevMode)) {
             this._ngZone.runOutsideAngular(() => {
                 window.addEventListener('error', loopLimitExceededErrorHandler);
@@ -107,8 +110,8 @@ class SharedResizeObserver {
         }
         return this._observers.get(box).observe(target);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: SharedResizeObserver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
-    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: SharedResizeObserver, providedIn: 'root' }); }
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: SharedResizeObserver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: SharedResizeObserver, providedIn: 'root' });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-next.10", ngImport: i0, type: SharedResizeObserver, decorators: [{
             type: Injectable,
