@@ -116,6 +116,7 @@ export declare class CdkNestedTreeNode<T, K = T> extends CdkTreeNode<T, K> imple
 export declare class CdkTree<T, K = T> implements AfterContentChecked, AfterContentInit, AfterViewInit, CollectionViewer, OnDestroy, OnInit {
     private _differs;
     private _changeDetectorRef;
+    private _elementRef;
     private _dir;
     /** Subject that emits when the component has been destroyed. */
     private readonly _onDestroy;
@@ -327,7 +328,7 @@ export declare class CdkTree<T, K = T> implements AfterContentChecked, AfterCont
     /** Given a CdkTreeNode, gets the nodes that renders that node's child data. */
     _getNodeChildren(node: CdkTreeNode<T, K>): Observable<CdkTreeNode<T, K>[]>;
     /** `keydown` event handler; this just passes the event to the `TreeKeyManager`. */
-    _sendKeydownToKeyManager(event: KeyboardEvent): void;
+    protected _sendKeydownToKeyManager(event: KeyboardEvent): void;
     /** Gets all nested descendants of a given node. */
     private _getDescendants;
     /**
@@ -378,7 +379,7 @@ export declare class CdkTreeModule {
  * Tree node for CdkTree. It contains the data in the tree node.
  */
 export declare class CdkTreeNode<T, K = T> implements OnDestroy, OnInit, TreeKeyManagerItem {
-    protected _elementRef: ElementRef<HTMLElement>;
+    _elementRef: ElementRef<HTMLElement>;
     protected _tree: CdkTree<T, K>;
     protected _tabindex: number | null;
     /**
