@@ -121,7 +121,7 @@ export declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDe
     /** Output to support two-way binding on `[(selectedIndex)]` */
     readonly selectedIndexChange: EventEmitter<number>;
     /** Used to track unique ID for each stepper component. */
-    _groupId: number;
+    private _groupId;
     /** Orientation of the stepper. */
     get orientation(): StepperOrientation;
     set orientation(value: StepperOrientation);

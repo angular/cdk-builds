@@ -137,6 +137,7 @@ export declare class Dialog implements OnDestroy {
     private _defaultOptions;
     private _parentDialog;
     private _overlayContainer;
+    private _idGenerator;
     private _openDialogsAtThisLevel;
     private readonly _afterAllClosedAtThisLevel;
     private readonly _afterOpenedAtThisLevel;

@@ -1,4 +1,4 @@
-import { FocusTrapFactory, InteractivityChecker, FocusMonitor, A11yModule } from '@angular/cdk/a11y';
+import { FocusTrapFactory, InteractivityChecker, FocusMonitor, _IdGenerator, A11yModule } from '@angular/cdk/a11y';
 import { OverlayRef, Overlay, OverlayContainer, OverlayConfig, OverlayModule } from '@angular/cdk/overlay';
 import { Platform, _getFocusedElementPierceShadowDom } from '@angular/cdk/platform';
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, TemplatePortal, PortalModule } from '@angular/cdk/portal';
@@ -545,14 +545,13 @@ const DIALOG_SCROLL_STRATEGY_PROVIDER = {
     useFactory: DIALOG_SCROLL_STRATEGY_PROVIDER_FACTORY,
 };
 
-/** Unique id for the created dialog. */
-let uniqueId = 0;
 class Dialog {
     _overlay = inject(Overlay);
     _injector = inject(Injector);
     _defaultOptions = inject(DEFAULT_DIALOG_CONFIG, { optional: true });
     _parentDialog = inject(Dialog, { optional: true, skipSelf: true });
     _overlayContainer = inject(OverlayContainer);
+    _idGenerator = inject(_IdGenerator);
     _openDialogsAtThisLevel = [];
     _afterAllClosedAtThisLevel = new Subject();
     _afterOpenedAtThisLevel = new Subject();
@@ -577,7 +576,7 @@ class Dialog {
     open(componentOrTemplateRef, config) {
         const defaults = (this._defaultOptions || new DialogConfig());
         config = { ...defaults, ...config };
-        config.id = config.id || `cdk-dialog-${uniqueId++}`;
+        config.id = config.id || this._idGenerator.getId('cdk-dialog-');
         if (config.id &&
             this.getDialogById(config.id) &&
             (typeof ngDevMode === 'undefined' || ngDevMode)) {

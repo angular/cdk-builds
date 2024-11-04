@@ -731,6 +731,18 @@ declare namespace i4 {
     }
 }
 
+/** Service that generates unique IDs for DOM nodes. */
+export declare class _IdGenerator {
+    private _appId;
+    /**
+     * Generates a unique ID with a specific prefix.
+     * @param prefix Prefix to add to the ID.
+     */
+    getId(prefix: string): string;
+    static ɵfac: i0.ɵɵFactoryDeclaration<_IdGenerator, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<_IdGenerator>;
+}
+
 /**
  * Default options for the InputModalityDetector.
  *

@@ -1,4 +1,4 @@
-import { FocusKeyManager } from '@angular/cdk/a11y';
+import { _IdGenerator, FocusKeyManager } from '@angular/cdk/a11y';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { hasModifierKey, SPACE, ENTER } from '@angular/cdk/keycodes';
 import * as i0 from '@angular/core';
@@ -41,8 +41,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-rc.0", ng
                 }]
         }], ctorParameters: () => [] });
 
-/** Used to generate unique ID for each stepper component. */
-let nextId = 0;
 /** Change event emitted on selection changes. */
 class StepperSelectionEvent {
     /** Index of the step now selected. */
@@ -277,7 +275,7 @@ class CdkStepper {
     /** Output to support two-way binding on `[(selectedIndex)]` */
     selectedIndexChange = new EventEmitter();
     /** Used to track unique ID for each stepper component. */
-    _groupId = nextId++;
+    _groupId = inject(_IdGenerator).getId('cdk-stepper-');
     /** Orientation of the stepper. */
     get orientation() {
         return this._orientation;
@@ -365,11 +363,11 @@ class CdkStepper {
     }
     /** Returns a unique id for each step label element. */
     _getStepLabelId(i) {
-        return `cdk-step-label-${this._groupId}-${i}`;
+        return `${this._groupId}-label-${i}`;
     }
     /** Returns unique id for each step content element. */
     _getStepContentId(i) {
-        return `cdk-step-content-${this._groupId}-${i}`;
+        return `${this._groupId}-content-${i}`;
     }
     /** Marks the component to be change detected. */
     _stateChanged() {
