@@ -1,12 +1,12 @@
 import * as i0 from '@angular/core';
-import { Directive, InjectionToken, Optional, SkipSelf, Inject, Injectable, inject, Injector, ViewContainerRef, EventEmitter, NgZone, ElementRef, ChangeDetectorRef, booleanAttribute, Input, Output, signal, computed, ContentChildren, NgModule } from '@angular/core';
+import { Directive, InjectionToken, Optional, SkipSelf, Inject, inject, Injectable, Injector, ViewContainerRef, EventEmitter, NgZone, ElementRef, ChangeDetectorRef, booleanAttribute, Input, Output, signal, computed, ContentChildren, NgModule } from '@angular/core';
 import { Overlay, OverlayConfig, STANDARD_DROPDOWN_BELOW_POSITIONS, STANDARD_DROPDOWN_ADJACENT_POSITIONS, OverlayModule } from '@angular/cdk/overlay';
 import { ENTER, SPACE, UP_ARROW, hasModifierKey, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, TAB, ESCAPE } from '@angular/cdk/keycodes';
 import { startWith, debounceTime, distinctUntilChanged, filter, takeUntil, mergeMap, mapTo, mergeAll, switchMap, skipWhile, skip } from 'rxjs/operators';
 import { UniqueSelectionDispatcher } from '@angular/cdk/collections';
+import { _IdGenerator, InputModalityDetector, FocusKeyManager } from '@angular/cdk/a11y';
 import { Subject, merge, fromEvent, defer, partition } from 'rxjs';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { InputModalityDetector, FocusKeyManager } from '@angular/cdk/a11y';
 import { Directionality } from '@angular/cdk/bidi';
 import { _getEventTarget } from '@angular/cdk/platform';
 
@@ -54,8 +54,6 @@ const PARENT_OR_NEW_INLINE_MENU_STACK_PROVIDER = (orientation) => ({
     deps: [[new Optional(), new SkipSelf(), new Inject(MENU_STACK)]],
     useFactory: (parentMenuStack) => parentMenuStack || MenuStack.inline(orientation),
 });
-/** The next available menu stack ID. */
-let nextId$2 = 0;
 /**
  * MenuStack allows subscribers to listen for close events (when a MenuStackItem is popped off
  * of the stack) in order to perform closing actions. Upon the MenuStack being empty it emits
@@ -64,7 +62,7 @@ let nextId$2 = 0;
  */
 class MenuStack {
     /** The ID of this menu stack. */
-    id = `${nextId$2++}`;
+    id = inject(_IdGenerator).getId('cdk-menu-stack-');
     /** All MenuStackItems tracked by this MenuStack. */
     _elements = [];
     /** Emits the element which was popped off of the stack when requested by a closer. */
@@ -1124,8 +1122,6 @@ class PointerFocusTracker {
     }
 }
 
-/** Counter used to create unique IDs for menus. */
-let nextId$1 = 0;
 /**
  * Abstract directive that implements shared logic common to all menus.
  * This class can be extended to create custom menu types.
@@ -1142,7 +1138,7 @@ class CdkMenuBase extends CdkMenuGroup {
     /** The directionality (text direction) of the current page. */
     dir = inject(Directionality, { optional: true });
     /** The id of the menu's host element. */
-    id = `cdk-menu-${nextId$1++}`;
+    id = inject(_IdGenerator).getId('cdk-menu-');
     /** All child MenuItem elements nested in this Menu. */
     items;
     /** The direction items in the menu flow. */
@@ -1557,8 +1553,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-rc.0", ng
                 args: [{ alias: 'cdkMenuItemChecked', transform: booleanAttribute }]
             }] } });
 
-/** Counter used to set a unique id and name for a selectable item */
-let nextId = 0;
 /**
  * A directive providing behavior for the "menuitemradio" ARIA role, which behaves similarly to
  * a conventional radio-button. Any sibling `CdkMenuItemRadio` instances within the same `CdkMenu`
@@ -1568,7 +1562,7 @@ class CdkMenuItemRadio extends CdkMenuItemSelectable {
     /** The unique selection dispatcher for this radio's `CdkMenuGroup`. */
     _selectionDispatcher = inject(UniqueSelectionDispatcher);
     /** An ID to identify this radio item to the `UniqueSelectionDispatcher`. */
-    _id = `${nextId++}`;
+    _id = inject(_IdGenerator).getId('cdk-menu-item-radio-');
     /** Function to unregister the selection dispatcher */
     _removeDispatcherListener;
     constructor() {

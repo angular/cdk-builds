@@ -1,10 +1,9 @@
 import * as i0 from '@angular/core';
-import { InjectionToken, booleanAttribute, Directive, Input, inject, ChangeDetectorRef, EventEmitter, Output, NgModule } from '@angular/core';
+import { InjectionToken, inject, booleanAttribute, Directive, Input, ChangeDetectorRef, EventEmitter, Output, NgModule } from '@angular/core';
+import { _IdGenerator } from '@angular/cdk/a11y';
 import { UniqueSelectionDispatcher } from '@angular/cdk/collections';
 import { Subject, Subscription } from 'rxjs';
 
-/** Used to generate unique ID for each accordion. */
-let nextId$1 = 0;
 /**
  * Injection token that can be used to reference instances of `CdkAccordion`. It serves
  * as alternative token to the actual `CdkAccordion` class which could cause unnecessary
@@ -20,7 +19,7 @@ class CdkAccordion {
     /** Stream that emits true/false when openAll/closeAll is triggered. */
     _openCloseAllActions = new Subject();
     /** A readonly id value to use for unique selection coordination. */
-    id = `cdk-accordion-${nextId$1++}`;
+    id = inject(_IdGenerator).getId('cdk-accordion-');
     /** Whether the accordion should allow multiple expanded accordion items simultaneously. */
     multi = false;
     /** Opens all enabled accordion items in an accordion where multi is enabled. */
@@ -55,8 +54,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-rc.0", ng
                 args: [{ transform: booleanAttribute }]
             }] } });
 
-/** Used to generate unique ID for each accordion item. */
-let nextId = 0;
 /**
  * A basic directive expected to be extended and decorated as a component.  Sets up all
  * events and attributes needed to be managed by a CdkAccordion parent.
@@ -80,7 +77,7 @@ class CdkAccordionItem {
      */
     expandedChange = new EventEmitter();
     /** The unique AccordionItem id. */
-    id = `cdk-accordion-child-${nextId++}`;
+    id = inject(_IdGenerator).getId('cdk-accordion-child-');
     /** Whether the AccordionItem is expanded. */
     get expanded() {
         return this._expanded;

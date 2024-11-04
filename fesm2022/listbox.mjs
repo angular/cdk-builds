@@ -1,4 +1,4 @@
-import { ActiveDescendantKeyManager } from '@angular/cdk/a11y';
+import { _IdGenerator, ActiveDescendantKeyManager } from '@angular/cdk/a11y';
 import { Directionality } from '@angular/cdk/bidi';
 import { coerceArray } from '@angular/cdk/coercion';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -10,8 +10,6 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Subject, defer, merge, fromEvent } from 'rxjs';
 import { startWith, switchMap, map, takeUntil, filter } from 'rxjs/operators';
 
-/** The next id to use for creating unique DOM IDs. */
-let nextId = 0;
 /**
  * An implementation of SelectionModel that internally always represents the selection as a
  * multi-selection. This is necessary so that we can recover the full selection if the user
@@ -50,7 +48,7 @@ class CdkOption {
         this._id = value;
     }
     _id;
-    _generatedId = `cdk-option-${nextId++}`;
+    _generatedId = inject(_IdGenerator).getId('cdk-option-');
     /** The value of this option. */
     value;
     /**
@@ -193,7 +191,7 @@ class CdkListbox {
         this._id = value;
     }
     _id;
-    _generatedId = `cdk-listbox-${nextId++}`;
+    _generatedId = inject(_IdGenerator).getId('cdk-listbox-');
     /** The tabindex to use when the listbox is enabled. */
     get enabledTabIndex() {
         return this._enabledTabIndex === undefined ? 0 : this._enabledTabIndex;

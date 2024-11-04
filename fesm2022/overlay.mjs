@@ -8,6 +8,7 @@ import { supportsScrollBehavior, Platform, _getEventTarget, _isTestEnvironment }
 import { filter, takeUntil, takeWhile } from 'rxjs/operators';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { DomPortalOutlet, TemplatePortal, PortalModule } from '@angular/cdk/portal';
+import { _IdGenerator } from '@angular/cdk/a11y';
 import { _CdkPrivateStyleLoader } from '@angular/cdk/private';
 import { Subject, Subscription, merge } from 'rxjs';
 import { ESCAPE, hasModifierKey } from '@angular/cdk/keycodes';
@@ -2496,8 +2497,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-rc.0", ng
             args: [{ providedIn: 'root' }]
         }], ctorParameters: () => [] });
 
-/** Next overlay unique ID. */
-let nextUniqueId = 0;
 /**
  * Service to create Overlays. Overlays are dynamically added pieces of floating UI, meant to be
  * used as a low-level building block for other components. Dialogs, tooltips, menus,
@@ -2518,6 +2517,7 @@ class Overlay {
     _location = inject(Location);
     _outsideClickDispatcher = inject(OverlayOutsideClickDispatcher);
     _animationsModuleType = inject(ANIMATION_MODULE_TYPE, { optional: true });
+    _idGenerator = inject(_IdGenerator);
     _appRef;
     _styleLoader = inject(_CdkPrivateStyleLoader);
     constructor() { }
@@ -2551,7 +2551,7 @@ class Overlay {
      */
     _createPaneElement(host) {
         const pane = this._document.createElement('div');
-        pane.id = `cdk-overlay-${nextUniqueId++}`;
+        pane.id = this._idGenerator.getId('cdk-overlay-');
         pane.classList.add('cdk-overlay-pane');
         host.appendChild(pane);
         return pane;

@@ -712,6 +712,7 @@ export declare class Overlay {
     private _location;
     private _outsideClickDispatcher;
     private _animationsModuleType;
+    private _idGenerator;
     private _appRef;
     private _styleLoader;
     constructor(...args: unknown[]);

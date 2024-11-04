@@ -2,7 +2,7 @@ import * as i0 from '@angular/core';
 import { signal, Component, ViewEncapsulation, ChangeDetectionStrategy, inject, NgZone, Injectable, InjectionToken, ElementRef, booleanAttribute, Directive, Input, ViewContainerRef, ChangeDetectorRef, EventEmitter, Injector, afterNextRender, numberAttribute, Output, TemplateRef, NgModule } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ViewportRuler, ScrollDispatcher, CdkScrollableModule } from '@angular/cdk/scrolling';
-import { isFakeTouchstartFromScreenReader, isFakeMousedownFromScreenReader } from '@angular/cdk/a11y';
+import { isFakeTouchstartFromScreenReader, isFakeMousedownFromScreenReader, _IdGenerator } from '@angular/cdk/a11y';
 import { coerceElement, coerceNumberProperty, coerceArray } from '@angular/cdk/coercion';
 import { _getEventTarget, normalizePassiveListenerOptions, _getShadowRoot } from '@angular/cdk/platform';
 import { Subject, Subscription, interval, animationFrameScheduler, Observable, merge, BehaviorSubject } from 'rxjs';
@@ -3842,8 +3842,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0-rc.0", ng
                 args: [{ alias: 'cdkDropListGroupDisabled', transform: booleanAttribute }]
             }] } });
 
-/** Counter used to generate unique ids for drop zones. */
-let _uniqueIdCounter = 0;
 /** Container that wraps a set of draggable items. */
 class CdkDropList {
     element = inject(ElementRef);
@@ -3876,7 +3874,7 @@ class CdkDropList {
      * Unique ID for the drop zone. Can be used as a reference
      * in the `connectedTo` of another `CdkDropList`.
      */
-    id = `cdk-drop-list-${_uniqueIdCounter++}`;
+    id = inject(_IdGenerator).getId('cdk-drop-list-');
     /** Locks the position of the draggable elements inside the container along the specified axis. */
     lockAxis;
     /** Whether starting a dragging sequence from this container is disabled. */
