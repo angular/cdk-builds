@@ -18,9 +18,9 @@ export declare class CdkListbox<T = unknown> implements AfterContentInit, OnDest
     private _id;
     private _generatedId;
     /** The tabindex to use when the listbox is enabled. */
-    get enabledTabIndex(): number | null;
-    set enabledTabIndex(value: number | null);
-    private _enabledTabIndex?;
+    get enabledTabIndex(): number | null | undefined;
+    set enabledTabIndex(value: number | null | undefined);
+    private _enabledTabIndex;
     /** The value selected in the listbox, represented as an array of option values. */
     get value(): readonly T[];
     set value(value: readonly T[]);
@@ -31,9 +31,13 @@ export declare class CdkListbox<T = unknown> implements AfterContentInit, OnDest
     get multiple(): boolean;
     set multiple(value: boolean);
     /** Whether the listbox is disabled. */
-    disabled: boolean;
+    get disabled(): boolean;
+    set disabled(value: boolean);
+    private _disabled;
     /** Whether the listbox will use active descendant or will move focus onto the options. */
-    useActiveDescendant: boolean;
+    get useActiveDescendant(): boolean;
+    set useActiveDescendant(value: boolean);
+    private _useActiveDescendant;
     /** The orientation of the listbox. Only affects keyboard interaction, not visual layout. */
     get orientation(): 'horizontal' | 'vertical';
     set orientation(value: 'horizontal' | 'vertical');
@@ -204,7 +208,7 @@ export declare class CdkListbox<T = unknown> implements AfterContentInit, OnDest
     /** Get the id of the active option if active descendant is being used. */
     protected _getAriaActiveDescendant(): string | null | undefined;
     /** Get the tabindex for the listbox. */
-    protected _getTabIndex(): number | null;
+    protected _getTabIndex(): number | null | undefined;
     /** Initialize the key manager. */
     private _initKeyManager;
     /** Focus the active option. */
@@ -287,9 +291,9 @@ export declare class CdkOption<T = unknown> implements ListKeyManagerOption, Hig
     set disabled(value: boolean);
     private _disabled;
     /** The tabindex of the option when it is enabled. */
-    get enabledTabIndex(): number | null;
-    set enabledTabIndex(value: number | null);
-    private _enabledTabIndex?;
+    get enabledTabIndex(): number | null | undefined;
+    set enabledTabIndex(value: number | null | undefined);
+    private _enabledTabIndex;
     /** The option's host element */
     readonly element: HTMLElement;
     /** The parent listbox this option belongs to. */
@@ -326,7 +330,7 @@ export declare class CdkOption<T = unknown> implements ListKeyManagerOption, Hig
     /** Handle focus events on the option. */
     protected _handleFocus(): void;
     /** Get the tabindex for this option. */
-    protected _getTabIndex(): number | null;
+    protected _getTabIndex(): number | null | undefined;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkOption<any>, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkOption<any>, "[cdkOption]", ["cdkOption"], { "id": { "alias": "id"; "required": false; }; "value": { "alias": "cdkOption"; "required": false; }; "typeaheadLabel": { "alias": "cdkOptionTypeaheadLabel"; "required": false; }; "disabled": { "alias": "cdkOptionDisabled"; "required": false; }; "enabledTabIndex": { "alias": "tabindex"; "required": false; }; }, {}, never, never, true, never>;
     static ngAcceptInputType_disabled: unknown;
