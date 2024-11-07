@@ -5,7 +5,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { A, hasModifierKey, SPACE, ENTER, HOME, END, UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW } from '@angular/cdk/keycodes';
 import { Platform } from '@angular/cdk/platform';
 import * as i0 from '@angular/core';
-import { inject, ElementRef, booleanAttribute, Directive, Input, NgZone, ChangeDetectorRef, forwardRef, Output, ContentChildren, NgModule } from '@angular/core';
+import { signal, inject, ElementRef, booleanAttribute, Directive, Input, NgZone, ChangeDetectorRef, forwardRef, Output, ContentChildren, NgModule } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Subject, defer, merge, fromEvent } from 'rxjs';
 import { startWith, switchMap, map, takeUntil, filter } from 'rxjs/operators';
@@ -43,7 +43,8 @@ class ListboxSelectionModel extends SelectionModel {
 class CdkOption {
     constructor() {
         this._generatedId = `cdk-option-${nextId++}`;
-        this._disabled = false;
+        this._disabled = signal(false);
+        this._enabledTabIndex = signal(undefined);
         /** The option's host element */
         this.element = inject(ElementRef).nativeElement;
         /** The parent listbox this option belongs to. */
@@ -62,19 +63,19 @@ class CdkOption {
     }
     /** Whether this option is disabled. */
     get disabled() {
-        return this.listbox.disabled || this._disabled;
+        return this.listbox.disabled || this._disabled();
     }
     set disabled(value) {
-        this._disabled = value;
+        this._disabled.set(value);
     }
     /** The tabindex of the option when it is enabled. */
     get enabledTabIndex() {
-        return this._enabledTabIndex === undefined
+        return this._enabledTabIndex() === undefined
             ? this.listbox.enabledTabIndex
-            : this._enabledTabIndex;
+            : this._enabledTabIndex();
     }
     set enabledTabIndex(value) {
-        this._enabledTabIndex = value;
+        this._enabledTabIndex.set(value);
     }
     ngOnDestroy() {
         this.destroyed.next();
@@ -187,10 +188,10 @@ class CdkListbox {
     }
     /** The tabindex to use when the listbox is enabled. */
     get enabledTabIndex() {
-        return this._enabledTabIndex === undefined ? 0 : this._enabledTabIndex;
+        return this._enabledTabIndex() === undefined ? 0 : this._enabledTabIndex();
     }
     set enabledTabIndex(value) {
-        this._enabledTabIndex = value;
+        this._enabledTabIndex.set(value);
     }
     /** The value selected in the listbox, represented as an array of option values. */
     get value() {
@@ -211,6 +212,20 @@ class CdkListbox {
         if (this.options) {
             this._updateInternalValue();
         }
+    }
+    /** Whether the listbox is disabled. */
+    get disabled() {
+        return this._disabled();
+    }
+    set disabled(value) {
+        this._disabled.set(value);
+    }
+    /** Whether the listbox will use active descendant or will move focus onto the options. */
+    get useActiveDescendant() {
+        return this._useActiveDescendant();
+    }
+    set useActiveDescendant(value) {
+        this._useActiveDescendant.set(value);
     }
     /** The orientation of the listbox. Only affects keyboard interaction, not visual layout. */
     get orientation() {
@@ -253,10 +268,9 @@ class CdkListbox {
     }
     constructor() {
         this._generatedId = `cdk-listbox-${nextId++}`;
-        /** Whether the listbox is disabled. */
-        this.disabled = false;
-        /** Whether the listbox will use active descendant or will move focus onto the options. */
-        this.useActiveDescendant = false;
+        this._enabledTabIndex = signal(undefined);
+        this._disabled = signal(false);
+        this._useActiveDescendant = signal(false);
         this._orientation = 'vertical';
         this._navigationWrapDisabled = false;
         this._navigateDisabledOptions = false;

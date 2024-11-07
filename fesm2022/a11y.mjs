@@ -1,10 +1,10 @@
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { inject, APP_ID, Injectable, Inject, QueryList, isSignal, effect, InjectionToken, afterNextRender, Injector, booleanAttribute, Directive, Input, Optional, EventEmitter, Output, NgModule } from '@angular/core';
+import { inject, APP_ID, Injectable, Inject, signal, QueryList, isSignal, effect, InjectionToken, afterNextRender, Injector, booleanAttribute, Directive, Input, Optional, EventEmitter, Output, NgModule } from '@angular/core';
 import * as i1 from '@angular/cdk/platform';
 import { Platform, _getFocusedElementPierceShadowDom, normalizePassiveListenerOptions, _getEventTarget, _getShadowRoot } from '@angular/cdk/platform';
-import { Subject, Subscription, isObservable, of, BehaviorSubject } from 'rxjs';
 import { A, Z, ZERO, NINE, hasModifierKey, PAGE_DOWN, PAGE_UP, END, HOME, LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW, TAB, ALT, CONTROL, MAC_META, META, SHIFT } from '@angular/cdk/keycodes';
+import { Subject, Subscription, isObservable, of, BehaviorSubject } from 'rxjs';
 import { tap, debounceTime, filter, map, take, skip, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { coerceObservable } from '@angular/cdk/coercion/private';
 import * as i1$1 from '@angular/cdk/observers';
@@ -360,7 +360,7 @@ class ListKeyManager {
     constructor(_items, injector) {
         this._items = _items;
         this._activeItemIndex = -1;
-        this._activeItem = null;
+        this._activeItem = signal(null);
         this._wrap = false;
         this._typeaheadSubscription = Subscription.EMPTY;
         this._vertical = true;
@@ -482,9 +482,9 @@ class ListKeyManager {
         return this;
     }
     setActiveItem(item) {
-        const previousActiveItem = this._activeItem;
+        const previousActiveItem = this._activeItem();
         this.updateActiveItem(item);
-        if (this._activeItem !== previousActiveItem) {
+        if (this._activeItem() !== previousActiveItem) {
             this.change.next(this._activeItemIndex);
         }
     }
@@ -586,7 +586,7 @@ class ListKeyManager {
     }
     /** The active item. */
     get activeItem() {
-        return this._activeItem;
+        return this._activeItem();
     }
     /** Gets whether the user is currently typing into the manager using the typeahead feature. */
     isTyping() {
@@ -615,7 +615,7 @@ class ListKeyManager {
         const index = typeof item === 'number' ? item : itemArray.indexOf(item);
         const activeItem = itemArray[index];
         // Explicitly check for `null` and `undefined` because other falsy values are valid.
-        this._activeItem = activeItem == null ? null : activeItem;
+        this._activeItem.set(activeItem == null ? null : activeItem);
         this._activeItemIndex = index;
         this._typeahead?.setCurrentSelectedItemIndex(index);
     }
@@ -688,8 +688,9 @@ class ListKeyManager {
     /** Callback for when the items have changed. */
     _itemsChanged(newItems) {
         this._typeahead?.setItems(newItems);
-        if (this._activeItem) {
-            const newIndex = newItems.indexOf(this._activeItem);
+        const activeItem = this._activeItem();
+        if (activeItem) {
+            const newIndex = newItems.indexOf(activeItem);
             if (newIndex > -1 && newIndex !== this._activeItemIndex) {
                 this._activeItemIndex = newIndex;
                 this._typeahead?.setCurrentSelectedItemIndex(newIndex);
