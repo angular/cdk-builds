@@ -85,7 +85,8 @@ export declare const CDK_TREE_NODE_OUTLET_NODE: InjectionToken<{}>;
  * be added in the `cdkTreeNodeOutlet` in tree node template.
  * The children of node will be automatically added to `cdkTreeNodeOutlet`.
  */
-export declare class CdkNestedTreeNode<T, K = T> extends CdkTreeNode<T, K> implements AfterContentInit, OnDestroy, OnInit {
+export declare class CdkNestedTreeNode<T, K = T> extends CdkTreeNode<T, K> implements AfterContentInit, OnDestroy {
+    protected _type: 'flat' | 'nested';
     protected _differs: IterableDiffers;
     /** Differ used to find the changes in the data provided by the data source. */
     private _dataDiffer;
@@ -95,7 +96,6 @@ export declare class CdkNestedTreeNode<T, K = T> extends CdkTreeNode<T, K> imple
     nodeOutlet: QueryList<CdkTreeNodeOutlet>;
     constructor(...args: unknown[]);
     ngAfterContentInit(): void;
-    ngOnInit(): void;
     ngOnDestroy(): void;
     /** Add children dataNodes to the NodeOutlet */
     protected updateChildrenNodes(children?: T[]): void;
@@ -224,7 +224,7 @@ export declare class CdkTree<T, K = T> implements AfterContentChecked, AfterCont
      * This will be called by the first node that's rendered in order for the tree
      * to determine what data transformations are required.
      */
-    _setNodeTypeIfUnset(nodeType: 'flat' | 'nested'): void;
+    _setNodeTypeIfUnset(newType: 'flat' | 'nested'): void;
     /**
      * Switch to the provided data source by resetting the data and unsubscribing from the current
      * render change subscription if one exists. If the data source is null, interpret this by
@@ -380,6 +380,7 @@ export declare class CdkTreeNode<T, K = T> implements OnDestroy, OnInit, TreeKey
     _elementRef: ElementRef<HTMLElement>;
     protected _tree: CdkTree<T, K>;
     protected _tabindex: number | null;
+    protected readonly _type: 'flat' | 'nested';
     /**
      * The role of the tree node.
      *

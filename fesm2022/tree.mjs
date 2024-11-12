@@ -447,9 +447,15 @@ class CdkTree {
      * This will be called by the first node that's rendered in order for the tree
      * to determine what data transformations are required.
      */
-    _setNodeTypeIfUnset(nodeType) {
-        if (this._nodeType.value === null) {
-            this._nodeType.next(nodeType);
+    _setNodeTypeIfUnset(newType) {
+        const currentType = this._nodeType.value;
+        if (currentType === null) {
+            this._nodeType.next(newType);
+        }
+        else if ((typeof ngDevMode === 'undefined' || ngDevMode) && currentType !== newType) {
+            console.warn(`Tree is using conflicting node types which can cause unexpected behavior. ` +
+                `Please use tree nodes of the same type (e.g. only flat or only nested). ` +
+                `Current node type: "${currentType}", new node type "${newType}".`);
         }
     }
     /**
@@ -1174,6 +1180,7 @@ class CdkTreeNode {
     _elementRef = inject(ElementRef);
     _tree = inject(CdkTree);
     _tabindex = -1;
+    _type = 'flat';
     /**
      * The role of the tree node.
      *
@@ -1337,10 +1344,8 @@ class CdkTreeNode {
         this._tree
             ._getExpansionModel()
             .changed.pipe(map(() => this.isExpanded), distinctUntilChanged())
-            .subscribe(() => {
-            this._changeDetectorRef.markForCheck();
-        });
-        this._tree._setNodeTypeIfUnset('flat');
+            .subscribe(() => this._changeDetectorRef.markForCheck());
+        this._tree._setNodeTypeIfUnset(this._type);
         this._tree._registerNode(this);
     }
     ngOnDestroy() {
@@ -1484,6 +1489,7 @@ function isNodeElement(element) {
  * The children of node will be automatically added to `cdkTreeNodeOutlet`.
  */
 class CdkNestedTreeNode extends CdkTreeNode {
+    _type = 'nested';
     _differs = inject(IterableDiffers);
     /** Differ used to find the changes in the data provided by the data source. */
     _dataDiffer;
@@ -1503,12 +1509,6 @@ class CdkNestedTreeNode extends CdkTreeNode {
         this.nodeOutlet.changes
             .pipe(takeUntil(this._destroyed))
             .subscribe(() => this.updateChildrenNodes());
-    }
-    // This is a workaround for https://github.com/angular/angular/issues/23091
-    // In aot mode, the lifecycle hooks from parent class are not called.
-    ngOnInit() {
-        this._tree._setNodeTypeIfUnset('nested');
-        super.ngOnInit();
     }
     ngOnDestroy() {
         this._clear();
