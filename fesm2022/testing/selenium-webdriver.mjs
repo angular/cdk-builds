@@ -145,7 +145,9 @@ class SeleniumWebDriverElement {
      */
     async setContenteditableValue(value) {
         const contenteditableAttr = await this.getAttribute('contenteditable');
-        if (contenteditableAttr !== '' && contenteditableAttr !== 'true') {
+        if (contenteditableAttr !== '' &&
+            contenteditableAttr !== 'true' &&
+            contenteditableAttr !== 'plaintext-only') {
             throw new Error('setContenteditableValue can only be called on a `contenteditable` element.');
         }
         await this._stabilize();
