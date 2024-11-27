@@ -705,7 +705,7 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
             .position()
             .flexibleConnectedTo(this._elementRef)
             .withLockedPosition()
-            .withGrowAfterOpen()
+            .withFlexibleDimensions(false)
             .withPositions(this._getOverlayPositions());
     }
     /** Get the preferred positions for the opened menu relative to the menu item. */
