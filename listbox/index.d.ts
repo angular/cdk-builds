@@ -39,7 +39,7 @@ export declare class CdkListbox<T = unknown> implements AfterContentInit, OnDest
     set useActiveDescendant(value: boolean);
     private _useActiveDescendant;
     /** The orientation of the listbox. Only affects keyboard interaction, not visual layout. */
-    get orientation(): 'horizontal' | 'vertical';
+    get orientation(): "horizontal" | "vertical";
     set orientation(value: 'horizontal' | 'vertical');
     private _orientation;
     /** The function used to compare option values. */

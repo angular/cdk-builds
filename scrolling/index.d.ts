@@ -251,7 +251,7 @@ export declare class CdkVirtualScrollViewport extends CdkVirtualScrollable imple
     /** Emits when the rendered range changes. */
     private readonly _renderedRangeSubject;
     /** The direction the viewport scrolls. */
-    get orientation(): 'horizontal' | 'vertical';
+    get orientation(): "horizontal" | "vertical";
     set orientation(orientation: 'horizontal' | 'vertical');
     private _orientation;
     /**
