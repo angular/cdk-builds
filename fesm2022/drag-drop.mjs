@@ -2989,6 +2989,12 @@ class DragDropRegistry {
      */
     _draggingPredicate = (item) => item.isDragging();
     /**
+     * Map tracking DOM nodes and their corresponding drag directives. Note that this is different
+     * from looking through the `_dragInstances` and getting their root node, because the root node
+     * isn't necessarily the node that the directive is set on.
+     */
+    _domNodesToDirectives = null;
+    /**
      * Emits the `touchmove` or `mousemove` events that are dispatched
      * while the user is dragging a drag item instance.
      */
@@ -3136,9 +3142,33 @@ class DragDropRegistry {
         }
         return merge(...streams);
     }
+    /**
+     * Tracks the DOM node which has a draggable directive.
+     * @param node Node to track.
+     * @param dragRef Drag directive set on the node.
+     */
+    registerDirectiveNode(node, dragRef) {
+        this._domNodesToDirectives ??= new WeakMap();
+        this._domNodesToDirectives.set(node, dragRef);
+    }
+    /**
+     * Stops tracking a draggable directive node.
+     * @param node Node to stop tracking.
+     */
+    removeDirectiveNode(node) {
+        this._domNodesToDirectives?.delete(node);
+    }
+    /**
+     * Gets the drag directive corresponding to a specific DOM node, if any.
+     * @param node Node for which to do the lookup.
+     */
+    getDragDirectiveForNode(node) {
+        return this._domNodesToDirectives?.get(node) || null;
+    }
     ngOnDestroy() {
         this._dragInstances.forEach(instance => this.removeDragItem(instance));
         this._dropInstances.forEach(instance => this.removeDropContainer(instance));
+        this._domNodesToDirectives = null;
         this._clearGlobalListeners();
         this.pointerMove.complete();
         this.pointerUp.complete();
@@ -3245,6 +3275,7 @@ const CDK_DRAG_HANDLE = new InjectionToken('CdkDragHandle');
 class CdkDragHandle {
     element = inject(ElementRef);
     _parentDrag = inject(CDK_DRAG_PARENT, { optional: true, skipSelf: true });
+    _dragDropRegistry = inject(DragDropRegistry);
     /** Emits when the state of the handle has changed. */
     _stateChanges = new Subject();
     /** Whether starting to drag through this handle is disabled. */
@@ -3261,6 +3292,20 @@ class CdkDragHandle {
             assertElementNode(this.element.nativeElement, 'cdkDragHandle');
         }
         this._parentDrag?._addHandle(this);
+    }
+    ngAfterViewInit() {
+        if (!this._parentDrag) {
+            let parent = this.element.nativeElement.parentElement;
+            while (parent) {
+                const ref = this._dragDropRegistry.getDragDirectiveForNode(parent);
+                if (ref) {
+                    this._parentDrag = ref;
+                    ref._addHandle(this);
+                    break;
+                }
+                parent = parent.parentElement;
+            }
+        }
     }
     ngOnDestroy() {
         this._parentDrag?._removeHandle(this);
@@ -3289,7 +3334,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.1.0-next.2", 
  */
 const CDK_DRAG_CONFIG = new InjectionToken('CDK_DRAG_CONFIG');
 
-const DRAG_HOST_CLASS = 'cdk-drag';
 /**
  * Injection token that can be used to reference instances of `CdkDropList`. It serves as
  * alternative token to the actual `CdkDropList` class which could cause unnecessary
@@ -3306,8 +3350,8 @@ class CdkDrag {
     _changeDetectorRef = inject(ChangeDetectorRef);
     _selfHandle = inject(CDK_DRAG_HANDLE, { optional: true, self: true });
     _parentDrag = inject(CDK_DRAG_PARENT, { optional: true, skipSelf: true });
+    _dragDropRegistry = inject(DragDropRegistry);
     _destroyed = new Subject();
-    static _dragInstances = [];
     _handles = new BehaviorSubject([]);
     _previewTemplate;
     _placeholderTemplate;
@@ -3420,10 +3464,7 @@ class CdkDrag {
             zIndex: config?.zIndex,
         });
         this._dragRef.data = this;
-        // We have to keep track of the drag instances in order to be able to match an element to
-        // a drag instance. We can't go through the global registry of `DragRef`, because the root
-        // element could be different.
-        CdkDrag._dragInstances.push(this);
+        this._dragDropRegistry.registerDirectiveNode(this.element.nativeElement, this);
         if (config) {
             this._assignDefaults(config);
         }
@@ -3507,10 +3548,7 @@ class CdkDrag {
         if (this.dropContainer) {
             this.dropContainer.removeItem(this);
         }
-        const index = CdkDrag._dragInstances.indexOf(this);
-        if (index > -1) {
-            CdkDrag._dragInstances.splice(index, 1);
-        }
+        this._dragDropRegistry.removeDirectiveNode(this.element.nativeElement);
         // Unnecessary in most cases, but used to avoid extra change detections with `zone-paths-rxjs`.
         this._ngZone.runOutsideAngular(() => {
             this._handles.complete();
@@ -3626,10 +3664,9 @@ class CdkDrag {
             // the item was projected into another item by something like `ngTemplateOutlet`.
             let parent = this.element.nativeElement.parentElement;
             while (parent) {
-                if (parent.classList.contains(DRAG_HOST_CLASS)) {
-                    ref.withParent(CdkDrag._dragInstances.find(drag => {
-                        return drag.element.nativeElement === parent;
-                    })?._dragRef || null);
+                const parentDrag = this._dragDropRegistry.getDragDirectiveForNode(parent);
+                if (parentDrag) {
+                    ref.withParent(parentDrag._dragRef);
                     break;
                 }
                 parent = parent.parentElement;
@@ -3745,7 +3782,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.1.0-next.2", 
                     selector: '[cdkDrag]',
                     exportAs: 'cdkDrag',
                     host: {
-                        'class': DRAG_HOST_CLASS,
+                        'class': 'cdk-drag',
                         '[class.cdk-drag-disabled]': 'disabled',
                         '[class.cdk-drag-dragging]': '_dragRef.isDragging()',
                     },
