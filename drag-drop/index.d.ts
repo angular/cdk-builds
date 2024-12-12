@@ -75,8 +75,8 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     private _changeDetectorRef;
     private _selfHandle;
     private _parentDrag;
+    private _dragDropRegistry;
     private readonly _destroyed;
-    private static _dragInstances;
     private _handles;
     private _previewTemplate;
     private _placeholderTemplate;
@@ -273,9 +273,10 @@ export declare interface CdkDragExit<T = any, I = T> {
 }
 
 /** Handle that can be used to drag a CdkDrag instance. */
-export declare class CdkDragHandle implements OnDestroy {
+export declare class CdkDragHandle implements AfterViewInit, OnDestroy {
     element: ElementRef<HTMLElement>;
     private _parentDrag;
+    private _dragDropRegistry;
     /** Emits when the state of the handle has changed. */
     readonly _stateChanges: Subject<CdkDragHandle>;
     /** Whether starting to drag through this handle is disabled. */
@@ -283,6 +284,7 @@ export declare class CdkDragHandle implements OnDestroy {
     set disabled(value: boolean);
     private _disabled;
     constructor(...args: unknown[]);
+    ngAfterViewInit(): void;
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkDragHandle, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDragHandle, "[cdkDragHandle]", never, { "disabled": { "alias": "cdkDragHandleDisabled"; "required": false; }; }, {}, never, never, true, never>;
@@ -592,6 +594,12 @@ export declare class DragDropRegistry<_ = unknown, __ = unknown> implements OnDe
      */
     private _draggingPredicate;
     /**
+     * Map tracking DOM nodes and their corresponding drag directives. Note that this is different
+     * from looking through the `_dragInstances` and getting their root node, because the root node
+     * isn't necessarily the node that the directive is set on.
+     */
+    private _domNodesToDirectives;
+    /**
      * Emits the `touchmove` or `mousemove` events that are dispatched
      * while the user is dragging a drag item instance.
      */
@@ -634,6 +642,22 @@ export declare class DragDropRegistry<_ = unknown, __ = unknown> implements OnDe
      *   be used to include an additional top-level listener at the shadow root level.
      */
     scrolled(shadowRoot?: DocumentOrShadowRoot | null): Observable<Event>;
+    /**
+     * Tracks the DOM node which has a draggable directive.
+     * @param node Node to track.
+     * @param dragRef Drag directive set on the node.
+     */
+    registerDirectiveNode(node: Node, dragRef: CdkDrag): void;
+    /**
+     * Stops tracking a draggable directive node.
+     * @param node Node to stop tracking.
+     */
+    removeDirectiveNode(node: Node): void;
+    /**
+     * Gets the drag directive corresponding to a specific DOM node, if any.
+     * @param node Node for which to do the lookup.
+     */
+    getDragDirectiveForNode(node: Node): CdkDrag | null;
     ngOnDestroy(): void;
     /**
      * Event listener that will prevent the default browser action while the user is dragging.
