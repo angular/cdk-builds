@@ -1,6 +1,6 @@
 import { normalizePassiveListenerOptions, Platform } from '@angular/cdk/platform';
 import * as i0 from '@angular/core';
-import { Component, ChangeDetectionStrategy, ViewEncapsulation, inject, NgZone, Injectable, ElementRef, EventEmitter, Directive, Output, booleanAttribute, Input, NgModule } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewEncapsulation, inject, NgZone, Injectable, ElementRef, EventEmitter, Directive, Output, Renderer2, booleanAttribute, Input, NgModule } from '@angular/core';
 import { _CdkPrivateStyleLoader } from '@angular/cdk/private';
 import { coerceElement, coerceNumberProperty } from '@angular/cdk/coercion';
 import { EMPTY, Subject, fromEvent } from 'rxjs';
@@ -122,10 +122,12 @@ class CdkTextareaAutosize {
     _elementRef = inject(ElementRef);
     _platform = inject(Platform);
     _ngZone = inject(NgZone);
+    _renderer = inject(Renderer2);
     /** Keep track of the previous textarea value to avoid resizing when the value hasn't changed. */
     _previousValue;
     _initialHeight;
     _destroyed = new Subject();
+    _listenerCleanups;
     _minRows;
     _maxRows;
     _enabled = true;
@@ -213,16 +215,17 @@ class CdkTextareaAutosize {
                 fromEvent(window, 'resize')
                     .pipe(auditTime(16), takeUntil(this._destroyed))
                     .subscribe(() => this.resizeToFitContent(true));
-                this._textareaElement.addEventListener('focus', this._handleFocusEvent);
-                this._textareaElement.addEventListener('blur', this._handleFocusEvent);
+                this._listenerCleanups = [
+                    this._renderer.listen(this._textareaElement, 'focus', this._handleFocusEvent),
+                    this._renderer.listen(this._textareaElement, 'blur', this._handleFocusEvent),
+                ];
             });
             this._isViewInited = true;
             this.resizeToFitContent(true);
         }
     }
     ngOnDestroy() {
-        this._textareaElement.removeEventListener('focus', this._handleFocusEvent);
-        this._textareaElement.removeEventListener('blur', this._handleFocusEvent);
+        this._listenerCleanups?.forEach(cleanup => cleanup());
         this._destroyed.next();
         this._destroyed.complete();
     }

@@ -603,12 +603,11 @@ export declare type _Top = {
  */
 export declare class ViewportRuler implements OnDestroy {
     private _platform;
+    private _listeners;
     /** Cached viewport dimensions. */
     private _viewportSize;
     /** Stream of viewport change events. */
     private readonly _change;
-    /** Event listener that will be used to handle the viewport change events. */
-    private _changeListener;
     /** Used to reference correct document/window */
     protected _document: Document;
     constructor(...args: unknown[]);

@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { signal, Component, ViewEncapsulation, ChangeDetectionStrategy, inject, NgZone, Injectable, InjectionToken, ElementRef, booleanAttribute, Directive, Input, ViewContainerRef, ChangeDetectorRef, EventEmitter, Injector, afterNextRender, numberAttribute, Output, TemplateRef, NgModule } from '@angular/core';
+import { signal, Component, ViewEncapsulation, ChangeDetectionStrategy, inject, NgZone, Injectable, RendererFactory2, InjectionToken, ElementRef, booleanAttribute, Directive, Input, ViewContainerRef, ChangeDetectorRef, EventEmitter, Injector, afterNextRender, numberAttribute, Output, TemplateRef, NgModule } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ViewportRuler, ScrollDispatcher, CdkScrollableModule } from '@angular/cdk/scrolling';
 import { isFakeTouchstartFromScreenReader, isFakeMousedownFromScreenReader, _IdGenerator } from '@angular/cdk/a11y';
@@ -333,6 +333,7 @@ class PreviewRef {
     _pickupPositionOnPage;
     _initialTransform;
     _zIndex;
+    _renderer;
     /** Reference to the view of the preview element. */
     _previewEmbeddedView;
     /** Reference to the preview element. */
@@ -340,7 +341,7 @@ class PreviewRef {
     get element() {
         return this._preview;
     }
-    constructor(_document, _rootElement, _direction, _initialDomRect, _previewTemplate, _previewClass, _pickupPositionOnPage, _initialTransform, _zIndex) {
+    constructor(_document, _rootElement, _direction, _initialDomRect, _previewTemplate, _previewClass, _pickupPositionOnPage, _initialTransform, _zIndex, _renderer) {
         this._document = _document;
         this._rootElement = _rootElement;
         this._direction = _direction;
@@ -350,6 +351,7 @@ class PreviewRef {
         this._pickupPositionOnPage = _pickupPositionOnPage;
         this._initialTransform = _initialTransform;
         this._zIndex = _zIndex;
+        this._renderer = _renderer;
     }
     attach(parent) {
         this._preview = this._createPreview();
@@ -378,10 +380,7 @@ class PreviewRef {
         return getTransformTransitionDurationInMs(this._preview);
     }
     addEventListener(name, handler) {
-        this._preview.addEventListener(name, handler);
-    }
-    removeEventListener(name, handler) {
-        this._preview.removeEventListener(name, handler);
+        return this._renderer.listen(this._preview, name, handler);
     }
     _createPreview() {
         const previewConfig = this._previewTemplate;
@@ -475,6 +474,7 @@ class DragRef {
     _ngZone;
     _viewportRuler;
     _dragDropRegistry;
+    _renderer;
     /** Element displayed next to the user's pointer while the element is dragged. */
     _preview;
     /** Container into which to insert the preview. */
@@ -638,12 +638,13 @@ class DragRef {
      * Should return a point describing where the item should be rendered.
      */
     constrainPosition;
-    constructor(element, _config, _document, _ngZone, _viewportRuler, _dragDropRegistry) {
+    constructor(element, _config, _document, _ngZone, _viewportRuler, _dragDropRegistry, _renderer) {
         this._config = _config;
         this._document = _document;
         this._ngZone = _ngZone;
         this._viewportRuler = _viewportRuler;
         this._dragDropRegistry = _dragDropRegistry;
+        this._renderer = _renderer;
         this.withRootElement(element).withParent(_config.parentDragRef || null);
         this._parentPositions = new ParentPositionTracker(_document);
         _dragDropRegistry.registerDragItem(this);
@@ -1040,7 +1041,7 @@ class DragRef {
             this._initialTransform = element.style.transform || '';
             // Create the preview after the initial transform has
             // been cached, because it can be affected by the transform.
-            this._preview = new PreviewRef(this._document, this._rootElement, this._direction, this._initialDomRect, this._previewTemplate || null, this.previewClass || null, this._pickupPositionOnPage, this._initialTransform, this._config.zIndex || 1000);
+            this._preview = new PreviewRef(this._document, this._rootElement, this._direction, this._initialDomRect, this._previewTemplate || null, this.previewClass || null, this._pickupPositionOnPage, this._initialTransform, this._config.zIndex || 1000, this._renderer);
             this._preview.attach(this._getPreviewInsertionPoint(parent, shadowRoot));
             // We move the element out at the end of the body and we make it hidden, because keeping it in
             // place will throw off the consumer's `:last-child` selectors. We can't remove the element
@@ -1244,21 +1245,21 @@ class DragRef {
         }
         return this._ngZone.runOutsideAngular(() => {
             return new Promise(resolve => {
-                const handler = ((event) => {
+                const handler = (event) => {
                     if (!event ||
                         (this._preview &&
                             _getEventTarget(event) === this._preview.element &&
                             event.propertyName === 'transform')) {
-                        this._preview?.removeEventListener('transitionend', handler);
+                        cleanupListener();
                         resolve();
                         clearTimeout(timeout);
                     }
-                });
+                };
                 // If a transition is short enough, the browser might not fire the `transitionend` event.
                 // Since we know how long it's supposed to take, add a timeout with a 50% buffer that'll
                 // fire if the transition hasn't completed when it was supposed to.
                 const timeout = setTimeout(handler, duration * 1.5);
-                this._preview.addEventListener('transitionend', handler);
+                const cleanupListener = this._preview.addEventListener('transitionend', handler);
             });
         });
     }
@@ -3222,6 +3223,7 @@ class DragDrop {
     _ngZone = inject(NgZone);
     _viewportRuler = inject(ViewportRuler);
     _dragDropRegistry = inject(DragDropRegistry);
+    _renderer = inject(RendererFactory2).createRenderer(null, null);
     constructor() { }
     /**
      * Turns an element into a draggable item.
@@ -3229,7 +3231,7 @@ class DragDrop {
      * @param config Object used to configure the dragging behavior.
      */
     createDrag(element, config = DEFAULT_CONFIG) {
-        return new DragRef(element, config, this._document, this._ngZone, this._viewportRuler, this._dragDropRegistry);
+        return new DragRef(element, config, this._document, this._ngZone, this._viewportRuler, this._dragDropRegistry, this._renderer);
     }
     /**
      * Turns an element into a drop list.

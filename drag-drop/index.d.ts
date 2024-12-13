@@ -10,6 +10,7 @@ import { NumberInput } from '@angular/cdk/coercion';
 import { Observable } from 'rxjs';
 import { OnChanges } from '@angular/core';
 import { OnDestroy } from '@angular/core';
+import { Renderer2 } from '@angular/core';
 import { SimpleChanges } from '@angular/core';
 import { Subject } from 'rxjs';
 import { TemplateRef } from '@angular/core';
@@ -530,6 +531,7 @@ export declare class DragDrop {
     private _ngZone;
     private _viewportRuler;
     private _dragDropRegistry;
+    private _renderer;
     constructor(...args: unknown[]);
     /**
      * Turns an element into a draggable item.
@@ -696,6 +698,7 @@ export declare class DragRef<T = any> {
     private _ngZone;
     private _viewportRuler;
     private _dragDropRegistry;
+    private _renderer;
     /** Element displayed next to the user's pointer while the element is dragged. */
     private _preview;
     /** Container into which to insert the preview. */
@@ -894,7 +897,7 @@ export declare class DragRef<T = any> {
      * Should return a point describing where the item should be rendered.
      */
     constrainPosition?: (userPointerPosition: Point, dragRef: DragRef, dimensions: DOMRect, pickupPositionInElement: Point) => Point;
-    constructor(element: ElementRef<HTMLElement> | HTMLElement, _config: DragRefConfig, _document: Document, _ngZone: NgZone, _viewportRuler: ViewportRuler, _dragDropRegistry: DragDropRegistry);
+    constructor(element: ElementRef<HTMLElement> | HTMLElement, _config: DragRefConfig, _document: Document, _ngZone: NgZone, _viewportRuler: ViewportRuler, _dragDropRegistry: DragDropRegistry, _renderer: Renderer2);
     /**
      * Returns the element that is being used as a placeholder
      * while the current element is being dragged.
