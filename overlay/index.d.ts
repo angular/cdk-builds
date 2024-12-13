@@ -21,6 +21,7 @@ import { OnChanges } from '@angular/core';
 import { OnDestroy } from '@angular/core';
 import { Platform } from '@angular/cdk/platform';
 import { PortalOutlet } from '@angular/cdk/portal';
+import { Renderer2 } from '@angular/core';
 import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import { SimpleChanges } from '@angular/core';
 import { Subject } from 'rxjs';
@@ -549,13 +550,13 @@ export declare type FlexibleConnectedPositionStrategyOrigin = ElementRef | Eleme
  * Should be provided in the root component.
  */
 export declare class FullscreenOverlayContainer extends OverlayContainer implements OnDestroy {
+    private _renderer;
     private _fullScreenEventName;
-    private _fullScreenListener;
+    private _cleanupFullScreenListener;
     constructor(...args: unknown[]);
     ngOnDestroy(): void;
     protected _createContainer(): void;
     private _adjustParentForFullscreenChange;
-    private _addFullscreenChangeListener;
     private _getEventName;
     /**
      * When the page is put into fullscreen mode, a specific element is specified.
@@ -713,6 +714,7 @@ export declare class Overlay {
     private _outsideClickDispatcher;
     private _animationsModuleType;
     private _idGenerator;
+    private _renderer;
     private _appRef;
     private _styleLoader;
     constructor(...args: unknown[]);
@@ -826,6 +828,8 @@ export declare class OverlayContainer implements OnDestroy {
  */
 export declare class OverlayKeyboardDispatcher extends BaseOverlayDispatcher {
     private _ngZone;
+    private _renderer;
+    private _cleanupKeydown;
     /** Add a new overlay to the list of attached overlay refs. */
     add(overlayRef: OverlayRef): void;
     /** Detaches the global keyboard event listener. */
@@ -902,6 +906,7 @@ export declare class OverlayRef implements PortalOutlet {
     private _outsideClickDispatcher;
     private _animationsDisabled;
     private _injector;
+    private _renderer;
     private _backdropElement;
     private _backdropTimeout;
     private readonly _backdropClick;
@@ -910,8 +915,8 @@ export declare class OverlayRef implements PortalOutlet {
     private _positionStrategy;
     private _scrollStrategy;
     private _locationChanges;
-    private _backdropClickHandler;
-    private _backdropTransitionendHandler;
+    private _cleanupBackdropClick;
+    private _cleanupBackdropTransitionEnd;
     /**
      * Reference to the parent of the `_host` at the time it was detached. Used to restore
      * the `_host` to its original position in the DOM when it gets re-attached.
@@ -925,7 +930,7 @@ export declare class OverlayRef implements PortalOutlet {
     private _afterRenderRef;
     /** Reference to the currently-running `afterNextRender` call. */
     private _afterNextRenderRef;
-    constructor(_portalOutlet: PortalOutlet, _host: HTMLElement, _pane: HTMLElement, _config: ImmutableObject<OverlayConfig>, _ngZone: NgZone, _keyboardDispatcher: OverlayKeyboardDispatcher, _document: Document, _location: Location_2, _outsideClickDispatcher: OverlayOutsideClickDispatcher, _animationsDisabled: boolean | undefined, _injector: EnvironmentInjector);
+    constructor(_portalOutlet: PortalOutlet, _host: HTMLElement, _pane: HTMLElement, _config: ImmutableObject<OverlayConfig>, _ngZone: NgZone, _keyboardDispatcher: OverlayKeyboardDispatcher, _document: Document, _location: Location_2, _outsideClickDispatcher: OverlayOutsideClickDispatcher, _animationsDisabled: boolean | undefined, _injector: EnvironmentInjector, _renderer: Renderer2);
     /** The overlay's HTML element */
     get overlayElement(): HTMLElement;
     /** The overlay's backdrop HTML element. */

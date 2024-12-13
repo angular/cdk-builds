@@ -2,7 +2,7 @@ import { ScrollDispatcher, ViewportRuler, ScrollingModule } from '@angular/cdk/s
 export { CdkScrollable, ScrollDispatcher, ViewportRuler } from '@angular/cdk/scrolling';
 import { DOCUMENT, Location } from '@angular/common';
 import * as i0 from '@angular/core';
-import { inject, NgZone, Injectable, Component, ChangeDetectionStrategy, ViewEncapsulation, untracked, afterRender, afterNextRender, ElementRef, Injector, ANIMATION_MODULE_TYPE, EnvironmentInjector, ApplicationRef, InjectionToken, Directive, EventEmitter, TemplateRef, ViewContainerRef, booleanAttribute, Input, Output, NgModule } from '@angular/core';
+import { inject, NgZone, Injectable, RendererFactory2, Component, ChangeDetectionStrategy, ViewEncapsulation, untracked, afterRender, afterNextRender, ElementRef, Injector, ANIMATION_MODULE_TYPE, EnvironmentInjector, ApplicationRef, InjectionToken, Directive, EventEmitter, TemplateRef, ViewContainerRef, booleanAttribute, Input, Output, NgModule } from '@angular/core';
 import { coerceCssPixelValue, coerceArray } from '@angular/cdk/coercion';
 import { supportsScrollBehavior, Platform, _getEventTarget, _isTestEnvironment } from '@angular/cdk/platform';
 import { filter, takeUntil, takeWhile } from 'rxjs/operators';
@@ -497,26 +497,24 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0", ngImpor
  * on event target and order of overlay opens.
  */
 class OverlayKeyboardDispatcher extends BaseOverlayDispatcher {
-    _ngZone = inject(NgZone, { optional: true });
+    _ngZone = inject(NgZone);
+    _renderer = inject(RendererFactory2).createRenderer(null, null);
+    _cleanupKeydown;
     /** Add a new overlay to the list of attached overlay refs. */
     add(overlayRef) {
         super.add(overlayRef);
         // Lazily start dispatcher once first overlay is added
         if (!this._isAttached) {
-            /** @breaking-change 14.0.0 _ngZone will be required. */
-            if (this._ngZone) {
-                this._ngZone.runOutsideAngular(() => this._document.body.addEventListener('keydown', this._keydownListener));
-            }
-            else {
-                this._document.body.addEventListener('keydown', this._keydownListener);
-            }
+            this._ngZone.runOutsideAngular(() => {
+                this._cleanupKeydown = this._renderer.listen('body', 'keydown', this._keydownListener);
+            });
             this._isAttached = true;
         }
     }
     /** Detaches the global keyboard event listener. */
     detach() {
         if (this._isAttached) {
-            this._document.body.removeEventListener('keydown', this._keydownListener);
+            this._cleanupKeydown?.();
             this._isAttached = false;
         }
     }
@@ -531,14 +529,7 @@ class OverlayKeyboardDispatcher extends BaseOverlayDispatcher {
             // because we don't want overlays that don't handle keyboard events to block the ones below
             // them that do.
             if (overlays[i]._keydownEvents.observers.length > 0) {
-                const keydownEvents = overlays[i]._keydownEvents;
-                /** @breaking-change 14.0.0 _ngZone will be required. */
-                if (this._ngZone) {
-                    this._ngZone.run(() => keydownEvents.next(event));
-                }
-                else {
-                    keydownEvents.next(event);
-                }
+                this._ngZone.run(() => overlays[i]._keydownEvents.next(event));
                 break;
             }
         }
@@ -777,6 +768,7 @@ class OverlayRef {
     _outsideClickDispatcher;
     _animationsDisabled;
     _injector;
+    _renderer;
     _backdropElement = null;
     _backdropTimeout;
     _backdropClick = new Subject();
@@ -785,10 +777,8 @@ class OverlayRef {
     _positionStrategy;
     _scrollStrategy;
     _locationChanges = Subscription.EMPTY;
-    _backdropClickHandler = (event) => this._backdropClick.next(event);
-    _backdropTransitionendHandler = (event) => {
-        this._disposeBackdrop(event.target);
-    };
+    _cleanupBackdropClick;
+    _cleanupBackdropTransitionEnd;
     /**
      * Reference to the parent of the `_host` at the time it was detached. Used to restore
      * the `_host` to its original position in the DOM when it gets re-attached.
@@ -802,7 +792,7 @@ class OverlayRef {
     _afterRenderRef;
     /** Reference to the currently-running `afterNextRender` call. */
     _afterNextRenderRef;
-    constructor(_portalOutlet, _host, _pane, _config, _ngZone, _keyboardDispatcher, _document, _location, _outsideClickDispatcher, _animationsDisabled = false, _injector) {
+    constructor(_portalOutlet, _host, _pane, _config, _ngZone, _keyboardDispatcher, _document, _location, _outsideClickDispatcher, _animationsDisabled = false, _injector, _renderer) {
         this._portalOutlet = _portalOutlet;
         this._host = _host;
         this._pane = _pane;
@@ -814,6 +804,7 @@ class OverlayRef {
         this._outsideClickDispatcher = _outsideClickDispatcher;
         this._animationsDisabled = _animationsDisabled;
         this._injector = _injector;
+        this._renderer = _renderer;
         if (_config.scrollStrategy) {
             this._scrollStrategy = _config.scrollStrategy;
             this._scrollStrategy.attach(this);
@@ -1099,7 +1090,8 @@ class OverlayRef {
         this._host.parentElement.insertBefore(this._backdropElement, this._host);
         // Forward backdrop clicks such that the consumer of the overlay can perform whatever
         // action desired when such a click occurs (usually closing the overlay).
-        this._backdropElement.addEventListener('click', this._backdropClickHandler);
+        this._cleanupBackdropClick?.();
+        this._cleanupBackdropClick = this._renderer.listen(this._backdropElement, 'click', (event) => this._backdropClick.next(event));
         // Add class to fade-in the backdrop after one frame.
         if (!this._animationsDisabled && typeof requestAnimationFrame !== 'undefined') {
             this._ngZone.runOutsideAngular(() => {
@@ -1138,7 +1130,10 @@ class OverlayRef {
         }
         backdropToDetach.classList.remove('cdk-overlay-backdrop-showing');
         this._ngZone.runOutsideAngular(() => {
-            backdropToDetach.addEventListener('transitionend', this._backdropTransitionendHandler);
+            this._cleanupBackdropTransitionEnd?.();
+            this._cleanupBackdropTransitionEnd = this._renderer.listen(backdropToDetach, 'transitionend', (event) => {
+                this._disposeBackdrop(event.target);
+            });
         });
         // If the backdrop doesn't have a transition, the `transitionend` event won't fire.
         // In this case we make it unclickable and we try to remove it after a delay.
@@ -1196,9 +1191,9 @@ class OverlayRef {
     }
     /** Removes a backdrop element from the DOM. */
     _disposeBackdrop(backdrop) {
+        this._cleanupBackdropClick?.();
+        this._cleanupBackdropTransitionEnd?.();
         if (backdrop) {
-            backdrop.removeEventListener('click', this._backdropClickHandler);
-            backdrop.removeEventListener('transitionend', this._backdropTransitionendHandler);
             backdrop.remove();
             // It is possible that a new portal has been attached to this overlay since we started
             // removing the backdrop. If that is the case, only clear the backdrop reference if it
@@ -2518,6 +2513,7 @@ class Overlay {
     _outsideClickDispatcher = inject(OverlayOutsideClickDispatcher);
     _animationsModuleType = inject(ANIMATION_MODULE_TYPE, { optional: true });
     _idGenerator = inject(_IdGenerator);
+    _renderer = inject(RendererFactory2).createRenderer(null, null);
     _appRef;
     _styleLoader = inject(_CdkPrivateStyleLoader);
     constructor() { }
@@ -2535,7 +2531,7 @@ class Overlay {
         const portalOutlet = this._createPortalOutlet(pane);
         const overlayConfig = new OverlayConfig(config);
         overlayConfig.direction = overlayConfig.direction || this._directionality.value;
-        return new OverlayRef(portalOutlet, host, pane, overlayConfig, this._ngZone, this._keyboardDispatcher, this._document, this._location, this._outsideClickDispatcher, this._animationsModuleType === 'NoopAnimations', this._injector.get(EnvironmentInjector));
+        return new OverlayRef(portalOutlet, host, pane, overlayConfig, this._ngZone, this._keyboardDispatcher, this._document, this._location, this._outsideClickDispatcher, this._animationsModuleType === 'NoopAnimations', this._injector.get(EnvironmentInjector), this._renderer);
     }
     /**
      * Gets a position builder that can be used, via fluent API,
@@ -3043,38 +3039,32 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0", ngImpor
  * Should be provided in the root component.
  */
 class FullscreenOverlayContainer extends OverlayContainer {
+    _renderer = inject(RendererFactory2).createRenderer(null, null);
     _fullScreenEventName;
-    _fullScreenListener;
+    _cleanupFullScreenListener;
     constructor() {
         super();
     }
     ngOnDestroy() {
         super.ngOnDestroy();
-        if (this._fullScreenEventName && this._fullScreenListener) {
-            this._document.removeEventListener(this._fullScreenEventName, this._fullScreenListener);
-        }
+        this._cleanupFullScreenListener?.();
     }
     _createContainer() {
+        const eventName = this._getEventName();
         super._createContainer();
         this._adjustParentForFullscreenChange();
-        this._addFullscreenChangeListener(() => this._adjustParentForFullscreenChange());
+        if (eventName) {
+            this._cleanupFullScreenListener?.();
+            this._cleanupFullScreenListener = this._renderer.listen('document', eventName, () => {
+                this._adjustParentForFullscreenChange();
+            });
+        }
     }
     _adjustParentForFullscreenChange() {
-        if (!this._containerElement) {
-            return;
-        }
-        const fullscreenElement = this.getFullscreenElement();
-        const parent = fullscreenElement || this._document.body;
-        parent.appendChild(this._containerElement);
-    }
-    _addFullscreenChangeListener(fn) {
-        const eventName = this._getEventName();
-        if (eventName) {
-            if (this._fullScreenListener) {
-                this._document.removeEventListener(eventName, this._fullScreenListener);
-            }
-            this._document.addEventListener(eventName, fn);
-            this._fullScreenListener = fn;
+        if (this._containerElement) {
+            const fullscreenElement = this.getFullscreenElement();
+            const parent = fullscreenElement || this._document.body;
+            parent.appendChild(this._containerElement);
         }
     }
     _getEventName() {

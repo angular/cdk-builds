@@ -4,7 +4,7 @@ import { Platform, _getFocusedElementPierceShadowDom } from '@angular/cdk/platfo
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, TemplatePortal, PortalModule } from '@angular/cdk/portal';
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { inject, ElementRef, NgZone, ChangeDetectorRef, Injector, afterNextRender, Component, ViewEncapsulation, ChangeDetectionStrategy, ViewChild, InjectionToken, TemplateRef, Injectable, NgModule } from '@angular/core';
+import { inject, ElementRef, NgZone, Renderer2, ChangeDetectorRef, Injector, afterNextRender, Component, ViewEncapsulation, ChangeDetectionStrategy, ViewChild, InjectionToken, TemplateRef, Injectable, NgModule } from '@angular/core';
 import { ESCAPE, hasModifierKey } from '@angular/cdk/keycodes';
 import { Subject, defer, of } from 'rxjs';
 import { Directionality } from '@angular/cdk/bidi';
@@ -139,6 +139,7 @@ class CdkDialogContainer extends BasePortalOutlet {
     _ngZone = inject(NgZone);
     _overlayRef = inject(OverlayRef);
     _focusMonitor = inject(FocusMonitor);
+    _renderer = inject(Renderer2);
     _platform = inject(Platform);
     _document = inject(DOCUMENT, { optional: true });
     /** The portal outlet inside of this container into which the dialog content will be loaded. */
@@ -255,12 +256,12 @@ class CdkDialogContainer extends BasePortalOutlet {
             // The tabindex attribute should be removed to avoid navigating to that element again
             this._ngZone.runOutsideAngular(() => {
                 const callback = () => {
-                    element.removeEventListener('blur', callback);
-                    element.removeEventListener('mousedown', callback);
+                    deregisterBlur();
+                    deregisterMousedown();
                     element.removeAttribute('tabindex');
                 };
-                element.addEventListener('blur', callback);
-                element.addEventListener('mousedown', callback);
+                const deregisterBlur = this._renderer.listen(element, 'blur', callback);
+                const deregisterMousedown = this._renderer.listen(element, 'mousedown', callback);
             });
         }
         element.focus(options);

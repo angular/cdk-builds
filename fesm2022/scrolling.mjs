@@ -1,6 +1,6 @@
 import { coerceNumberProperty, coerceElement } from '@angular/cdk/coercion';
 import * as i0 from '@angular/core';
-import { InjectionToken, forwardRef, Directive, Input, inject, NgZone, Injectable, ElementRef, ChangeDetectorRef, Injector, afterNextRender, booleanAttribute, Optional, Inject, Component, ViewEncapsulation, ChangeDetectionStrategy, Output, ViewChild, ViewContainerRef, TemplateRef, IterableDiffers, NgModule } from '@angular/core';
+import { InjectionToken, forwardRef, Directive, Input, inject, NgZone, Injectable, ElementRef, RendererFactory2, ChangeDetectorRef, Injector, afterNextRender, booleanAttribute, Optional, Inject, Component, ViewEncapsulation, ChangeDetectionStrategy, Output, ViewChild, ViewContainerRef, TemplateRef, IterableDiffers, NgModule } from '@angular/core';
 import { Subject, of, Observable, fromEvent, animationFrameScheduler, asapScheduler, Subscription, isObservable } from 'rxjs';
 import { distinctUntilChanged, auditTime, filter, takeUntil, startWith, pairwise, switchMap, shareReplay } from 'rxjs/operators';
 import { Platform, getRtlScrollAxisType, RtlScrollAxisType, supportsScrollBehavior } from '@angular/cdk/platform';
@@ -527,25 +527,23 @@ const DEFAULT_RESIZE_TIME = 20;
  */
 class ViewportRuler {
     _platform = inject(Platform);
+    _listeners;
     /** Cached viewport dimensions. */
     _viewportSize;
     /** Stream of viewport change events. */
     _change = new Subject();
-    /** Event listener that will be used to handle the viewport change events. */
-    _changeListener = (event) => {
-        this._change.next(event);
-    };
     /** Used to reference correct document/window */
     _document = inject(DOCUMENT, { optional: true });
     constructor() {
         const ngZone = inject(NgZone);
+        const renderer = inject(RendererFactory2).createRenderer(null, null);
         ngZone.runOutsideAngular(() => {
             if (this._platform.isBrowser) {
-                const window = this._getWindow();
-                // Note that bind the events ourselves, rather than going through something like RxJS's
-                // `fromEvent` so that we can ensure that they're bound outside of the NgZone.
-                window.addEventListener('resize', this._changeListener);
-                window.addEventListener('orientationchange', this._changeListener);
+                const changeListener = (event) => this._change.next(event);
+                this._listeners = [
+                    renderer.listen('window', 'resize', changeListener),
+                    renderer.listen('window', 'orientationchange', changeListener),
+                ];
             }
             // Clear the cached position so that the viewport is re-measured next time it is required.
             // We don't need to keep track of the subscription, because it is completed on destroy.
@@ -553,11 +551,7 @@ class ViewportRuler {
         });
     }
     ngOnDestroy() {
-        if (this._platform.isBrowser) {
-            const window = this._getWindow();
-            window.removeEventListener('resize', this._changeListener);
-            window.removeEventListener('orientationchange', this._changeListener);
-        }
+        this._listeners?.forEach(cleanup => cleanup());
         this._change.complete();
     }
     /** Returns the viewport's width and height. */

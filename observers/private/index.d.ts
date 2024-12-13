@@ -13,6 +13,7 @@ import { OnDestroy } from '@angular/core';
  * earlier calls.
  */
 export declare class SharedResizeObserver implements OnDestroy {
+    private _cleanupErrorListener;
     /** Map of box type to shared resize observer. */
     private _observers;
     /** The Angular zone. */

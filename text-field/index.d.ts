@@ -72,10 +72,12 @@ export declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDe
     private _elementRef;
     private _platform;
     private _ngZone;
+    private _renderer;
     /** Keep track of the previous textarea value to avoid resizing when the value hasn't changed. */
     private _previousValue?;
     private _initialHeight;
     private readonly _destroyed;
+    private _listenerCleanups;
     private _minRows;
     private _maxRows;
     private _enabled;

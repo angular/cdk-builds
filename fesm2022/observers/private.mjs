@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { inject, NgZone, Injectable } from '@angular/core';
+import { inject, NgZone, RendererFactory2, Injectable } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import { filter, shareReplay, takeUntil } from 'rxjs/operators';
 
@@ -77,6 +77,7 @@ class SingleBoxSharedResizeObserver {
  * earlier calls.
  */
 class SharedResizeObserver {
+    _cleanupErrorListener;
     /** Map of box type to shared resize observer. */
     _observers = new Map();
     /** The Angular zone. */
@@ -84,7 +85,8 @@ class SharedResizeObserver {
     constructor() {
         if (typeof ResizeObserver !== 'undefined' && (typeof ngDevMode === 'undefined' || ngDevMode)) {
             this._ngZone.runOutsideAngular(() => {
-                window.addEventListener('error', loopLimitExceededErrorHandler);
+                const renderer = inject(RendererFactory2).createRenderer(null, null);
+                this._cleanupErrorListener = renderer.listen('window', 'error', loopLimitExceededErrorHandler);
             });
         }
     }
@@ -93,9 +95,7 @@ class SharedResizeObserver {
             observer.destroy();
         }
         this._observers.clear();
-        if (typeof ResizeObserver !== 'undefined' && (typeof ngDevMode === 'undefined' || ngDevMode)) {
-            window.removeEventListener('error', loopLimitExceededErrorHandler);
-        }
+        this._cleanupErrorListener?.();
     }
     /**
      * Gets a stream of resize events for the given target element and box type.
