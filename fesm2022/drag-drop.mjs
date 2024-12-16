@@ -3057,15 +3057,22 @@ class DragDropRegistry {
         this._styleLoader.load(_ResetsLoader);
         this._activeDragInstances.update(instances => [...instances, drag]);
         if (this._activeDragInstances().length === 1) {
-            const isTouchEvent = event.type.startsWith('touch');
             // We explicitly bind __active__ listeners here, because newer browsers will default to
             // passive ones for `mousemove` and `touchmove`. The events need to be active, because we
             // use `preventDefault` to prevent the page from scrolling while the user is dragging.
-            this._globalListeners
-                .set(isTouchEvent ? 'touchend' : 'mouseup', {
+            const isTouchEvent = event.type.startsWith('touch');
+            const endEventHandler = {
                 handler: (e) => this.pointerUp.next(e),
                 options: true,
-            })
+            };
+            if (isTouchEvent) {
+                this._globalListeners.set('touchend', endEventHandler);
+                this._globalListeners.set('touchcancel', endEventHandler);
+            }
+            else {
+                this._globalListeners.set('mouseup', endEventHandler);
+            }
+            this._globalListeners
                 .set('scroll', {
                 handler: (e) => this.scroll.next(e),
                 // Use capturing so that we pick up scroll changes in any scrollable nodes that aren't
