@@ -171,18 +171,19 @@ function createTouchEvent(type, pageX = 0, pageY = 0, clientX = 0, clientY = 0) 
  * Creates a keyboard event with the specified key and modifiers.
  * @docs-private
  */
-function createKeyboardEvent(type, keyCode = 0, key = '', modifiers = {}) {
+function createKeyboardEvent(type, keyCode = 0, key = '', modifiers = {}, code = '') {
     return new KeyboardEvent(type, {
         bubbles: true,
         cancelable: true,
         composed: true, // Required for shadow DOM events.
         view: window,
-        keyCode: keyCode,
-        key: key,
+        keyCode,
+        key,
         shiftKey: modifiers.shift,
         metaKey: modifiers.meta,
         altKey: modifiers.alt,
         ctrlKey: modifiers.control,
+        code,
     });
 }
 /**
@@ -220,8 +221,8 @@ function dispatchFakeEvent(node, type, bubbles) {
  * optional modifiers.
  * @docs-private
  */
-function dispatchKeyboardEvent(node, type, keyCode, key, modifiers) {
-    return dispatchEvent(node, createKeyboardEvent(type, keyCode, key, modifiers));
+function dispatchKeyboardEvent(node, type, keyCode, key, modifiers, code) {
+    return dispatchEvent(node, createKeyboardEvent(type, keyCode, key, modifiers, code));
 }
 /**
  * Shorthand to dispatch a mouse event on the specified coordinates.
@@ -287,6 +288,44 @@ const incrementalInputTypes = new Set([
     'url',
 ]);
 /**
+ * Manual mapping of some common characters to their `code` in a keyboard event. Non-exhaustive, see
+ * the tables on MDN for more info: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode
+ */
+const charsToCodes = {
+    ' ': 'Space',
+    '.': 'Period',
+    ',': 'Comma',
+    '`': 'Backquote',
+    '-': 'Minus',
+    '=': 'Equal',
+    '[': 'BracketLeft',
+    ']': 'BracketRight',
+    '\\': 'Backslash',
+    '/': 'Slash',
+    "'": 'Quote',
+    '"': 'Quote',
+    ';': 'Semicolon',
+};
+/**
+ * Determines the `KeyboardEvent.key` from a character. See #27034 and
+ * https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code
+ */
+function getKeyboardEventCode(char) {
+    if (char.length !== 1) {
+        return '';
+    }
+    const charCode = char.charCodeAt(0);
+    // Key is a letter between a and z, uppercase or lowercase.
+    if ((charCode >= 97 && charCode <= 122) || (charCode >= 65 && charCode <= 90)) {
+        return `Key${char.toUpperCase()}`;
+    }
+    // Digits from 0 to 9.
+    if (48 <= charCode && charCode <= 57) {
+        return `Digit${char}`;
+    }
+    return charsToCodes[char] ?? '';
+}
+/**
  * Checks whether the given Element is a text input element.
  * @docs-private
  */
@@ -313,7 +352,11 @@ function typeInElement(element, ...modifiersAndKeys) {
     const inputType = element.getAttribute('type') || 'text';
     const keys = rest
         .map(k => typeof k === 'string'
-        ? k.split('').map(c => ({ keyCode: c.toUpperCase().charCodeAt(0), key: c }))
+        ? k.split('').map(c => ({
+            keyCode: c.toUpperCase().charCodeAt(0),
+            key: c,
+            code: getKeyboardEventCode(c),
+        }))
         : [k])
         .reduce((arr, k) => arr.concat(k), []);
     // Throw an error if no keys have been specified. Calling this function with no
@@ -337,15 +380,15 @@ function typeInElement(element, ...modifiersAndKeys) {
         element.value = keys.reduce((value, key) => value + (key.key || ''), '');
     }
     for (const key of keys) {
-        dispatchKeyboardEvent(element, 'keydown', key.keyCode, key.key, modifiers);
-        dispatchKeyboardEvent(element, 'keypress', key.keyCode, key.key, modifiers);
+        dispatchKeyboardEvent(element, 'keydown', key.keyCode, key.key, modifiers, key.code);
+        dispatchKeyboardEvent(element, 'keypress', key.keyCode, key.key, modifiers, key.code);
         if (isInput && key.key && key.key.length === 1) {
             if (enterValueIncrementally) {
                 element.value += key.key;
                 dispatchFakeEvent(element, 'input');
             }
         }
-        dispatchKeyboardEvent(element, 'keyup', key.keyCode, key.key, modifiers);
+        dispatchKeyboardEvent(element, 'keyup', key.keyCode, key.key, modifiers, key.code);
     }
     // Since we weren't dispatching `input` events while sending the keys, we have to do it now.
     if (!enterValueIncrementally) {
@@ -366,37 +409,37 @@ function clearElement(element) {
 
 /** Maps `TestKey` constants to the `keyCode` and `key` values used by native browser events. */
 const keyMap = {
-    [TestKey.BACKSPACE]: { keyCode: keyCodes.BACKSPACE, key: 'Backspace' },
-    [TestKey.TAB]: { keyCode: keyCodes.TAB, key: 'Tab' },
-    [TestKey.ENTER]: { keyCode: keyCodes.ENTER, key: 'Enter' },
-    [TestKey.SHIFT]: { keyCode: keyCodes.SHIFT, key: 'Shift' },
-    [TestKey.CONTROL]: { keyCode: keyCodes.CONTROL, key: 'Control' },
-    [TestKey.ALT]: { keyCode: keyCodes.ALT, key: 'Alt' },
-    [TestKey.ESCAPE]: { keyCode: keyCodes.ESCAPE, key: 'Escape' },
-    [TestKey.PAGE_UP]: { keyCode: keyCodes.PAGE_UP, key: 'PageUp' },
-    [TestKey.PAGE_DOWN]: { keyCode: keyCodes.PAGE_DOWN, key: 'PageDown' },
-    [TestKey.END]: { keyCode: keyCodes.END, key: 'End' },
-    [TestKey.HOME]: { keyCode: keyCodes.HOME, key: 'Home' },
-    [TestKey.LEFT_ARROW]: { keyCode: keyCodes.LEFT_ARROW, key: 'ArrowLeft' },
-    [TestKey.UP_ARROW]: { keyCode: keyCodes.UP_ARROW, key: 'ArrowUp' },
-    [TestKey.RIGHT_ARROW]: { keyCode: keyCodes.RIGHT_ARROW, key: 'ArrowRight' },
-    [TestKey.DOWN_ARROW]: { keyCode: keyCodes.DOWN_ARROW, key: 'ArrowDown' },
-    [TestKey.INSERT]: { keyCode: keyCodes.INSERT, key: 'Insert' },
-    [TestKey.DELETE]: { keyCode: keyCodes.DELETE, key: 'Delete' },
-    [TestKey.F1]: { keyCode: keyCodes.F1, key: 'F1' },
-    [TestKey.F2]: { keyCode: keyCodes.F2, key: 'F2' },
-    [TestKey.F3]: { keyCode: keyCodes.F3, key: 'F3' },
-    [TestKey.F4]: { keyCode: keyCodes.F4, key: 'F4' },
-    [TestKey.F5]: { keyCode: keyCodes.F5, key: 'F5' },
-    [TestKey.F6]: { keyCode: keyCodes.F6, key: 'F6' },
-    [TestKey.F7]: { keyCode: keyCodes.F7, key: 'F7' },
-    [TestKey.F8]: { keyCode: keyCodes.F8, key: 'F8' },
-    [TestKey.F9]: { keyCode: keyCodes.F9, key: 'F9' },
-    [TestKey.F10]: { keyCode: keyCodes.F10, key: 'F10' },
-    [TestKey.F11]: { keyCode: keyCodes.F11, key: 'F11' },
-    [TestKey.F12]: { keyCode: keyCodes.F12, key: 'F12' },
-    [TestKey.META]: { keyCode: keyCodes.META, key: 'Meta' },
-    [TestKey.COMMA]: { keyCode: keyCodes.COMMA, key: ',' },
+    [TestKey.BACKSPACE]: { keyCode: keyCodes.BACKSPACE, key: 'Backspace', code: 'Backspace' },
+    [TestKey.TAB]: { keyCode: keyCodes.TAB, key: 'Tab', code: 'Tab' },
+    [TestKey.ENTER]: { keyCode: keyCodes.ENTER, key: 'Enter', code: 'Enter' },
+    [TestKey.SHIFT]: { keyCode: keyCodes.SHIFT, key: 'Shift', code: 'ShiftLeft' },
+    [TestKey.CONTROL]: { keyCode: keyCodes.CONTROL, key: 'Control', code: 'ControlLeft' },
+    [TestKey.ALT]: { keyCode: keyCodes.ALT, key: 'Alt', code: 'AltLeft' },
+    [TestKey.ESCAPE]: { keyCode: keyCodes.ESCAPE, key: 'Escape', code: 'Escape' },
+    [TestKey.PAGE_UP]: { keyCode: keyCodes.PAGE_UP, key: 'PageUp', code: 'PageUp' },
+    [TestKey.PAGE_DOWN]: { keyCode: keyCodes.PAGE_DOWN, key: 'PageDown', code: 'PageDown' },
+    [TestKey.END]: { keyCode: keyCodes.END, key: 'End', code: 'End' },
+    [TestKey.HOME]: { keyCode: keyCodes.HOME, key: 'Home', code: 'Home' },
+    [TestKey.LEFT_ARROW]: { keyCode: keyCodes.LEFT_ARROW, key: 'ArrowLeft', code: 'ArrowLeft' },
+    [TestKey.UP_ARROW]: { keyCode: keyCodes.UP_ARROW, key: 'ArrowUp', code: 'ArrowUp' },
+    [TestKey.RIGHT_ARROW]: { keyCode: keyCodes.RIGHT_ARROW, key: 'ArrowRight', code: 'ArrowRight' },
+    [TestKey.DOWN_ARROW]: { keyCode: keyCodes.DOWN_ARROW, key: 'ArrowDown', code: 'ArrowDown' },
+    [TestKey.INSERT]: { keyCode: keyCodes.INSERT, key: 'Insert', code: 'Insert' },
+    [TestKey.DELETE]: { keyCode: keyCodes.DELETE, key: 'Delete', code: 'Delete' },
+    [TestKey.F1]: { keyCode: keyCodes.F1, key: 'F1', code: 'F1' },
+    [TestKey.F2]: { keyCode: keyCodes.F2, key: 'F2', code: 'F2' },
+    [TestKey.F3]: { keyCode: keyCodes.F3, key: 'F3', code: 'F3' },
+    [TestKey.F4]: { keyCode: keyCodes.F4, key: 'F4', code: 'F4' },
+    [TestKey.F5]: { keyCode: keyCodes.F5, key: 'F5', code: 'F5' },
+    [TestKey.F6]: { keyCode: keyCodes.F6, key: 'F6', code: 'F6' },
+    [TestKey.F7]: { keyCode: keyCodes.F7, key: 'F7', code: 'F7' },
+    [TestKey.F8]: { keyCode: keyCodes.F8, key: 'F8', code: 'F8' },
+    [TestKey.F9]: { keyCode: keyCodes.F9, key: 'F9', code: 'F9' },
+    [TestKey.F10]: { keyCode: keyCodes.F10, key: 'F10', code: 'F10' },
+    [TestKey.F11]: { keyCode: keyCodes.F11, key: 'F11', code: 'F11' },
+    [TestKey.F12]: { keyCode: keyCodes.F12, key: 'F12', code: 'F12' },
+    [TestKey.META]: { keyCode: keyCodes.META, key: 'Meta', code: 'MetaLeft' },
+    [TestKey.COMMA]: { keyCode: keyCodes.COMMA, key: ',', code: 'Comma' },
 };
 /** A `TestElement` implementation for unit tests. */
 class UnitTestElement {
