@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { inject, PLATFORM_ID, Injectable, NgModule } from '@angular/core';
+import { inject, PLATFORM_ID, Injectable, NgModule, VERSION } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
 // Whether the current platform supports the V8 Break Iterator. The V8 check
@@ -65,20 +65,20 @@ class Platform {
     /** Whether the current browser is Safari. */
     SAFARI = this.isBrowser && /safari/i.test(navigator.userAgent) && this.WEBKIT;
     constructor() { }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.1.0-next.2", ngImport: i0, type: Platform, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.1.0-next.2", ngImport: i0, type: Platform, providedIn: 'root' });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.1.0-next.3", ngImport: i0, type: Platform, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.1.0-next.3", ngImport: i0, type: Platform, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.1.0-next.2", ngImport: i0, type: Platform, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.1.0-next.3", ngImport: i0, type: Platform, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: () => [] });
 
 class PlatformModule {
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.1.0-next.2", ngImport: i0, type: PlatformModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-    static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "19.1.0-next.2", ngImport: i0, type: PlatformModule });
-    static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "19.1.0-next.2", ngImport: i0, type: PlatformModule });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.1.0-next.3", ngImport: i0, type: PlatformModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+    static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "19.1.0-next.3", ngImport: i0, type: PlatformModule });
+    static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "19.1.0-next.3", ngImport: i0, type: PlatformModule });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.1.0-next.2", ngImport: i0, type: PlatformModule, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.1.0-next.3", ngImport: i0, type: PlatformModule, decorators: [{
             type: NgModule,
             args: [{}]
         }] });
@@ -325,9 +325,30 @@ function _isTestEnvironment() {
         (typeof Mocha !== 'undefined' && !!Mocha));
 }
 
+// TODO(crisbeto): remove this function when making breaking changes for v20.
+/**
+ * Binds an event listener with specific options in a backwards-compatible way.
+ * This function is necessary, because `Renderer2.listen` only supports listener options
+ * after 19.1 and during the v19 period we support any 19.x version.
+ * @docs-private
+ */
+function _bindEventWithOptions(renderer, target, eventName, callback, options) {
+    const major = parseInt(VERSION.major);
+    const minor = parseInt(VERSION.minor);
+    // Event options in `listen` are only supported in 19.1 and beyond.
+    // We also allow 0.0.x, because that indicates a build at HEAD.
+    if (major > 19 || (major === 19 && minor > 0) || (major === 0 && minor === 0)) {
+        return renderer.listen(target, eventName, callback, options);
+    }
+    target.addEventListener(eventName, callback, options);
+    return () => {
+        target.removeEventListener(eventName, callback, options);
+    };
+}
+
 /**
  * Generated bundle index. Do not edit.
  */
 
-export { Platform, PlatformModule, RtlScrollAxisType, _getEventTarget, _getFocusedElementPierceShadowDom, _getShadowRoot, _isTestEnvironment, _supportsShadowDom, getRtlScrollAxisType, getSupportedInputTypes, normalizePassiveListenerOptions, supportsPassiveEventListeners, supportsScrollBehavior };
+export { Platform, PlatformModule, RtlScrollAxisType, _bindEventWithOptions, _getEventTarget, _getFocusedElementPierceShadowDom, _getShadowRoot, _isTestEnvironment, _supportsShadowDom, getRtlScrollAxisType, getSupportedInputTypes, normalizePassiveListenerOptions, supportsPassiveEventListeners, supportsScrollBehavior };
 //# sourceMappingURL=platform.mjs.map

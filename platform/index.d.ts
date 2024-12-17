@@ -1,4 +1,14 @@
 import * as i0 from '@angular/core';
+import { ListenerOptions } from '@angular/core';
+import { Renderer2 } from '@angular/core';
+
+/**
+ * Binds an event listener with specific options in a backwards-compatible way.
+ * This function is necessary, because `Renderer2.listen` only supports listener options
+ * after 19.1 and during the v19 period we support any 19.x version.
+ * @docs-private
+ */
+export declare function _bindEventWithOptions(renderer: Renderer2, target: EventTarget, eventName: string, callback: (event: any) => boolean | void, options: ListenerOptions): () => void;
 
 /** Gets the target of an event while accounting for Shadow DOM. */
 export declare function _getEventTarget<T extends EventTarget>(event: Event): T | null;

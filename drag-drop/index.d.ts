@@ -582,6 +582,8 @@ export declare class DragDropRegistry<_ = unknown, __ = unknown> implements OnDe
     private _ngZone;
     private _document;
     private _styleLoader;
+    private _renderer;
+    private _cleanupDocumentTouchmove;
     /** Registered drop container instances. */
     private _dropInstances;
     /** Registered drag item instances. */
@@ -699,6 +701,8 @@ export declare class DragRef<T = any> {
     private _viewportRuler;
     private _dragDropRegistry;
     private _renderer;
+    private _rootElementCleanups;
+    private _cleanupShadowRootSelectStart;
     /** Element displayed next to the user's pointer while the element is dragged. */
     private _preview;
     /** Container into which to insert the preview. */

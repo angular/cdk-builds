@@ -318,6 +318,8 @@ export declare class FocusKeyManager<T> extends ListKeyManager<FocusableOption &
 export declare class FocusMonitor implements OnDestroy {
     private _ngZone;
     private _platform;
+    private _renderer;
+    private _cleanupWindowFocus;
     private readonly _inputModalityDetector;
     /** The focus origin that the next focus event is a result of. */
     private _origin;
@@ -344,7 +346,7 @@ export declare class FocusMonitor implements OnDestroy {
      * handlers differently from the rest of the events, because the browser won't emit events
      * to the document when focus moves inside of a shadow root.
      */
-    private _rootNodeFocusListenerCount;
+    private _rootNodeFocusListeners;
     /**
      * The specified detection mode, used for attributing the origin of a focus
      * event.
@@ -408,8 +410,6 @@ export declare class FocusMonitor implements OnDestroy {
     ngOnDestroy(): void;
     /** Access injected document if available or fallback to global document reference */
     private _getDocument;
-    /** Use defaultView of injected document if available or fallback to global window reference */
-    private _getWindow;
     private _getFocusOrigin;
     /**
      * Returns whether the focus event should be attributed to touch. Recall that in IMMEDIATE mode, a
@@ -788,6 +788,7 @@ export declare type InputModality = 'keyboard' | 'mouse' | 'touch' | null;
  */
 export declare class InputModalityDetector implements OnDestroy {
     private readonly _platform;
+    private readonly _listenerCleanups;
     /** Emits whenever an input modality is detected. */
     readonly modalityDetected: Observable<InputModality>;
     /** Emits when the input modality changes. */
