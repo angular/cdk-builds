@@ -12,6 +12,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Subject } from 'rxjs';
 
 export declare class CdkListbox<T = unknown> implements AfterContentInit, OnDestroy, ControlValueAccessor {
+    private _cleanupWindowBlur;
     /** The id of the option's host element. */
     get id(): string;
     set id(value: string);
@@ -252,11 +253,6 @@ export declare class CdkListbox<T = unknown> implements AfterContentInit, OnDest
     private _getInvalidOptionValues;
     /** Get the index of the last triggered option. */
     private _getLastTriggeredIndex;
-    /**
-     * Set previous active option as active option on window blur.
-     * This ensures that the `activeOption` matches the actual focused element when the user returns to the document.
-     */
-    private _setPreviousActiveOptionAsActiveOptionOnWindowBlur;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkListbox<any>, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkListbox<any>, "[cdkListbox]", ["cdkListbox"], { "id": { "alias": "id"; "required": false; }; "enabledTabIndex": { "alias": "tabindex"; "required": false; }; "value": { "alias": "cdkListboxValue"; "required": false; }; "multiple": { "alias": "cdkListboxMultiple"; "required": false; }; "disabled": { "alias": "cdkListboxDisabled"; "required": false; }; "useActiveDescendant": { "alias": "cdkListboxUseActiveDescendant"; "required": false; }; "orientation": { "alias": "cdkListboxOrientation"; "required": false; }; "compareWith": { "alias": "cdkListboxCompareWith"; "required": false; }; "navigationWrapDisabled": { "alias": "cdkListboxNavigationWrapDisabled"; "required": false; }; "navigateDisabledOptions": { "alias": "cdkListboxNavigatesDisabledOptions"; "required": false; }; }, { "valueChange": "cdkListboxValueChange"; }, ["options"], never, true, never>;
     static ngAcceptInputType_multiple: unknown;

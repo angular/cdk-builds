@@ -59,8 +59,11 @@ export declare class CdkScrollable implements OnInit, OnDestroy {
     protected scrollDispatcher: ScrollDispatcher;
     protected ngZone: NgZone;
     protected dir?: Directionality | null | undefined;
+    protected _scrollElement: EventTarget;
     protected readonly _destroyed: Subject<void>;
-    protected _elementScrolled: Observable<Event>;
+    private _renderer;
+    private _cleanupScroll;
+    private _elementScrolled;
     constructor(...args: unknown[]);
     ngOnInit(): void;
     ngOnDestroy(): void;
@@ -224,7 +227,6 @@ export declare class CdkVirtualScrollableElement extends CdkVirtualScrollable {
  * Provides as virtual scrollable for the global / window scrollbar.
  */
 export declare class CdkVirtualScrollableWindow extends CdkVirtualScrollable {
-    protected _elementScrolled: Observable<Event>;
     constructor(...args: unknown[]);
     measureBoundingClientRectWithScrollOffset(from: 'left' | 'top' | 'right' | 'bottom'): number;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkVirtualScrollableWindow, never>;
@@ -522,13 +524,11 @@ export declare type _Right = {
 export declare class ScrollDispatcher implements OnDestroy {
     private _ngZone;
     private _platform;
-    /** Used to reference correct document/window */
-    protected _document: Document;
+    private _renderer;
+    private _cleanupGlobalListener;
     constructor(...args: unknown[]);
     /** Subject for notifying that a registered scrollable reference element has been scrolled. */
     private readonly _scrolled;
-    /** Keeps track of the global `scroll` and `resize` subscriptions. */
-    _globalSubscription: Subscription | null;
     /** Keeps track of the amount of subscriptions to `scrolled`. Used for cleaning up afterwards. */
     private _scrolledCount;
     /**
@@ -568,14 +568,8 @@ export declare class ScrollDispatcher implements OnDestroy {
     ancestorScrolled(elementOrElementRef: ElementRef | HTMLElement, auditTimeInMs?: number): Observable<CdkScrollable | void>;
     /** Returns all registered Scrollables that contain the provided element. */
     getAncestorScrollContainers(elementOrElementRef: ElementRef | HTMLElement): CdkScrollable[];
-    /** Use defaultView of injected document if available or fallback to global window reference */
-    private _getWindow;
     /** Returns true if the element is contained within the provided Scrollable. */
     private _scrollableContainsElement;
-    /** Sets up the global scroll listeners. */
-    private _addGlobalListener;
-    /** Cleans up the global scroll listener. */
-    private _removeGlobalListener;
     static ɵfac: i0.ɵɵFactoryDeclaration<ScrollDispatcher, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<ScrollDispatcher>;
 }

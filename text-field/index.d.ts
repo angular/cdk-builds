@@ -74,6 +74,7 @@ export declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDe
     private _platform;
     private _ngZone;
     private _renderer;
+    private _resizeEvents;
     /** Keep track of the previous textarea value to avoid resizing when the value hasn't changed. */
     private _previousValue?;
     private _initialHeight;
@@ -139,10 +140,6 @@ export declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDe
      */
     reset(): void;
     _noopInputHandler(): void;
-    /** Access injected document if available or fallback to global document reference */
-    private _getDocument;
-    /** Use defaultView of injected document if available or fallback to global window reference */
-    private _getWindow;
     /**
      * Scrolls a textarea to the caret position. On Firefox resizing the textarea will
      * prevent it from scrolling to the caret position. We need to re-set the selection

@@ -16,6 +16,7 @@ import { OnDestroy } from '@angular/core';
 import { Optional } from '@angular/core';
 import { OverlayRef } from '@angular/cdk/overlay';
 import { QueryList } from '@angular/core';
+import { Renderer2 } from '@angular/core';
 import { ScrollStrategy } from '@angular/cdk/overlay';
 import { Subject } from 'rxjs';
 import { TemplatePortal } from '@angular/cdk/portal';
@@ -149,10 +150,10 @@ export declare class CdkMenuBar extends CdkMenuBase implements AfterContentInit 
  * This class can be extended to create custom menu types.
  */
 export declare abstract class CdkMenuBase extends CdkMenuGroup implements Menu, AfterContentInit, OnDestroy {
+    protected ngZone: NgZone;
+    private _renderer;
     /** The menu's native DOM host element. */
     readonly nativeElement: HTMLElement;
-    /** The Angular zone. */
-    protected ngZone: NgZone;
     /** The stack of menus this menu belongs to. */
     readonly menuStack: MenuStack;
     /** The menu aim service used by this menu. */
@@ -242,6 +243,8 @@ export declare class CdkMenuItem implements FocusableOption, FocusableElement, T
     readonly _elementRef: ElementRef<HTMLElement>;
     protected _ngZone: NgZone;
     private readonly _inputModalityDetector;
+    private readonly _renderer;
+    private _cleanupMouseEnter;
     /** The menu aim service used by this menu. */
     private readonly _menuAim;
     /** The stack of menus this menu belongs to. */
@@ -417,6 +420,8 @@ export declare class CdkMenuTrigger extends CdkMenuTriggerBase implements OnDest
     private readonly _changeDetectorRef;
     private readonly _inputModalityDetector;
     private readonly _directionality;
+    private readonly _renderer;
+    private _cleanupMouseenter;
     /** The parent menu this trigger belongs to. */
     private readonly _parentMenu;
     /** The menu aim service used by this menu. */
@@ -432,6 +437,7 @@ export declare class CdkMenuTrigger extends CdkMenuTriggerBase implements OnDest
      * Get a reference to the rendered Menu if the Menu is open and rendered in the DOM.
      */
     getMenu(): Menu | undefined;
+    ngOnDestroy(): void;
     /**
      * Handles keyboard events for the menu item.
      * @param event The keyboard event to handle
@@ -803,8 +809,10 @@ export declare const PARENT_OR_NEW_MENU_STACK_PROVIDER: {
  * observables which emit when the users mouse enters and leaves a tracked element.
  */
 export declare class PointerFocusTracker<T extends FocusableElement> {
-    /** The list of items being tracked. */
+    private _renderer;
     private readonly _items;
+    private _eventCleanups;
+    private _itemsSubscription;
     /** Emits when an element is moused into. */
     readonly entered: Observable<T>;
     /** Emits when an element is moused out. */
@@ -813,23 +821,13 @@ export declare class PointerFocusTracker<T extends FocusableElement> {
     activeElement?: T;
     /** The element previously under mouse focus. */
     previousElement?: T;
-    /** Emits when this is destroyed. */
-    private readonly _destroyed;
-    constructor(
-    /** The list of items being tracked. */
-    _items: QueryList<T>);
+    constructor(_renderer: Renderer2, _items: QueryList<T>);
     /** Stop the managers listeners. */
     destroy(): void;
-    /**
-     * Gets a stream of pointer (mouse) entries into the given items.
-     * This should typically run outside the Angular zone.
-     */
-    private _getItemPointerEntries;
-    /**
-     * Gets a stream of pointer (mouse) exits out of the given items.
-     * This should typically run outside the Angular zone.
-     */
-    private _getItemPointerExits;
+    /** Binds the enter/exit events on all the items. */
+    private _bindEvents;
+    /** Cleans up the currently-bound events. */
+    private _cleanupEvents;
 }
 
 /**
@@ -843,8 +841,9 @@ export declare class PointerFocusTracker<T extends FocusableElement> {
  * to submenu.
  */
 export declare class TargetMenuAim implements MenuAim, OnDestroy {
-    /** The Angular zone. */
     private readonly _ngZone;
+    private readonly _renderer;
+    private _cleanupMousemove;
     /** The last NUM_POINTS mouse move events. */
     private readonly _points;
     /** Reference to the root menu in which we are tracking mouse moves. */

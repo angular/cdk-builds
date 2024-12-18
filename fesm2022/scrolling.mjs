@@ -1,12 +1,12 @@
 import { coerceNumberProperty, coerceElement } from '@angular/cdk/coercion';
 import * as i0 from '@angular/core';
-import { InjectionToken, forwardRef, Directive, Input, inject, NgZone, Injectable, ElementRef, RendererFactory2, ChangeDetectorRef, Injector, afterNextRender, booleanAttribute, Optional, Inject, Component, ViewEncapsulation, ChangeDetectionStrategy, Output, ViewChild, ViewContainerRef, TemplateRef, IterableDiffers, NgModule } from '@angular/core';
-import { Subject, of, Observable, fromEvent, animationFrameScheduler, asapScheduler, Subscription, isObservable } from 'rxjs';
-import { distinctUntilChanged, auditTime, filter, takeUntil, startWith, pairwise, switchMap, shareReplay } from 'rxjs/operators';
+import { InjectionToken, forwardRef, Directive, Input, inject, NgZone, RendererFactory2, Injectable, ElementRef, Renderer2, ChangeDetectorRef, Injector, afterNextRender, booleanAttribute, Optional, Inject, Component, ViewEncapsulation, ChangeDetectionStrategy, Output, ViewChild, ViewContainerRef, TemplateRef, IterableDiffers, NgModule } from '@angular/core';
+import { Subject, of, Observable, animationFrameScheduler, asapScheduler, Subscription, isObservable } from 'rxjs';
+import { distinctUntilChanged, auditTime, filter, startWith, takeUntil, pairwise, switchMap, shareReplay } from 'rxjs/operators';
 import { Platform, getRtlScrollAxisType, RtlScrollAxisType, supportsScrollBehavior } from '@angular/cdk/platform';
-import { DOCUMENT } from '@angular/common';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { _VIEW_REPEATER_STRATEGY, isDataSource, ArrayDataSource, _RecycleViewRepeaterStrategy } from '@angular/cdk/collections';
+import { DOCUMENT } from '@angular/common';
 
 /** The injection token used to specify the virtual scrolling strategy. */
 const VIRTUAL_SCROLL_STRATEGY = new InjectionToken('VIRTUAL_SCROLL_STRATEGY');
@@ -228,13 +228,11 @@ const DEFAULT_SCROLL_TIME = 20;
 class ScrollDispatcher {
     _ngZone = inject(NgZone);
     _platform = inject(Platform);
-    /** Used to reference correct document/window */
-    _document = inject(DOCUMENT, { optional: true });
+    _renderer = inject(RendererFactory2).createRenderer(null, null);
+    _cleanupGlobalListener;
     constructor() { }
     /** Subject for notifying that a registered scrollable reference element has been scrolled. */
     _scrolled = new Subject();
-    /** Keeps track of the global `scroll` and `resize` subscriptions. */
-    _globalSubscription = null;
     /** Keeps track of the amount of subscriptions to `scrolled`. Used for cleaning up afterwards. */
     _scrolledCount = 0;
     /**
@@ -278,8 +276,8 @@ class ScrollDispatcher {
             return of();
         }
         return new Observable((observer) => {
-            if (!this._globalSubscription) {
-                this._addGlobalListener();
+            if (!this._cleanupGlobalListener) {
+                this._cleanupGlobalListener = this._ngZone.runOutsideAngular(() => this._renderer.listen('document', 'scroll', () => this._scrolled.next()));
             }
             // In the case of a 0ms delay, use an observable without auditTime
             // since it does add a perceptible delay in processing overhead.
@@ -291,13 +289,15 @@ class ScrollDispatcher {
                 subscription.unsubscribe();
                 this._scrolledCount--;
                 if (!this._scrolledCount) {
-                    this._removeGlobalListener();
+                    this._cleanupGlobalListener?.();
+                    this._cleanupGlobalListener = undefined;
                 }
             };
         });
     }
     ngOnDestroy() {
-        this._removeGlobalListener();
+        this._cleanupGlobalListener?.();
+        this._cleanupGlobalListener = undefined;
         this.scrollContainers.forEach((_, container) => this.deregister(container));
         this._scrolled.complete();
     }
@@ -309,9 +309,7 @@ class ScrollDispatcher {
      */
     ancestorScrolled(elementOrElementRef, auditTimeInMs) {
         const ancestors = this.getAncestorScrollContainers(elementOrElementRef);
-        return this.scrolled(auditTimeInMs).pipe(filter(target => {
-            return !target || ancestors.indexOf(target) > -1;
-        }));
+        return this.scrolled(auditTimeInMs).pipe(filter(target => !target || ancestors.indexOf(target) > -1));
     }
     /** Returns all registered Scrollables that contain the provided element. */
     getAncestorScrollContainers(elementOrElementRef) {
@@ -322,10 +320,6 @@ class ScrollDispatcher {
             }
         });
         return scrollingContainers;
-    }
-    /** Use defaultView of injected document if available or fallback to global window reference */
-    _getWindow() {
-        return this._document.defaultView || window;
     }
     /** Returns true if the element is contained within the provided Scrollable. */
     _scrollableContainsElement(scrollable, elementOrElementRef) {
@@ -339,20 +333,6 @@ class ScrollDispatcher {
             }
         } while ((element = element.parentElement));
         return false;
-    }
-    /** Sets up the global scroll listeners. */
-    _addGlobalListener() {
-        this._globalSubscription = this._ngZone.runOutsideAngular(() => {
-            const window = this._getWindow();
-            return fromEvent(window.document, 'scroll').subscribe(() => this._scrolled.next());
-        });
-    }
-    /** Cleans up the global scroll listener. */
-    _removeGlobalListener() {
-        if (this._globalSubscription) {
-            this._globalSubscription.unsubscribe();
-            this._globalSubscription = null;
-        }
     }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.1.0-next.3", ngImport: i0, type: ScrollDispatcher, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
     static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.1.0-next.3", ngImport: i0, type: ScrollDispatcher, providedIn: 'root' });
@@ -372,15 +352,19 @@ class CdkScrollable {
     scrollDispatcher = inject(ScrollDispatcher);
     ngZone = inject(NgZone);
     dir = inject(Directionality, { optional: true });
+    _scrollElement = this.elementRef.nativeElement;
     _destroyed = new Subject();
-    _elementScrolled = new Observable((observer) => this.ngZone.runOutsideAngular(() => fromEvent(this.elementRef.nativeElement, 'scroll')
-        .pipe(takeUntil(this._destroyed))
-        .subscribe(observer)));
+    _renderer = inject(Renderer2);
+    _cleanupScroll;
+    _elementScrolled = new Subject();
     constructor() { }
     ngOnInit() {
+        this._cleanupScroll = this.ngZone.runOutsideAngular(() => this._renderer.listen(this._scrollElement, 'scroll', event => this._elementScrolled.next(event)));
         this.scrollDispatcher.register(this);
     }
     ngOnDestroy() {
+        this._cleanupScroll?.();
+        this._elementScrolled.complete();
         this.scrollDispatcher.deregister(this);
         this._destroyed.next();
         this._destroyed.complete();
@@ -1399,10 +1383,10 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.1.0-next.3", 
  * Provides as virtual scrollable for the global / window scrollbar.
  */
 class CdkVirtualScrollableWindow extends CdkVirtualScrollable {
-    _elementScrolled = new Observable((observer) => this.ngZone.runOutsideAngular(() => fromEvent(document, 'scroll').pipe(takeUntil(this._destroyed)).subscribe(observer)));
     constructor() {
         super();
         this.elementRef = new ElementRef(document.documentElement);
+        this._scrollElement = document;
     }
     measureBoundingClientRectWithScrollOffset(from) {
         return this.getElementRef().nativeElement.getBoundingClientRect()[from];

@@ -5,9 +5,9 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { A, hasModifierKey, SPACE, ENTER, HOME, END, UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW } from '@angular/cdk/keycodes';
 import { Platform } from '@angular/cdk/platform';
 import * as i0 from '@angular/core';
-import { inject, signal, ElementRef, booleanAttribute, Directive, Input, NgZone, ChangeDetectorRef, forwardRef, Output, ContentChildren, NgModule } from '@angular/core';
+import { inject, signal, ElementRef, booleanAttribute, Directive, Input, NgZone, ChangeDetectorRef, Renderer2, forwardRef, Output, ContentChildren, NgModule } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Subject, defer, merge, fromEvent } from 'rxjs';
+import { Subject, defer, merge } from 'rxjs';
 import { startWith, switchMap, map, takeUntil, filter } from 'rxjs/operators';
 
 /**
@@ -183,6 +183,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.1.0-next.3", 
                 args: ['tabindex']
             }] } });
 class CdkListbox {
+    _cleanupWindowBlur;
     /** The id of the option's host element. */
     get id() {
         return this._id || this._generatedId;
@@ -318,7 +319,15 @@ class CdkListbox {
     _previousActiveOption = null;
     constructor() {
         if (this._isBrowser) {
-            this._setPreviousActiveOptionAsActiveOptionOnWindowBlur();
+            const renderer = inject(Renderer2);
+            this._cleanupWindowBlur = this.ngZone.runOutsideAngular(() => {
+                return renderer.listen('window', 'blur', () => {
+                    if (this.element.contains(document.activeElement) && this._previousActiveOption) {
+                        this._setActiveOption(this._previousActiveOption);
+                        this._previousActiveOption = null;
+                    }
+                });
+            });
         }
     }
     ngAfterContentInit() {
@@ -336,6 +345,7 @@ class CdkListbox {
             .subscribe(({ option, event }) => this._handleOptionClicked(option, event));
     }
     ngOnDestroy() {
+        this._cleanupWindowBlur?.();
         this.listKeyManager?.destroy();
         this.destroyed.next();
         this.destroyed.complete();
@@ -818,22 +828,6 @@ class CdkListbox {
     _getLastTriggeredIndex() {
         const index = this.options.toArray().indexOf(this._lastTriggered);
         return index === -1 ? null : index;
-    }
-    /**
-     * Set previous active option as active option on window blur.
-     * This ensures that the `activeOption` matches the actual focused element when the user returns to the document.
-     */
-    _setPreviousActiveOptionAsActiveOptionOnWindowBlur() {
-        this.ngZone.runOutsideAngular(() => {
-            fromEvent(window, 'blur')
-                .pipe(takeUntil(this.destroyed))
-                .subscribe(() => {
-                if (this.element.contains(document.activeElement) && this._previousActiveOption) {
-                    this._setActiveOption(this._previousActiveOption);
-                    this._previousActiveOption = null;
-                }
-            });
-        });
     }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.1.0-next.3", ngImport: i0, type: CdkListbox, deps: [], target: i0.ɵɵFactoryTarget.Directive });
     static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "19.1.0-next.3", type: CdkListbox, isStandalone: true, selector: "[cdkListbox]", inputs: { id: "id", enabledTabIndex: ["tabindex", "enabledTabIndex"], value: ["cdkListboxValue", "value"], multiple: ["cdkListboxMultiple", "multiple", booleanAttribute], disabled: ["cdkListboxDisabled", "disabled", booleanAttribute], useActiveDescendant: ["cdkListboxUseActiveDescendant", "useActiveDescendant", booleanAttribute], orientation: ["cdkListboxOrientation", "orientation"], compareWith: ["cdkListboxCompareWith", "compareWith"], navigationWrapDisabled: ["cdkListboxNavigationWrapDisabled", "navigationWrapDisabled", booleanAttribute], navigateDisabledOptions: ["cdkListboxNavigatesDisabledOptions", "navigateDisabledOptions", booleanAttribute] }, outputs: { valueChange: "cdkListboxValueChange" }, host: { attributes: { "role": "listbox" }, listeners: { "focus": "_handleFocus()", "keydown": "_handleKeydown($event)", "focusout": "_handleFocusOut($event)", "focusin": "_handleFocusIn()" }, properties: { "id": "id", "attr.tabindex": "_getTabIndex()", "attr.aria-disabled": "disabled", "attr.aria-multiselectable": "multiple", "attr.aria-activedescendant": "_getAriaActiveDescendant()", "attr.aria-orientation": "orientation" }, classAttribute: "cdk-listbox" }, providers: [

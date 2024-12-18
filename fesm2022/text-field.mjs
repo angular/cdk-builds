@@ -3,9 +3,9 @@ import * as i0 from '@angular/core';
 import { Component, ChangeDetectionStrategy, ViewEncapsulation, inject, NgZone, RendererFactory2, Injectable, ElementRef, EventEmitter, Directive, Output, Renderer2, booleanAttribute, Input, NgModule } from '@angular/core';
 import { _CdkPrivateStyleLoader } from '@angular/cdk/private';
 import { coerceElement, coerceNumberProperty } from '@angular/cdk/coercion';
-import { EMPTY, Subject, fromEvent } from 'rxjs';
+import { EMPTY, Subject } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
-import { auditTime, takeUntil } from 'rxjs/operators';
+import { auditTime } from 'rxjs/operators';
 
 /** Component used to load the structural styles of the text field. */
 class _CdkTextFieldStyleLoader {
@@ -119,6 +119,7 @@ class CdkTextareaAutosize {
     _platform = inject(Platform);
     _ngZone = inject(NgZone);
     _renderer = inject(Renderer2);
+    _resizeEvents = new Subject();
     /** Keep track of the previous textarea value to avoid resizing when the value hasn't changed. */
     _previousValue;
     _initialHeight;
@@ -207,14 +208,12 @@ class CdkTextareaAutosize {
             this._initialHeight = this._textareaElement.style.height;
             this.resizeToFitContent();
             this._ngZone.runOutsideAngular(() => {
-                const window = this._getWindow();
-                fromEvent(window, 'resize')
-                    .pipe(auditTime(16), takeUntil(this._destroyed))
-                    .subscribe(() => this.resizeToFitContent(true));
                 this._listenerCleanups = [
+                    this._renderer.listen('window', 'resize', () => this._resizeEvents.next()),
                     this._renderer.listen(this._textareaElement, 'focus', this._handleFocusEvent),
                     this._renderer.listen(this._textareaElement, 'blur', this._handleFocusEvent),
                 ];
+                this._resizeEvents.pipe(auditTime(16)).subscribe(() => this.resizeToFitContent(true));
             });
             this._isViewInited = true;
             this.resizeToFitContent(true);
@@ -222,6 +221,7 @@ class CdkTextareaAutosize {
     }
     ngOnDestroy() {
         this._listenerCleanups?.forEach(cleanup => cleanup());
+        this._resizeEvents.complete();
         this._destroyed.next();
         this._destroyed.complete();
     }
@@ -360,15 +360,6 @@ class CdkTextareaAutosize {
     }
     _noopInputHandler() {
         // no-op handler that ensures we're running change detection on input events.
-    }
-    /** Access injected document if available or fallback to global document reference */
-    _getDocument() {
-        return this._document || document;
-    }
-    /** Use defaultView of injected document if available or fallback to global window reference */
-    _getWindow() {
-        const doc = this._getDocument();
-        return doc.defaultView || window;
     }
     /**
      * Scrolls a textarea to the caret position. On Firefox resizing the textarea will
