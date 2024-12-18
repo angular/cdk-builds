@@ -1,6 +1,6 @@
-import { Platform, _bindEventWithOptions } from '@angular/cdk/platform';
+import { normalizePassiveListenerOptions, Platform } from '@angular/cdk/platform';
 import * as i0 from '@angular/core';
-import { Component, ChangeDetectionStrategy, ViewEncapsulation, inject, NgZone, RendererFactory2, Injectable, ElementRef, EventEmitter, Directive, Output, Renderer2, booleanAttribute, Input, NgModule } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewEncapsulation, inject, NgZone, Injectable, ElementRef, EventEmitter, Directive, Output, Renderer2, booleanAttribute, Input, NgModule } from '@angular/core';
 import { _CdkPrivateStyleLoader } from '@angular/cdk/private';
 import { coerceElement, coerceNumberProperty } from '@angular/cdk/coercion';
 import { EMPTY, Subject } from 'rxjs';
@@ -18,7 +18,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.1.0-next.3", 
         }] });
 
 /** Options to pass to the animationstart listener. */
-const listenerOptions = { passive: true };
+const listenerOptions = normalizePassiveListenerOptions({ passive: true });
 /**
  * An injectable service that can be used to monitor the autofill state of an input.
  * Based on the following blog post:
@@ -27,7 +27,6 @@ const listenerOptions = { passive: true };
 class AutofillMonitor {
     _platform = inject(Platform);
     _ngZone = inject(NgZone);
-    _renderer = inject(RendererFactory2).createRenderer(null, null);
     _styleLoader = inject(_CdkPrivateStyleLoader);
     _monitoredElements = new Map();
     constructor() { }
@@ -41,29 +40,34 @@ class AutofillMonitor {
         if (info) {
             return info.subject;
         }
-        const subject = new Subject();
+        const result = new Subject();
         const cssClass = 'cdk-text-field-autofilled';
-        const listener = (event) => {
+        const listener = ((event) => {
             // Animation events fire on initial element render, we check for the presence of the autofill
             // CSS class to make sure this is a real change in state, not just the initial render before
             // we fire off events.
             if (event.animationName === 'cdk-text-field-autofill-start' &&
                 !element.classList.contains(cssClass)) {
                 element.classList.add(cssClass);
-                this._ngZone.run(() => subject.next({ target: event.target, isAutofilled: true }));
+                this._ngZone.run(() => result.next({ target: event.target, isAutofilled: true }));
             }
             else if (event.animationName === 'cdk-text-field-autofill-end' &&
                 element.classList.contains(cssClass)) {
                 element.classList.remove(cssClass);
-                this._ngZone.run(() => subject.next({ target: event.target, isAutofilled: false }));
+                this._ngZone.run(() => result.next({ target: event.target, isAutofilled: false }));
             }
-        };
-        const unlisten = this._ngZone.runOutsideAngular(() => {
-            element.classList.add('cdk-text-field-autofill-monitored');
-            return _bindEventWithOptions(this._renderer, element, 'animationstart', listener, listenerOptions);
         });
-        this._monitoredElements.set(element, { subject, unlisten });
-        return subject;
+        this._ngZone.runOutsideAngular(() => {
+            element.addEventListener('animationstart', listener, listenerOptions);
+            element.classList.add('cdk-text-field-autofill-monitored');
+        });
+        this._monitoredElements.set(element, {
+            subject: result,
+            unlisten: () => {
+                element.removeEventListener('animationstart', listener, listenerOptions);
+            },
+        });
+        return result;
     }
     stopMonitoring(elementOrRef) {
         const element = coerceElement(elementOrRef);

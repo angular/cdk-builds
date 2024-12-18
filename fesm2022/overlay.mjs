@@ -4,7 +4,7 @@ import { DOCUMENT, Location } from '@angular/common';
 import * as i0 from '@angular/core';
 import { inject, NgZone, Injectable, RendererFactory2, Component, ChangeDetectionStrategy, ViewEncapsulation, untracked, afterRender, afterNextRender, ElementRef, Injector, ANIMATION_MODULE_TYPE, EnvironmentInjector, ApplicationRef, InjectionToken, Directive, EventEmitter, TemplateRef, ViewContainerRef, booleanAttribute, Input, Output, NgModule } from '@angular/core';
 import { coerceCssPixelValue, coerceArray } from '@angular/cdk/coercion';
-import { supportsScrollBehavior, Platform, _bindEventWithOptions, _getEventTarget, _isTestEnvironment } from '@angular/cdk/platform';
+import { supportsScrollBehavior, Platform, _getEventTarget, _isTestEnvironment } from '@angular/cdk/platform';
 import { filter, takeUntil, takeWhile } from 'rxjs/operators';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { DomPortalOutlet, TemplatePortal, PortalModule } from '@angular/cdk/portal';
@@ -549,12 +549,10 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.1.0-next.3", 
  */
 class OverlayOutsideClickDispatcher extends BaseOverlayDispatcher {
     _platform = inject(Platform);
-    _ngZone = inject(NgZone);
-    _renderer = inject(RendererFactory2).createRenderer(null, null);
+    _ngZone = inject(NgZone, { optional: true });
     _cursorOriginalValue;
     _cursorStyleIsSet = false;
     _pointerDownEventTarget;
-    _cleanups;
     /** Add a new overlay to the list of attached overlay refs. */
     add(overlayRef) {
         super.add(overlayRef);
@@ -566,13 +564,13 @@ class OverlayOutsideClickDispatcher extends BaseOverlayDispatcher {
         // https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/HandlingEvents/HandlingEvents.html
         if (!this._isAttached) {
             const body = this._document.body;
-            const eventOptions = { capture: true };
-            this._cleanups = this._ngZone.runOutsideAngular(() => [
-                _bindEventWithOptions(this._renderer, body, 'pointerdown', this._pointerDownListener, eventOptions),
-                _bindEventWithOptions(this._renderer, body, 'click', this._clickListener, eventOptions),
-                _bindEventWithOptions(this._renderer, body, 'auxclick', this._clickListener, eventOptions),
-                _bindEventWithOptions(this._renderer, body, 'contextmenu', this._clickListener, eventOptions),
-            ]);
+            /** @breaking-change 14.0.0 _ngZone will be required. */
+            if (this._ngZone) {
+                this._ngZone.runOutsideAngular(() => this._addEventListeners(body));
+            }
+            else {
+                this._addEventListeners(body);
+            }
             // click event is not fired on iOS. To make element "clickable" we are
             // setting the cursor to pointer
             if (this._platform.IOS && !this._cursorStyleIsSet) {
@@ -586,14 +584,23 @@ class OverlayOutsideClickDispatcher extends BaseOverlayDispatcher {
     /** Detaches the global keyboard event listener. */
     detach() {
         if (this._isAttached) {
-            this._cleanups?.forEach(cleanup => cleanup());
-            this._cleanups = undefined;
+            const body = this._document.body;
+            body.removeEventListener('pointerdown', this._pointerDownListener, true);
+            body.removeEventListener('click', this._clickListener, true);
+            body.removeEventListener('auxclick', this._clickListener, true);
+            body.removeEventListener('contextmenu', this._clickListener, true);
             if (this._platform.IOS && this._cursorStyleIsSet) {
-                this._document.body.style.cursor = this._cursorOriginalValue;
+                body.style.cursor = this._cursorOriginalValue;
                 this._cursorStyleIsSet = false;
             }
             this._isAttached = false;
         }
+    }
+    _addEventListeners(body) {
+        body.addEventListener('pointerdown', this._pointerDownListener, true);
+        body.addEventListener('click', this._clickListener, true);
+        body.addEventListener('auxclick', this._clickListener, true);
+        body.addEventListener('contextmenu', this._clickListener, true);
     }
     /** Store pointerdown event target to track origin of click. */
     _pointerDownListener = (event) => {
