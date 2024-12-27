@@ -783,8 +783,7 @@ class CdkTree {
             this.treeControl.expandAll();
         }
         else if (this._expansionModel) {
-            const expansionModel = this._expansionModel;
-            expansionModel.select(...this._flattenedNodes.value.map(child => this._getExpansionKey(child)));
+            this._forEachExpansionKey(keys => this._expansionModel?.select(...keys));
         }
     }
     /** Collapse all data nodes in the tree. */
@@ -793,8 +792,7 @@ class CdkTree {
             this.treeControl.collapseAll();
         }
         else if (this._expansionModel) {
-            const expansionModel = this._expansionModel;
-            expansionModel.deselect(...this._flattenedNodes.value.map(child => this._getExpansionKey(child)));
+            this._forEachExpansionKey(keys => this._expansionModel?.deselect(...keys));
         }
     }
     /** Level accessor, used for compatibility between the old Tree and new Tree */
@@ -1126,6 +1124,26 @@ class CdkTree {
             const group = this._ariaSets.get(parentKey) ?? [];
             group.splice(index, 0, dataNode);
             this._ariaSets.set(parentKey, group);
+        }
+    }
+    /** Invokes a callback with all node expansion keys. */
+    _forEachExpansionKey(callback) {
+        const toToggle = [];
+        const observables = [];
+        this._nodes.value.forEach(node => {
+            toToggle.push(this._getExpansionKey(node.data));
+            observables.push(this._getDescendants(node.data));
+        });
+        if (observables.length > 0) {
+            combineLatest(observables)
+                .pipe(take(1), takeUntil(this._onDestroy))
+                .subscribe(results => {
+                results.forEach(inner => inner.forEach(r => toToggle.push(this._getExpansionKey(r))));
+                callback(toToggle);
+            });
+        }
+        else {
+            callback(toToggle);
         }
     }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0", ngImport: i0, type: CdkTree, deps: [], target: i0.ɵɵFactoryTarget.Component });
