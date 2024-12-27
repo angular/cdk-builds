@@ -592,6 +592,11 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
     getMenu() {
         return this.childMenu;
     }
+    ngOnChanges(changes) {
+        if (changes['menuPosition'] && this.overlayRef) {
+            this.overlayRef.updatePositionStrategy(this._getOverlayPositionStrategy());
+        }
+    }
     ngOnDestroy() {
         this._cleanupMouseenter();
         super.ngOnDestroy();
@@ -800,7 +805,7 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
     static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.1.0-next.3", type: CdkMenuTrigger, isStandalone: true, selector: "[cdkMenuTriggerFor]", inputs: { menuTemplateRef: ["cdkMenuTriggerFor", "menuTemplateRef"], menuPosition: ["cdkMenuPosition", "menuPosition"], menuData: ["cdkMenuTriggerData", "menuData"] }, outputs: { opened: "cdkMenuOpened", closed: "cdkMenuClosed" }, host: { listeners: { "focusin": "_setHasFocus(true)", "focusout": "_setHasFocus(false)", "keydown": "_toggleOnKeydown($event)", "click": "_handleClick()" }, properties: { "attr.aria-haspopup": "menuTemplateRef ? \"menu\" : null", "attr.aria-expanded": "menuTemplateRef == null ? null : isOpen()" }, classAttribute: "cdk-menu-trigger" }, providers: [
             { provide: MENU_TRIGGER, useExisting: CdkMenuTrigger },
             PARENT_OR_NEW_MENU_STACK_PROVIDER,
-        ], exportAs: ["cdkMenuTriggerFor"], usesInheritance: true, ngImport: i0 });
+        ], exportAs: ["cdkMenuTriggerFor"], usesInheritance: true, usesOnChanges: true, ngImport: i0 });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.1.0-next.3", ngImport: i0, type: CdkMenuTrigger, decorators: [{
             type: Directive,

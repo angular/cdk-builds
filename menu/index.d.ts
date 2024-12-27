@@ -12,12 +12,14 @@ import { InjectionToken } from '@angular/core';
 import { Injector } from '@angular/core';
 import { NgZone } from '@angular/core';
 import { Observable } from 'rxjs';
+import { OnChanges } from '@angular/core';
 import { OnDestroy } from '@angular/core';
 import { Optional } from '@angular/core';
 import { OverlayRef } from '@angular/cdk/overlay';
 import { QueryList } from '@angular/core';
 import { Renderer2 } from '@angular/core';
 import { ScrollStrategy } from '@angular/cdk/overlay';
+import { SimpleChanges } from '@angular/core';
 import { Subject } from 'rxjs';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { TemplateRef } from '@angular/core';
@@ -413,7 +415,7 @@ export declare class CdkMenuModule {
  * If it is inside of a Menu it will open the attached Submenu on hover regardless of its sibling
  * state.
  */
-export declare class CdkMenuTrigger extends CdkMenuTriggerBase implements OnDestroy {
+export declare class CdkMenuTrigger extends CdkMenuTriggerBase implements OnChanges, OnDestroy {
     private readonly _elementRef;
     private readonly _overlay;
     private readonly _ngZone;
@@ -437,6 +439,7 @@ export declare class CdkMenuTrigger extends CdkMenuTriggerBase implements OnDest
      * Get a reference to the rendered Menu if the Menu is open and rendered in the DOM.
      */
     getMenu(): Menu | undefined;
+    ngOnChanges(changes: SimpleChanges): void;
     ngOnDestroy(): void;
     /**
      * Handles keyboard events for the menu item.

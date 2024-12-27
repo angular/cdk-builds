@@ -363,6 +363,8 @@ export declare class CdkTree<T, K = T> implements AfterContentChecked, AfterCont
     private _updateKeyManagerItems;
     /** Traverse the flattened node data and compute parents, levels, and group data. */
     private _calculateParents;
+    /** Invokes a callback with all node expansion keys. */
+    private _forEachExpansionKey;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTree<any, any>, never>;
     static ɵcmp: i0.ɵɵComponentDeclaration<CdkTree<any, any>, "cdk-tree", ["cdkTree"], { "dataSource": { "alias": "dataSource"; "required": false; }; "treeControl": { "alias": "treeControl"; "required": false; }; "levelAccessor": { "alias": "levelAccessor"; "required": false; }; "childrenAccessor": { "alias": "childrenAccessor"; "required": false; }; "trackBy": { "alias": "trackBy"; "required": false; }; "expansionKey": { "alias": "expansionKey"; "required": false; }; }, {}, ["_nodeDefs"], never, true, never>;
 }
