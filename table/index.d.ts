@@ -11,6 +11,7 @@ import { EventEmitter } from '@angular/core';
 import * as i0 from '@angular/core';
 import * as i1 from '@angular/cdk/scrolling';
 import { InjectionToken } from '@angular/core';
+import { Injector } from '@angular/core';
 import { IterableChanges } from '@angular/core';
 import { IterableDiffer } from '@angular/core';
 import { IterableDiffers } from '@angular/core';
@@ -1063,12 +1064,14 @@ export declare class StickyStyler {
     private _isBrowser;
     private readonly _needsPositionStickyOnElement;
     private readonly _positionListener?;
+    private readonly _tableInjector?;
     private _elemSizeCache;
     private _resizeObserver;
     private _updatedStickyColumnsParamsToReplay;
     private _stickyColumnsReplayTimeout;
     private _cachedCellWidths;
     private readonly _borderCellCss;
+    private _destroyed;
     /**
      * @param _isNativeHtmlTable Whether the sticky logic should be based on a table
      *     that uses the native `<table>` element.
@@ -1082,8 +1085,9 @@ export declare class StickyStyler {
      *     the component stylesheet for _stickCellCss.
      * @param _positionListener A listener that is notified of changes to sticky rows/columns
      *     and their dimensions.
+     * @param _tableInjector The table's Injector.
      */
-    constructor(_isNativeHtmlTable: boolean, _stickCellCss: string, direction: Direction, _coalescedStyleScheduler: _CoalescedStyleScheduler, _isBrowser?: boolean, _needsPositionStickyOnElement?: boolean, _positionListener?: StickyPositioningListener | undefined);
+    constructor(_isNativeHtmlTable: boolean, _stickCellCss: string, direction: Direction, _coalescedStyleScheduler: _CoalescedStyleScheduler, _isBrowser?: boolean, _needsPositionStickyOnElement?: boolean, _positionListener?: StickyPositioningListener | undefined, _tableInjector?: Injector | undefined);
     /**
      * Clears the sticky positioning styles from the row and its cells by resetting the `position`
      * style, setting the zIndex to 0, and unsetting each provided sticky direction.
@@ -1123,6 +1127,8 @@ export declare class StickyStyler {
      * the tfoot element.
      */
     updateStickyFooterContainer(tableElement: Element, stickyStates: boolean[]): void;
+    /** Triggered by the table's OnDestroy hook. */
+    destroy(): void;
     /**
      * Removes the sticky style on the element by removing the sticky cell CSS class, re-evaluating
      * the zIndex, removing each of the provided sticky directions, and removing the
@@ -1175,6 +1181,11 @@ export declare class StickyStyler {
     private _removeFromStickyColumnReplayQueue;
     /** Update _elemSizeCache with the observed sizes. */
     private _updateCachedSizes;
+    /**
+     * Invoke afterNextRender with the table's injector, falling back to CoalescedStyleScheduler
+     * if the injector was not provided.
+     */
+    private _afterNextRender;
 }
 
 export declare interface StickyUpdate {
