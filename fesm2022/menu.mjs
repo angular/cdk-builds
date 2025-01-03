@@ -4,7 +4,7 @@ import { Overlay, OverlayConfig, STANDARD_DROPDOWN_BELOW_POSITIONS, STANDARD_DRO
 import { ENTER, SPACE, UP_ARROW, hasModifierKey, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, TAB, ESCAPE } from '@angular/cdk/keycodes';
 import { startWith, debounceTime, distinctUntilChanged, takeUntil, mergeMap, mapTo, mergeAll, switchMap, skipWhile, skip } from 'rxjs/operators';
 import { UniqueSelectionDispatcher } from '@angular/cdk/collections';
-import { _IdGenerator, InputModalityDetector, FocusKeyManager } from '@angular/cdk/a11y';
+import { _IdGenerator, InputModalityDetector, FocusMonitor, FocusKeyManager } from '@angular/cdk/a11y';
 import { Subject, merge, partition } from 'rxjs';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { Directionality } from '@angular/cdk/bidi';
@@ -1155,6 +1155,7 @@ class PointerFocusTracker {
  * This class can be extended to create custom menu types.
  */
 class CdkMenuBase extends CdkMenuGroup {
+    _focusMonitor = inject(FocusMonitor);
     ngZone = inject(NgZone);
     _renderer = inject(Renderer2);
     /** The menu's native DOM host element. */
@@ -1195,12 +1196,14 @@ class CdkMenuBase extends CdkMenuGroup {
             this.menuStack.push(this);
         }
         this._setKeyManager();
+        this._handleFocus();
         this._subscribeToMenuStackHasFocus();
         this._subscribeToMenuOpen();
         this._subscribeToMenuStackClosed();
         this._setUpPointerTracker();
     }
     ngOnDestroy() {
+        this._focusMonitor.stopMonitoring(this.nativeElement);
         this.keyManager?.destroy();
         this.destroyed.next();
         this.destroyed.complete();
@@ -1301,8 +1304,21 @@ class CdkMenuBase extends CdkMenuGroup {
             this.menuAim.initialize(this, this.pointerTracker);
         }
     }
+    /** Handles focus landing on the host element of the menu. */
+    _handleFocus() {
+        this._focusMonitor
+            .monitor(this.nativeElement, false)
+            .pipe(takeUntil(this.destroyed))
+            .subscribe(origin => {
+            // Don't forward focus on mouse interactions, because it can
+            // mess with the user's scroll position. See #30130.
+            if (origin !== null && origin !== 'mouse') {
+                this.focusFirstItem(origin);
+            }
+        });
+    }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.1.0-next.3", ngImport: i0, type: CdkMenuBase, deps: null, target: i0.ɵɵFactoryTarget.Directive });
-    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.1.0-next.3", type: CdkMenuBase, isStandalone: true, inputs: { id: "id" }, host: { attributes: { "role": "menu" }, listeners: { "focus": "focusFirstItem()", "focusin": "menuStack.setHasFocus(true)", "focusout": "menuStack.setHasFocus(false)" }, properties: { "tabindex": "_getTabIndex()", "id": "id", "attr.aria-orientation": "orientation", "attr.data-cdk-menu-stack-id": "menuStack.id" } }, queries: [{ propertyName: "items", predicate: CdkMenuItem, descendants: true }], usesInheritance: true, ngImport: i0 });
+    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.1.0-next.3", type: CdkMenuBase, isStandalone: true, inputs: { id: "id" }, host: { attributes: { "role": "menu" }, listeners: { "focusin": "menuStack.setHasFocus(true)", "focusout": "menuStack.setHasFocus(false)" }, properties: { "tabindex": "_getTabIndex()", "id": "id", "attr.aria-orientation": "orientation", "attr.data-cdk-menu-stack-id": "menuStack.id" } }, queries: [{ propertyName: "items", predicate: CdkMenuItem, descendants: true }], usesInheritance: true, ngImport: i0 });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.1.0-next.3", ngImport: i0, type: CdkMenuBase, decorators: [{
             type: Directive,
@@ -1314,7 +1330,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.1.0-next.3", 
                         '[id]': 'id',
                         '[attr.aria-orientation]': 'orientation',
                         '[attr.data-cdk-menu-stack-id]': 'menuStack.id',
-                        '(focus)': 'focusFirstItem()',
                         '(focusin)': 'menuStack.setHasFocus(true)',
                         '(focusout)': 'menuStack.setHasFocus(false)',
                     },

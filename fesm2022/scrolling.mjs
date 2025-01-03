@@ -1385,6 +1385,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.1.0-next.3", 
 class CdkVirtualScrollableWindow extends CdkVirtualScrollable {
     constructor() {
         super();
+        const document = inject(DOCUMENT);
         this.elementRef = new ElementRef(document.documentElement);
         this._scrollElement = document;
     }

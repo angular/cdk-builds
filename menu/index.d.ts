@@ -152,6 +152,7 @@ export declare class CdkMenuBar extends CdkMenuBase implements AfterContentInit 
  * This class can be extended to create custom menu types.
  */
 export declare abstract class CdkMenuBase extends CdkMenuGroup implements Menu, AfterContentInit, OnDestroy {
+    private _focusMonitor;
     protected ngZone: NgZone;
     private _renderer;
     /** The menu's native DOM host element. */
@@ -223,6 +224,8 @@ export declare abstract class CdkMenuBase extends CdkMenuGroup implements Menu, 
      * with the latest menu item under mouse focus.
      */
     private _setUpPointerTracker;
+    /** Handles focus landing on the host element of the menu. */
+    private _handleFocus;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuBase, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuBase, never, never, { "id": { "alias": "id"; "required": false; }; }, {}, ["items"], never, true, never>;
 }
