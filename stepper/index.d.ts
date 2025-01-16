@@ -94,7 +94,7 @@ export declare class CdkStepLabel {
 export declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDestroy {
     private _dir;
     private _changeDetectorRef;
-    private _elementRef;
+    protected _elementRef: ElementRef<HTMLElement>;
     /** Emits when the component is destroyed. */
     protected readonly _destroyed: Subject<void>;
     /** Used for managing keyboard focus. */
