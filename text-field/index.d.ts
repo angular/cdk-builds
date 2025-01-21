@@ -101,7 +101,7 @@ export declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDe
     get placeholder(): string;
     set placeholder(value: string);
     /** Cached height of a textarea with a single row. */
-    private _cachedLineHeight;
+    private _cachedLineHeight?;
     /** Cached height of a textarea with only the placeholder. */
     private _cachedPlaceholderHeight?;
     /** Used to reference correct document/window */
