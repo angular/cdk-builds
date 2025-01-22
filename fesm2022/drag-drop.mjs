@@ -1,10 +1,10 @@
 import * as i0 from '@angular/core';
-import { signal, Component, ViewEncapsulation, ChangeDetectionStrategy, inject, NgZone, Injectable, RendererFactory2, InjectionToken, ElementRef, booleanAttribute, Directive, Input, ViewContainerRef, ChangeDetectorRef, EventEmitter, Injector, afterNextRender, numberAttribute, Output, TemplateRef, NgModule } from '@angular/core';
+import { signal, Component, ViewEncapsulation, ChangeDetectionStrategy, inject, NgZone, RendererFactory2, Injectable, InjectionToken, ElementRef, booleanAttribute, Directive, Input, ViewContainerRef, ChangeDetectorRef, EventEmitter, Injector, afterNextRender, numberAttribute, Output, TemplateRef, NgModule } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ViewportRuler, ScrollDispatcher, CdkScrollableModule } from '@angular/cdk/scrolling';
 import { isFakeTouchstartFromScreenReader, isFakeMousedownFromScreenReader, _IdGenerator } from '@angular/cdk/a11y';
 import { coerceElement, coerceNumberProperty, coerceArray } from '@angular/cdk/coercion';
-import { _getEventTarget, normalizePassiveListenerOptions, _getShadowRoot } from '@angular/cdk/platform';
+import { _getEventTarget, _bindEventWithOptions, _getShadowRoot } from '@angular/cdk/platform';
 import { Subject, Subscription, interval, animationFrameScheduler, Observable, merge, BehaviorSubject } from 'rxjs';
 import { takeUntil, map, take, tap, switchMap, startWith } from 'rxjs/operators';
 import { _CdkPrivateStyleLoader } from '@angular/cdk/private';
@@ -445,14 +445,14 @@ function supportsPopover(element) {
 }
 
 /** Options that can be used to bind a passive event listener. */
-const passiveEventListenerOptions = normalizePassiveListenerOptions({ passive: true });
+const passiveEventListenerOptions = { passive: true };
 /** Options that can be used to bind an active event listener. */
-const activeEventListenerOptions = normalizePassiveListenerOptions({ passive: false });
+const activeEventListenerOptions = { passive: false };
 /** Event options that can be used to bind an active, capturing event. */
-const activeCapturingEventOptions$1 = normalizePassiveListenerOptions({
+const activeCapturingEventOptions$1 = {
     passive: false,
     capture: true,
-});
+};
 /**
  * Time in milliseconds for which to ignore mouse events, after
  * receiving a touch event. Used to avoid doing double work for
@@ -475,6 +475,8 @@ class DragRef {
     _viewportRuler;
     _dragDropRegistry;
     _renderer;
+    _rootElementCleanups;
+    _cleanupShadowRootSelectStart;
     /** Element displayed next to the user's pointer while the element is dragged. */
     _preview;
     /** Container into which to insert the preview. */
@@ -709,14 +711,12 @@ class DragRef {
     withRootElement(rootElement) {
         const element = coerceElement(rootElement);
         if (element !== this._rootElement) {
-            if (this._rootElement) {
-                this._removeRootElementListeners(this._rootElement);
-            }
-            this._ngZone.runOutsideAngular(() => {
-                element.addEventListener('mousedown', this._pointerDown, activeEventListenerOptions);
-                element.addEventListener('touchstart', this._pointerDown, passiveEventListenerOptions);
-                element.addEventListener('dragstart', this._nativeDragStart, activeEventListenerOptions);
-            });
+            this._removeRootElementListeners();
+            this._rootElementCleanups = this._ngZone.runOutsideAngular(() => [
+                _bindEventWithOptions(this._renderer, element, 'mousedown', this._pointerDown, activeEventListenerOptions),
+                _bindEventWithOptions(this._renderer, element, 'touchstart', this._pointerDown, passiveEventListenerOptions),
+                _bindEventWithOptions(this._renderer, element, 'dragstart', this._nativeDragStart, activeEventListenerOptions),
+            ]);
             this._initialTransform = undefined;
             this._rootElement = element;
         }
@@ -745,7 +745,7 @@ class DragRef {
     }
     /** Removes the dragging functionality from the DOM element. */
     dispose() {
-        this._removeRootElementListeners(this._rootElement);
+        this._removeRootElementListeners();
         // Do this check before removing from the registry since it'll
         // stop being considered as dragged once it is removed.
         if (this.isDragging()) {
@@ -859,7 +859,8 @@ class DragRef {
         this._pointerMoveSubscription.unsubscribe();
         this._pointerUpSubscription.unsubscribe();
         this._scrollSubscription.unsubscribe();
-        this._getShadowRoot()?.removeEventListener('selectstart', shadowDomSelectStart, activeCapturingEventOptions$1);
+        this._cleanupShadowRootSelectStart?.();
+        this._cleanupShadowRootSelectStart = undefined;
     }
     /** Destroys the preview element and its ViewRef. */
     _destroyPreview() {
@@ -1024,7 +1025,7 @@ class DragRef {
             // In some browsers the global `selectstart` that we maintain in the `DragDropRegistry`
             // doesn't cross the shadow boundary so we have to prevent it at the shadow root (see #28792).
             this._ngZone.runOutsideAngular(() => {
-                shadowRoot.addEventListener('selectstart', shadowDomSelectStart, activeCapturingEventOptions$1);
+                this._cleanupShadowRootSelectStart = _bindEventWithOptions(this._renderer, shadowRoot, 'selectstart', shadowDomSelectStart, activeCapturingEventOptions$1);
             });
         }
         if (dropContainer) {
@@ -1394,10 +1395,9 @@ class DragRef {
         }
     }
     /** Removes the manually-added event listeners from the root element. */
-    _removeRootElementListeners(element) {
-        element.removeEventListener('mousedown', this._pointerDown, activeEventListenerOptions);
-        element.removeEventListener('touchstart', this._pointerDown, passiveEventListenerOptions);
-        element.removeEventListener('dragstart', this._nativeDragStart, activeEventListenerOptions);
+    _removeRootElementListeners() {
+        this._rootElementCleanups?.forEach(cleanup => cleanup());
+        this._rootElementCleanups = undefined;
     }
     /**
      * Applies a `transform` to the root element, taking into account any existing transforms on it.
@@ -2949,11 +2949,15 @@ function getElementScrollDirections(element, clientRect, direction, pointerX, po
     return [verticalScrollDirection, horizontalScrollDirection];
 }
 
+/** Event options that can be used to bind a capturing event. */
+const capturingEventOptions = {
+    capture: true,
+};
 /** Event options that can be used to bind an active, capturing event. */
-const activeCapturingEventOptions = normalizePassiveListenerOptions({
+const activeCapturingEventOptions = {
     passive: false,
     capture: true,
-});
+};
 /**
  * Component used to load the drag&drop reset styles.
  * @docs-private
@@ -2976,6 +2980,8 @@ class DragDropRegistry {
     _ngZone = inject(NgZone);
     _document = inject(DOCUMENT);
     _styleLoader = inject(_CdkPrivateStyleLoader);
+    _renderer = inject(RendererFactory2).createRenderer(null, null);
+    _cleanupDocumentTouchmove;
     /** Registered drop container instances. */
     _dropInstances = new Set();
     /** Registered drag item instances. */
@@ -2983,7 +2989,7 @@ class DragDropRegistry {
     /** Drag item instances that are currently being dragged. */
     _activeDragInstances = signal([]);
     /** Keeps track of the event listeners that we've bound to the `document`. */
-    _globalListeners = new Map();
+    _globalListeners;
     /**
      * Predicate function to check if an item is being dragged.  Moved out into a property,
      * because it'll be called a lot and we don't want to create a new function every time.
@@ -3028,7 +3034,8 @@ class DragDropRegistry {
             this._ngZone.runOutsideAngular(() => {
                 // The event handler has to be explicitly active,
                 // because newer browsers make it passive by default.
-                this._document.addEventListener('touchmove', this._persistentTouchmoveListener, activeCapturingEventOptions);
+                this._cleanupDocumentTouchmove?.();
+                this._cleanupDocumentTouchmove = _bindEventWithOptions(this._renderer, this._document, 'touchmove', this._persistentTouchmoveListener, activeCapturingEventOptions);
             });
         }
     }
@@ -3041,7 +3048,7 @@ class DragDropRegistry {
         this._dragInstances.delete(drag);
         this.stopDragging(drag);
         if (this._dragInstances.size === 0) {
-            this._document.removeEventListener('touchmove', this._persistentTouchmoveListener, activeCapturingEventOptions);
+            this._cleanupDocumentTouchmove?.();
         }
     }
     /**
@@ -3061,44 +3068,34 @@ class DragDropRegistry {
             // passive ones for `mousemove` and `touchmove`. The events need to be active, because we
             // use `preventDefault` to prevent the page from scrolling while the user is dragging.
             const isTouchEvent = event.type.startsWith('touch');
-            const endEventHandler = {
-                handler: (e) => this.pointerUp.next(e),
-                options: true,
-            };
-            if (isTouchEvent) {
-                this._globalListeners.set('touchend', endEventHandler);
-                this._globalListeners.set('touchcancel', endEventHandler);
-            }
-            else {
-                this._globalListeners.set('mouseup', endEventHandler);
-            }
-            this._globalListeners
-                .set('scroll', {
-                handler: (e) => this.scroll.next(e),
+            const endEventHandler = (e) => this.pointerUp.next(e);
+            const toBind = [
                 // Use capturing so that we pick up scroll changes in any scrollable nodes that aren't
                 // the document. See https://github.com/angular/components/issues/17144.
-                options: true,
-            })
+                ['scroll', (e) => this.scroll.next(e), capturingEventOptions],
                 // Preventing the default action on `mousemove` isn't enough to disable text selection
                 // on Safari so we need to prevent the selection event as well. Alternatively this can
                 // be done by setting `user-select: none` on the `body`, however it has causes a style
                 // recalculation which can be expensive on pages with a lot of elements.
-                .set('selectstart', {
-                handler: this._preventDefaultWhileDragging,
-                options: activeCapturingEventOptions,
-            });
+                ['selectstart', this._preventDefaultWhileDragging, activeCapturingEventOptions],
+            ];
+            if (isTouchEvent) {
+                toBind.push(['touchend', endEventHandler, capturingEventOptions], ['touchcancel', endEventHandler, capturingEventOptions]);
+            }
+            else {
+                toBind.push(['mouseup', endEventHandler, capturingEventOptions]);
+            }
             // We don't have to bind a move event for touch drag sequences, because
             // we already have a persistent global one bound from `registerDragItem`.
             if (!isTouchEvent) {
-                this._globalListeners.set('mousemove', {
-                    handler: (e) => this.pointerMove.next(e),
-                    options: activeCapturingEventOptions,
-                });
+                toBind.push([
+                    'mousemove',
+                    (e) => this.pointerMove.next(e),
+                    activeCapturingEventOptions,
+                ]);
             }
             this._ngZone.runOutsideAngular(() => {
-                this._globalListeners.forEach((config, name) => {
-                    this._document.addEventListener(name, config.handler, config.options);
-                });
+                this._globalListeners = toBind.map(([name, handler, options]) => _bindEventWithOptions(this._renderer, this._document, name, handler, options));
             });
         }
     }
@@ -3135,15 +3132,13 @@ class DragDropRegistry {
             // `fromEvent` it'll only happen if the subscription is outside the `NgZone`.
             streams.push(new Observable((observer) => {
                 return this._ngZone.runOutsideAngular(() => {
-                    const eventOptions = true;
-                    const callback = (event) => {
+                    const cleanup = _bindEventWithOptions(this._renderer, shadowRoot, 'scroll', (event) => {
                         if (this._activeDragInstances().length) {
                             observer.next(event);
                         }
-                    };
-                    shadowRoot.addEventListener('scroll', callback, eventOptions);
+                    }, capturingEventOptions);
                     return () => {
-                        shadowRoot.removeEventListener('scroll', callback, eventOptions);
+                        cleanup();
                     };
                 });
             }));
@@ -3204,10 +3199,8 @@ class DragDropRegistry {
     };
     /** Clears out the global event listeners from the `document`. */
     _clearGlobalListeners() {
-        this._globalListeners.forEach((config, name) => {
-            this._document.removeEventListener(name, config.handler, config.options);
-        });
-        this._globalListeners.clear();
+        this._globalListeners?.forEach(cleanup => cleanup());
+        this._globalListeners = undefined;
     }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.1.0-rc.0", ngImport: i0, type: DragDropRegistry, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
     static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.1.0-rc.0", ngImport: i0, type: DragDropRegistry, providedIn: 'root' });

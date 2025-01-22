@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { inject, APP_ID, Injectable, signal, QueryList, isSignal, effect, InjectionToken, afterNextRender, NgZone, Injector, ElementRef, booleanAttribute, Directive, Input, EventEmitter, Output, NgModule } from '@angular/core';
-import { Platform, _getFocusedElementPierceShadowDom, normalizePassiveListenerOptions, _getEventTarget, _getShadowRoot } from '@angular/cdk/platform';
+import { inject, APP_ID, Injectable, signal, QueryList, isSignal, effect, InjectionToken, afterNextRender, NgZone, Injector, ElementRef, booleanAttribute, Directive, Input, RendererFactory2, EventEmitter, Output, NgModule } from '@angular/core';
+import { Platform, _getFocusedElementPierceShadowDom, _getEventTarget, _bindEventWithOptions, normalizePassiveListenerOptions, _getShadowRoot } from '@angular/cdk/platform';
 import { _CdkPrivateStyleLoader, _VisuallyHiddenLoader } from '@angular/cdk/private';
 import { A, Z, ZERO, NINE, hasModifierKey, PAGE_DOWN, PAGE_UP, END, HOME, LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW, TAB, ALT, CONTROL, MAC_META, META, SHIFT } from '@angular/cdk/keycodes';
 import { Subject, Subscription, isObservable, of, BehaviorSubject } from 'rxjs';
@@ -1994,10 +1994,10 @@ const TOUCH_BUFFER_MS = 650;
  * Event listener options that enable capturing and also mark the listener as passive if the browser
  * supports it.
  */
-const modalityEventListenerOptions = normalizePassiveListenerOptions({
+const modalityEventListenerOptions = {
     passive: true,
     capture: true,
-});
+};
 /**
  * Service that detects the user's input modality.
  *
@@ -2014,6 +2014,7 @@ const modalityEventListenerOptions = normalizePassiveListenerOptions({
  */
 class InputModalityDetector {
     _platform = inject(Platform);
+    _listenerCleanups;
     /** Emits whenever an input modality is detected. */
     modalityDetected;
     /** Emits when the input modality changes. */
@@ -2096,20 +2097,19 @@ class InputModalityDetector {
         // If we're not in a browser, this service should do nothing, as there's no relevant input
         // modality to detect.
         if (this._platform.isBrowser) {
-            ngZone.runOutsideAngular(() => {
-                document.addEventListener('keydown', this._onKeydown, modalityEventListenerOptions);
-                document.addEventListener('mousedown', this._onMousedown, modalityEventListenerOptions);
-                document.addEventListener('touchstart', this._onTouchstart, modalityEventListenerOptions);
+            const renderer = inject(RendererFactory2).createRenderer(null, null);
+            this._listenerCleanups = ngZone.runOutsideAngular(() => {
+                return [
+                    _bindEventWithOptions(renderer, document, 'keydown', this._onKeydown, modalityEventListenerOptions),
+                    _bindEventWithOptions(renderer, document, 'mousedown', this._onMousedown, modalityEventListenerOptions),
+                    _bindEventWithOptions(renderer, document, 'touchstart', this._onTouchstart, modalityEventListenerOptions),
+                ];
             });
         }
     }
     ngOnDestroy() {
         this._modality.complete();
-        if (this._platform.isBrowser) {
-            document.removeEventListener('keydown', this._onKeydown, modalityEventListenerOptions);
-            document.removeEventListener('mousedown', this._onMousedown, modalityEventListenerOptions);
-            document.removeEventListener('touchstart', this._onTouchstart, modalityEventListenerOptions);
-        }
+        this._listenerCleanups?.forEach(cleanup => cleanup());
     }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.1.0-rc.0", ngImport: i0, type: InputModalityDetector, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
     static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.1.0-rc.0", ngImport: i0, type: InputModalityDetector, providedIn: 'root' });

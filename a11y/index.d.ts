@@ -788,6 +788,7 @@ export declare type InputModality = 'keyboard' | 'mouse' | 'touch' | null;
  */
 export declare class InputModalityDetector implements OnDestroy {
     private readonly _platform;
+    private readonly _listenerCleanups;
     /** Emits whenever an input modality is detected. */
     readonly modalityDetected: Observable<InputModality>;
     /** Emits when the input modality changes. */

@@ -854,14 +854,15 @@ export declare class OverlayModule {
 export declare class OverlayOutsideClickDispatcher extends BaseOverlayDispatcher {
     private _platform;
     private _ngZone;
+    private _renderer;
     private _cursorOriginalValue;
     private _cursorStyleIsSet;
     private _pointerDownEventTarget;
+    private _cleanups;
     /** Add a new overlay to the list of attached overlay refs. */
     add(overlayRef: OverlayRef): void;
     /** Detaches the global keyboard event listener. */
     protected detach(): void;
-    private _addEventListeners;
     /** Store pointerdown event target to track origin of click. */
     private _pointerDownListener;
     /** Click event listener that will be attached to the body propagate phase. */
