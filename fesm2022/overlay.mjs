@@ -2747,14 +2747,12 @@ class CdkConnectedOverlay {
         this._detachSubscription.unsubscribe();
         this._backdropSubscription.unsubscribe();
         this._positionSubscription.unsubscribe();
-        if (this._overlayRef) {
-            this._overlayRef.dispose();
-        }
+        this._overlayRef?.dispose();
     }
     ngOnChanges(changes) {
         if (this._position) {
             this._updatePositionStrategy(this._position);
-            this._overlayRef.updateSize({
+            this._overlayRef?.updateSize({
                 width: this.width,
                 minWidth: this.minWidth,
                 height: this.height,
@@ -2765,7 +2763,7 @@ class CdkConnectedOverlay {
             }
         }
         if (changes['open']) {
-            this.open ? this._attachOverlay() : this._detachOverlay();
+            this.open ? this.attachOverlay() : this.detachOverlay();
         }
     }
     /** Creates an overlay */
@@ -2780,7 +2778,7 @@ class CdkConnectedOverlay {
             this.overlayKeydown.next(event);
             if (event.keyCode === ESCAPE && !this.disableClose && !hasModifierKey(event)) {
                 event.preventDefault();
-                this._detachOverlay();
+                this.detachOverlay();
             }
         });
         this._overlayRef.outsidePointerEvents().subscribe((event) => {
@@ -2869,8 +2867,8 @@ class CdkConnectedOverlay {
         }
         return null;
     }
-    /** Attaches the overlay and subscribes to backdrop clicks if backdrop exists */
-    _attachOverlay() {
+    /** Attaches the overlay. */
+    attachOverlay() {
         if (!this._overlayRef) {
             this._createOverlay();
         }
@@ -2902,14 +2900,14 @@ class CdkConnectedOverlay {
                 }
             });
         }
+        this.open = true;
     }
-    /** Detaches the overlay and unsubscribes to backdrop clicks if backdrop exists */
-    _detachOverlay() {
-        if (this._overlayRef) {
-            this._overlayRef.detach();
-        }
+    /** Detaches the overlay. */
+    detachOverlay() {
+        this._overlayRef?.detach();
         this._backdropSubscription.unsubscribe();
         this._positionSubscription.unsubscribe();
+        this.open = false;
     }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.1.0-rc.0", ngImport: i0, type: CdkConnectedOverlay, deps: [], target: i0.ɵɵFactoryTarget.Directive });
     static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "19.1.0-rc.0", type: CdkConnectedOverlay, isStandalone: true, selector: "[cdk-connected-overlay], [connected-overlay], [cdkConnectedOverlay]", inputs: { origin: ["cdkConnectedOverlayOrigin", "origin"], positions: ["cdkConnectedOverlayPositions", "positions"], positionStrategy: ["cdkConnectedOverlayPositionStrategy", "positionStrategy"], offsetX: ["cdkConnectedOverlayOffsetX", "offsetX"], offsetY: ["cdkConnectedOverlayOffsetY", "offsetY"], width: ["cdkConnectedOverlayWidth", "width"], height: ["cdkConnectedOverlayHeight", "height"], minWidth: ["cdkConnectedOverlayMinWidth", "minWidth"], minHeight: ["cdkConnectedOverlayMinHeight", "minHeight"], backdropClass: ["cdkConnectedOverlayBackdropClass", "backdropClass"], panelClass: ["cdkConnectedOverlayPanelClass", "panelClass"], viewportMargin: ["cdkConnectedOverlayViewportMargin", "viewportMargin"], scrollStrategy: ["cdkConnectedOverlayScrollStrategy", "scrollStrategy"], open: ["cdkConnectedOverlayOpen", "open"], disableClose: ["cdkConnectedOverlayDisableClose", "disableClose"], transformOriginSelector: ["cdkConnectedOverlayTransformOriginOn", "transformOriginSelector"], hasBackdrop: ["cdkConnectedOverlayHasBackdrop", "hasBackdrop", booleanAttribute], lockPosition: ["cdkConnectedOverlayLockPosition", "lockPosition", booleanAttribute], flexibleDimensions: ["cdkConnectedOverlayFlexibleDimensions", "flexibleDimensions", booleanAttribute], growAfterOpen: ["cdkConnectedOverlayGrowAfterOpen", "growAfterOpen", booleanAttribute], push: ["cdkConnectedOverlayPush", "push", booleanAttribute], disposeOnNavigation: ["cdkConnectedOverlayDisposeOnNavigation", "disposeOnNavigation", booleanAttribute] }, outputs: { backdropClick: "backdropClick", positionChange: "positionChange", attach: "attach", detach: "detach", overlayKeydown: "overlayKeydown", overlayOutsideClick: "overlayOutsideClick" }, exportAs: ["cdkConnectedOverlay"], usesOnChanges: true, ngImport: i0 });
