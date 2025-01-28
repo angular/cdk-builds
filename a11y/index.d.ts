@@ -11,6 +11,7 @@ import { NgZone } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OnChanges } from '@angular/core';
 import { OnDestroy } from '@angular/core';
+import { Provider } from '@angular/core';
 import { QueryList } from '@angular/core';
 import { Signal } from '@angular/core';
 import { SimpleChanges } from '@angular/core';
@@ -1182,10 +1183,7 @@ export declare function NOOP_TREE_KEY_MANAGER_FACTORY<T extends TreeKeyManagerIt
  *
  * @breaking-change 21.0.0
  */
-export declare const NOOP_TREE_KEY_MANAGER_FACTORY_PROVIDER: {
-    provide: InjectionToken<TreeKeyManagerFactory<any>>;
-    useFactory: typeof NOOP_TREE_KEY_MANAGER_FACTORY;
-};
+export declare const NOOP_TREE_KEY_MANAGER_FACTORY_PROVIDER: Provider;
 
 /**
  * @docs-private

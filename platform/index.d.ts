@@ -1,5 +1,4 @@
 import * as i0 from '@angular/core';
-import { ListenerOptions } from '@angular/core';
 import { Renderer2 } from '@angular/core';
 
 /**
@@ -8,7 +7,7 @@ import { Renderer2 } from '@angular/core';
  * after 19.1 and during the v19 period we support any 19.x version.
  * @docs-private
  */
-export declare function _bindEventWithOptions(renderer: Renderer2, target: EventTarget, eventName: string, callback: (event: any) => boolean | void, options: ListenerOptions): () => void;
+export declare function _bindEventWithOptions(renderer: Renderer2, target: EventTarget, eventName: string, callback: (event: any) => boolean | void, options: _ListenerOptions): () => void;
 
 /** Gets the target of an event while accounting for Shadow DOM. */
 export declare function _getEventTarget<T extends EventTarget>(event: Event): T | null;
@@ -35,6 +34,13 @@ export declare function getSupportedInputTypes(): Set<string>;
 
 /** Gets whether the code is currently running in a test environment. */
 export declare function _isTestEnvironment(): boolean;
+
+/** Options when binding events manually. */
+export declare interface _ListenerOptions {
+    capture?: boolean;
+    once?: boolean;
+    passive?: boolean;
+}
 
 /**
  * Normalizes an `AddEventListener` object to something that can be passed
