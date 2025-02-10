@@ -728,20 +728,12 @@ class StickyStyler {
      * @param replay Whether to enqueue this call for replay after a ResizeObserver update.
      */
     updateStickyColumns(rows, stickyStartStates, stickyEndStates, recalculateCellWidths = true, replay = true) {
-        if (replay) {
-            this._updateStickyColumnReplayQueue({
-                rows: [...rows],
-                stickyStartStates: [...stickyStartStates],
-                stickyEndStates: [...stickyEndStates],
-            });
-        }
+        // Don't cache any state if none of the columns are sticky.
         if (!rows.length ||
             !this._isBrowser ||
             !(stickyStartStates.some(state => state) || stickyEndStates.some(state => state))) {
-            if (this._positionListener) {
-                this._positionListener.stickyColumnsUpdated({ sizes: [] });
-                this._positionListener.stickyEndColumnsUpdated({ sizes: [] });
-            }
+            this._positionListener?.stickyColumnsUpdated({ sizes: [] });
+            this._positionListener?.stickyEndColumnsUpdated({ sizes: [] });
             return;
         }
         // Coalesce with sticky row updates (and potentially other changes like column resize).
@@ -755,6 +747,13 @@ class StickyStyler {
         let cellWidths;
         let startPositions;
         let endPositions;
+        if (replay) {
+            this._updateStickyColumnReplayQueue({
+                rows: [...rows],
+                stickyStartStates: [...stickyStartStates],
+                stickyEndStates: [...stickyEndStates],
+            });
+        }
         this._afterNextRender({
             earlyRead: () => {
                 cellWidths = this._getCellWidths(firstRow, recalculateCellWidths);
@@ -895,6 +894,7 @@ class StickyStyler {
         if (this._stickyColumnsReplayTimeout) {
             clearTimeout(this._stickyColumnsReplayTimeout);
         }
+        this._resizeObserver?.disconnect();
         this._destroyed = true;
     }
     /**
@@ -1040,10 +1040,9 @@ class StickyStyler {
     _updateStickyColumnReplayQueue(params) {
         this._removeFromStickyColumnReplayQueue(params.rows);
         // No need to replay if a flush is pending.
-        if (this._stickyColumnsReplayTimeout) {
-            return;
+        if (!this._stickyColumnsReplayTimeout) {
+            this._updatedStickyColumnsParamsToReplay.push(params);
         }
-        this._updatedStickyColumnsParamsToReplay.push(params);
     }
     /** Remove updates for the specified rows from the queue. */
     _removeFromStickyColumnReplayQueue(rows) {
