@@ -170,7 +170,11 @@
   },
   "schematics": "./schematics/collection.json",
   "ng-update": {
-    "migrations": "./schematics/migration.json"
+    "migrations": "./schematics/migration.json",
+    "packageGroup": [
+      "@angular/material",
+      "@angular/cdk"
+    ]
   },
   "sideEffects": false,
   "module": "./fesm2022/cdk.mjs",
