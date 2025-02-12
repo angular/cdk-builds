@@ -907,16 +907,13 @@ export declare class OverlayRef implements PortalOutlet {
     private _animationsDisabled;
     private _injector;
     private _renderer;
-    private _backdropElement;
-    private _backdropTimeout;
     private readonly _backdropClick;
     private readonly _attachments;
     private readonly _detachments;
     private _positionStrategy;
     private _scrollStrategy;
     private _locationChanges;
-    private _cleanupBackdropClick;
-    private _cleanupBackdropTransitionEnd;
+    private _backdropRef;
     /**
      * Reference to the parent of the `_host` at the time it was detached. Used to restore
      * the `_host` to its original position in the DOM when it gets re-attached.
@@ -1007,8 +1004,6 @@ export declare class OverlayRef implements PortalOutlet {
     private _detachContentWhenEmpty;
     /** Disposes of a scroll strategy. */
     private _disposeScrollStrategy;
-    /** Removes a backdrop element from the DOM. */
-    private _disposeBackdrop;
 }
 
 /** Size properties for an overlay. */
