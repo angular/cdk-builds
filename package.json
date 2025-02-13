@@ -173,7 +173,12 @@
     "migrations": "./schematics/migration.json",
     "packageGroup": [
       "@angular/material",
-      "@angular/cdk"
+      "@angular/cdk",
+      "@angular/cdk-experimental",
+      "@angular/material-experimental",
+      "@angular/material-luxon-adapter",
+      "@angular/material-moment-adapter",
+      "@angular/material-date-fns-adapter"
     ]
   },
   "sideEffects": false,
