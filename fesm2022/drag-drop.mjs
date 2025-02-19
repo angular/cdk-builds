@@ -4004,6 +4004,8 @@ class CdkDropList {
     /** Registers an items with the drop list. */
     addItem(item) {
         this._unsortedItems.add(item);
+        // Only sync the items while dragging since this method is
+        // called when items are being initialized one-by-one.
         if (this._dropListRef.isDragging()) {
             this._syncItemsWithRef();
         }
@@ -4011,9 +4013,8 @@ class CdkDropList {
     /** Removes an item from the drop list. */
     removeItem(item) {
         this._unsortedItems.delete(item);
-        if (this._dropListRef.isDragging()) {
-            this._syncItemsWithRef();
-        }
+        // This method might be called on destroy so we always want to sync with the ref.
+        this._syncItemsWithRef();
     }
     /** Gets the registered items in the list, sorted by their position in the DOM. */
     getSortedItems() {
