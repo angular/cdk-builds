@@ -277,7 +277,7 @@ class SelectionModel {
     setSelection(...values) {
         this._verifyValueAssignment(values);
         const oldValues = this.selected;
-        const newSelectedSet = new Set(values);
+        const newSelectedSet = new Set(values.map(value => this._getConcreteValue(value)));
         values.forEach(value => this._markSelected(value));
         oldValues
             .filter(value => !newSelectedSet.has(this._getConcreteValue(value, newSelectedSet)))
