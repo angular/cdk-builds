@@ -120,7 +120,7 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
      * of the user's pointer on the page, a reference to the item being dragged and its dimensions.
      * Should return a point describing where the item should be rendered.
      */
-    constrainPosition?: (userPointerPosition: Point, dragRef: DragRef, dimensions: DOMRect, pickupPositionInElement: Point) => Point;
+    constrainPosition?: DragConstrainPosition;
     /** Class to be added to the preview element. */
     previewClass: string | string[];
     /**
@@ -521,7 +521,7 @@ export declare function copyArrayItem<T = any>(currentArray: T[], targetArray: T
 export declare type DragAxis = 'x' | 'y';
 
 /** Function that can be used to constrain the position of a dragged element. */
-export declare type DragConstrainPosition = (point: Point, dragRef: DragRef) => Point;
+export declare type DragConstrainPosition = (userPointerPosition: Point, dragRef: DragRef, dimensions: DOMRect, pickupPositionInElement: Point) => Point;
 
 /**
  * Service that allows for drag-and-drop functionality to be attached to DOM elements.
@@ -900,7 +900,7 @@ export declare class DragRef<T = any> {
      * of the user's pointer on the page, a reference to the item being dragged and its dimensions.
      * Should return a point describing where the item should be rendered.
      */
-    constrainPosition?: (userPointerPosition: Point, dragRef: DragRef, dimensions: DOMRect, pickupPositionInElement: Point) => Point;
+    constrainPosition?: DragConstrainPosition;
     constructor(element: ElementRef<HTMLElement> | HTMLElement, _config: DragRefConfig, _document: Document, _ngZone: NgZone, _viewportRuler: ViewportRuler, _dragDropRegistry: DragDropRegistry, _renderer: Renderer2);
     /**
      * Returns the element that is being used as a placeholder
