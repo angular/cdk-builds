@@ -2555,7 +2555,7 @@ class Overlay {
         if (!this._appRef) {
             this._appRef = this._injector.get(ApplicationRef);
         }
-        return new DomPortalOutlet(pane, null, this._appRef, this._injector, this._document);
+        return new DomPortalOutlet(pane, this._appRef, this._injector);
     }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: Overlay, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
     static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: Overlay, providedIn: 'root' });

@@ -103,20 +103,10 @@ class ComponentPortal extends Portal {
     /** Injector used for the instantiation of the component. */
     injector;
     /**
-     * @deprecated No longer in use. To be removed.
-     * @breaking-change 18.0.0
-     */
-    componentFactoryResolver;
-    /**
      * List of DOM nodes that should be projected through `<ng-content>` of the attached component.
      */
     projectableNodes;
-    constructor(component, viewContainerRef, injector, 
-    /**
-     * @deprecated No longer in use. To be removed.
-     * @breaking-change 18.0.0
-     */
-    _componentFactoryResolver, projectableNodes) {
+    constructor(component, viewContainerRef, injector, projectableNodes) {
         super();
         this.component = component;
         this.viewContainerRef = viewContainerRef;
@@ -266,36 +256,20 @@ class DomPortalOutlet extends BasePortalOutlet {
     outletElement;
     _appRef;
     _defaultInjector;
-    _document;
     /**
      * @param outletElement Element into which the content is projected.
-     * @param _unusedComponentFactoryResolver Used to resolve the component factory.
-     *   Only required when attaching component portals.
      * @param _appRef Reference to the application. Only used in component portals when there
      *   is no `ViewContainerRef` available.
      * @param _defaultInjector Injector to use as a fallback when the portal being attached doesn't
      *   have one. Only used for component portals.
-     * @param _document Reference to the document. Used when attaching a DOM portal. Will eventually
-     *   become a required parameter.
      */
     constructor(
     /** Element into which the content is projected. */
-    outletElement, 
-    /**
-     * @deprecated No longer in use. To be removed.
-     * @breaking-change 18.0.0
-     */
-    _unusedComponentFactoryResolver, _appRef, _defaultInjector, 
-    /**
-     * @deprecated `_document` Parameter to be made required.
-     * @breaking-change 10.0.0
-     */
-    _document) {
+    outletElement, _appRef, _defaultInjector) {
         super();
         this.outletElement = outletElement;
         this._appRef = _appRef;
         this._defaultInjector = _defaultInjector;
-        this._document = _document;
     }
     /**
      * Attach the given ComponentPortal to DOM element.
@@ -386,7 +360,7 @@ class DomPortalOutlet extends BasePortalOutlet {
         }
         // Anchor used to save the element's previous position so
         // that we can restore it when the portal is detached.
-        const anchorNode = this._document.createComment('dom-portal');
+        const anchorNode = this.outletElement.ownerDocument.createComment('dom-portal');
         element.parentNode.insertBefore(anchorNode, element);
         this.outletElement.appendChild(element);
         this._attachedPortal = portal;

@@ -105,12 +105,6 @@ class DialogConfig {
      */
     closeOnOverlayDetachments = true;
     /**
-     * Alternate `ComponentFactoryResolver` to use when resolving the associated component.
-     * @deprecated No longer used. Will be removed.
-     * @breaking-change 20.0.0
-     */
-    componentFactoryResolver;
-    /**
      * Providers that will be exposed to the contents of the dialog. Can also
      * be provided as a function in order to generate the providers lazily.
      */

@@ -126,20 +126,10 @@ export declare class ComponentPortal<T> extends Portal<ComponentRef<T>> {
     /** Injector used for the instantiation of the component. */
     injector?: Injector | null;
     /**
-     * @deprecated No longer in use. To be removed.
-     * @breaking-change 18.0.0
-     */
-    componentFactoryResolver?: any;
-    /**
      * List of DOM nodes that should be projected through `<ng-content>` of the attached component.
      */
     projectableNodes?: Node[][] | null;
-    constructor(component: ComponentType<T>, viewContainerRef?: ViewContainerRef | null, injector?: Injector | null, 
-    /**
-     * @deprecated No longer in use. To be removed.
-     * @breaking-change 18.0.0
-     */
-    _componentFactoryResolver?: any, projectableNodes?: Node[][] | null);
+    constructor(component: ComponentType<T>, viewContainerRef?: ViewContainerRef | null, injector?: Injector | null, projectableNodes?: Node[][] | null);
 }
 
 /** Interface that can be used to generically type a class. */
@@ -174,31 +164,16 @@ export declare class DomPortalOutlet extends BasePortalOutlet {
     outletElement: Element;
     private _appRef?;
     private _defaultInjector?;
-    private _document;
     /**
      * @param outletElement Element into which the content is projected.
-     * @param _unusedComponentFactoryResolver Used to resolve the component factory.
-     *   Only required when attaching component portals.
      * @param _appRef Reference to the application. Only used in component portals when there
      *   is no `ViewContainerRef` available.
      * @param _defaultInjector Injector to use as a fallback when the portal being attached doesn't
      *   have one. Only used for component portals.
-     * @param _document Reference to the document. Used when attaching a DOM portal. Will eventually
-     *   become a required parameter.
      */
     constructor(
     /** Element into which the content is projected. */
-    outletElement: Element, 
-    /**
-     * @deprecated No longer in use. To be removed.
-     * @breaking-change 18.0.0
-     */
-    _unusedComponentFactoryResolver?: any, _appRef?: ApplicationRef | undefined, _defaultInjector?: Injector | undefined, 
-    /**
-     * @deprecated `_document` Parameter to be made required.
-     * @breaking-change 10.0.0
-     */
-    _document?: any);
+    outletElement: Element, _appRef?: ApplicationRef | undefined, _defaultInjector?: Injector | undefined);
     /**
      * Attach the given ComponentPortal to DOM element.
      * @param portal Portal to be attached
