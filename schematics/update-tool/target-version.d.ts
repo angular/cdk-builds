@@ -7,7 +7,7 @@
  */
 /** Possible versions that can be automatically migrated by `ng update`. */
 export declare enum TargetVersion {
-    V19 = "version 19"
+    V20 = "version 20"
 }
 /**
  * Returns all versions that are supported by "ng update". The versions are determined
