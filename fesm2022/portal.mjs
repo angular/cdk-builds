@@ -241,12 +241,6 @@ class BasePortalOutlet {
         }
     }
 }
-/**
- * @deprecated Use `BasePortalOutlet` instead.
- * @breaking-change 9.0.0
- */
-class BasePortalHost extends BasePortalOutlet {
-}
 
 /**
  * A PortalOutlet for attaching portals to an arbitrary DOM element outside of the Angular
@@ -382,12 +376,6 @@ class DomPortalOutlet extends BasePortalOutlet {
     _getComponentRootNode(componentRef) {
         return componentRef.hostView.rootNodes[0];
     }
-}
-/**
- * @deprecated Use `DomPortalOutlet` instead.
- * @breaking-change 9.0.0
- */
-class DomPortalHost extends DomPortalOutlet {
 }
 
 /**
@@ -621,31 +609,8 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.0", ngImpor
         }] });
 
 /**
- * Custom injector to be used when providing custom
- * injection tokens to components inside a portal.
- * @docs-private
- * @deprecated Use `Injector.create` instead.
- * @breaking-change 11.0.0
- */
-class PortalInjector {
-    _parentInjector;
-    _customTokens;
-    constructor(_parentInjector, _customTokens) {
-        this._parentInjector = _parentInjector;
-        this._customTokens = _customTokens;
-    }
-    get(token, notFoundValue) {
-        const value = this._customTokens.get(token);
-        if (typeof value !== 'undefined') {
-            return value;
-        }
-        return this._parentInjector.get(token, notFoundValue);
-    }
-}
-
-/**
  * Generated bundle index. Do not edit.
  */
 
-export { BasePortalHost, BasePortalOutlet, CdkPortal, CdkPortalOutlet, ComponentPortal, DomPortal, DomPortalHost, DomPortalOutlet, Portal, PortalHostDirective, PortalInjector, PortalModule, TemplatePortal, TemplatePortalDirective };
+export { BasePortalOutlet, CdkPortal, CdkPortalOutlet, ComponentPortal, DomPortal, DomPortalOutlet, Portal, PortalHostDirective, PortalModule, TemplatePortal, TemplatePortalDirective };
 //# sourceMappingURL=portal.mjs.map

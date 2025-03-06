@@ -11,13 +11,6 @@ import { TemplateRef } from '@angular/core';
 import { ViewContainerRef } from '@angular/core';
 
 /**
- * @deprecated Use `BasePortalOutlet` instead.
- * @breaking-change 9.0.0
- */
-export declare abstract class BasePortalHost extends BasePortalOutlet {
-}
-
-/**
  * Partial implementation of PortalOutlet that handles attaching
  * ComponentPortal and TemplatePortal.
  */
@@ -149,13 +142,6 @@ export declare class DomPortal<T = HTMLElement> extends Portal<T> {
 }
 
 /**
- * @deprecated Use `DomPortalOutlet` instead.
- * @breaking-change 9.0.0
- */
-export declare class DomPortalHost extends DomPortalOutlet {
-}
-
-/**
  * A PortalOutlet for attaching portals to an arbitrary DOM element outside of the Angular
  * application context.
  */
@@ -221,32 +207,12 @@ export declare abstract class Portal<T> {
 }
 
 /**
- * @deprecated Use `PortalOutlet` instead.
- * @breaking-change 9.0.0
- */
-export declare type PortalHost = PortalOutlet;
-
-/**
  * @deprecated Use `CdkPortalOutlet` instead.
  * @breaking-change 9.0.0
  */
 export declare class PortalHostDirective extends CdkPortalOutlet {
     static ɵfac: i0.ɵɵFactoryDeclaration<PortalHostDirective, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<PortalHostDirective, "[cdkPortalHost], [portalHost]", ["cdkPortalHost"], { "portal": { "alias": "cdkPortalHost"; "required": false; }; }, {}, never, never, true, never>;
-}
-
-/**
- * Custom injector to be used when providing custom
- * injection tokens to components inside a portal.
- * @docs-private
- * @deprecated Use `Injector.create` instead.
- * @breaking-change 11.0.0
- */
-export declare class PortalInjector implements Injector {
-    private _parentInjector;
-    private _customTokens;
-    constructor(_parentInjector: Injector, _customTokens: WeakMap<any, any>);
-    get(token: any, notFoundValue?: any): any;
 }
 
 export declare class PortalModule {
