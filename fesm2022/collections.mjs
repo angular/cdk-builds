@@ -246,7 +246,6 @@ class SelectionModel {
      * Selects a value or an array of values.
      * @param values The values to select
      * @return Whether the selection changed as a result of this call
-     * @breaking-change 16.0.0 make return type boolean
      */
     select(...values) {
         this._verifyValueAssignment(values);
@@ -259,7 +258,6 @@ class SelectionModel {
      * Deselects a value or an array of values.
      * @param values The values to deselect
      * @return Whether the selection changed as a result of this call
-     * @breaking-change 16.0.0 make return type boolean
      */
     deselect(...values) {
         this._verifyValueAssignment(values);
@@ -272,7 +270,6 @@ class SelectionModel {
      * Sets the selected values
      * @param values The new selected values
      * @return Whether the selection changed as a result of this call
-     * @breaking-change 16.0.0 make return type boolean
      */
     setSelection(...values) {
         this._verifyValueAssignment(values);
@@ -290,7 +287,6 @@ class SelectionModel {
      * Toggles a value between selected and deselected.
      * @param value The value to toggle
      * @return Whether the selection changed as a result of this call
-     * @breaking-change 16.0.0 make return type boolean
      */
     toggle(value) {
         return this.isSelected(value) ? this.deselect(value) : this.select(value);
@@ -300,7 +296,6 @@ class SelectionModel {
      * @param flushEvent Whether to flush the changes in an event.
      *   If false, the changes to the selection will be flushed along with the next event.
      * @return Whether the selection changed as a result of this call
-     * @breaking-change 16.0.0 make return type boolean
      */
     clear(flushEvent = true) {
         this._unmarkAll();

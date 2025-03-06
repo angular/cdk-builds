@@ -8,7 +8,6 @@ import * as i0 from '@angular/core';
 import { InjectionToken, inject, TemplateRef, Directive, booleanAttribute, Input, ContentChild, ElementRef, NgZone, Injectable, IterableDiffers, ViewContainerRef, Component, ChangeDetectionStrategy, ViewEncapsulation, afterNextRender, EmbeddedViewRef, ChangeDetectorRef, EventEmitter, Injector, HostAttributeToken, Output, ContentChildren, ViewChild, NgModule } from '@angular/core';
 import { Subject, BehaviorSubject, isObservable, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
 
 /**
  * Used to provide a table to some of the sub-components without causing a circular dependency.
@@ -2559,46 +2558,8 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.1", 
         }] });
 
 /**
- * Mixin to provide a directive with a function that checks if the sticky input has been
- * changed since the last time the function was called. Essentially adds a dirty-check to the
- * sticky value.
- * @docs-private
- * @deprecated Implement the `CanStick` interface instead.
- * @breaking-change 19.0.0
- */
-function mixinHasStickyInput(base) {
-    return class extends base {
-        /** Whether sticky positioning should be applied. */
-        get sticky() {
-            return this._sticky;
-        }
-        set sticky(v) {
-            const prevValue = this._sticky;
-            this._sticky = coerceBooleanProperty(v);
-            this._hasStickyChanged = prevValue !== this._sticky;
-        }
-        _sticky = false;
-        /** Whether the sticky input has changed since it was last checked. */
-        _hasStickyChanged = false;
-        /** Whether the sticky value has changed since this was last called. */
-        hasStickyChanged() {
-            const hasStickyChanged = this._hasStickyChanged;
-            this._hasStickyChanged = false;
-            return hasStickyChanged;
-        }
-        /** Resets the dirty check for cases where the sticky state has been used without checking. */
-        resetStickyChanged() {
-            this._hasStickyChanged = false;
-        }
-        constructor(...args) {
-            super(...args);
-        }
-    };
-}
-
-/**
  * Generated bundle index. Do not edit.
  */
 
-export { BaseCdkCell, BaseRowDef, CDK_ROW_TEMPLATE, CDK_TABLE, CDK_TABLE_TEMPLATE, CdkCell, CdkCellDef, CdkCellOutlet, CdkColumnDef, CdkFooterCell, CdkFooterCellDef, CdkFooterRow, CdkFooterRowDef, CdkHeaderCell, CdkHeaderCellDef, CdkHeaderRow, CdkHeaderRowDef, CdkNoDataRow, CdkRecycleRows, CdkRow, CdkRowDef, CdkTable, CdkTableModule, CdkTextColumn, DataRowOutlet, FooterRowOutlet, HeaderRowOutlet, NoDataRowOutlet, STICKY_DIRECTIONS, STICKY_POSITIONING_LISTENER, StickyStyler, TEXT_COLUMN_OPTIONS, _COALESCED_STYLE_SCHEDULER, _CoalescedStyleScheduler, _Schedule, mixinHasStickyInput };
+export { BaseCdkCell, BaseRowDef, CDK_ROW_TEMPLATE, CDK_TABLE, CDK_TABLE_TEMPLATE, CdkCell, CdkCellDef, CdkCellOutlet, CdkColumnDef, CdkFooterCell, CdkFooterCellDef, CdkFooterRow, CdkFooterRowDef, CdkHeaderCell, CdkHeaderCellDef, CdkHeaderRow, CdkHeaderRowDef, CdkNoDataRow, CdkRecycleRows, CdkRow, CdkRowDef, CdkTable, CdkTableModule, CdkTextColumn, DataRowOutlet, FooterRowOutlet, HeaderRowOutlet, NoDataRowOutlet, STICKY_DIRECTIONS, STICKY_POSITIONING_LISTENER, StickyStyler, TEXT_COLUMN_OPTIONS, _COALESCED_STYLE_SCHEDULER, _CoalescedStyleScheduler, _Schedule };
 //# sourceMappingURL=table.mjs.map

@@ -578,12 +578,13 @@ export declare class DragDropModule {
  * instances, and manages global event listeners on the `document`.
  * @docs-private
  */
-export declare class DragDropRegistry<_ = unknown, __ = unknown> implements OnDestroy {
+export declare class DragDropRegistry implements OnDestroy {
     private _ngZone;
     private _document;
     private _styleLoader;
     private _renderer;
     private _cleanupDocumentTouchmove;
+    private _scroll;
     /** Registered drop container instances. */
     private _dropInstances;
     /** Registered drag item instances. */
@@ -613,12 +614,6 @@ export declare class DragDropRegistry<_ = unknown, __ = unknown> implements OnDe
      * while the user is dragging a drag item instance.
      */
     readonly pointerUp: Subject<TouchEvent | MouseEvent>;
-    /**
-     * Emits when the viewport has been scrolled while the user is dragging an item.
-     * @deprecated To be turned into a private member. Use the `scrolled` method instead.
-     * @breaking-change 13.0.0
-     */
-    readonly scroll: Subject<Event>;
     constructor(...args: unknown[]);
     /** Adds a drop container to the registry. */
     registerDropContainer(drop: DropListRef): void;
@@ -672,8 +667,8 @@ export declare class DragDropRegistry<_ = unknown, __ = unknown> implements OnDe
     private _persistentTouchmoveListener;
     /** Clears out the global event listeners from the `document`. */
     private _clearGlobalListeners;
-    static ɵfac: i0.ɵɵFactoryDeclaration<DragDropRegistry<any, any>, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<DragDropRegistry<any, any>>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<DragDropRegistry, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<DragDropRegistry>;
 }
 
 /** Template that can be used to create a drag helper element (e.g. a preview or a placeholder). */

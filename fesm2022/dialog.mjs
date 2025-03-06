@@ -525,24 +525,6 @@ const DIALOG_SCROLL_STRATEGY = new InjectionToken('DialogScrollStrategy', {
 const DIALOG_DATA = new InjectionToken('DialogData');
 /** Injection token that can be used to provide default options for the dialog module. */
 const DEFAULT_DIALOG_CONFIG = new InjectionToken('DefaultDialogConfig');
-/**
- * @docs-private
- * @deprecated No longer used. To be removed.
- * @breaking-change 19.0.0
- */
-function DIALOG_SCROLL_STRATEGY_PROVIDER_FACTORY(overlay) {
-    return () => overlay.scrollStrategies.block();
-}
-/**
- * @docs-private
- * @deprecated No longer used. To be removed.
- * @breaking-change 19.0.0
- */
-const DIALOG_SCROLL_STRATEGY_PROVIDER = {
-    provide: DIALOG_SCROLL_STRATEGY,
-    deps: [Overlay],
-    useFactory: DIALOG_SCROLL_STRATEGY_PROVIDER_FACTORY,
-};
 
 class Dialog {
     _overlay = inject(Overlay);
@@ -843,5 +825,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.1", 
  * Generated bundle index. Do not edit.
  */
 
-export { CdkDialogContainer, DEFAULT_DIALOG_CONFIG, DIALOG_DATA, DIALOG_SCROLL_STRATEGY, DIALOG_SCROLL_STRATEGY_PROVIDER, DIALOG_SCROLL_STRATEGY_PROVIDER_FACTORY, Dialog, DialogConfig, DialogModule, DialogRef, throwDialogContentAlreadyAttachedError };
+export { CdkDialogContainer, DEFAULT_DIALOG_CONFIG, DIALOG_DATA, DIALOG_SCROLL_STRATEGY, Dialog, DialogConfig, DialogModule, DialogRef, throwDialogContentAlreadyAttachedError };
 //# sourceMappingURL=dialog.mjs.map

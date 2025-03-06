@@ -2970,7 +2970,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.1", 
             type: Component,
             args: [{ encapsulation: ViewEncapsulation.None, template: '', changeDetection: ChangeDetectionStrategy.OnPush, host: { 'cdk-drag-resets-container': '' }, styles: ["@layer cdk-resets{.cdk-drag-preview{background:none;border:none;padding:0;color:inherit;inset:auto}}.cdk-drag-placeholder *,.cdk-drag-preview *{pointer-events:none !important}"] }]
         }] });
-// TODO(crisbeto): remove generics when making breaking changes.
 /**
  * Service that keeps track of all the drag item and drop container
  * instances, and manages global event listeners on the `document`.
@@ -2982,6 +2981,7 @@ class DragDropRegistry {
     _styleLoader = inject(_CdkPrivateStyleLoader);
     _renderer = inject(RendererFactory2).createRenderer(null, null);
     _cleanupDocumentTouchmove;
+    _scroll = new Subject();
     /** Registered drop container instances. */
     _dropInstances = new Set();
     /** Registered drag item instances. */
@@ -3011,12 +3011,6 @@ class DragDropRegistry {
      * while the user is dragging a drag item instance.
      */
     pointerUp = new Subject();
-    /**
-     * Emits when the viewport has been scrolled while the user is dragging an item.
-     * @deprecated To be turned into a private member. Use the `scrolled` method instead.
-     * @breaking-change 13.0.0
-     */
-    scroll = new Subject();
     constructor() { }
     /** Adds a drop container to the registry. */
     registerDropContainer(drop) {
@@ -3072,7 +3066,7 @@ class DragDropRegistry {
             const toBind = [
                 // Use capturing so that we pick up scroll changes in any scrollable nodes that aren't
                 // the document. See https://github.com/angular/components/issues/17144.
-                ['scroll', (e) => this.scroll.next(e), capturingEventOptions],
+                ['scroll', (e) => this._scroll.next(e), capturingEventOptions],
                 // Preventing the default action on `mousemove` isn't enough to disable text selection
                 // on Safari so we need to prevent the selection event as well. Alternatively this can
                 // be done by setting `user-select: none` on the `body`, however it has causes a style
@@ -3125,7 +3119,7 @@ class DragDropRegistry {
      *   be used to include an additional top-level listener at the shadow root level.
      */
     scrolled(shadowRoot) {
-        const streams = [this.scroll];
+        const streams = [this._scroll];
         if (shadowRoot && shadowRoot !== this._document) {
             // Note that this is basically the same as `fromEvent` from rxjs, but we do it ourselves,
             // because we want to guarantee that the event is bound outside of the `NgZone`. With

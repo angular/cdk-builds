@@ -352,7 +352,7 @@ declare class ListboxSelectionModel<T> extends SelectionModel<T> {
     multiple: boolean;
     constructor(multiple?: boolean, initiallySelectedValues?: T[], emitChanges?: boolean, compareWith?: (o1: T, o2: T) => boolean);
     isMultipleSelection(): boolean;
-    select(...values: T[]): boolean | void;
+    select(...values: T[]): boolean;
 }
 
 /** Change event that is fired whenever the value of the listbox changes. */

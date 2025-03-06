@@ -161,38 +161,33 @@ export declare class SelectionModel<T> {
      * Selects a value or an array of values.
      * @param values The values to select
      * @return Whether the selection changed as a result of this call
-     * @breaking-change 16.0.0 make return type boolean
      */
-    select(...values: T[]): boolean | void;
+    select(...values: T[]): boolean;
     /**
      * Deselects a value or an array of values.
      * @param values The values to deselect
      * @return Whether the selection changed as a result of this call
-     * @breaking-change 16.0.0 make return type boolean
      */
-    deselect(...values: T[]): boolean | void;
+    deselect(...values: T[]): boolean;
     /**
      * Sets the selected values
      * @param values The new selected values
      * @return Whether the selection changed as a result of this call
-     * @breaking-change 16.0.0 make return type boolean
      */
-    setSelection(...values: T[]): boolean | void;
+    setSelection(...values: T[]): boolean;
     /**
      * Toggles a value between selected and deselected.
      * @param value The value to toggle
      * @return Whether the selection changed as a result of this call
-     * @breaking-change 16.0.0 make return type boolean
      */
-    toggle(value: T): boolean | void;
+    toggle(value: T): boolean;
     /**
      * Clears all of the selected values.
      * @param flushEvent Whether to flush the changes in an event.
      *   If false, the changes to the selection will be flushed along with the next event.
      * @return Whether the selection changed as a result of this call
-     * @breaking-change 16.0.0 make return type boolean
      */
-    clear(flushEvent?: boolean): boolean | void;
+    clear(flushEvent?: boolean): boolean;
     /**
      * Determines whether a value is selected.
      */

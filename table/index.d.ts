@@ -55,6 +55,7 @@ export declare abstract class BaseRowDef implements OnChanges {
     static ɵdir: i0.ɵɵDirectiveDeclaration<BaseRowDef, never, never, {}, {}, never, never, true, never>;
 }
 
+
 /**
  * Interface for a mixin to provide a directive with a function that checks if the sticky input has
  * been changed since the last time the function was called. Essentially adds a dirty-check to the
@@ -69,9 +70,6 @@ export declare interface CanStick {
     /** Resets the dirty check for cases where the sticky state has been used without checking. */
     resetStickyChanged(): void;
 }
-
-/** @docs-private */
-export declare type CanStickCtor = Constructor<CanStick>;
 
 /**
  * The row template that can be used by the mat-table. Should not be used outside of the
@@ -865,10 +863,6 @@ export declare class _CoalescedStyleScheduler {
     static ɵprov: i0.ɵɵInjectableDeclaration<_CoalescedStyleScheduler>;
 }
 
-
-/** @docs-private */
-export declare type Constructor<T> = new (...args: any[]) => T;
-
 /**
  * Provides a handle for the table to grab the view container's ng-container to insert data rows.
  * @docs-private
@@ -959,16 +953,6 @@ declare namespace i5 {
         CdkTextColumn
     }
 }
-
-/**
- * Mixin to provide a directive with a function that checks if the sticky input has been
- * changed since the last time the function was called. Essentially adds a dirty-check to the
- * sticky value.
- * @docs-private
- * @deprecated Implement the `CanStick` interface instead.
- * @breaking-change 19.0.0
- */
-export declare function mixinHasStickyInput<T extends Constructor<{}>>(base: T): CanStickCtor & T;
 
 /**
  * Provides a handle for the table to grab the view
