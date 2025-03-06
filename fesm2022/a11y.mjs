@@ -1,15 +1,15 @@
-import { DOCUMENT } from '@angular/common';
+import { A, Z, ZERO, NINE, hasModifierKey, PAGE_DOWN, PAGE_UP, END, HOME, LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW, TAB, ALT, CONTROL, MAC_META, META, SHIFT } from '@angular/cdk/keycodes';
 import * as i0 from '@angular/core';
 import { inject, APP_ID, Injectable, signal, QueryList, isSignal, effect, InjectionToken, afterNextRender, NgZone, Injector, ElementRef, booleanAttribute, Directive, Input, RendererFactory2, EventEmitter, Output, NgModule } from '@angular/core';
 import { Platform, _getFocusedElementPierceShadowDom, _getEventTarget, _bindEventWithOptions, normalizePassiveListenerOptions, _getShadowRoot } from '@angular/cdk/platform';
-import { _CdkPrivateStyleLoader, _VisuallyHiddenLoader } from '@angular/cdk/private';
-import { A, Z, ZERO, NINE, hasModifierKey, PAGE_DOWN, PAGE_UP, END, HOME, LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW, TAB, ALT, CONTROL, MAC_META, META, SHIFT } from '@angular/cdk/keycodes';
+import { DOCUMENT } from '@angular/common';
 import { Subject, Subscription, isObservable, of, BehaviorSubject } from 'rxjs';
 import { tap, debounceTime, filter, map, take, skip, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { _CdkPrivateStyleLoader, _VisuallyHiddenLoader } from '@angular/cdk/private';
 import { coerceObservable } from '@angular/cdk/coercion/private';
 import { ContentObserver, ObserversModule } from '@angular/cdk/observers';
 import { coerceElement } from '@angular/cdk/coercion';
-import { BreakpointObserver } from '@angular/cdk/layout';
 
 /** IDs are delimited by an empty space, as per the spec. */
 const ID_DELIMITER = ' ';
@@ -2928,10 +2928,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.1", 
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });
-
-/**
- * Generated bundle index. Do not edit.
- */
 
 export { A11yModule, ActiveDescendantKeyManager, AriaDescriber, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, CDK_DESCRIBEDBY_ID_PREFIX, CdkAriaLive, CdkMonitorFocus, CdkTrapFocus, ConfigurableFocusTrap, ConfigurableFocusTrapFactory, EventListenerFocusTrapInertStrategy, FOCUS_MONITOR_DEFAULT_OPTIONS, FOCUS_TRAP_INERT_STRATEGY, FocusKeyManager, FocusMonitor, FocusMonitorDetectionMode, FocusTrap, FocusTrapFactory, HighContrastMode, HighContrastModeDetector, INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS, INPUT_MODALITY_DETECTOR_OPTIONS, InputModalityDetector, InteractivityChecker, IsFocusableConfig, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, ListKeyManager, LiveAnnouncer, MESSAGES_CONTAINER_ID, NOOP_TREE_KEY_MANAGER_FACTORY, NOOP_TREE_KEY_MANAGER_FACTORY_PROVIDER, NoopTreeKeyManager, TREE_KEY_MANAGER, TREE_KEY_MANAGER_FACTORY, TREE_KEY_MANAGER_FACTORY_PROVIDER, TreeKeyManager, _IdGenerator, addAriaReferencedId, getAriaReferenceIds, isFakeMousedownFromScreenReader, isFakeTouchstartFromScreenReader, removeAriaReferencedId };
 //# sourceMappingURL=a11y.mjs.map

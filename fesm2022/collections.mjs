@@ -1,6 +1,6 @@
-import { ConnectableObservable, isObservable, of, Subject } from 'rxjs';
 import * as i0 from '@angular/core';
 import { InjectionToken, Injectable } from '@angular/core';
+import { ConnectableObservable, isObservable, of, Subject } from 'rxjs';
 
 class DataSource {
 }
@@ -463,10 +463,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.1", 
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });
-
-/**
- * Generated bundle index. Do not edit.
- */
 
 export { ArrayDataSource, DataSource, SelectionModel, UniqueSelectionDispatcher, _DisposeViewRepeaterStrategy, _RecycleViewRepeaterStrategy, _VIEW_REPEATER_STRATEGY, _ViewRepeaterOperation, getMultipleValuesInSingleSelectionError, isDataSource };
 //# sourceMappingURL=collections.mjs.map

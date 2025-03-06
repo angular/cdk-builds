@@ -346,9 +346,5 @@ function _bindEventWithOptions(renderer, target, eventName, callback, options) {
     };
 }
 
-/**
- * Generated bundle index. Do not edit.
- */
-
 export { Platform, PlatformModule, RtlScrollAxisType, _bindEventWithOptions, _getEventTarget, _getFocusedElementPierceShadowDom, _getShadowRoot, _isTestEnvironment, _supportsShadowDom, getRtlScrollAxisType, getSupportedInputTypes, normalizePassiveListenerOptions, supportsPassiveEventListeners, supportsScrollBehavior };
 //# sourceMappingURL=platform.mjs.map

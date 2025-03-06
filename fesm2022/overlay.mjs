@@ -1,16 +1,16 @@
-import { ScrollDispatcher, ViewportRuler, ScrollingModule } from '@angular/cdk/scrolling';
-export { CdkScrollable, ScrollDispatcher, ViewportRuler } from '@angular/cdk/scrolling';
+import { Directionality, BidiModule } from '@angular/cdk/bidi';
+import { DomPortalOutlet, TemplatePortal, PortalModule } from '@angular/cdk/portal';
 import { DOCUMENT, Location } from '@angular/common';
 import * as i0 from '@angular/core';
 import { inject, NgZone, Injectable, RendererFactory2, Component, ChangeDetectionStrategy, ViewEncapsulation, untracked, afterRender, afterNextRender, ElementRef, Injector, ANIMATION_MODULE_TYPE, EnvironmentInjector, ApplicationRef, InjectionToken, Directive, EventEmitter, TemplateRef, ViewContainerRef, booleanAttribute, Input, Output, NgModule } from '@angular/core';
-import { coerceCssPixelValue, coerceArray } from '@angular/cdk/coercion';
-import { supportsScrollBehavior, Platform, _bindEventWithOptions, _getEventTarget, _isTestEnvironment } from '@angular/cdk/platform';
-import { filter, takeUntil, takeWhile } from 'rxjs/operators';
-import { Directionality, BidiModule } from '@angular/cdk/bidi';
-import { DomPortalOutlet, TemplatePortal, PortalModule } from '@angular/cdk/portal';
 import { _IdGenerator } from '@angular/cdk/a11y';
 import { _CdkPrivateStyleLoader } from '@angular/cdk/private';
+import { supportsScrollBehavior, Platform, _bindEventWithOptions, _getEventTarget, _isTestEnvironment } from '@angular/cdk/platform';
 import { Subject, Subscription, merge } from 'rxjs';
+import { filter, takeUntil, takeWhile } from 'rxjs/operators';
+import { coerceCssPixelValue, coerceArray } from '@angular/cdk/coercion';
+import { ScrollDispatcher, ViewportRuler, ScrollingModule } from '@angular/cdk/scrolling';
+export { CdkScrollable, ScrollDispatcher, ViewportRuler } from '@angular/cdk/scrolling';
 import { ESCAPE, hasModifierKey } from '@angular/cdk/keycodes';
 
 const scrollBehaviorSupported = supportsScrollBehavior();
@@ -3084,10 +3084,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.1", 
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: () => [] });
-
-/**
- * Generated bundle index. Do not edit.
- */
 
 export { BlockScrollStrategy, CdkConnectedOverlay, CdkOverlayOrigin, CloseScrollStrategy, ConnectedOverlayPositionChange, ConnectionPositionPair, FlexibleConnectedPositionStrategy, FullscreenOverlayContainer, GlobalPositionStrategy, NoopScrollStrategy, Overlay, OverlayConfig, OverlayContainer, OverlayKeyboardDispatcher, OverlayModule, OverlayOutsideClickDispatcher, OverlayPositionBuilder, OverlayRef, RepositionScrollStrategy, STANDARD_DROPDOWN_ADJACENT_POSITIONS, STANDARD_DROPDOWN_BELOW_POSITIONS, ScrollStrategyOptions, ScrollingVisibility, validateHorizontalPosition, validateVerticalPosition };
 //# sourceMappingURL=overlay.mjs.map

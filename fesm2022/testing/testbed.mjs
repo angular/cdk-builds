@@ -1,4 +1,4 @@
-import { getNoKeysSpecifiedError, TestKey, _getTextWithExcludedElements, handleAutoChangeDetectionStatus, stopHandlingAutoChangeDetectionStatus, HarnessEnvironment } from '@angular/cdk/testing';
+import { getNoKeysSpecifiedError, _getTextWithExcludedElements, TestKey, HarnessEnvironment, handleAutoChangeDetectionStatus, stopHandlingAutoChangeDetectionStatus } from '@angular/cdk/testing';
 import { flush } from '@angular/core/testing';
 import { takeWhile } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
@@ -81,7 +81,6 @@ class TaskStateZoneInterceptor {
 }
 
 /** Used to generate unique IDs for events. */
-let uniqueIds = 0;
 /**
  * Creates a browser MouseEvent with the specified options.
  * @docs-private
@@ -147,24 +146,6 @@ function createPointerEvent(type, clientX = 0, clientY = 0, offsetX, offsetY, op
     if (offsetY != null) {
         defineReadonlyEventProperty(event, 'offsetY', offsetY);
     }
-    return event;
-}
-/**
- * Creates a browser TouchEvent with the specified pointer coordinates.
- * @docs-private
- */
-function createTouchEvent(type, pageX = 0, pageY = 0, clientX = 0, clientY = 0) {
-    // We cannot use the `TouchEvent` or `Touch` because Firefox and Safari lack support.
-    // TODO: Switch to the constructor API when it is available for Firefox and Safari.
-    const event = document.createEvent('UIEvent');
-    const touchDetails = { pageX, pageY, clientX, clientY, identifier: uniqueIds++ };
-    // TS3.6 removes the initUIEvent method and suggests porting to "new UIEvent()".
-    event.initUIEvent(type, true, true, window, 0);
-    // Most of the browsers don't have a "initTouchEvent" method that can be used to define
-    // the touch details.
-    defineReadonlyEventProperty(event, 'touches', [touchDetails]);
-    defineReadonlyEventProperty(event, 'targetTouches', [touchDetails]);
-    defineReadonlyEventProperty(event, 'changedTouches', [touchDetails]);
     return event;
 }
 /**
@@ -238,13 +219,6 @@ function dispatchMouseEvent(node, type, clientX = 0, clientY = 0, offsetX, offse
 function dispatchPointerEvent(node, type, clientX = 0, clientY = 0, offsetX, offsetY, options) {
     return dispatchEvent(node, createPointerEvent(type, clientX, clientY, offsetX, offsetY, options));
 }
-/**
- * Shorthand to dispatch a touch event on the specified coordinates.
- * @docs-private
- */
-function dispatchTouchEvent(node, type, pageX = 0, pageY = 0, clientX = 0, clientY = 0) {
-    return dispatchEvent(node, createTouchEvent(type, pageX, pageY, clientX, clientY));
-}
 
 function triggerFocusChange(element, event) {
     let eventFired = false;
@@ -255,18 +229,6 @@ function triggerFocusChange(element, event) {
     if (!eventFired) {
         dispatchFakeEvent(element, event);
     }
-}
-/**
- * Patches an elements focus and blur methods to emit events consistently and predictably.
- * This is necessary, because some browsers can call the focus handlers asynchronously,
- * while others won't fire them at all if the browser window is not focused.
- * @docs-private
- */
-// TODO: Check if this element focus patching is still needed for local testing,
-// where browser is not necessarily focused.
-function patchElementFocus(element) {
-    element.focus = () => dispatchFakeEvent(element, 'focus');
-    element.blur = () => dispatchFakeEvent(element, 'blur');
 }
 /** @docs-private */
 function triggerFocus(element) {
@@ -404,8 +366,6 @@ function clearElement(element) {
     element.value = '';
     dispatchFakeEvent(element, 'input');
 }
-
-// These are private APIs that are used both by the public APIs inside of this package, as well
 
 /** Maps `TestKey` constants to the `keyCode` and `key` values used by native browser events. */
 const keyMap = {
