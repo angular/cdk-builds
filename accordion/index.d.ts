@@ -1,24 +1,18 @@
-import { EventEmitter } from '@angular/core';
 import * as i0 from '@angular/core';
-import { InjectionToken } from '@angular/core';
-import { OnChanges } from '@angular/core';
-import { OnDestroy } from '@angular/core';
-import { OnInit } from '@angular/core';
-import { SimpleChanges } from '@angular/core';
-import { Subject } from 'rxjs';
+import { InjectionToken, OnDestroy, OnChanges, SimpleChanges, OnInit, EventEmitter } from '@angular/core';
 import { UniqueSelectionDispatcher } from '@angular/cdk/collections';
+import { Subject } from 'rxjs';
 
 /**
  * Injection token that can be used to reference instances of `CdkAccordion`. It serves
  * as alternative token to the actual `CdkAccordion` class which could cause unnecessary
  * retention of the class and its directive metadata.
  */
-export declare const CDK_ACCORDION: InjectionToken<CdkAccordion>;
-
+declare const CDK_ACCORDION: InjectionToken<CdkAccordion>;
 /**
  * Directive whose purpose is to manage the expanded state of CdkAccordionItem children.
  */
-export declare class CdkAccordion implements OnDestroy, OnChanges {
+declare class CdkAccordion implements OnDestroy, OnChanges {
     /** Emits when the state of the accordion changes */
     readonly _stateChanges: Subject<SimpleChanges>;
     /** Stream that emits true/false when openAll/closeAll is triggered. */
@@ -42,7 +36,7 @@ export declare class CdkAccordion implements OnDestroy, OnChanges {
  * A basic directive expected to be extended and decorated as a component.  Sets up all
  * events and attributes needed to be managed by a CdkAccordion parent.
  */
-export declare class CdkAccordionItem implements OnInit, OnDestroy {
+declare class CdkAccordionItem implements OnInit, OnDestroy {
     accordion: CdkAccordion;
     private _changeDetectorRef;
     protected _expansionDispatcher: UniqueSelectionDispatcher;
@@ -87,23 +81,10 @@ export declare class CdkAccordionItem implements OnInit, OnDestroy {
     static ngAcceptInputType_disabled: unknown;
 }
 
-export declare class CdkAccordionModule {
+declare class CdkAccordionModule {
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkAccordionModule, never>;
-    static ɵmod: i0.ɵɵNgModuleDeclaration<CdkAccordionModule, never, [typeof i1.CdkAccordion, typeof i2.CdkAccordionItem], [typeof i1.CdkAccordion, typeof i2.CdkAccordionItem]>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<CdkAccordionModule, never, [typeof CdkAccordion, typeof CdkAccordionItem], [typeof CdkAccordion, typeof CdkAccordionItem]>;
     static ɵinj: i0.ɵɵInjectorDeclaration<CdkAccordionModule>;
 }
 
-declare namespace i1 {
-    export {
-        CDK_ACCORDION,
-        CdkAccordion
-    }
-}
-
-declare namespace i2 {
-    export {
-        CdkAccordionItem
-    }
-}
-
-export { }
+export { CDK_ACCORDION, CdkAccordion, CdkAccordionItem, CdkAccordionModule };

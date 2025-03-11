@@ -1,32 +1,17 @@
-import { _CdkPrivateStyleLoader } from '@angular/cdk/private';
-import { CdkScrollable } from '@angular/cdk/scrolling';
-import { ComponentPortal } from '@angular/cdk/portal';
-import { ComponentRef } from '@angular/core';
-import { ComponentType } from '@angular/cdk/portal';
-import { Direction } from '@angular/cdk/bidi';
-import { Directionality } from '@angular/cdk/bidi';
-import { ElementRef } from '@angular/core';
-import { EmbeddedViewRef } from '@angular/core';
-import { EnvironmentInjector } from '@angular/core';
-import { EventEmitter } from '@angular/core';
+import * as i2 from '@angular/cdk/bidi';
+import { Direction, Directionality } from '@angular/cdk/bidi';
+import * as i2$1 from '@angular/cdk/portal';
+import { PortalOutlet, ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
+export { ComponentType } from '@angular/cdk/portal';
 import * as i0 from '@angular/core';
-import * as i1 from '@angular/cdk/bidi';
-import * as i2 from '@angular/cdk/portal';
+import { OnDestroy, NgZone, EnvironmentInjector, Renderer2, ComponentRef, EmbeddedViewRef, ElementRef, OnChanges, EventEmitter, SimpleChanges } from '@angular/core';
+import { Location } from '@angular/common';
+import { Subject, Observable } from 'rxjs';
 import * as i3 from '@angular/cdk/scrolling';
-import { InjectionToken } from '@angular/core';
-import { Location as Location_2 } from '@angular/common';
-import { NgZone } from '@angular/core';
-import { Observable } from 'rxjs';
-import { OnChanges } from '@angular/core';
-import { OnDestroy } from '@angular/core';
+import { ViewportRuler, ScrollDispatcher, CdkScrollable } from '@angular/cdk/scrolling';
+export { CdkScrollable, ScrollDispatcher, ViewportRuler } from '@angular/cdk/scrolling';
 import { Platform } from '@angular/cdk/platform';
-import { PortalOutlet } from '@angular/cdk/portal';
-import { Renderer2 } from '@angular/core';
-import { ScrollDispatcher } from '@angular/cdk/scrolling';
-import { SimpleChanges } from '@angular/core';
-import { Subject } from 'rxjs';
-import { TemplatePortal } from '@angular/cdk/portal';
-import { ViewportRuler } from '@angular/cdk/scrolling';
+import { _CdkPrivateStyleLoader } from '@angular/cdk/private';
 
 /**
  * Service for dispatching events that land on the body to appropriate overlay ref,
@@ -51,9 +36,67 @@ declare abstract class BaseOverlayDispatcher implements OnDestroy {
 }
 
 /**
+ * Service for dispatching keyboard events that land on the body to appropriate overlay ref,
+ * if any. It maintains a list of attached overlays to determine best suited overlay based
+ * on event target and order of overlay opens.
+ */
+declare class OverlayKeyboardDispatcher extends BaseOverlayDispatcher {
+    private _ngZone;
+    private _renderer;
+    private _cleanupKeydown;
+    /** Add a new overlay to the list of attached overlay refs. */
+    add(overlayRef: OverlayRef): void;
+    /** Detaches the global keyboard event listener. */
+    protected detach(): void;
+    /** Keyboard event listener that will be attached to the body. */
+    private _keydownListener;
+    static ɵfac: i0.ɵɵFactoryDeclaration<OverlayKeyboardDispatcher, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<OverlayKeyboardDispatcher>;
+}
+
+/**
+ * Service for dispatching mouse click events that land on the body to appropriate overlay ref,
+ * if any. It maintains a list of attached overlays to determine best suited overlay based
+ * on event target and order of overlay opens.
+ */
+declare class OverlayOutsideClickDispatcher extends BaseOverlayDispatcher {
+    private _platform;
+    private _ngZone;
+    private _renderer;
+    private _cursorOriginalValue;
+    private _cursorStyleIsSet;
+    private _pointerDownEventTarget;
+    private _cleanups;
+    /** Add a new overlay to the list of attached overlay refs. */
+    add(overlayRef: OverlayRef): void;
+    /** Detaches the global keyboard event listener. */
+    protected detach(): void;
+    /** Store pointerdown event target to track origin of click. */
+    private _pointerDownListener;
+    /** Click event listener that will be attached to the body propagate phase. */
+    private _clickListener;
+    static ɵfac: i0.ɵɵFactoryDeclaration<OverlayOutsideClickDispatcher, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<OverlayOutsideClickDispatcher>;
+}
+
+/**
+ * Describes a strategy that will be used by an overlay to handle scroll events while it is open.
+ */
+interface ScrollStrategy {
+    /** Enable this scroll strategy (called when the attached overlay is attached to a portal). */
+    enable: () => void;
+    /** Disable this scroll strategy (called when the attached overlay is detached from a portal). */
+    disable: () => void;
+    /** Attaches this `ScrollStrategy` to an overlay. */
+    attach: (overlayRef: OverlayRef) => void;
+    /** Detaches the scroll strategy from the current overlay. */
+    detach?: () => void;
+}
+
+/**
  * Strategy that will prevent the user from scrolling while the overlay is visible.
  */
-export declare class BlockScrollStrategy implements ScrollStrategy {
+declare class BlockScrollStrategy implements ScrollStrategy {
     private _viewportRuler;
     private _previousHTMLStyles;
     private _previousScrollPosition;
@@ -69,148 +112,17 @@ export declare class BlockScrollStrategy implements ScrollStrategy {
     private _canBeEnabled;
 }
 
-/** Injection token that determines the scroll handling while the connected overlay is open. */
-declare const CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY: InjectionToken<() => ScrollStrategy>;
-
-/** @docs-private */
-declare const CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER: {
-    provide: InjectionToken<() => ScrollStrategy>;
-    deps: (typeof Overlay)[];
-    useFactory: typeof CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY;
-};
-
-/** @docs-private */
-declare function CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY(overlay: Overlay): () => RepositionScrollStrategy;
-
 /**
- * Directive to facilitate declarative creation of an
- * Overlay using a FlexibleConnectedPositionStrategy.
+ * Config options for the CloseScrollStrategy.
  */
-export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
-    private _overlay;
-    private _dir;
-    private _overlayRef;
-    private _templatePortal;
-    private _backdropSubscription;
-    private _attachSubscription;
-    private _detachSubscription;
-    private _positionSubscription;
-    private _offsetX;
-    private _offsetY;
-    private _position;
-    private _scrollStrategyFactory;
-    private _disposeOnNavigation;
-    private _ngZone;
-    /** Origin for the connected overlay. */
-    origin: CdkOverlayOrigin | FlexibleConnectedPositionStrategyOrigin;
-    /** Registered connected position pairs. */
-    positions: ConnectedPosition[];
-    /**
-     * This input overrides the positions input if specified. It lets users pass
-     * in arbitrary positioning strategies.
-     */
-    positionStrategy: FlexibleConnectedPositionStrategy;
-    /** The offset in pixels for the overlay connection point on the x-axis */
-    get offsetX(): number;
-    set offsetX(offsetX: number);
-    /** The offset in pixels for the overlay connection point on the y-axis */
-    get offsetY(): number;
-    set offsetY(offsetY: number);
-    /** The width of the overlay panel. */
-    width: number | string;
-    /** The height of the overlay panel. */
-    height: number | string;
-    /** The min width of the overlay panel. */
-    minWidth: number | string;
-    /** The min height of the overlay panel. */
-    minHeight: number | string;
-    /** The custom class to be set on the backdrop element. */
-    backdropClass: string | string[];
-    /** The custom class to add to the overlay pane element. */
-    panelClass: string | string[];
-    /** Margin between the overlay and the viewport edges. */
-    viewportMargin: number;
-    /** Strategy to be used when handling scroll events while the overlay is open. */
-    scrollStrategy: ScrollStrategy;
-    /** Whether the overlay is open. */
-    open: boolean;
-    /** Whether the overlay can be closed by user interaction. */
-    disableClose: boolean;
-    /** CSS selector which to set the transform origin. */
-    transformOriginSelector: string;
-    /** Whether or not the overlay should attach a backdrop. */
-    hasBackdrop: boolean;
-    /** Whether or not the overlay should be locked when scrolling. */
-    lockPosition: boolean;
-    /** Whether the overlay's width and height can be constrained to fit within the viewport. */
-    flexibleDimensions: boolean;
-    /** Whether the overlay can grow after the initial open when flexible positioning is turned on. */
-    growAfterOpen: boolean;
-    /** Whether the overlay can be pushed on-screen if none of the provided positions fit. */
-    push: boolean;
-    /** Whether the overlay should be disposed of when the user goes backwards/forwards in history. */
-    get disposeOnNavigation(): boolean;
-    set disposeOnNavigation(value: boolean);
-    /** Event emitted when the backdrop is clicked. */
-    readonly backdropClick: EventEmitter<MouseEvent>;
-    /** Event emitted when the position has changed. */
-    readonly positionChange: EventEmitter<ConnectedOverlayPositionChange>;
-    /** Event emitted when the overlay has been attached. */
-    readonly attach: EventEmitter<void>;
-    /** Event emitted when the overlay has been detached. */
-    readonly detach: EventEmitter<void>;
-    /** Emits when there are keyboard events that are targeted at the overlay. */
-    readonly overlayKeydown: EventEmitter<KeyboardEvent>;
-    /** Emits when there are mouse outside click events that are targeted at the overlay. */
-    readonly overlayOutsideClick: EventEmitter<MouseEvent>;
-    constructor(...args: unknown[]);
-    /** The associated overlay reference. */
-    get overlayRef(): OverlayRef;
-    /** The element's layout direction. */
-    get dir(): Direction;
-    ngOnDestroy(): void;
-    ngOnChanges(changes: SimpleChanges): void;
-    /** Creates an overlay */
-    private _createOverlay;
-    /** Builds the overlay config based on the directive's inputs */
-    private _buildConfig;
-    /** Updates the state of a position strategy, based on the values of the directive inputs. */
-    private _updatePositionStrategy;
-    /** Returns the position strategy of the overlay to be set on the overlay config */
-    private _createPositionStrategy;
-    private _getOrigin;
-    private _getOriginElement;
-    /** Attaches the overlay. */
-    attachOverlay(): void;
-    /** Detaches the overlay. */
-    detachOverlay(): void;
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkConnectedOverlay, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkConnectedOverlay, "[cdk-connected-overlay], [connected-overlay], [cdkConnectedOverlay]", ["cdkConnectedOverlay"], { "origin": { "alias": "cdkConnectedOverlayOrigin"; "required": false; }; "positions": { "alias": "cdkConnectedOverlayPositions"; "required": false; }; "positionStrategy": { "alias": "cdkConnectedOverlayPositionStrategy"; "required": false; }; "offsetX": { "alias": "cdkConnectedOverlayOffsetX"; "required": false; }; "offsetY": { "alias": "cdkConnectedOverlayOffsetY"; "required": false; }; "width": { "alias": "cdkConnectedOverlayWidth"; "required": false; }; "height": { "alias": "cdkConnectedOverlayHeight"; "required": false; }; "minWidth": { "alias": "cdkConnectedOverlayMinWidth"; "required": false; }; "minHeight": { "alias": "cdkConnectedOverlayMinHeight"; "required": false; }; "backdropClass": { "alias": "cdkConnectedOverlayBackdropClass"; "required": false; }; "panelClass": { "alias": "cdkConnectedOverlayPanelClass"; "required": false; }; "viewportMargin": { "alias": "cdkConnectedOverlayViewportMargin"; "required": false; }; "scrollStrategy": { "alias": "cdkConnectedOverlayScrollStrategy"; "required": false; }; "open": { "alias": "cdkConnectedOverlayOpen"; "required": false; }; "disableClose": { "alias": "cdkConnectedOverlayDisableClose"; "required": false; }; "transformOriginSelector": { "alias": "cdkConnectedOverlayTransformOriginOn"; "required": false; }; "hasBackdrop": { "alias": "cdkConnectedOverlayHasBackdrop"; "required": false; }; "lockPosition": { "alias": "cdkConnectedOverlayLockPosition"; "required": false; }; "flexibleDimensions": { "alias": "cdkConnectedOverlayFlexibleDimensions"; "required": false; }; "growAfterOpen": { "alias": "cdkConnectedOverlayGrowAfterOpen"; "required": false; }; "push": { "alias": "cdkConnectedOverlayPush"; "required": false; }; "disposeOnNavigation": { "alias": "cdkConnectedOverlayDisposeOnNavigation"; "required": false; }; }, { "backdropClick": "backdropClick"; "positionChange": "positionChange"; "attach": "attach"; "detach": "detach"; "overlayKeydown": "overlayKeydown"; "overlayOutsideClick": "overlayOutsideClick"; }, never, never, true, never>;
-    static ngAcceptInputType_hasBackdrop: unknown;
-    static ngAcceptInputType_lockPosition: unknown;
-    static ngAcceptInputType_flexibleDimensions: unknown;
-    static ngAcceptInputType_growAfterOpen: unknown;
-    static ngAcceptInputType_push: unknown;
-    static ngAcceptInputType_disposeOnNavigation: unknown;
+interface CloseScrollStrategyConfig {
+    /** Amount of pixels the user has to scroll before the overlay is closed. */
+    threshold?: number;
 }
-
-/**
- * Directive applied to an element to make it usable as an origin for an Overlay using a
- * ConnectedPositionStrategy.
- */
-export declare class CdkOverlayOrigin {
-    elementRef: ElementRef<any>;
-    constructor(...args: unknown[]);
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkOverlayOrigin, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkOverlayOrigin, "[cdk-overlay-origin], [overlay-origin], [cdkOverlayOrigin]", ["cdkOverlayOrigin"], {}, {}, never, never, true, never>;
-}
-
-export { CdkScrollable }
-
 /**
  * Strategy that will close the overlay as soon as the user starts scrolling.
  */
-export declare class CloseScrollStrategy implements ScrollStrategy {
+declare class CloseScrollStrategy implements ScrollStrategy {
     private _scrollDispatcher;
     private _ngZone;
     private _viewportRuler;
@@ -230,43 +142,271 @@ export declare class CloseScrollStrategy implements ScrollStrategy {
     private _detach;
 }
 
+/** Scroll strategy that doesn't do anything. */
+declare class NoopScrollStrategy implements ScrollStrategy {
+    /** Does nothing, as this scroll strategy is a no-op. */
+    enable(): void;
+    /** Does nothing, as this scroll strategy is a no-op. */
+    disable(): void;
+    /** Does nothing, as this scroll strategy is a no-op. */
+    attach(): void;
+}
+
 /**
- * Config options for the CloseScrollStrategy.
+ * Config options for the RepositionScrollStrategy.
  */
-declare interface CloseScrollStrategyConfig {
-    /** Amount of pixels the user has to scroll before the overlay is closed. */
-    threshold?: number;
+interface RepositionScrollStrategyConfig {
+    /** Time in milliseconds to throttle the scroll events. */
+    scrollThrottle?: number;
+    /** Whether to close the overlay once the user has scrolled away completely. */
+    autoClose?: boolean;
+}
+/**
+ * Strategy that will update the element position as the user is scrolling.
+ */
+declare class RepositionScrollStrategy implements ScrollStrategy {
+    private _scrollDispatcher;
+    private _viewportRuler;
+    private _ngZone;
+    private _config?;
+    private _scrollSubscription;
+    private _overlayRef;
+    constructor(_scrollDispatcher: ScrollDispatcher, _viewportRuler: ViewportRuler, _ngZone: NgZone, _config?: RepositionScrollStrategyConfig | undefined);
+    /** Attaches this scroll strategy to an overlay. */
+    attach(overlayRef: OverlayRef): void;
+    /** Enables repositioning of the attached overlay on scroll. */
+    enable(): void;
+    /** Disables repositioning of the attached overlay on scroll. */
+    disable(): void;
+    detach(): void;
 }
 
-export { ComponentType }
-
-/** The change event emitted by the strategy when a fallback position is used. */
-export declare class ConnectedOverlayPositionChange {
-    /** The position used as a result of this change. */
-    connectionPair: ConnectionPositionPair;
-    /** @docs-private */
-    scrollableViewProperties: ScrollingVisibility;
-    constructor(
-    /** The position used as a result of this change. */
-    connectionPair: ConnectionPositionPair, 
-    /** @docs-private */
-    scrollableViewProperties: ScrollingVisibility);
+/**
+ * Options for how an overlay will handle scrolling.
+ *
+ * Users can provide a custom value for `ScrollStrategyOptions` to replace the default
+ * behaviors. This class primarily acts as a factory for ScrollStrategy instances.
+ */
+declare class ScrollStrategyOptions {
+    private _scrollDispatcher;
+    private _viewportRuler;
+    private _ngZone;
+    private _document;
+    constructor(...args: unknown[]);
+    /** Do nothing on scroll. */
+    noop: () => NoopScrollStrategy;
+    /**
+     * Close the overlay as soon as the user scrolls.
+     * @param config Configuration to be used inside the scroll strategy.
+     */
+    close: (config?: CloseScrollStrategyConfig) => CloseScrollStrategy;
+    /** Block scrolling. */
+    block: () => BlockScrollStrategy;
+    /**
+     * Update the overlay's position on scroll.
+     * @param config Configuration to be used inside the scroll strategy.
+     * Allows debouncing the reposition calls.
+     */
+    reposition: (config?: RepositionScrollStrategyConfig) => RepositionScrollStrategy;
+    static ɵfac: i0.ɵɵFactoryDeclaration<ScrollStrategyOptions, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<ScrollStrategyOptions>;
 }
 
-/** A connected position as specified by the user. */
-export declare interface ConnectedPosition {
-    originX: 'start' | 'center' | 'end';
-    originY: 'top' | 'center' | 'bottom';
-    overlayX: 'start' | 'center' | 'end';
-    overlayY: 'top' | 'center' | 'bottom';
-    weight?: number;
-    offsetX?: number;
-    offsetY?: number;
+/** An object where all of its properties cannot be written. */
+type ImmutableObject<T> = {
+    readonly [P in keyof T]: T[P];
+};
+/**
+ * Reference to an overlay that has been created with the Overlay service.
+ * Used to manipulate or dispose of said overlay.
+ */
+declare class OverlayRef implements PortalOutlet {
+    private _portalOutlet;
+    private _host;
+    private _pane;
+    private _config;
+    private _ngZone;
+    private _keyboardDispatcher;
+    private _document;
+    private _location;
+    private _outsideClickDispatcher;
+    private _animationsDisabled;
+    private _injector;
+    private _renderer;
+    private readonly _backdropClick;
+    private readonly _attachments;
+    private readonly _detachments;
+    private _positionStrategy;
+    private _scrollStrategy;
+    private _locationChanges;
+    private _backdropRef;
+    /**
+     * Reference to the parent of the `_host` at the time it was detached. Used to restore
+     * the `_host` to its original position in the DOM when it gets re-attached.
+     */
+    private _previousHostParent;
+    /** Stream of keydown events dispatched to this overlay. */
+    readonly _keydownEvents: Subject<KeyboardEvent>;
+    /** Stream of mouse outside events dispatched to this overlay. */
+    readonly _outsidePointerEvents: Subject<MouseEvent>;
+    private _renders;
+    private _afterRenderRef;
+    /** Reference to the currently-running `afterNextRender` call. */
+    private _afterNextRenderRef;
+    constructor(_portalOutlet: PortalOutlet, _host: HTMLElement, _pane: HTMLElement, _config: ImmutableObject<OverlayConfig>, _ngZone: NgZone, _keyboardDispatcher: OverlayKeyboardDispatcher, _document: Document, _location: Location, _outsideClickDispatcher: OverlayOutsideClickDispatcher, _animationsDisabled: boolean | undefined, _injector: EnvironmentInjector, _renderer: Renderer2);
+    /** The overlay's HTML element */
+    get overlayElement(): HTMLElement;
+    /** The overlay's backdrop HTML element. */
+    get backdropElement(): HTMLElement | null;
+    /**
+     * Wrapper around the panel element. Can be used for advanced
+     * positioning where a wrapper with specific styling is
+     * required around the overlay pane.
+     */
+    get hostElement(): HTMLElement;
+    attach<T>(portal: ComponentPortal<T>): ComponentRef<T>;
+    attach<T>(portal: TemplatePortal<T>): EmbeddedViewRef<T>;
+    attach(portal: any): any;
+    /**
+     * Detaches an overlay from a portal.
+     * @returns The portal detachment result.
+     */
+    detach(): any;
+    /** Cleans up the overlay from the DOM. */
+    dispose(): void;
+    /** Whether the overlay has attached content. */
+    hasAttached(): boolean;
+    /** Gets an observable that emits when the backdrop has been clicked. */
+    backdropClick(): Observable<MouseEvent>;
+    /** Gets an observable that emits when the overlay has been attached. */
+    attachments(): Observable<void>;
+    /** Gets an observable that emits when the overlay has been detached. */
+    detachments(): Observable<void>;
+    /** Gets an observable of keydown events targeted to this overlay. */
+    keydownEvents(): Observable<KeyboardEvent>;
+    /** Gets an observable of pointer events targeted outside this overlay. */
+    outsidePointerEvents(): Observable<MouseEvent>;
+    /** Gets the current overlay configuration, which is immutable. */
+    getConfig(): OverlayConfig;
+    /** Updates the position of the overlay based on the position strategy. */
+    updatePosition(): void;
+    /** Switches to a new position strategy and updates the overlay position. */
+    updatePositionStrategy(strategy: PositionStrategy): void;
+    /** Update the size properties of the overlay. */
+    updateSize(sizeConfig: OverlaySizeConfig): void;
+    /** Sets the LTR/RTL direction for the overlay. */
+    setDirection(dir: Direction | Directionality): void;
+    /** Add a CSS class or an array of classes to the overlay pane. */
+    addPanelClass(classes: string | string[]): void;
+    /** Remove a CSS class or an array of classes from the overlay pane. */
+    removePanelClass(classes: string | string[]): void;
+    /**
+     * Returns the layout direction of the overlay panel.
+     */
+    getDirection(): Direction;
+    /** Switches to a new scroll strategy. */
+    updateScrollStrategy(strategy: ScrollStrategy): void;
+    /** Updates the text direction of the overlay panel. */
+    private _updateElementDirection;
+    /** Updates the size of the overlay element based on the overlay config. */
+    private _updateElementSize;
+    /** Toggles the pointer events for the overlay pane element. */
+    private _togglePointerEvents;
+    /** Attaches a backdrop for this overlay. */
+    private _attachBackdrop;
+    /**
+     * Updates the stacking order of the element, moving it to the top if necessary.
+     * This is required in cases where one overlay was detached, while another one,
+     * that should be behind it, was destroyed. The next time both of them are opened,
+     * the stacking will be wrong, because the detached element's pane will still be
+     * in its original DOM position.
+     */
+    private _updateStackingOrder;
+    /** Detaches the backdrop (if any) associated with the overlay. */
+    detachBackdrop(): void;
+    /** Toggles a single CSS class or an array of classes on an element. */
+    private _toggleClasses;
+    /** Detaches the overlay content next time the zone stabilizes. */
+    private _detachContentWhenEmpty;
+    /** Disposes of a scroll strategy. */
+    private _disposeScrollStrategy;
+}
+/** Size properties for an overlay. */
+interface OverlaySizeConfig {
+    width?: number | string;
+    height?: number | string;
+    minWidth?: number | string;
+    minHeight?: number | string;
+    maxWidth?: number | string;
+    maxHeight?: number | string;
+}
+
+/** Strategy for setting the position on an overlay. */
+interface PositionStrategy {
+    /** Attaches this position strategy to an overlay. */
+    attach(overlayRef: OverlayRef): void;
+    /** Updates the position of the overlay element. */
+    apply(): void;
+    /** Called when the overlay is detached. */
+    detach?(): void;
+    /** Cleans up any DOM modifications made by the position strategy, if necessary. */
+    dispose(): void;
+}
+
+/** Initial configuration used when creating an overlay. */
+declare class OverlayConfig {
+    /** Strategy with which to position the overlay. */
+    positionStrategy?: PositionStrategy;
+    /** Strategy to be used when handling scroll events while the overlay is open. */
+    scrollStrategy?: ScrollStrategy;
+    /** Custom class to add to the overlay pane. */
     panelClass?: string | string[];
+    /** Whether the overlay has a backdrop. */
+    hasBackdrop?: boolean;
+    /** Custom class to add to the backdrop */
+    backdropClass?: string | string[];
+    /** The width of the overlay panel. If a number is provided, pixel units are assumed. */
+    width?: number | string;
+    /** The height of the overlay panel. If a number is provided, pixel units are assumed. */
+    height?: number | string;
+    /** The min-width of the overlay panel. If a number is provided, pixel units are assumed. */
+    minWidth?: number | string;
+    /** The min-height of the overlay panel. If a number is provided, pixel units are assumed. */
+    minHeight?: number | string;
+    /** The max-width of the overlay panel. If a number is provided, pixel units are assumed. */
+    maxWidth?: number | string;
+    /** The max-height of the overlay panel. If a number is provided, pixel units are assumed. */
+    maxHeight?: number | string;
+    /**
+     * Direction of the text in the overlay panel. If a `Directionality` instance
+     * is passed in, the overlay will handle changes to its value automatically.
+     */
+    direction?: Direction | Directionality;
+    /**
+     * Whether the overlay should be disposed of when the user goes backwards/forwards in history.
+     * Note that this usually doesn't include clicking on links (unless the user is using
+     * the `HashLocationStrategy`).
+     */
+    disposeOnNavigation?: boolean;
+    constructor(config?: OverlayConfig);
 }
 
+/** Horizontal dimension of a connection point on the perimeter of the origin or overlay element. */
+type HorizontalConnectionPos = 'start' | 'center' | 'end';
+/** Vertical dimension of a connection point on the perimeter of the origin or overlay element. */
+type VerticalConnectionPos = 'top' | 'center' | 'bottom';
+/** A connection point on the origin element. */
+interface OriginConnectionPosition {
+    originX: HorizontalConnectionPos;
+    originY: VerticalConnectionPos;
+}
+/** A connection point on the overlay element. */
+interface OverlayConnectionPosition {
+    overlayX: HorizontalConnectionPos;
+    overlayY: VerticalConnectionPos;
+}
 /** The points of the origin element and the overlay element to connect. */
-export declare class ConnectionPositionPair {
+declare class ConnectionPositionPair {
     /** Offset along the X axis. */
     offsetX?: number | undefined;
     /** Offset along the Y axis. */
@@ -289,7 +429,95 @@ export declare class ConnectionPositionPair {
     /** Class(es) to be applied to the panel while this position is active. */
     panelClass?: string | string[] | undefined);
 }
+/**
+ * Set of properties regarding the position of the origin and overlay relative to the viewport
+ * with respect to the containing Scrollable elements.
+ *
+ * The overlay and origin are clipped if any part of their bounding client rectangle exceeds the
+ * bounds of any one of the strategy's Scrollable's bounding client rectangle.
+ *
+ * The overlay and origin are outside view if there is no overlap between their bounding client
+ * rectangle and any one of the strategy's Scrollable's bounding client rectangle.
+ *
+ *       -----------                    -----------
+ *       | outside |                    | clipped |
+ *       |  view   |              --------------------------
+ *       |         |              |     |         |        |
+ *       ----------               |     -----------        |
+ *  --------------------------    |                        |
+ *  |                        |    |      Scrollable        |
+ *  |                        |    |                        |
+ *  |                        |     --------------------------
+ *  |      Scrollable        |
+ *  |                        |
+ *  --------------------------
+ *
+ *  @docs-private
+ */
+declare class ScrollingVisibility {
+    isOriginClipped: boolean;
+    isOriginOutsideView: boolean;
+    isOverlayClipped: boolean;
+    isOverlayOutsideView: boolean;
+}
+/** The change event emitted by the strategy when a fallback position is used. */
+declare class ConnectedOverlayPositionChange {
+    /** The position used as a result of this change. */
+    connectionPair: ConnectionPositionPair;
+    /** @docs-private */
+    scrollableViewProperties: ScrollingVisibility;
+    constructor(
+    /** The position used as a result of this change. */
+    connectionPair: ConnectionPositionPair, 
+    /** @docs-private */
+    scrollableViewProperties: ScrollingVisibility);
+}
+/**
+ * Validates whether a vertical position property matches the expected values.
+ * @param property Name of the property being validated.
+ * @param value Value of the property being validated.
+ * @docs-private
+ */
+declare function validateVerticalPosition(property: string, value: VerticalConnectionPos): void;
+/**
+ * Validates whether a horizontal position property matches the expected values.
+ * @param property Name of the property being validated.
+ * @param value Value of the property being validated.
+ * @docs-private
+ */
+declare function validateHorizontalPosition(property: string, value: HorizontalConnectionPos): void;
 
+/** Container inside which all overlays will render. */
+declare class OverlayContainer implements OnDestroy {
+    protected _platform: Platform;
+    protected _containerElement: HTMLElement;
+    protected _document: Document;
+    protected _styleLoader: _CdkPrivateStyleLoader;
+    constructor(...args: unknown[]);
+    ngOnDestroy(): void;
+    /**
+     * This method returns the overlay container element. It will lazily
+     * create the element the first time it is called to facilitate using
+     * the container in non-browser environments.
+     * @returns the container element
+     */
+    getContainerElement(): HTMLElement;
+    /**
+     * Create the overlay container element, which is simply a div
+     * with the 'cdk-overlay-container' class on the document body.
+     */
+    protected _createContainer(): void;
+    /** Loads the structural styles necessary for the overlay to work. */
+    protected _loadStyles(): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<OverlayContainer, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<OverlayContainer>;
+}
+
+/** Possible values that can be set as the origin of a FlexibleConnectedPositionStrategy. */
+type FlexibleConnectedPositionStrategyOrigin = ElementRef | Element | (Point & {
+    width?: number;
+    height?: number;
+});
 /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
  * implicit position relative some origin element. The relative position is defined in terms of
@@ -297,7 +525,7 @@ export declare class ConnectionPositionPair {
  * a basic dropdown is connecting the bottom-left corner of the origin to the top-left corner
  * of the overlay.
  */
-export declare class FlexibleConnectedPositionStrategy implements PositionStrategy {
+declare class FlexibleConnectedPositionStrategy implements PositionStrategy {
     private _viewportRuler;
     private _document;
     private _platform;
@@ -535,37 +763,24 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
     /** Returns the DOMRect of the current origin. */
     private _getOriginRect;
 }
-
-/** Possible values that can be set as the origin of a FlexibleConnectedPositionStrategy. */
-export declare type FlexibleConnectedPositionStrategyOrigin = ElementRef | Element | (Point & {
-    width?: number;
-    height?: number;
-});
-
-/**
- * Alternative to OverlayContainer that supports correct displaying of overlay elements in
- * Fullscreen mode
- * https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen
- *
- * Should be provided in the root component.
- */
-export declare class FullscreenOverlayContainer extends OverlayContainer implements OnDestroy {
-    private _renderer;
-    private _fullScreenEventName;
-    private _cleanupFullScreenListener;
-    constructor(...args: unknown[]);
-    ngOnDestroy(): void;
-    protected _createContainer(): void;
-    private _adjustParentForFullscreenChange;
-    private _getEventName;
-    /**
-     * When the page is put into fullscreen mode, a specific element is specified.
-     * Only that element and its children are visible when in fullscreen mode.
-     */
-    getFullscreenElement(): Element;
-    static ɵfac: i0.ɵɵFactoryDeclaration<FullscreenOverlayContainer, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<FullscreenOverlayContainer>;
+/** A simple (x, y) coordinate. */
+interface Point {
+    x: number;
+    y: number;
 }
+/** A connected position as specified by the user. */
+interface ConnectedPosition {
+    originX: 'start' | 'center' | 'end';
+    originY: 'top' | 'center' | 'bottom';
+    overlayX: 'start' | 'center' | 'end';
+    overlayY: 'top' | 'center' | 'bottom';
+    weight?: number;
+    offsetX?: number;
+    offsetY?: number;
+    panelClass?: string | string[];
+}
+declare const STANDARD_DROPDOWN_BELOW_POSITIONS: ConnectedPosition[];
+declare const STANDARD_DROPDOWN_ADJACENT_POSITIONS: ConnectedPosition[];
 
 /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
@@ -573,7 +788,7 @@ export declare class FullscreenOverlayContainer extends OverlayContainer impleme
  * transforms, in order to avoid issues with subpixel rendering which can cause the
  * element to become blurry.
  */
-export declare class GlobalPositionStrategy implements PositionStrategy {
+declare class GlobalPositionStrategy implements PositionStrategy {
     /** The overlay to which this strategy is attached. */
     private _overlayRef;
     private _cssPosition;
@@ -658,39 +873,24 @@ export declare class GlobalPositionStrategy implements PositionStrategy {
     dispose(): void;
 }
 
-
-/** Horizontal dimension of a connection point on the perimeter of the origin or overlay element. */
-export declare type HorizontalConnectionPos = 'start' | 'center' | 'end';
-
-declare namespace i4 {
-    export {
-        CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY,
-        CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY,
-        CdkOverlayOrigin,
-        CdkConnectedOverlay,
-        CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER
-    }
-}
-
-/** An object where all of its properties cannot be written. */
-declare type ImmutableObject<T> = {
-    readonly [P in keyof T]: T[P];
-};
-
-/** Scroll strategy that doesn't do anything. */
-export declare class NoopScrollStrategy implements ScrollStrategy {
-    /** Does nothing, as this scroll strategy is a no-op. */
-    enable(): void;
-    /** Does nothing, as this scroll strategy is a no-op. */
-    disable(): void;
-    /** Does nothing, as this scroll strategy is a no-op. */
-    attach(): void;
-}
-
-/** A connection point on the origin element. */
-export declare interface OriginConnectionPosition {
-    originX: HorizontalConnectionPos;
-    originY: VerticalConnectionPos;
+/** Builder for overlay position strategy. */
+declare class OverlayPositionBuilder {
+    private _viewportRuler;
+    private _document;
+    private _platform;
+    private _overlayContainer;
+    constructor(...args: unknown[]);
+    /**
+     * Creates a global position strategy.
+     */
+    global(): GlobalPositionStrategy;
+    /**
+     * Creates a flexible position strategy.
+     * @param origin Origin relative to which to position the overlay.
+     */
+    flexibleConnectedTo(origin: FlexibleConnectedPositionStrategyOrigin): FlexibleConnectedPositionStrategy;
+    static ɵfac: i0.ɵɵFactoryDeclaration<OverlayPositionBuilder, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<OverlayPositionBuilder>;
 }
 
 /**
@@ -701,7 +901,7 @@ export declare interface OriginConnectionPosition {
  *
  * An overlay *is* a PortalOutlet, so any kind of Portal can be loaded into one.
  */
-export declare class Overlay {
+declare class Overlay {
     scrollStrategies: ScrollStrategyOptions;
     private _overlayContainer;
     private _positionBuilder;
@@ -751,422 +951,157 @@ export declare class Overlay {
     static ɵprov: i0.ɵɵInjectableDeclaration<Overlay>;
 }
 
-/** Initial configuration used when creating an overlay. */
-export declare class OverlayConfig {
-    /** Strategy with which to position the overlay. */
-    positionStrategy?: PositionStrategy;
-    /** Strategy to be used when handling scroll events while the overlay is open. */
-    scrollStrategy?: ScrollStrategy;
-    /** Custom class to add to the overlay pane. */
-    panelClass?: string | string[];
-    /** Whether the overlay has a backdrop. */
-    hasBackdrop?: boolean;
-    /** Custom class to add to the backdrop */
-    backdropClass?: string | string[];
-    /** The width of the overlay panel. If a number is provided, pixel units are assumed. */
-    width?: number | string;
-    /** The height of the overlay panel. If a number is provided, pixel units are assumed. */
-    height?: number | string;
-    /** The min-width of the overlay panel. If a number is provided, pixel units are assumed. */
-    minWidth?: number | string;
-    /** The min-height of the overlay panel. If a number is provided, pixel units are assumed. */
-    minHeight?: number | string;
-    /** The max-width of the overlay panel. If a number is provided, pixel units are assumed. */
-    maxWidth?: number | string;
-    /** The max-height of the overlay panel. If a number is provided, pixel units are assumed. */
-    maxHeight?: number | string;
-    /**
-     * Direction of the text in the overlay panel. If a `Directionality` instance
-     * is passed in, the overlay will handle changes to its value automatically.
-     */
-    direction?: Direction | Directionality;
-    /**
-     * Whether the overlay should be disposed of when the user goes backwards/forwards in history.
-     * Note that this usually doesn't include clicking on links (unless the user is using
-     * the `HashLocationStrategy`).
-     */
-    disposeOnNavigation?: boolean;
-    constructor(config?: OverlayConfig);
-}
-
-/** A connection point on the overlay element. */
-export declare interface OverlayConnectionPosition {
-    overlayX: HorizontalConnectionPos;
-    overlayY: VerticalConnectionPos;
-}
-
-/** Container inside which all overlays will render. */
-export declare class OverlayContainer implements OnDestroy {
-    protected _platform: Platform;
-    protected _containerElement: HTMLElement;
-    protected _document: Document;
-    protected _styleLoader: _CdkPrivateStyleLoader;
-    constructor(...args: unknown[]);
-    ngOnDestroy(): void;
-    /**
-     * This method returns the overlay container element. It will lazily
-     * create the element the first time it is called to facilitate using
-     * the container in non-browser environments.
-     * @returns the container element
-     */
-    getContainerElement(): HTMLElement;
-    /**
-     * Create the overlay container element, which is simply a div
-     * with the 'cdk-overlay-container' class on the document body.
-     */
-    protected _createContainer(): void;
-    /** Loads the structural styles necessary for the overlay to work. */
-    protected _loadStyles(): void;
-    static ɵfac: i0.ɵɵFactoryDeclaration<OverlayContainer, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<OverlayContainer>;
-}
-
 /**
- * Service for dispatching keyboard events that land on the body to appropriate overlay ref,
- * if any. It maintains a list of attached overlays to determine best suited overlay based
- * on event target and order of overlay opens.
+ * Directive applied to an element to make it usable as an origin for an Overlay using a
+ * ConnectedPositionStrategy.
  */
-export declare class OverlayKeyboardDispatcher extends BaseOverlayDispatcher {
+declare class CdkOverlayOrigin {
+    elementRef: ElementRef<any>;
+    constructor(...args: unknown[]);
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkOverlayOrigin, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkOverlayOrigin, "[cdk-overlay-origin], [overlay-origin], [cdkOverlayOrigin]", ["cdkOverlayOrigin"], {}, {}, never, never, true, never>;
+}
+/**
+ * Directive to facilitate declarative creation of an
+ * Overlay using a FlexibleConnectedPositionStrategy.
+ */
+declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
+    private _overlay;
+    private _dir;
+    private _overlayRef;
+    private _templatePortal;
+    private _backdropSubscription;
+    private _attachSubscription;
+    private _detachSubscription;
+    private _positionSubscription;
+    private _offsetX;
+    private _offsetY;
+    private _position;
+    private _scrollStrategyFactory;
+    private _disposeOnNavigation;
     private _ngZone;
-    private _renderer;
-    private _cleanupKeydown;
-    /** Add a new overlay to the list of attached overlay refs. */
-    add(overlayRef: OverlayRef): void;
-    /** Detaches the global keyboard event listener. */
-    protected detach(): void;
-    /** Keyboard event listener that will be attached to the body. */
-    private _keydownListener;
-    static ɵfac: i0.ɵɵFactoryDeclaration<OverlayKeyboardDispatcher, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<OverlayKeyboardDispatcher>;
+    /** Origin for the connected overlay. */
+    origin: CdkOverlayOrigin | FlexibleConnectedPositionStrategyOrigin;
+    /** Registered connected position pairs. */
+    positions: ConnectedPosition[];
+    /**
+     * This input overrides the positions input if specified. It lets users pass
+     * in arbitrary positioning strategies.
+     */
+    positionStrategy: FlexibleConnectedPositionStrategy;
+    /** The offset in pixels for the overlay connection point on the x-axis */
+    get offsetX(): number;
+    set offsetX(offsetX: number);
+    /** The offset in pixels for the overlay connection point on the y-axis */
+    get offsetY(): number;
+    set offsetY(offsetY: number);
+    /** The width of the overlay panel. */
+    width: number | string;
+    /** The height of the overlay panel. */
+    height: number | string;
+    /** The min width of the overlay panel. */
+    minWidth: number | string;
+    /** The min height of the overlay panel. */
+    minHeight: number | string;
+    /** The custom class to be set on the backdrop element. */
+    backdropClass: string | string[];
+    /** The custom class to add to the overlay pane element. */
+    panelClass: string | string[];
+    /** Margin between the overlay and the viewport edges. */
+    viewportMargin: number;
+    /** Strategy to be used when handling scroll events while the overlay is open. */
+    scrollStrategy: ScrollStrategy;
+    /** Whether the overlay is open. */
+    open: boolean;
+    /** Whether the overlay can be closed by user interaction. */
+    disableClose: boolean;
+    /** CSS selector which to set the transform origin. */
+    transformOriginSelector: string;
+    /** Whether or not the overlay should attach a backdrop. */
+    hasBackdrop: boolean;
+    /** Whether or not the overlay should be locked when scrolling. */
+    lockPosition: boolean;
+    /** Whether the overlay's width and height can be constrained to fit within the viewport. */
+    flexibleDimensions: boolean;
+    /** Whether the overlay can grow after the initial open when flexible positioning is turned on. */
+    growAfterOpen: boolean;
+    /** Whether the overlay can be pushed on-screen if none of the provided positions fit. */
+    push: boolean;
+    /** Whether the overlay should be disposed of when the user goes backwards/forwards in history. */
+    get disposeOnNavigation(): boolean;
+    set disposeOnNavigation(value: boolean);
+    /** Event emitted when the backdrop is clicked. */
+    readonly backdropClick: EventEmitter<MouseEvent>;
+    /** Event emitted when the position has changed. */
+    readonly positionChange: EventEmitter<ConnectedOverlayPositionChange>;
+    /** Event emitted when the overlay has been attached. */
+    readonly attach: EventEmitter<void>;
+    /** Event emitted when the overlay has been detached. */
+    readonly detach: EventEmitter<void>;
+    /** Emits when there are keyboard events that are targeted at the overlay. */
+    readonly overlayKeydown: EventEmitter<KeyboardEvent>;
+    /** Emits when there are mouse outside click events that are targeted at the overlay. */
+    readonly overlayOutsideClick: EventEmitter<MouseEvent>;
+    constructor(...args: unknown[]);
+    /** The associated overlay reference. */
+    get overlayRef(): OverlayRef;
+    /** The element's layout direction. */
+    get dir(): Direction;
+    ngOnDestroy(): void;
+    ngOnChanges(changes: SimpleChanges): void;
+    /** Creates an overlay */
+    private _createOverlay;
+    /** Builds the overlay config based on the directive's inputs */
+    private _buildConfig;
+    /** Updates the state of a position strategy, based on the values of the directive inputs. */
+    private _updatePositionStrategy;
+    /** Returns the position strategy of the overlay to be set on the overlay config */
+    private _createPositionStrategy;
+    private _getOrigin;
+    private _getOriginElement;
+    /** Attaches the overlay. */
+    attachOverlay(): void;
+    /** Detaches the overlay. */
+    detachOverlay(): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkConnectedOverlay, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkConnectedOverlay, "[cdk-connected-overlay], [connected-overlay], [cdkConnectedOverlay]", ["cdkConnectedOverlay"], { "origin": { "alias": "cdkConnectedOverlayOrigin"; "required": false; }; "positions": { "alias": "cdkConnectedOverlayPositions"; "required": false; }; "positionStrategy": { "alias": "cdkConnectedOverlayPositionStrategy"; "required": false; }; "offsetX": { "alias": "cdkConnectedOverlayOffsetX"; "required": false; }; "offsetY": { "alias": "cdkConnectedOverlayOffsetY"; "required": false; }; "width": { "alias": "cdkConnectedOverlayWidth"; "required": false; }; "height": { "alias": "cdkConnectedOverlayHeight"; "required": false; }; "minWidth": { "alias": "cdkConnectedOverlayMinWidth"; "required": false; }; "minHeight": { "alias": "cdkConnectedOverlayMinHeight"; "required": false; }; "backdropClass": { "alias": "cdkConnectedOverlayBackdropClass"; "required": false; }; "panelClass": { "alias": "cdkConnectedOverlayPanelClass"; "required": false; }; "viewportMargin": { "alias": "cdkConnectedOverlayViewportMargin"; "required": false; }; "scrollStrategy": { "alias": "cdkConnectedOverlayScrollStrategy"; "required": false; }; "open": { "alias": "cdkConnectedOverlayOpen"; "required": false; }; "disableClose": { "alias": "cdkConnectedOverlayDisableClose"; "required": false; }; "transformOriginSelector": { "alias": "cdkConnectedOverlayTransformOriginOn"; "required": false; }; "hasBackdrop": { "alias": "cdkConnectedOverlayHasBackdrop"; "required": false; }; "lockPosition": { "alias": "cdkConnectedOverlayLockPosition"; "required": false; }; "flexibleDimensions": { "alias": "cdkConnectedOverlayFlexibleDimensions"; "required": false; }; "growAfterOpen": { "alias": "cdkConnectedOverlayGrowAfterOpen"; "required": false; }; "push": { "alias": "cdkConnectedOverlayPush"; "required": false; }; "disposeOnNavigation": { "alias": "cdkConnectedOverlayDisposeOnNavigation"; "required": false; }; }, { "backdropClick": "backdropClick"; "positionChange": "positionChange"; "attach": "attach"; "detach": "detach"; "overlayKeydown": "overlayKeydown"; "overlayOutsideClick": "overlayOutsideClick"; }, never, never, true, never>;
+    static ngAcceptInputType_hasBackdrop: unknown;
+    static ngAcceptInputType_lockPosition: unknown;
+    static ngAcceptInputType_flexibleDimensions: unknown;
+    static ngAcceptInputType_growAfterOpen: unknown;
+    static ngAcceptInputType_push: unknown;
+    static ngAcceptInputType_disposeOnNavigation: unknown;
 }
 
-export declare class OverlayModule {
+declare class OverlayModule {
     static ɵfac: i0.ɵɵFactoryDeclaration<OverlayModule, never>;
-    static ɵmod: i0.ɵɵNgModuleDeclaration<OverlayModule, never, [typeof i1.BidiModule, typeof i2.PortalModule, typeof i3.ScrollingModule, typeof i4.CdkConnectedOverlay, typeof i4.CdkOverlayOrigin], [typeof i4.CdkConnectedOverlay, typeof i4.CdkOverlayOrigin, typeof i3.ScrollingModule]>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<OverlayModule, never, [typeof i2.BidiModule, typeof i2$1.PortalModule, typeof i3.ScrollingModule, typeof CdkConnectedOverlay, typeof CdkOverlayOrigin], [typeof CdkConnectedOverlay, typeof CdkOverlayOrigin, typeof i3.ScrollingModule]>;
     static ɵinj: i0.ɵɵInjectorDeclaration<OverlayModule>;
 }
 
 /**
- * Service for dispatching mouse click events that land on the body to appropriate overlay ref,
- * if any. It maintains a list of attached overlays to determine best suited overlay based
- * on event target and order of overlay opens.
+ * Alternative to OverlayContainer that supports correct displaying of overlay elements in
+ * Fullscreen mode
+ * https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen
+ *
+ * Should be provided in the root component.
  */
-export declare class OverlayOutsideClickDispatcher extends BaseOverlayDispatcher {
-    private _platform;
-    private _ngZone;
+declare class FullscreenOverlayContainer extends OverlayContainer implements OnDestroy {
     private _renderer;
-    private _cursorOriginalValue;
-    private _cursorStyleIsSet;
-    private _pointerDownEventTarget;
-    private _cleanups;
-    /** Add a new overlay to the list of attached overlay refs. */
-    add(overlayRef: OverlayRef): void;
-    /** Detaches the global keyboard event listener. */
-    protected detach(): void;
-    /** Store pointerdown event target to track origin of click. */
-    private _pointerDownListener;
-    /** Click event listener that will be attached to the body propagate phase. */
-    private _clickListener;
-    static ɵfac: i0.ɵɵFactoryDeclaration<OverlayOutsideClickDispatcher, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<OverlayOutsideClickDispatcher>;
-}
-
-/** Builder for overlay position strategy. */
-export declare class OverlayPositionBuilder {
-    private _viewportRuler;
-    private _document;
-    private _platform;
-    private _overlayContainer;
+    private _fullScreenEventName;
+    private _cleanupFullScreenListener;
     constructor(...args: unknown[]);
+    ngOnDestroy(): void;
+    protected _createContainer(): void;
+    private _adjustParentForFullscreenChange;
+    private _getEventName;
     /**
-     * Creates a global position strategy.
+     * When the page is put into fullscreen mode, a specific element is specified.
+     * Only that element and its children are visible when in fullscreen mode.
      */
-    global(): GlobalPositionStrategy;
-    /**
-     * Creates a flexible position strategy.
-     * @param origin Origin relative to which to position the overlay.
-     */
-    flexibleConnectedTo(origin: FlexibleConnectedPositionStrategyOrigin): FlexibleConnectedPositionStrategy;
-    static ɵfac: i0.ɵɵFactoryDeclaration<OverlayPositionBuilder, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<OverlayPositionBuilder>;
+    getFullscreenElement(): Element;
+    static ɵfac: i0.ɵɵFactoryDeclaration<FullscreenOverlayContainer, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<FullscreenOverlayContainer>;
 }
 
-/**
- * Reference to an overlay that has been created with the Overlay service.
- * Used to manipulate or dispose of said overlay.
- */
-export declare class OverlayRef implements PortalOutlet {
-    private _portalOutlet;
-    private _host;
-    private _pane;
-    private _config;
-    private _ngZone;
-    private _keyboardDispatcher;
-    private _document;
-    private _location;
-    private _outsideClickDispatcher;
-    private _animationsDisabled;
-    private _injector;
-    private _renderer;
-    private readonly _backdropClick;
-    private readonly _attachments;
-    private readonly _detachments;
-    private _positionStrategy;
-    private _scrollStrategy;
-    private _locationChanges;
-    private _backdropRef;
-    /**
-     * Reference to the parent of the `_host` at the time it was detached. Used to restore
-     * the `_host` to its original position in the DOM when it gets re-attached.
-     */
-    private _previousHostParent;
-    /** Stream of keydown events dispatched to this overlay. */
-    readonly _keydownEvents: Subject<KeyboardEvent>;
-    /** Stream of mouse outside events dispatched to this overlay. */
-    readonly _outsidePointerEvents: Subject<MouseEvent>;
-    private _renders;
-    private _afterRenderRef;
-    /** Reference to the currently-running `afterNextRender` call. */
-    private _afterNextRenderRef;
-    constructor(_portalOutlet: PortalOutlet, _host: HTMLElement, _pane: HTMLElement, _config: ImmutableObject<OverlayConfig>, _ngZone: NgZone, _keyboardDispatcher: OverlayKeyboardDispatcher, _document: Document, _location: Location_2, _outsideClickDispatcher: OverlayOutsideClickDispatcher, _animationsDisabled: boolean | undefined, _injector: EnvironmentInjector, _renderer: Renderer2);
-    /** The overlay's HTML element */
-    get overlayElement(): HTMLElement;
-    /** The overlay's backdrop HTML element. */
-    get backdropElement(): HTMLElement | null;
-    /**
-     * Wrapper around the panel element. Can be used for advanced
-     * positioning where a wrapper with specific styling is
-     * required around the overlay pane.
-     */
-    get hostElement(): HTMLElement;
-    attach<T>(portal: ComponentPortal<T>): ComponentRef<T>;
-    attach<T>(portal: TemplatePortal<T>): EmbeddedViewRef<T>;
-    attach(portal: any): any;
-    /**
-     * Detaches an overlay from a portal.
-     * @returns The portal detachment result.
-     */
-    detach(): any;
-    /** Cleans up the overlay from the DOM. */
-    dispose(): void;
-    /** Whether the overlay has attached content. */
-    hasAttached(): boolean;
-    /** Gets an observable that emits when the backdrop has been clicked. */
-    backdropClick(): Observable<MouseEvent>;
-    /** Gets an observable that emits when the overlay has been attached. */
-    attachments(): Observable<void>;
-    /** Gets an observable that emits when the overlay has been detached. */
-    detachments(): Observable<void>;
-    /** Gets an observable of keydown events targeted to this overlay. */
-    keydownEvents(): Observable<KeyboardEvent>;
-    /** Gets an observable of pointer events targeted outside this overlay. */
-    outsidePointerEvents(): Observable<MouseEvent>;
-    /** Gets the current overlay configuration, which is immutable. */
-    getConfig(): OverlayConfig;
-    /** Updates the position of the overlay based on the position strategy. */
-    updatePosition(): void;
-    /** Switches to a new position strategy and updates the overlay position. */
-    updatePositionStrategy(strategy: PositionStrategy): void;
-    /** Update the size properties of the overlay. */
-    updateSize(sizeConfig: OverlaySizeConfig): void;
-    /** Sets the LTR/RTL direction for the overlay. */
-    setDirection(dir: Direction | Directionality): void;
-    /** Add a CSS class or an array of classes to the overlay pane. */
-    addPanelClass(classes: string | string[]): void;
-    /** Remove a CSS class or an array of classes from the overlay pane. */
-    removePanelClass(classes: string | string[]): void;
-    /**
-     * Returns the layout direction of the overlay panel.
-     */
-    getDirection(): Direction;
-    /** Switches to a new scroll strategy. */
-    updateScrollStrategy(strategy: ScrollStrategy): void;
-    /** Updates the text direction of the overlay panel. */
-    private _updateElementDirection;
-    /** Updates the size of the overlay element based on the overlay config. */
-    private _updateElementSize;
-    /** Toggles the pointer events for the overlay pane element. */
-    private _togglePointerEvents;
-    /** Attaches a backdrop for this overlay. */
-    private _attachBackdrop;
-    /**
-     * Updates the stacking order of the element, moving it to the top if necessary.
-     * This is required in cases where one overlay was detached, while another one,
-     * that should be behind it, was destroyed. The next time both of them are opened,
-     * the stacking will be wrong, because the detached element's pane will still be
-     * in its original DOM position.
-     */
-    private _updateStackingOrder;
-    /** Detaches the backdrop (if any) associated with the overlay. */
-    detachBackdrop(): void;
-    /** Toggles a single CSS class or an array of classes on an element. */
-    private _toggleClasses;
-    /** Detaches the overlay content next time the zone stabilizes. */
-    private _detachContentWhenEmpty;
-    /** Disposes of a scroll strategy. */
-    private _disposeScrollStrategy;
-}
-
-/** Size properties for an overlay. */
-export declare interface OverlaySizeConfig {
-    width?: number | string;
-    height?: number | string;
-    minWidth?: number | string;
-    minHeight?: number | string;
-    maxWidth?: number | string;
-    maxHeight?: number | string;
-}
-
-/** A simple (x, y) coordinate. */
-declare interface Point {
-    x: number;
-    y: number;
-}
-
-/** Strategy for setting the position on an overlay. */
-export declare interface PositionStrategy {
-    /** Attaches this position strategy to an overlay. */
-    attach(overlayRef: OverlayRef): void;
-    /** Updates the position of the overlay element. */
-    apply(): void;
-    /** Called when the overlay is detached. */
-    detach?(): void;
-    /** Cleans up any DOM modifications made by the position strategy, if necessary. */
-    dispose(): void;
-}
-
-/**
- * Strategy that will update the element position as the user is scrolling.
- */
-export declare class RepositionScrollStrategy implements ScrollStrategy {
-    private _scrollDispatcher;
-    private _viewportRuler;
-    private _ngZone;
-    private _config?;
-    private _scrollSubscription;
-    private _overlayRef;
-    constructor(_scrollDispatcher: ScrollDispatcher, _viewportRuler: ViewportRuler, _ngZone: NgZone, _config?: RepositionScrollStrategyConfig | undefined);
-    /** Attaches this scroll strategy to an overlay. */
-    attach(overlayRef: OverlayRef): void;
-    /** Enables repositioning of the attached overlay on scroll. */
-    enable(): void;
-    /** Disables repositioning of the attached overlay on scroll. */
-    disable(): void;
-    detach(): void;
-}
-
-/**
- * Config options for the RepositionScrollStrategy.
- */
-export declare interface RepositionScrollStrategyConfig {
-    /** Time in milliseconds to throttle the scroll events. */
-    scrollThrottle?: number;
-    /** Whether to close the overlay once the user has scrolled away completely. */
-    autoClose?: boolean;
-}
-
-export { ScrollDispatcher }
-
-/**
- * Set of properties regarding the position of the origin and overlay relative to the viewport
- * with respect to the containing Scrollable elements.
- *
- * The overlay and origin are clipped if any part of their bounding client rectangle exceeds the
- * bounds of any one of the strategy's Scrollable's bounding client rectangle.
- *
- * The overlay and origin are outside view if there is no overlap between their bounding client
- * rectangle and any one of the strategy's Scrollable's bounding client rectangle.
- *
- *       -----------                    -----------
- *       | outside |                    | clipped |
- *       |  view   |              --------------------------
- *       |         |              |     |         |        |
- *       ----------               |     -----------        |
- *  --------------------------    |                        |
- *  |                        |    |      Scrollable        |
- *  |                        |    |                        |
- *  |                        |     --------------------------
- *  |      Scrollable        |
- *  |                        |
- *  --------------------------
- *
- *  @docs-private
- */
-export declare class ScrollingVisibility {
-    isOriginClipped: boolean;
-    isOriginOutsideView: boolean;
-    isOverlayClipped: boolean;
-    isOverlayOutsideView: boolean;
-}
-
-/**
- * Describes a strategy that will be used by an overlay to handle scroll events while it is open.
- */
-export declare interface ScrollStrategy {
-    /** Enable this scroll strategy (called when the attached overlay is attached to a portal). */
-    enable: () => void;
-    /** Disable this scroll strategy (called when the attached overlay is detached from a portal). */
-    disable: () => void;
-    /** Attaches this `ScrollStrategy` to an overlay. */
-    attach: (overlayRef: OverlayRef) => void;
-    /** Detaches the scroll strategy from the current overlay. */
-    detach?: () => void;
-}
-
-/**
- * Options for how an overlay will handle scrolling.
- *
- * Users can provide a custom value for `ScrollStrategyOptions` to replace the default
- * behaviors. This class primarily acts as a factory for ScrollStrategy instances.
- */
-export declare class ScrollStrategyOptions {
-    private _scrollDispatcher;
-    private _viewportRuler;
-    private _ngZone;
-    private _document;
-    constructor(...args: unknown[]);
-    /** Do nothing on scroll. */
-    noop: () => NoopScrollStrategy;
-    /**
-     * Close the overlay as soon as the user scrolls.
-     * @param config Configuration to be used inside the scroll strategy.
-     */
-    close: (config?: CloseScrollStrategyConfig) => CloseScrollStrategy;
-    /** Block scrolling. */
-    block: () => BlockScrollStrategy;
-    /**
-     * Update the overlay's position on scroll.
-     * @param config Configuration to be used inside the scroll strategy.
-     * Allows debouncing the reposition calls.
-     */
-    reposition: (config?: RepositionScrollStrategyConfig) => RepositionScrollStrategy;
-    static ɵfac: i0.ɵɵFactoryDeclaration<ScrollStrategyOptions, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<ScrollStrategyOptions>;
-}
-
-export declare const STANDARD_DROPDOWN_ADJACENT_POSITIONS: ConnectedPosition[];
-
-export declare const STANDARD_DROPDOWN_BELOW_POSITIONS: ConnectedPosition[];
-
-/**
- * Validates whether a horizontal position property matches the expected values.
- * @param property Name of the property being validated.
- * @param value Value of the property being validated.
- * @docs-private
- */
-export declare function validateHorizontalPosition(property: string, value: HorizontalConnectionPos): void;
-
-/**
- * Validates whether a vertical position property matches the expected values.
- * @param property Name of the property being validated.
- * @param value Value of the property being validated.
- * @docs-private
- */
-export declare function validateVerticalPosition(property: string, value: VerticalConnectionPos): void;
-
-/** Vertical dimension of a connection point on the perimeter of the origin or overlay element. */
-export declare type VerticalConnectionPos = 'top' | 'center' | 'bottom';
-
-export { ViewportRuler }
-
-export { }
+export { BlockScrollStrategy, CdkConnectedOverlay, CdkOverlayOrigin, CloseScrollStrategy, ConnectedOverlayPositionChange, type ConnectedPosition, ConnectionPositionPair, FlexibleConnectedPositionStrategy, type FlexibleConnectedPositionStrategyOrigin, FullscreenOverlayContainer, GlobalPositionStrategy, type HorizontalConnectionPos, NoopScrollStrategy, type OriginConnectionPosition, Overlay, OverlayConfig, type OverlayConnectionPosition, OverlayContainer, OverlayKeyboardDispatcher, OverlayModule, OverlayOutsideClickDispatcher, OverlayPositionBuilder, OverlayRef, type OverlaySizeConfig, type PositionStrategy, RepositionScrollStrategy, type RepositionScrollStrategyConfig, STANDARD_DROPDOWN_ADJACENT_POSITIONS, STANDARD_DROPDOWN_BELOW_POSITIONS, type ScrollStrategy, ScrollStrategyOptions, ScrollingVisibility, type VerticalConnectionPos, validateHorizontalPosition, validateVerticalPosition };
