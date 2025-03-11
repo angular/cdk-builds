@@ -1,9 +1,8 @@
-import { getNoKeysSpecifiedError, _getTextWithExcludedElements, TestKey, HarnessEnvironment, handleAutoChangeDetectionStatus, stopHandlingAutoChangeDetectionStatus } from '@angular/cdk/testing';
 import { flush } from '@angular/core/testing';
 import { takeWhile } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
-import * as keyCodes from '@angular/cdk/keycodes';
-import { PERIOD } from '@angular/cdk/keycodes';
+import { g as getNoKeysSpecifiedError, _ as _getTextWithExcludedElements, T as TestKey, b as HarnessEnvironment, h as handleAutoChangeDetectionStatus, s as stopHandlingAutoChangeDetectionStatus } from '../text-filtering-b60ba8a2.mjs';
+import { aV as PERIOD, B as BACKSPACE, T as TAB, h as ENTER, S as SHIFT, C as CONTROL, A as ALT, e as ESCAPE, b as PAGE_UP, P as PAGE_DOWN, E as END, H as HOME, L as LEFT_ARROW, U as UP_ARROW, R as RIGHT_ARROW, D as DOWN_ARROW, I as INSERT, n as DELETE, au as F1, av as F2, aw as F3, ax as F4, ay as F5, az as F6, aA as F7, aB as F8, aC as F9, aD as F10, aE as F11, aF as F12, a as META, aT as COMMA } from '../keycodes-107cd3e4.mjs';
 
 /** Unique symbol that is used to patch a property to a proxy zone. */
 const stateObservableSymbol = Symbol('ProxyZone_PATCHED#stateObservable');
@@ -369,37 +368,37 @@ function clearElement(element) {
 
 /** Maps `TestKey` constants to the `keyCode` and `key` values used by native browser events. */
 const keyMap = {
-    [TestKey.BACKSPACE]: { keyCode: keyCodes.BACKSPACE, key: 'Backspace', code: 'Backspace' },
-    [TestKey.TAB]: { keyCode: keyCodes.TAB, key: 'Tab', code: 'Tab' },
-    [TestKey.ENTER]: { keyCode: keyCodes.ENTER, key: 'Enter', code: 'Enter' },
-    [TestKey.SHIFT]: { keyCode: keyCodes.SHIFT, key: 'Shift', code: 'ShiftLeft' },
-    [TestKey.CONTROL]: { keyCode: keyCodes.CONTROL, key: 'Control', code: 'ControlLeft' },
-    [TestKey.ALT]: { keyCode: keyCodes.ALT, key: 'Alt', code: 'AltLeft' },
-    [TestKey.ESCAPE]: { keyCode: keyCodes.ESCAPE, key: 'Escape', code: 'Escape' },
-    [TestKey.PAGE_UP]: { keyCode: keyCodes.PAGE_UP, key: 'PageUp', code: 'PageUp' },
-    [TestKey.PAGE_DOWN]: { keyCode: keyCodes.PAGE_DOWN, key: 'PageDown', code: 'PageDown' },
-    [TestKey.END]: { keyCode: keyCodes.END, key: 'End', code: 'End' },
-    [TestKey.HOME]: { keyCode: keyCodes.HOME, key: 'Home', code: 'Home' },
-    [TestKey.LEFT_ARROW]: { keyCode: keyCodes.LEFT_ARROW, key: 'ArrowLeft', code: 'ArrowLeft' },
-    [TestKey.UP_ARROW]: { keyCode: keyCodes.UP_ARROW, key: 'ArrowUp', code: 'ArrowUp' },
-    [TestKey.RIGHT_ARROW]: { keyCode: keyCodes.RIGHT_ARROW, key: 'ArrowRight', code: 'ArrowRight' },
-    [TestKey.DOWN_ARROW]: { keyCode: keyCodes.DOWN_ARROW, key: 'ArrowDown', code: 'ArrowDown' },
-    [TestKey.INSERT]: { keyCode: keyCodes.INSERT, key: 'Insert', code: 'Insert' },
-    [TestKey.DELETE]: { keyCode: keyCodes.DELETE, key: 'Delete', code: 'Delete' },
-    [TestKey.F1]: { keyCode: keyCodes.F1, key: 'F1', code: 'F1' },
-    [TestKey.F2]: { keyCode: keyCodes.F2, key: 'F2', code: 'F2' },
-    [TestKey.F3]: { keyCode: keyCodes.F3, key: 'F3', code: 'F3' },
-    [TestKey.F4]: { keyCode: keyCodes.F4, key: 'F4', code: 'F4' },
-    [TestKey.F5]: { keyCode: keyCodes.F5, key: 'F5', code: 'F5' },
-    [TestKey.F6]: { keyCode: keyCodes.F6, key: 'F6', code: 'F6' },
-    [TestKey.F7]: { keyCode: keyCodes.F7, key: 'F7', code: 'F7' },
-    [TestKey.F8]: { keyCode: keyCodes.F8, key: 'F8', code: 'F8' },
-    [TestKey.F9]: { keyCode: keyCodes.F9, key: 'F9', code: 'F9' },
-    [TestKey.F10]: { keyCode: keyCodes.F10, key: 'F10', code: 'F10' },
-    [TestKey.F11]: { keyCode: keyCodes.F11, key: 'F11', code: 'F11' },
-    [TestKey.F12]: { keyCode: keyCodes.F12, key: 'F12', code: 'F12' },
-    [TestKey.META]: { keyCode: keyCodes.META, key: 'Meta', code: 'MetaLeft' },
-    [TestKey.COMMA]: { keyCode: keyCodes.COMMA, key: ',', code: 'Comma' },
+    [TestKey.BACKSPACE]: { keyCode: BACKSPACE, key: 'Backspace', code: 'Backspace' },
+    [TestKey.TAB]: { keyCode: TAB, key: 'Tab', code: 'Tab' },
+    [TestKey.ENTER]: { keyCode: ENTER, key: 'Enter', code: 'Enter' },
+    [TestKey.SHIFT]: { keyCode: SHIFT, key: 'Shift', code: 'ShiftLeft' },
+    [TestKey.CONTROL]: { keyCode: CONTROL, key: 'Control', code: 'ControlLeft' },
+    [TestKey.ALT]: { keyCode: ALT, key: 'Alt', code: 'AltLeft' },
+    [TestKey.ESCAPE]: { keyCode: ESCAPE, key: 'Escape', code: 'Escape' },
+    [TestKey.PAGE_UP]: { keyCode: PAGE_UP, key: 'PageUp', code: 'PageUp' },
+    [TestKey.PAGE_DOWN]: { keyCode: PAGE_DOWN, key: 'PageDown', code: 'PageDown' },
+    [TestKey.END]: { keyCode: END, key: 'End', code: 'End' },
+    [TestKey.HOME]: { keyCode: HOME, key: 'Home', code: 'Home' },
+    [TestKey.LEFT_ARROW]: { keyCode: LEFT_ARROW, key: 'ArrowLeft', code: 'ArrowLeft' },
+    [TestKey.UP_ARROW]: { keyCode: UP_ARROW, key: 'ArrowUp', code: 'ArrowUp' },
+    [TestKey.RIGHT_ARROW]: { keyCode: RIGHT_ARROW, key: 'ArrowRight', code: 'ArrowRight' },
+    [TestKey.DOWN_ARROW]: { keyCode: DOWN_ARROW, key: 'ArrowDown', code: 'ArrowDown' },
+    [TestKey.INSERT]: { keyCode: INSERT, key: 'Insert', code: 'Insert' },
+    [TestKey.DELETE]: { keyCode: DELETE, key: 'Delete', code: 'Delete' },
+    [TestKey.F1]: { keyCode: F1, key: 'F1', code: 'F1' },
+    [TestKey.F2]: { keyCode: F2, key: 'F2', code: 'F2' },
+    [TestKey.F3]: { keyCode: F3, key: 'F3', code: 'F3' },
+    [TestKey.F4]: { keyCode: F4, key: 'F4', code: 'F4' },
+    [TestKey.F5]: { keyCode: F5, key: 'F5', code: 'F5' },
+    [TestKey.F6]: { keyCode: F6, key: 'F6', code: 'F6' },
+    [TestKey.F7]: { keyCode: F7, key: 'F7', code: 'F7' },
+    [TestKey.F8]: { keyCode: F8, key: 'F8', code: 'F8' },
+    [TestKey.F9]: { keyCode: F9, key: 'F9', code: 'F9' },
+    [TestKey.F10]: { keyCode: F10, key: 'F10', code: 'F10' },
+    [TestKey.F11]: { keyCode: F11, key: 'F11', code: 'F11' },
+    [TestKey.F12]: { keyCode: F12, key: 'F12', code: 'F12' },
+    [TestKey.META]: { keyCode: META, key: 'Meta', code: 'MetaLeft' },
+    [TestKey.COMMA]: { keyCode: COMMA, key: ',', code: 'Comma' },
 };
 /** A `TestElement` implementation for unit tests. */
 class UnitTestElement {

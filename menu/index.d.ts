@@ -1,12 +1,20 @@
 import * as i0 from '@angular/core';
 import { ElementRef, Renderer2, QueryList, InjectionToken, Optional, OnDestroy, Injector, ViewContainerRef, EventEmitter, TemplateRef, OnChanges, SimpleChanges, NgZone, AfterContentInit } from '@angular/core';
-import * as i1 from '@angular/cdk/overlay';
-import { ScrollStrategy, ConnectedPosition, OverlayRef } from '@angular/cdk/overlay';
+import { S as ScrollStrategy, C as ConnectedPosition, O as OverlayRef, a as OverlayModule } from '../overlay-module.d-5d06db8a.js';
 import * as rxjs from 'rxjs';
 import { Observable, Subject } from 'rxjs';
-import { FocusOrigin, FocusableOption, FocusKeyManager } from '@angular/cdk/a11y';
-import { Directionality } from '@angular/cdk/bidi';
-import { TemplatePortal } from '@angular/cdk/portal';
+import { F as FocusOrigin } from '../focus-monitor.d-810a02e6.js';
+import { F as FocusableOption, a as FocusKeyManager } from '../focus-key-manager.d-415a6958.js';
+import { D as Directionality } from '../bidi-module.d-f8648621.js';
+import { T as TemplatePortal } from '../portal-directives.d-d345bd53.js';
+import '../scrolling-module.d-a08a462d.js';
+import '../data-source.d-7cab2c9d.js';
+import '../number-property.d-ce316715.js';
+import '@angular/common';
+import '../viewport-ruler.d-f3d3e82f.js';
+import '../platform.d-0a5b4792.js';
+import '../style-loader.d-19baab84.js';
+import '../list-key-manager.d-72e9a2e7.js';
 
 /** Item to track for mouse focus events. */
 interface FocusableElement {
@@ -805,7 +813,7 @@ declare class CdkContextMenuTrigger extends CdkMenuTriggerBase implements OnDest
 /** Module that declares components and directives for the CDK menu. */
 declare class CdkMenuModule {
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuModule, never>;
-    static ɵmod: i0.ɵɵNgModuleDeclaration<CdkMenuModule, never, [typeof i1.OverlayModule, typeof CdkMenuBar, typeof CdkMenu, typeof CdkMenuItem, typeof CdkMenuItemRadio, typeof CdkMenuItemCheckbox, typeof CdkMenuTrigger, typeof CdkMenuGroup, typeof CdkContextMenuTrigger, typeof CdkTargetMenuAim], [typeof CdkMenuBar, typeof CdkMenu, typeof CdkMenuItem, typeof CdkMenuItemRadio, typeof CdkMenuItemCheckbox, typeof CdkMenuTrigger, typeof CdkMenuGroup, typeof CdkContextMenuTrigger, typeof CdkTargetMenuAim]>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<CdkMenuModule, never, [typeof OverlayModule, typeof CdkMenuBar, typeof CdkMenu, typeof CdkMenuItem, typeof CdkMenuItemRadio, typeof CdkMenuItemCheckbox, typeof CdkMenuTrigger, typeof CdkMenuGroup, typeof CdkContextMenuTrigger, typeof CdkTargetMenuAim], [typeof CdkMenuBar, typeof CdkMenu, typeof CdkMenuItem, typeof CdkMenuItemRadio, typeof CdkMenuItemCheckbox, typeof CdkMenuTrigger, typeof CdkMenuGroup, typeof CdkContextMenuTrigger, typeof CdkTargetMenuAim]>;
     static ɵinj: i0.ɵɵInjectorDeclaration<CdkMenuModule>;
 }
 

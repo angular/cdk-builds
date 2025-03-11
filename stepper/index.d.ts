@@ -2,8 +2,10 @@ import * as i0 from '@angular/core';
 import { ElementRef, TemplateRef, InjectionToken, OnChanges, QueryList, EventEmitter, AfterContentInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { NgForm, FormGroupDirective, AbstractControl } from '@angular/forms';
 import { Subject } from 'rxjs';
-import { FocusableOption } from '@angular/cdk/a11y';
-import * as i2 from '@angular/cdk/bidi';
+import { F as FocusableOption } from '../focus-key-manager.d-415a6958.js';
+import { B as BidiModule } from '../bidi-module.d-f8648621.js';
+import '../list-key-manager.d-72e9a2e7.js';
+import '../focus-monitor.d-810a02e6.js';
 
 declare class CdkStepHeader implements FocusableOption {
     _elementRef: ElementRef<HTMLElement>;
@@ -218,7 +220,7 @@ declare class CdkStepperPrevious {
 
 declare class CdkStepperModule {
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkStepperModule, never>;
-    static ɵmod: i0.ɵɵNgModuleDeclaration<CdkStepperModule, never, [typeof i2.BidiModule, typeof CdkStep, typeof CdkStepper, typeof CdkStepHeader, typeof CdkStepLabel, typeof CdkStepperNext, typeof CdkStepperPrevious], [typeof CdkStep, typeof CdkStepper, typeof CdkStepHeader, typeof CdkStepLabel, typeof CdkStepperNext, typeof CdkStepperPrevious]>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<CdkStepperModule, never, [typeof BidiModule, typeof CdkStep, typeof CdkStepper, typeof CdkStepHeader, typeof CdkStepLabel, typeof CdkStepperNext, typeof CdkStepperPrevious], [typeof CdkStep, typeof CdkStepper, typeof CdkStepHeader, typeof CdkStepLabel, typeof CdkStepperNext, typeof CdkStepperPrevious]>;
     static ɵinj: i0.ɵɵInjectorDeclaration<CdkStepperModule>;
 }
 

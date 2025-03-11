@@ -1,9 +1,10 @@
-import { Platform, _bindEventWithOptions } from '@angular/cdk/platform';
 import * as i0 from '@angular/core';
 import { Component, ChangeDetectionStrategy, ViewEncapsulation, inject, NgZone, RendererFactory2, Injectable, ElementRef, EventEmitter, Directive, Output, Renderer2, booleanAttribute, Input, NgModule } from '@angular/core';
-import { _CdkPrivateStyleLoader } from '@angular/cdk/private';
-import { coerceElement, coerceNumberProperty } from '@angular/cdk/coercion';
 import { EMPTY, Subject } from 'rxjs';
+import { P as Platform } from './platform-1be098b0.mjs';
+import { _ as _CdkPrivateStyleLoader } from './style-loader-e14dc585.mjs';
+import { _ as _bindEventWithOptions } from './backwards-compatibility-bcbe473e.mjs';
+import { c as coerceElement, a as coerceNumberProperty } from './element-705567fe.mjs';
 import { DOCUMENT } from '@angular/common';
 import { auditTime } from 'rxjs/operators';
 

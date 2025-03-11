@@ -1,45 +1,11 @@
-import { ElementRef } from '@angular/core';
+export { _ as _isNumberValue, c as coerceElement, a as coerceNumberProperty } from './element-705567fe.mjs';
+export { c as coerceArray } from './array-ee3b4bab.mjs';
+export { c as coerceCssPixelValue } from './css-pixel-value-286c9a60.mjs';
+import '@angular/core';
 
 /** Coerces a data-bound value (typically a string) to a boolean. */
 function coerceBooleanProperty(value) {
     return value != null && `${value}` !== 'false';
-}
-
-function coerceNumberProperty(value, fallbackValue = 0) {
-    if (_isNumberValue(value)) {
-        return Number(value);
-    }
-    return arguments.length === 2 ? fallbackValue : 0;
-}
-/**
- * Whether the provided value is considered a number.
- * @docs-private
- */
-function _isNumberValue(value) {
-    // parseFloat(value) handles most of the cases we're interested in (it treats null, empty string,
-    // and other non-number values as NaN, where Number just uses 0) but it considers the string
-    // '123hello' to be a valid number. Therefore we also check if Number(value) is NaN.
-    return !isNaN(parseFloat(value)) && !isNaN(Number(value));
-}
-
-function coerceArray(value) {
-    return Array.isArray(value) ? value : [value];
-}
-
-/** Coerces a value to a CSS pixel value. */
-function coerceCssPixelValue(value) {
-    if (value == null) {
-        return '';
-    }
-    return typeof value === 'string' ? value : `${value}px`;
-}
-
-/**
- * Coerces an ElementRef or an Element into an element.
- * Useful for APIs that can accept either a ref or the native element itself.
- */
-function coerceElement(elementOrRef) {
-    return elementOrRef instanceof ElementRef ? elementOrRef.nativeElement : elementOrRef;
 }
 
 /**
@@ -73,5 +39,5 @@ function coerceStringArray(value, separator = /\s+/) {
     return result;
 }
 
-export { _isNumberValue, coerceArray, coerceBooleanProperty, coerceCssPixelValue, coerceElement, coerceNumberProperty, coerceStringArray };
+export { coerceBooleanProperty, coerceStringArray };
 //# sourceMappingURL=coercion.mjs.map

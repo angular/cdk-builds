@@ -1,10 +1,12 @@
-import { Directionality, Direction } from '@angular/cdk/bidi';
-import { DataSource, CollectionViewer, _ViewRepeater } from '@angular/cdk/collections';
-export { DataSource } from '@angular/cdk/collections';
+import { D as Directionality, a as Direction } from '../bidi-module.d-f8648621.js';
 import * as i0 from '@angular/core';
 import { TemplateRef, ElementRef, InjectionToken, OnChanges, IterableDiffers, IterableDiffer, SimpleChanges, IterableChanges, OnDestroy, ViewContainerRef, AfterContentInit, AfterContentChecked, OnInit, ChangeDetectorRef, TrackByFunction, EventEmitter, QueryList, Injector } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
-import * as i3 from '@angular/cdk/scrolling';
+import { D as DataSource, C as CollectionViewer } from '../data-source.d-7cab2c9d.js';
+export { D as DataSource } from '../data-source.d-7cab2c9d.js';
+import { a as _ViewRepeater } from '../view-repeater.d-79039e1f.js';
+import { S as ScrollingModule } from '../scrolling-module.d-a08a462d.js';
+import '../number-property.d-ce316715.js';
 
 /**
  * Interface for a mixin to provide a directive with a function that checks if the sticky input has
@@ -913,7 +915,7 @@ declare class CdkTextColumn<T> implements OnDestroy, OnInit {
 
 declare class CdkTableModule {
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTableModule, never>;
-    static ɵmod: i0.ɵɵNgModuleDeclaration<CdkTableModule, never, [typeof i3.ScrollingModule, typeof CdkTable, typeof CdkRowDef, typeof CdkCellDef, typeof CdkCellOutlet, typeof CdkHeaderCellDef, typeof CdkFooterCellDef, typeof CdkColumnDef, typeof CdkCell, typeof CdkRow, typeof CdkHeaderCell, typeof CdkFooterCell, typeof CdkHeaderRow, typeof CdkHeaderRowDef, typeof CdkFooterRow, typeof CdkFooterRowDef, typeof DataRowOutlet, typeof HeaderRowOutlet, typeof FooterRowOutlet, typeof CdkTextColumn, typeof CdkNoDataRow, typeof CdkRecycleRows, typeof NoDataRowOutlet], [typeof CdkTable, typeof CdkRowDef, typeof CdkCellDef, typeof CdkCellOutlet, typeof CdkHeaderCellDef, typeof CdkFooterCellDef, typeof CdkColumnDef, typeof CdkCell, typeof CdkRow, typeof CdkHeaderCell, typeof CdkFooterCell, typeof CdkHeaderRow, typeof CdkHeaderRowDef, typeof CdkFooterRow, typeof CdkFooterRowDef, typeof DataRowOutlet, typeof HeaderRowOutlet, typeof FooterRowOutlet, typeof CdkTextColumn, typeof CdkNoDataRow, typeof CdkRecycleRows, typeof NoDataRowOutlet]>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<CdkTableModule, never, [typeof ScrollingModule, typeof CdkTable, typeof CdkRowDef, typeof CdkCellDef, typeof CdkCellOutlet, typeof CdkHeaderCellDef, typeof CdkFooterCellDef, typeof CdkColumnDef, typeof CdkCell, typeof CdkRow, typeof CdkHeaderCell, typeof CdkFooterCell, typeof CdkHeaderRow, typeof CdkHeaderRowDef, typeof CdkFooterRow, typeof CdkFooterRowDef, typeof DataRowOutlet, typeof HeaderRowOutlet, typeof FooterRowOutlet, typeof CdkTextColumn, typeof CdkNoDataRow, typeof CdkRecycleRows, typeof NoDataRowOutlet], [typeof CdkTable, typeof CdkRowDef, typeof CdkCellDef, typeof CdkCellOutlet, typeof CdkHeaderCellDef, typeof CdkFooterCellDef, typeof CdkColumnDef, typeof CdkCell, typeof CdkRow, typeof CdkHeaderCell, typeof CdkFooterCell, typeof CdkHeaderRow, typeof CdkHeaderRowDef, typeof CdkFooterRow, typeof CdkFooterRowDef, typeof DataRowOutlet, typeof HeaderRowOutlet, typeof FooterRowOutlet, typeof CdkTextColumn, typeof CdkNoDataRow, typeof CdkRecycleRows, typeof NoDataRowOutlet]>;
     static ɵinj: i0.ɵɵInjectorDeclaration<CdkTableModule>;
 }
 

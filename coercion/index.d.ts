@@ -1,3 +1,4 @@
+export { N as NumberInput, _ as _isNumberValue, c as coerceNumberProperty } from '../number-property.d-ce316715.js';
 import { ElementRef } from '@angular/core';
 
 /**
@@ -7,20 +8,6 @@ import { ElementRef } from '@angular/core';
 type BooleanInput = string | boolean | null | undefined;
 /** Coerces a data-bound value (typically a string) to a boolean. */
 declare function coerceBooleanProperty(value: any): boolean;
-
-/**
- * Type describing the allowed values for a number input
- * @docs-private
- */
-type NumberInput = string | number | null | undefined;
-/** Coerces a data-bound value (typically a string) to a number. */
-declare function coerceNumberProperty(value: any): number;
-declare function coerceNumberProperty<D>(value: any, fallback: D): number | D;
-/**
- * Whether the provided value is considered a number.
- * @docs-private
- */
-declare function _isNumberValue(value: any): boolean;
 
 /** Wraps the provided value in an array, unless the provided value is an array. */
 declare function coerceArray<T>(value: T | T[]): T[];
@@ -54,4 +41,4 @@ declare function coerceElement<T>(elementOrRef: ElementRef<T> | T): T;
  */
 declare function coerceStringArray(value: any, separator?: string | RegExp): string[];
 
-export { type BooleanInput, type NumberInput, _isNumberValue, coerceArray, coerceBooleanProperty, coerceCssPixelValue, coerceElement, coerceNumberProperty, coerceStringArray };
+export { type BooleanInput, coerceArray, coerceBooleanProperty, coerceCssPixelValue, coerceElement, coerceStringArray };
