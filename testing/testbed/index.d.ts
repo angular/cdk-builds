@@ -1,17 +1,13 @@
+import { HarnessEnvironment, HarnessLoader, TestElement, ComponentHarness, ComponentHarnessConstructor, ModifierKeys, TestKey, TextOptions, ElementDimensions, EventData } from '@angular/cdk/testing';
 import { ComponentFixture } from '@angular/core/testing';
-import { ComponentHarness } from '@angular/cdk/testing';
-import { ComponentHarnessConstructor } from '@angular/cdk/testing';
-import { ElementDimensions } from '@angular/cdk/testing';
-import { EventData } from '@angular/cdk/testing';
-import { HarnessEnvironment } from '@angular/cdk/testing';
-import { HarnessLoader } from '@angular/cdk/testing';
-import { ModifierKeys } from '@angular/cdk/testing';
-import { TestElement } from '@angular/cdk/testing';
-import { TestKey } from '@angular/cdk/testing';
-import { TextOptions } from '@angular/cdk/testing';
 
+/** Options to configure the environment. */
+interface TestbedHarnessEnvironmentOptions {
+    /** The query function used to find DOM elements. */
+    queryFn: (selector: string, root: Element) => Iterable<Element> | ArrayLike<Element>;
+}
 /** A `HarnessEnvironment` implementation for Angular's Testbed. */
-export declare class TestbedHarnessEnvironment extends HarnessEnvironment<Element> {
+declare class TestbedHarnessEnvironment extends HarnessEnvironment<Element> {
     private _fixture;
     /** Whether the environment has been destroyed. */
     private _destroyed;
@@ -61,14 +57,8 @@ export declare class TestbedHarnessEnvironment extends HarnessEnvironment<Elemen
     protected getAllRawElements(selector: string): Promise<Element[]>;
 }
 
-/** Options to configure the environment. */
-export declare interface TestbedHarnessEnvironmentOptions {
-    /** The query function used to find DOM elements. */
-    queryFn: (selector: string, root: Element) => Iterable<Element> | ArrayLike<Element>;
-}
-
 /** A `TestElement` implementation for unit tests. */
-export declare class UnitTestElement implements TestElement {
+declare class UnitTestElement implements TestElement {
     readonly element: Element;
     private _stabilize;
     constructor(element: Element, _stabilize: () => Promise<void>);
@@ -163,4 +153,4 @@ export declare class UnitTestElement implements TestElement {
     private _dispatchMouseEventSequence;
 }
 
-export { }
+export { TestbedHarnessEnvironment, type TestbedHarnessEnvironmentOptions, UnitTestElement };

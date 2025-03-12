@@ -140,9 +140,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.0", ngImpor
                 }]
         }] });
 
-/**
- * Generated bundle index. Do not edit.
- */
-
 export { BidiModule, DIR_DOCUMENT, Dir, Directionality };
 //# sourceMappingURL=bidi.mjs.map

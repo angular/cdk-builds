@@ -1,26 +1,52 @@
-import { AfterContentChecked } from '@angular/core';
-import { AfterContentInit } from '@angular/core';
-import { AfterViewInit } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { CollectionViewer } from '@angular/cdk/collections';
-import { DataSource } from '@angular/cdk/collections';
-import { ElementRef } from '@angular/core';
-import { EventEmitter } from '@angular/core';
+import { SelectionModel, CollectionViewer, DataSource } from '@angular/cdk/collections';
+import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import * as i0 from '@angular/core';
-import { InjectionToken } from '@angular/core';
-import { IterableDiffer } from '@angular/core';
-import { IterableDiffers } from '@angular/core';
-import { Observable } from 'rxjs';
-import { OnDestroy } from '@angular/core';
-import { OnInit } from '@angular/core';
-import { QueryList } from '@angular/core';
-import { SelectionModel } from '@angular/cdk/collections';
-import { Subject } from 'rxjs';
-import { TemplateRef } from '@angular/core';
-import { TrackByFunction } from '@angular/core';
-import { TreeKeyManagerItem } from '@angular/cdk/a11y';
-import { TreeKeyManagerStrategy } from '@angular/cdk/a11y';
-import { ViewContainerRef } from '@angular/core';
+import { InjectionToken, ViewContainerRef, TemplateRef, AfterContentChecked, AfterContentInit, AfterViewInit, OnDestroy, OnInit, TrackByFunction, QueryList, IterableDiffer, ElementRef, EventEmitter, IterableDiffers } from '@angular/core';
+import { TreeKeyManagerStrategy, TreeKeyManagerItem } from '@angular/cdk/a11y';
+
+/**
+ * Tree control interface. User can implement TreeControl to expand/collapse dataNodes in the tree.
+ * The CDKTree will use this TreeControl to expand/collapse a node.
+ * User can also use it outside the `<cdk-tree>` to control the expansion status of the tree.
+ *
+ * @deprecated Use one of levelAccessor or childrenAccessor instead. To be removed in a future version.
+ * @breaking-change 21.0.0
+ */
+interface TreeControl<T, K = T> {
+    /** The saved tree nodes data for `expandAll` action. */
+    dataNodes: T[];
+    /** The expansion model */
+    expansionModel: SelectionModel<K>;
+    /** Whether the data node is expanded or collapsed. Return true if it's expanded. */
+    isExpanded(dataNode: T): boolean;
+    /** Get all descendants of a data node */
+    getDescendants(dataNode: T): any[];
+    /** Expand or collapse data node */
+    toggle(dataNode: T): void;
+    /** Expand one data node */
+    expand(dataNode: T): void;
+    /** Collapse one data node */
+    collapse(dataNode: T): void;
+    /** Expand all the dataNodes in the tree */
+    expandAll(): void;
+    /** Collapse all the dataNodes in the tree */
+    collapseAll(): void;
+    /** Toggle a data node by expand/collapse it and all its descendants */
+    toggleDescendants(dataNode: T): void;
+    /** Expand a data node and all its descendants */
+    expandDescendants(dataNode: T): void;
+    /** Collapse a data node and all its descendants */
+    collapseDescendants(dataNode: T): void;
+    /** Get depth of a given data node, return the level number. This is for flat tree node. */
+    readonly getLevel: (dataNode: T) => number;
+    /**
+     * Whether the data node is expandable. Returns true if expandable.
+     * This is for flat tree node.
+     */
+    readonly isExpandable: (dataNode: T) => boolean;
+    /** Gets a stream that emits whenever the given data node's children change. */
+    readonly getChildren: (dataNode: T) => Observable<T[]> | T[] | undefined | null;
+}
 
 /**
  * Base tree control. It has basic toggle/expand/collapse operations on a single data node.
@@ -28,7 +54,7 @@ import { ViewContainerRef } from '@angular/core';
  * @deprecated Use one of levelAccessor or childrenAccessor. To be removed in a future version.
  * @breaking-change 21.0.0
  */
-export declare abstract class BaseTreeControl<T, K = T> implements TreeControl<T, K> {
+declare abstract class BaseTreeControl<T, K = T> implements TreeControl<T, K> {
     /** Gets a list of descendent data nodes of a subtree rooted at given data node recursively. */
     abstract getDescendants(dataNode: T): T[];
     /** Expands all data nodes in the tree. */
@@ -72,46 +98,125 @@ export declare abstract class BaseTreeControl<T, K = T> implements TreeControl<T
     protected _trackByValue(value: T | K): K;
 }
 
+/** Optional set of configuration that can be provided to the FlatTreeControl. */
+interface FlatTreeControlOptions<T, K> {
+    trackBy?: (dataNode: T) => K;
+}
+/**
+ * Flat tree control. Able to expand/collapse a subtree recursively for flattened tree.
+ *
+ * @deprecated Use one of levelAccessor or childrenAccessor instead. To be removed in a future
+ * version.
+ * @breaking-change 21.0.0
+ */
+declare class FlatTreeControl<T, K = T> extends BaseTreeControl<T, K> {
+    getLevel: (dataNode: T) => number;
+    isExpandable: (dataNode: T) => boolean;
+    options?: FlatTreeControlOptions<T, K> | undefined;
+    /** Construct with flat tree data node functions getLevel and isExpandable. */
+    constructor(getLevel: (dataNode: T) => number, isExpandable: (dataNode: T) => boolean, options?: FlatTreeControlOptions<T, K> | undefined);
+    /**
+     * Gets a list of the data node's subtree of descendent data nodes.
+     *
+     * To make this working, the `dataNodes` of the TreeControl must be flattened tree nodes
+     * with correct levels.
+     */
+    getDescendants(dataNode: T): T[];
+    /**
+     * Expands all data nodes in the tree.
+     *
+     * To make this working, the `dataNodes` variable of the TreeControl must be set to all flattened
+     * data nodes of the tree.
+     */
+    expandAll(): void;
+}
+
+/** Optional set of configuration that can be provided to the NestedTreeControl. */
+interface NestedTreeControlOptions<T, K> {
+    /** Function to determine if the provided node is expandable. */
+    isExpandable?: (dataNode: T) => boolean;
+    trackBy?: (dataNode: T) => K;
+}
+/**
+ * Nested tree control. Able to expand/collapse a subtree recursively for NestedNode type.
+ *
+ * @deprecated Use one of levelAccessor or childrenAccessor instead. To be removed in a future
+ * version.
+ * @breaking-change 21.0.0
+ */
+declare class NestedTreeControl<T, K = T> extends BaseTreeControl<T, K> {
+    getChildren: (dataNode: T) => Observable<T[]> | T[] | undefined | null;
+    options?: NestedTreeControlOptions<T, K> | undefined;
+    /** Construct with nested tree function getChildren. */
+    constructor(getChildren: (dataNode: T) => Observable<T[]> | T[] | undefined | null, options?: NestedTreeControlOptions<T, K> | undefined);
+    /**
+     * Expands all dataNodes in the tree.
+     *
+     * To make this working, the `dataNodes` variable of the TreeControl must be set to all root level
+     * data nodes of the tree.
+     */
+    expandAll(): void;
+    /** Gets a list of descendant dataNodes of a subtree rooted at given data node recursively. */
+    getDescendants(dataNode: T): T[];
+    /** A helper function to get descendants recursively. */
+    protected _getDescendants(descendants: T[], dataNode: T): void;
+}
+
 /**
  * Injection token used to provide a `CdkTreeNode` to its outlet.
  * Used primarily to avoid circular imports.
  * @docs-private
  */
-export declare const CDK_TREE_NODE_OUTLET_NODE: InjectionToken<{}>;
-
+declare const CDK_TREE_NODE_OUTLET_NODE: InjectionToken<{}>;
 /**
- * Nested node is a child of `<cdk-tree>`. It works with nested tree.
- * By using `cdk-nested-tree-node` component in tree node template, children of the parent node will
- * be added in the `cdkTreeNodeOutlet` in tree node template.
- * The children of node will be automatically added to `cdkTreeNodeOutlet`.
+ * Outlet for nested CdkNode. Put `[cdkTreeNodeOutlet]` on a tag to place children dataNodes
+ * inside the outlet.
  */
-export declare class CdkNestedTreeNode<T, K = T> extends CdkTreeNode<T, K> implements AfterContentInit, OnDestroy {
-    protected _type: 'flat' | 'nested';
-    protected _differs: IterableDiffers;
-    /** Differ used to find the changes in the data provided by the data source. */
-    private _dataDiffer;
-    /** The children data dataNodes of current node. They will be placed in `CdkTreeNodeOutlet`. */
-    protected _children: T[];
-    /** The children node placeholder. */
-    nodeOutlet: QueryList<CdkTreeNodeOutlet>;
+declare class CdkTreeNodeOutlet {
+    viewContainer: ViewContainerRef;
+    _node?: {} | null | undefined;
     constructor(...args: unknown[]);
-    ngAfterContentInit(): void;
-    ngOnDestroy(): void;
-    /** Add children dataNodes to the NodeOutlet */
-    protected updateChildrenNodes(children?: T[]): void;
-    /** Clear the children dataNodes. */
-    protected _clear(): void;
-    /** Gets the outlet for the current node. */
-    private _getNodeOutlet;
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkNestedTreeNode<any, any>, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkNestedTreeNode<any, any>, "cdk-nested-tree-node", ["cdkNestedTreeNode"], {}, {}, ["nodeOutlet"], never, true, never>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNodeOutlet, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodeOutlet, "[cdkTreeNodeOutlet]", never, {}, {}, never, never, true, never>;
+}
+
+/** Context provided to the tree node component. */
+declare class CdkTreeNodeOutletContext<T> {
+    /** Data for the node. */
+    $implicit: T;
+    /** Depth of the node. */
+    level: number;
+    /** Index location of the node. */
+    index?: number;
+    /** Length of the number of total dataNodes. */
+    count?: number;
+    constructor(data: T);
+}
+/**
+ * Data node definition for the CdkTree.
+ * Captures the node's template and a when predicate that describes when this node should be used.
+ */
+declare class CdkTreeNodeDef<T> {
+    /** @docs-private */
+    template: TemplateRef<any>;
+    /**
+     * Function that should return true if this node template should be used for the provided node
+     * data and index. If left undefined, this node will be considered the default node template to
+     * use when no other when functions return true for the data.
+     * For every node, there must be at least one when function that passes or an undefined to
+     * default.
+     */
+    when: (index: number, nodeData: T) => boolean;
+    constructor(...args: unknown[]);
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNodeDef<any>, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodeDef<any>, "[cdkTreeNodeDef]", never, { "when": { "alias": "cdkTreeNodeDefWhen"; "required": false; }; }, {}, never, never, true, never>;
 }
 
 /**
  * CDK tree component that connects with a data source to retrieve data of type `T` and renders
  * dataNodes with hierarchy. Updates the dataNodes when new data is provided by the data source.
  */
-export declare class CdkTree<T, K = T> implements AfterContentChecked, AfterContentInit, AfterViewInit, CollectionViewer, OnDestroy, OnInit {
+declare class CdkTree<T, K = T> implements AfterContentChecked, AfterContentInit, AfterViewInit, CollectionViewer, OnDestroy, OnInit {
     private _differs;
     private _changeDetectorRef;
     private _elementRef;
@@ -368,17 +473,10 @@ export declare class CdkTree<T, K = T> implements AfterContentChecked, AfterCont
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTree<any, any>, never>;
     static ɵcmp: i0.ɵɵComponentDeclaration<CdkTree<any, any>, "cdk-tree", ["cdkTree"], { "dataSource": { "alias": "dataSource"; "required": false; }; "treeControl": { "alias": "treeControl"; "required": false; }; "levelAccessor": { "alias": "levelAccessor"; "required": false; }; "childrenAccessor": { "alias": "childrenAccessor"; "required": false; }; "trackBy": { "alias": "trackBy"; "required": false; }; "expansionKey": { "alias": "expansionKey"; "required": false; }; }, {}, ["_nodeDefs"], never, true, never>;
 }
-
-export declare class CdkTreeModule {
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeModule, never>;
-    static ɵmod: i0.ɵɵNgModuleDeclaration<CdkTreeModule, never, [typeof i1.CdkNestedTreeNode, typeof i2.CdkTreeNodeDef, typeof i3.CdkTreeNodePadding, typeof i4.CdkTreeNodeToggle, typeof i5.CdkTree, typeof i5.CdkTreeNode, typeof i6.CdkTreeNodeOutlet], [typeof i1.CdkNestedTreeNode, typeof i2.CdkTreeNodeDef, typeof i3.CdkTreeNodePadding, typeof i4.CdkTreeNodeToggle, typeof i5.CdkTree, typeof i5.CdkTreeNode, typeof i6.CdkTreeNodeOutlet]>;
-    static ɵinj: i0.ɵɵInjectorDeclaration<CdkTreeModule>;
-}
-
 /**
  * Tree node for CdkTree. It contains the data in the tree node.
  */
-export declare class CdkTreeNode<T, K = T> implements OnDestroy, OnInit, TreeKeyManagerItem {
+declare class CdkTreeNode<T, K = T> implements OnDestroy, OnInit, TreeKeyManagerItem {
     _elementRef: ElementRef<HTMLElement>;
     protected _tree: CdkTree<T, K>;
     protected _tabindex: number | null;
@@ -490,55 +588,38 @@ export declare class CdkTreeNode<T, K = T> implements OnDestroy, OnInit, TreeKey
 }
 
 /**
- * Data node definition for the CdkTree.
- * Captures the node's template and a when predicate that describes when this node should be used.
+ * Nested node is a child of `<cdk-tree>`. It works with nested tree.
+ * By using `cdk-nested-tree-node` component in tree node template, children of the parent node will
+ * be added in the `cdkTreeNodeOutlet` in tree node template.
+ * The children of node will be automatically added to `cdkTreeNodeOutlet`.
  */
-export declare class CdkTreeNodeDef<T> {
-    /** @docs-private */
-    template: TemplateRef<any>;
-    /**
-     * Function that should return true if this node template should be used for the provided node
-     * data and index. If left undefined, this node will be considered the default node template to
-     * use when no other when functions return true for the data.
-     * For every node, there must be at least one when function that passes or an undefined to
-     * default.
-     */
-    when: (index: number, nodeData: T) => boolean;
+declare class CdkNestedTreeNode<T, K = T> extends CdkTreeNode<T, K> implements AfterContentInit, OnDestroy {
+    protected _type: 'flat' | 'nested';
+    protected _differs: IterableDiffers;
+    /** Differ used to find the changes in the data provided by the data source. */
+    private _dataDiffer;
+    /** The children data dataNodes of current node. They will be placed in `CdkTreeNodeOutlet`. */
+    protected _children: T[];
+    /** The children node placeholder. */
+    nodeOutlet: QueryList<CdkTreeNodeOutlet>;
     constructor(...args: unknown[]);
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNodeDef<any>, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodeDef<any>, "[cdkTreeNodeDef]", never, { "when": { "alias": "cdkTreeNodeDefWhen"; "required": false; }; }, {}, never, never, true, never>;
-}
-
-/**
- * Outlet for nested CdkNode. Put `[cdkTreeNodeOutlet]` on a tag to place children dataNodes
- * inside the outlet.
- */
-export declare class CdkTreeNodeOutlet {
-    viewContainer: ViewContainerRef;
-    _node?: {} | null | undefined;
-    constructor(...args: unknown[]);
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNodeOutlet, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodeOutlet, "[cdkTreeNodeOutlet]", never, {}, {}, never, never, true, never>;
-}
-
-/** Context provided to the tree node component. */
-export declare class CdkTreeNodeOutletContext<T> {
-    /** Data for the node. */
-    $implicit: T;
-    /** Depth of the node. */
-    level: number;
-    /** Index location of the node. */
-    index?: number;
-    /** Length of the number of total dataNodes. */
-    count?: number;
-    constructor(data: T);
+    ngAfterContentInit(): void;
+    ngOnDestroy(): void;
+    /** Add children dataNodes to the NodeOutlet */
+    protected updateChildrenNodes(children?: T[]): void;
+    /** Clear the children dataNodes. */
+    protected _clear(): void;
+    /** Gets the outlet for the current node. */
+    private _getNodeOutlet;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkNestedTreeNode<any, any>, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkNestedTreeNode<any, any>, "cdk-nested-tree-node", ["cdkNestedTreeNode"], {}, {}, ["nodeOutlet"], never, true, never>;
 }
 
 /**
  * Indent for the children tree dataNodes.
  * This directive will add left-padding to the node to show hierarchy.
  */
-export declare class CdkTreeNodePadding<T, K = T> implements OnDestroy {
+declare class CdkTreeNodePadding<T, K = T> implements OnDestroy {
     private _treeNode;
     private _tree;
     private _element;
@@ -585,9 +666,36 @@ export declare class CdkTreeNodePadding<T, K = T> implements OnDestroy {
 }
 
 /**
+ * Returns an error to be thrown when there is no usable data.
+ * @docs-private
+ */
+declare function getTreeNoValidDataSourceError(): Error;
+/**
+ * Returns an error to be thrown when there are multiple nodes that are missing a when function.
+ * @docs-private
+ */
+declare function getTreeMultipleDefaultNodeDefsError(): Error;
+/**
+ * Returns an error to be thrown when there are no matching node defs for a particular set of data.
+ * @docs-private
+ */
+declare function getTreeMissingMatchingNodeDefError(): Error;
+/**
+ * Returns an error to be thrown when there is no tree control.
+ * @docs-private
+ */
+declare function getTreeControlMissingError(): Error;
+/**
+ * Returns an error to be thrown when there are multiple ways of specifying children or level
+ * provided to the tree.
+ * @docs-private
+ */
+declare function getMultipleTreeControlsError(): Error;
+
+/**
  * Node toggle to expand and collapse the node.
  */
-export declare class CdkTreeNodeToggle<T, K = T> {
+declare class CdkTreeNodeToggle<T, K = T> {
     protected _tree: CdkTree<T, K>;
     protected _treeNode: CdkTreeNode<T, K>;
     /** Whether expand/collapse the node recursively. */
@@ -599,185 +707,10 @@ export declare class CdkTreeNodeToggle<T, K = T> {
     static ngAcceptInputType_recursive: unknown;
 }
 
-/**
- * Flat tree control. Able to expand/collapse a subtree recursively for flattened tree.
- *
- * @deprecated Use one of levelAccessor or childrenAccessor instead. To be removed in a future
- * version.
- * @breaking-change 21.0.0
- */
-export declare class FlatTreeControl<T, K = T> extends BaseTreeControl<T, K> {
-    getLevel: (dataNode: T) => number;
-    isExpandable: (dataNode: T) => boolean;
-    options?: FlatTreeControlOptions<T, K> | undefined;
-    /** Construct with flat tree data node functions getLevel and isExpandable. */
-    constructor(getLevel: (dataNode: T) => number, isExpandable: (dataNode: T) => boolean, options?: FlatTreeControlOptions<T, K> | undefined);
-    /**
-     * Gets a list of the data node's subtree of descendent data nodes.
-     *
-     * To make this working, the `dataNodes` of the TreeControl must be flattened tree nodes
-     * with correct levels.
-     */
-    getDescendants(dataNode: T): T[];
-    /**
-     * Expands all data nodes in the tree.
-     *
-     * To make this working, the `dataNodes` variable of the TreeControl must be set to all flattened
-     * data nodes of the tree.
-     */
-    expandAll(): void;
+declare class CdkTreeModule {
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeModule, never>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<CdkTreeModule, never, [typeof CdkNestedTreeNode, typeof CdkTreeNodeDef, typeof CdkTreeNodePadding, typeof CdkTreeNodeToggle, typeof CdkTree, typeof CdkTreeNode, typeof CdkTreeNodeOutlet], [typeof CdkNestedTreeNode, typeof CdkTreeNodeDef, typeof CdkTreeNodePadding, typeof CdkTreeNodeToggle, typeof CdkTree, typeof CdkTreeNode, typeof CdkTreeNodeOutlet]>;
+    static ɵinj: i0.ɵɵInjectorDeclaration<CdkTreeModule>;
 }
 
-/** Optional set of configuration that can be provided to the FlatTreeControl. */
-export declare interface FlatTreeControlOptions<T, K> {
-    trackBy?: (dataNode: T) => K;
-}
-
-/**
- * Returns an error to be thrown when there are multiple ways of specifying children or level
- * provided to the tree.
- * @docs-private
- */
-export declare function getMultipleTreeControlsError(): Error;
-
-/**
- * Returns an error to be thrown when there is no tree control.
- * @docs-private
- */
-export declare function getTreeControlMissingError(): Error;
-
-/**
- * Returns an error to be thrown when there are no matching node defs for a particular set of data.
- * @docs-private
- */
-export declare function getTreeMissingMatchingNodeDefError(): Error;
-
-/**
- * Returns an error to be thrown when there are multiple nodes that are missing a when function.
- * @docs-private
- */
-export declare function getTreeMultipleDefaultNodeDefsError(): Error;
-
-
-/**
- * Returns an error to be thrown when there is no usable data.
- * @docs-private
- */
-export declare function getTreeNoValidDataSourceError(): Error;
-
-declare namespace i1 {
-    export {
-        CdkNestedTreeNode
-    }
-}
-
-declare namespace i2 {
-    export {
-        CdkTreeNodeOutletContext,
-        CdkTreeNodeDef
-    }
-}
-
-declare namespace i3 {
-    export {
-        CdkTreeNodePadding
-    }
-}
-
-declare namespace i4 {
-    export {
-        CdkTreeNodeToggle
-    }
-}
-
-declare namespace i5 {
-    export {
-        CdkTree,
-        CdkTreeNode
-    }
-}
-
-declare namespace i6 {
-    export {
-        CDK_TREE_NODE_OUTLET_NODE,
-        CdkTreeNodeOutlet
-    }
-}
-
-/**
- * Nested tree control. Able to expand/collapse a subtree recursively for NestedNode type.
- *
- * @deprecated Use one of levelAccessor or childrenAccessor instead. To be removed in a future
- * version.
- * @breaking-change 21.0.0
- */
-export declare class NestedTreeControl<T, K = T> extends BaseTreeControl<T, K> {
-    getChildren: (dataNode: T) => Observable<T[]> | T[] | undefined | null;
-    options?: NestedTreeControlOptions<T, K> | undefined;
-    /** Construct with nested tree function getChildren. */
-    constructor(getChildren: (dataNode: T) => Observable<T[]> | T[] | undefined | null, options?: NestedTreeControlOptions<T, K> | undefined);
-    /**
-     * Expands all dataNodes in the tree.
-     *
-     * To make this working, the `dataNodes` variable of the TreeControl must be set to all root level
-     * data nodes of the tree.
-     */
-    expandAll(): void;
-    /** Gets a list of descendant dataNodes of a subtree rooted at given data node recursively. */
-    getDescendants(dataNode: T): T[];
-    /** A helper function to get descendants recursively. */
-    protected _getDescendants(descendants: T[], dataNode: T): void;
-}
-
-/** Optional set of configuration that can be provided to the NestedTreeControl. */
-export declare interface NestedTreeControlOptions<T, K> {
-    /** Function to determine if the provided node is expandable. */
-    isExpandable?: (dataNode: T) => boolean;
-    trackBy?: (dataNode: T) => K;
-}
-
-/**
- * Tree control interface. User can implement TreeControl to expand/collapse dataNodes in the tree.
- * The CDKTree will use this TreeControl to expand/collapse a node.
- * User can also use it outside the `<cdk-tree>` to control the expansion status of the tree.
- *
- * @deprecated Use one of levelAccessor or childrenAccessor instead. To be removed in a future version.
- * @breaking-change 21.0.0
- */
-export declare interface TreeControl<T, K = T> {
-    /** The saved tree nodes data for `expandAll` action. */
-    dataNodes: T[];
-    /** The expansion model */
-    expansionModel: SelectionModel<K>;
-    /** Whether the data node is expanded or collapsed. Return true if it's expanded. */
-    isExpanded(dataNode: T): boolean;
-    /** Get all descendants of a data node */
-    getDescendants(dataNode: T): any[];
-    /** Expand or collapse data node */
-    toggle(dataNode: T): void;
-    /** Expand one data node */
-    expand(dataNode: T): void;
-    /** Collapse one data node */
-    collapse(dataNode: T): void;
-    /** Expand all the dataNodes in the tree */
-    expandAll(): void;
-    /** Collapse all the dataNodes in the tree */
-    collapseAll(): void;
-    /** Toggle a data node by expand/collapse it and all its descendants */
-    toggleDescendants(dataNode: T): void;
-    /** Expand a data node and all its descendants */
-    expandDescendants(dataNode: T): void;
-    /** Collapse a data node and all its descendants */
-    collapseDescendants(dataNode: T): void;
-    /** Get depth of a given data node, return the level number. This is for flat tree node. */
-    readonly getLevel: (dataNode: T) => number;
-    /**
-     * Whether the data node is expandable. Returns true if expandable.
-     * This is for flat tree node.
-     */
-    readonly isExpandable: (dataNode: T) => boolean;
-    /** Gets a stream that emits whenever the given data node's children change. */
-    readonly getChildren: (dataNode: T) => Observable<T[]> | T[] | undefined | null;
-}
-
-export { }
+export { BaseTreeControl, CDK_TREE_NODE_OUTLET_NODE, CdkNestedTreeNode, CdkTree, CdkTreeModule, CdkTreeNode, CdkTreeNodeDef, CdkTreeNodeOutlet, CdkTreeNodeOutletContext, CdkTreeNodePadding, CdkTreeNodeToggle, FlatTreeControl, type FlatTreeControlOptions, NestedTreeControl, type NestedTreeControlOptions, type TreeControl, getMultipleTreeControlsError, getTreeControlMissingError, getTreeMissingMatchingNodeDefError, getTreeMultipleDefaultNodeDefsError, getTreeNoValidDataSourceError };

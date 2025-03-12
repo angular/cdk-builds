@@ -1,15 +1,8 @@
-import { ElementDimensions } from '@angular/cdk/testing';
-import { EventData } from '@angular/cdk/testing';
-import { HarnessEnvironment } from '@angular/cdk/testing';
-import { HarnessLoader } from '@angular/cdk/testing';
-import { ModifierKeys } from '@angular/cdk/testing';
-import { TestElement } from '@angular/cdk/testing';
-import { TestKey } from '@angular/cdk/testing';
-import { TextOptions } from '@angular/cdk/testing';
+import { TestElement, ModifierKeys, TestKey, TextOptions, ElementDimensions, EventData, HarnessEnvironment, HarnessLoader } from '@angular/cdk/testing';
 import * as webdriver from 'selenium-webdriver';
 
 /** A `TestElement` implementation for WebDriver. */
-export declare class SeleniumWebDriverElement implements TestElement {
+declare class SeleniumWebDriverElement implements TestElement {
     readonly element: () => webdriver.WebElement;
     private _stabilize;
     constructor(element: () => webdriver.WebElement, _stabilize: () => Promise<void>);
@@ -96,8 +89,34 @@ export declare class SeleniumWebDriverElement implements TestElement {
     private _dispatchClickEventSequence;
 }
 
+/**
+ * An Angular framework stabilizer function that takes a callback and calls it when the application
+ * is stable, passing a boolean indicating if any work was done.
+ */
+declare interface FrameworkStabilizer {
+    (callback: (didWork: boolean) => void): void;
+}
+declare global {
+    interface Window {
+        /**
+         * These hooks are exposed by Angular to register a callback for when the application is stable
+         * (no more pending tasks).
+         *
+         * For the implementation, see: https://github.com/
+         *  angular/angular/blob/main/packages/platform-browser/src/browser/testability.ts#L30-L49
+         */
+        frameworkStabilizers: FrameworkStabilizer[];
+    }
+}
+/** Options to configure the environment. */
+interface WebDriverHarnessEnvironmentOptions {
+    /** The query function used to find DOM elements. */
+    queryFn: (selector: string, root: () => webdriver.WebElement) => Promise<webdriver.WebElement[]>;
+}
+/** Waits for angular to be ready after the page load. */
+declare function waitForAngularReady(wd: webdriver.WebDriver): Promise<void>;
 /** A `HarnessEnvironment` implementation for WebDriver. */
-export declare class SeleniumWebDriverHarnessEnvironment extends HarnessEnvironment<() => webdriver.WebElement> {
+declare class SeleniumWebDriverHarnessEnvironment extends HarnessEnvironment<() => webdriver.WebElement> {
     /** The options for this environment. */
     private _options;
     /** Environment stabilization callback passed to the created test elements. */
@@ -127,13 +146,4 @@ export declare class SeleniumWebDriverHarnessEnvironment extends HarnessEnvironm
     protected getAllRawElements(selector: string): Promise<(() => webdriver.WebElement)[]>;
 }
 
-/** Waits for angular to be ready after the page load. */
-export declare function waitForAngularReady(wd: webdriver.WebDriver): Promise<void>;
-
-/** Options to configure the environment. */
-export declare interface WebDriverHarnessEnvironmentOptions {
-    /** The query function used to find DOM elements. */
-    queryFn: (selector: string, root: () => webdriver.WebElement) => Promise<webdriver.WebElement[]>;
-}
-
-export { }
+export { SeleniumWebDriverElement, SeleniumWebDriverHarnessEnvironment, type WebDriverHarnessEnvironmentOptions, waitForAngularReady };

@@ -1,7 +1,7 @@
 import { coerceNumberProperty, coerceElement } from '@angular/cdk/coercion';
 import * as i0 from '@angular/core';
 import { InjectionToken, forwardRef, Directive, Input, inject, NgZone, RendererFactory2, Injectable, ElementRef, Renderer2, ChangeDetectorRef, Injector, afterNextRender, booleanAttribute, Optional, Inject, Component, ViewEncapsulation, ChangeDetectionStrategy, Output, ViewChild, ViewContainerRef, TemplateRef, IterableDiffers, NgModule } from '@angular/core';
-import { Subject, of, Observable, animationFrameScheduler, asapScheduler, Subscription, isObservable } from 'rxjs';
+import { Subject, of, Observable, Subscription, animationFrameScheduler, asapScheduler, isObservable } from 'rxjs';
 import { distinctUntilChanged, auditTime, filter, startWith, takeUntil, pairwise, switchMap, shareReplay } from 'rxjs/operators';
 import { Platform, getRtlScrollAxisType, RtlScrollAxisType, supportsScrollBehavior } from '@angular/cdk/platform';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
@@ -1455,10 +1455,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.0", ngImpor
                     ],
                 }]
         }] });
-
-/**
- * Generated bundle index. Do not edit.
- */
 
 export { CdkFixedSizeVirtualScroll, CdkScrollable, CdkScrollableModule, CdkVirtualForOf, CdkVirtualScrollViewport, CdkVirtualScrollable, CdkVirtualScrollableElement, CdkVirtualScrollableWindow, DEFAULT_RESIZE_TIME, DEFAULT_SCROLL_TIME, FixedSizeVirtualScrollStrategy, ScrollDispatcher, ScrollingModule, VIRTUAL_SCROLLABLE, VIRTUAL_SCROLL_STRATEGY, ViewportRuler, _fixedSizeVirtualScrollStrategyFactory };
 //# sourceMappingURL=scrolling.mjs.map

@@ -845,9 +845,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.0", ngImpor
                 }]
         }] });
 
-/**
- * Generated bundle index. Do not edit.
- */
-
 export { CdkDialogContainer, DEFAULT_DIALOG_CONFIG, DIALOG_DATA, DIALOG_SCROLL_STRATEGY, DIALOG_SCROLL_STRATEGY_PROVIDER, DIALOG_SCROLL_STRATEGY_PROVIDER_FACTORY, Dialog, DialogConfig, DialogModule, DialogRef, throwDialogContentAlreadyAttachedError };
 //# sourceMappingURL=dialog.mjs.map

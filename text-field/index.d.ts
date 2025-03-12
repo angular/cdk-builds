@@ -1,27 +1,21 @@
-import { AfterViewInit } from '@angular/core';
-import { DoCheck } from '@angular/core';
-import { ElementRef } from '@angular/core';
-import { EventEmitter } from '@angular/core';
 import * as i0 from '@angular/core';
-import { NumberInput } from '@angular/cdk/coercion';
+import { OnDestroy, ElementRef, OnInit, EventEmitter, AfterViewInit, DoCheck } from '@angular/core';
 import { Observable } from 'rxjs';
-import { OnDestroy } from '@angular/core';
-import { OnInit } from '@angular/core';
+import { NumberInput } from '@angular/cdk/coercion';
 
 /** An event that is emitted when the autofill state of an input changes. */
-export declare type AutofillEvent = {
+type AutofillEvent = {
     /** The element whose autofill state changes. */
     target: Element;
     /** Whether the element is currently autofilled. */
     isAutofilled: boolean;
 };
-
 /**
  * An injectable service that can be used to monitor the autofill state of an input.
  * Based on the following blog post:
  * https://medium.com/@brunn/detecting-autofilled-fields-in-javascript-aed598d25da7
  */
-export declare class AutofillMonitor implements OnDestroy {
+declare class AutofillMonitor implements OnDestroy {
     private _platform;
     private _ngZone;
     private _renderer;
@@ -54,9 +48,8 @@ export declare class AutofillMonitor implements OnDestroy {
     static ɵfac: i0.ɵɵFactoryDeclaration<AutofillMonitor, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<AutofillMonitor>;
 }
-
 /** A directive that can be used to monitor the autofill state of an input. */
-export declare class CdkAutofill implements OnDestroy, OnInit {
+declare class CdkAutofill implements OnDestroy, OnInit {
     private _elementRef;
     private _autofillMonitor;
     /** Emits when the autofill state of the element changes. */
@@ -69,7 +62,7 @@ export declare class CdkAutofill implements OnDestroy, OnInit {
 }
 
 /** Directive to automatically resize a textarea to fit its content. */
-export declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDestroy {
+declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDestroy {
     private _elementRef;
     private _platform;
     private _ngZone;
@@ -151,24 +144,10 @@ export declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDe
     static ngAcceptInputType_enabled: unknown;
 }
 
-declare namespace i1 {
-    export {
-        AutofillEvent,
-        AutofillMonitor,
-        CdkAutofill
-    }
-}
-
-declare namespace i2 {
-    export {
-        CdkTextareaAutosize
-    }
-}
-
-export declare class TextFieldModule {
+declare class TextFieldModule {
     static ɵfac: i0.ɵɵFactoryDeclaration<TextFieldModule, never>;
-    static ɵmod: i0.ɵɵNgModuleDeclaration<TextFieldModule, never, [typeof i1.CdkAutofill, typeof i2.CdkTextareaAutosize], [typeof i1.CdkAutofill, typeof i2.CdkTextareaAutosize]>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<TextFieldModule, never, [typeof CdkAutofill, typeof CdkTextareaAutosize], [typeof CdkAutofill, typeof CdkTextareaAutosize]>;
     static ɵinj: i0.ɵɵInjectorDeclaration<TextFieldModule>;
 }
 
-export { }
+export { type AutofillEvent, AutofillMonitor, CdkAutofill, CdkTextareaAutosize, TextFieldModule };

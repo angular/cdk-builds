@@ -1,9 +1,27 @@
 import * as i0 from '@angular/core';
-import { Observable } from 'rxjs';
 import { OnDestroy } from '@angular/core';
+import { Observable } from 'rxjs';
 
+declare class LayoutModule {
+    static ɵfac: i0.ɵɵFactoryDeclaration<LayoutModule, never>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<LayoutModule, never, never, never>;
+    static ɵinj: i0.ɵɵInjectorDeclaration<LayoutModule>;
+}
+
+/** The current state of a layout breakpoint. */
+interface BreakpointState {
+    /** Whether the breakpoint is currently matching. */
+    matches: boolean;
+    /**
+     * A key boolean pair for each query provided to the observe method,
+     * with its current matched state.
+     */
+    breakpoints: {
+        [key: string]: boolean;
+    };
+}
 /** Utility for checking the matching state of `@media` queries. */
-export declare class BreakpointObserver implements OnDestroy {
+declare class BreakpointObserver implements OnDestroy {
     private _mediaMatcher;
     private _zone;
     /**  A map of all media queries currently being listened for. */
@@ -32,8 +50,7 @@ export declare class BreakpointObserver implements OnDestroy {
     static ɵprov: i0.ɵɵInjectableDeclaration<BreakpointObserver>;
 }
 
-
-export declare const Breakpoints: {
+declare const Breakpoints: {
     XSmall: string;
     Small: string;
     Medium: string;
@@ -50,27 +67,8 @@ export declare const Breakpoints: {
     WebLandscape: string;
 };
 
-/** The current state of a layout breakpoint. */
-export declare interface BreakpointState {
-    /** Whether the breakpoint is currently matching. */
-    matches: boolean;
-    /**
-     * A key boolean pair for each query provided to the observe method,
-     * with its current matched state.
-     */
-    breakpoints: {
-        [key: string]: boolean;
-    };
-}
-
-export declare class LayoutModule {
-    static ɵfac: i0.ɵɵFactoryDeclaration<LayoutModule, never>;
-    static ɵmod: i0.ɵɵNgModuleDeclaration<LayoutModule, never, never, never>;
-    static ɵinj: i0.ɵɵInjectorDeclaration<LayoutModule>;
-}
-
 /** A utility for calling matchMedia queries. */
-export declare class MediaMatcher {
+declare class MediaMatcher {
     private _platform;
     private _nonce;
     /** The internal matchMedia method to return back a MediaQueryList like object. */
@@ -87,4 +85,4 @@ export declare class MediaMatcher {
     static ɵprov: i0.ɵɵInjectableDeclaration<MediaMatcher>;
 }
 
-export { }
+export { BreakpointObserver, type BreakpointState, Breakpoints, LayoutModule, MediaMatcher };

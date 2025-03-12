@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { ElementRef, NgModuleRef, Injector, EnvironmentInjector, createComponent, inject, TemplateRef, ViewContainerRef, Directive, EventEmitter, Input, Output, NgModule } from '@angular/core';
+import { ElementRef, NgModuleRef, EnvironmentInjector, createComponent, Injector, inject, TemplateRef, ViewContainerRef, Directive, EventEmitter, Input, Output, NgModule } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 /**
@@ -671,10 +671,6 @@ class PortalInjector {
         return this._parentInjector.get(token, notFoundValue);
     }
 }
-
-/**
- * Generated bundle index. Do not edit.
- */
 
 export { BasePortalHost, BasePortalOutlet, CdkPortal, CdkPortalOutlet, ComponentPortal, DomPortal, DomPortalHost, DomPortalOutlet, Portal, PortalHostDirective, PortalInjector, PortalModule, TemplatePortal, TemplatePortalDirective };
 //# sourceMappingURL=portal.mjs.map

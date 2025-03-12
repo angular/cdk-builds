@@ -56,9 +56,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.0", ngImpor
             args: [{ exportAs: 'cdkVisuallyHidden', encapsulation: ViewEncapsulation.None, template: '', changeDetection: ChangeDetectionStrategy.OnPush, styles: [".cdk-visually-hidden{border:0;clip:rect(0 0 0 0);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;white-space:nowrap;outline:0;-webkit-appearance:none;-moz-appearance:none;left:0}[dir=rtl] .cdk-visually-hidden{left:auto;right:0}"] }]
         }] });
 
-/**
- * Generated bundle index. Do not edit.
- */
-
 export { _CdkPrivateStyleLoader, _VisuallyHiddenLoader };
 //# sourceMappingURL=private.mjs.map

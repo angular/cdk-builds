@@ -1,60 +1,115 @@
-import { CollectionViewer } from '@angular/cdk/collections';
-import { DataSource } from '@angular/cdk/collections';
-import { Directionality } from '@angular/cdk/bidi';
-import { DoCheck } from '@angular/core';
-import { ElementRef } from '@angular/core';
-import * as i0 from '@angular/core';
-import * as i2 from '@angular/cdk/bidi';
-import { InjectionToken } from '@angular/core';
-import { ListRange } from '@angular/cdk/collections';
-import { NgIterable } from '@angular/core';
-import { NgZone } from '@angular/core';
 import { NumberInput } from '@angular/cdk/coercion';
-import { Observable } from 'rxjs';
-import { OnChanges } from '@angular/core';
-import { OnDestroy } from '@angular/core';
-import { OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
-import { Subscription } from 'rxjs';
-import { TemplateRef } from '@angular/core';
-import { TrackByFunction } from '@angular/core';
+import * as i0 from '@angular/core';
+import { OnDestroy, ElementRef, OnInit, NgZone, InjectionToken, OnChanges, NgIterable, DoCheck, TrackByFunction, TemplateRef } from '@angular/core';
+import { Observable, Subscription, Subject } from 'rxjs';
+import { ListRange, DataSource, CollectionViewer } from '@angular/cdk/collections';
+import * as i2 from '@angular/cdk/bidi';
+import { Directionality } from '@angular/cdk/bidi';
 
-export declare type _Bottom = {
-    bottom?: number;
-};
-
-/** A virtual scroll strategy that supports fixed-size items. */
-export declare class CdkFixedSizeVirtualScroll implements OnChanges {
-    /** The size of the items in the list (in pixels). */
-    get itemSize(): number;
-    set itemSize(value: NumberInput);
-    _itemSize: number;
-    /**
-     * The minimum amount of buffer rendered beyond the viewport (in pixels).
-     * If the amount of buffer dips below this number, more items will be rendered. Defaults to 100px.
-     */
-    get minBufferPx(): number;
-    set minBufferPx(value: NumberInput);
-    _minBufferPx: number;
-    /**
-     * The number of pixels worth of buffer to render for when rendering new items. Defaults to 200px.
-     */
-    get maxBufferPx(): number;
-    set maxBufferPx(value: NumberInput);
-    _maxBufferPx: number;
-    /** The scroll strategy used by this directive. */
-    _scrollStrategy: FixedSizeVirtualScrollStrategy;
-    ngOnChanges(): void;
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkFixedSizeVirtualScroll, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkFixedSizeVirtualScroll, "cdk-virtual-scroll-viewport[itemSize]", never, { "itemSize": { "alias": "itemSize"; "required": false; }; "minBufferPx": { "alias": "minBufferPx"; "required": false; }; "maxBufferPx": { "alias": "maxBufferPx"; "required": false; }; }, {}, never, never, true, never>;
+/**
+ * An item to be repeated by the VirtualScrollViewport
+ */
+interface CdkVirtualScrollRepeater<T> {
+    readonly dataStream: Observable<readonly T[]>;
+    measureRangeSize(range: ListRange, orientation: 'horizontal' | 'vertical'): number;
 }
 
+/** Time in ms to throttle the scrolling events by default. */
+declare const DEFAULT_SCROLL_TIME = 20;
+/**
+ * Service contained all registered Scrollable references and emits an event when any one of the
+ * Scrollable references emit a scrolled event.
+ */
+declare class ScrollDispatcher implements OnDestroy {
+    private _ngZone;
+    private _platform;
+    private _renderer;
+    private _cleanupGlobalListener;
+    constructor(...args: unknown[]);
+    /** Subject for notifying that a registered scrollable reference element has been scrolled. */
+    private readonly _scrolled;
+    /** Keeps track of the amount of subscriptions to `scrolled`. Used for cleaning up afterwards. */
+    private _scrolledCount;
+    /**
+     * Map of all the scrollable references that are registered with the service and their
+     * scroll event subscriptions.
+     */
+    scrollContainers: Map<CdkScrollable, Subscription>;
+    /**
+     * Registers a scrollable instance with the service and listens for its scrolled events. When the
+     * scrollable is scrolled, the service emits the event to its scrolled observable.
+     * @param scrollable Scrollable instance to be registered.
+     */
+    register(scrollable: CdkScrollable): void;
+    /**
+     * De-registers a Scrollable reference and unsubscribes from its scroll event observable.
+     * @param scrollable Scrollable instance to be deregistered.
+     */
+    deregister(scrollable: CdkScrollable): void;
+    /**
+     * Returns an observable that emits an event whenever any of the registered Scrollable
+     * references (or window, document, or body) fire a scrolled event. Can provide a time in ms
+     * to override the default "throttle" time.
+     *
+     * **Note:** in order to avoid hitting change detection for every scroll event,
+     * all of the events emitted from this stream will be run outside the Angular zone.
+     * If you need to update any data bindings as a result of a scroll event, you have
+     * to run the callback using `NgZone.run`.
+     */
+    scrolled(auditTimeInMs?: number): Observable<CdkScrollable | void>;
+    ngOnDestroy(): void;
+    /**
+     * Returns an observable that emits whenever any of the
+     * scrollable ancestors of an element are scrolled.
+     * @param elementOrElementRef Element whose ancestors to listen for.
+     * @param auditTimeInMs Time to throttle the scroll events.
+     */
+    ancestorScrolled(elementOrElementRef: ElementRef | HTMLElement, auditTimeInMs?: number): Observable<CdkScrollable | void>;
+    /** Returns all registered Scrollables that contain the provided element. */
+    getAncestorScrollContainers(elementOrElementRef: ElementRef | HTMLElement): CdkScrollable[];
+    /** Returns true if the element is contained within the provided Scrollable. */
+    private _scrollableContainsElement;
+    static ɵfac: i0.ɵɵFactoryDeclaration<ScrollDispatcher, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<ScrollDispatcher>;
+}
+
+type _Without<T> = {
+    [P in keyof T]?: never;
+};
+type _XOR<T, U> = (_Without<T> & U) | (_Without<U> & T);
+type _Top = {
+    top?: number;
+};
+type _Bottom = {
+    bottom?: number;
+};
+type _Left = {
+    left?: number;
+};
+type _Right = {
+    right?: number;
+};
+type _Start = {
+    start?: number;
+};
+type _End = {
+    end?: number;
+};
+type _XAxis = _XOR<_XOR<_Left, _Right>, _XOR<_Start, _End>>;
+type _YAxis = _XOR<_Top, _Bottom>;
+/**
+ * An extended version of ScrollToOptions that allows expressing scroll offsets relative to the
+ * top, bottom, left, right, start, or end of the viewport rather than just the top and left.
+ * Please note: the top and bottom properties are mutually exclusive, as are the left, right,
+ * start, and end properties.
+ */
+type ExtendedScrollToOptions = _XAxis & _YAxis & ScrollOptions;
 /**
  * Sends an event when the directive's element is scrolled. Registers itself with the
  * ScrollDispatcher service to include itself as part of its collection of scrolling events that it
  * can be listened to through the service.
  */
-export declare class CdkScrollable implements OnInit, OnDestroy {
+declare class CdkScrollable implements OnInit, OnDestroy {
     protected elementRef: ElementRef<HTMLElement>;
     protected scrollDispatcher: ScrollDispatcher;
     protected ngZone: NgZone;
@@ -95,107 +150,11 @@ export declare class CdkScrollable implements OnInit, OnDestroy {
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkScrollable, "[cdk-scrollable], [cdkScrollable]", never, {}, {}, never, never, true, never>;
 }
 
-export declare class CdkScrollableModule {
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkScrollableModule, never>;
-    static ɵmod: i0.ɵɵNgModuleDeclaration<CdkScrollableModule, never, [typeof i1.CdkScrollable], [typeof i1.CdkScrollable]>;
-    static ɵinj: i0.ɵɵInjectorDeclaration<CdkScrollableModule>;
-}
-
-/**
- * A directive similar to `ngForOf` to be used for rendering data inside a virtual scrolling
- * container.
- */
-export declare class CdkVirtualForOf<T> implements CdkVirtualScrollRepeater<T>, CollectionViewer, DoCheck, OnDestroy {
-    private _viewContainerRef;
-    private _template;
-    private _differs;
-    private _viewRepeater;
-    private _viewport;
-    /** Emits when the rendered view of the data changes. */
-    readonly viewChange: Subject<ListRange>;
-    /** Subject that emits when a new DataSource instance is given. */
-    private readonly _dataSourceChanges;
-    /** The DataSource to display. */
-    get cdkVirtualForOf(): DataSource<T> | Observable<T[]> | NgIterable<T> | null | undefined;
-    set cdkVirtualForOf(value: DataSource<T> | Observable<T[]> | NgIterable<T> | null | undefined);
-    _cdkVirtualForOf: DataSource<T> | Observable<T[]> | NgIterable<T> | null | undefined;
-    /**
-     * The `TrackByFunction` to use for tracking changes. The `TrackByFunction` takes the index and
-     * the item and produces a value to be used as the item's identity when tracking changes.
-     */
-    get cdkVirtualForTrackBy(): TrackByFunction<T> | undefined;
-    set cdkVirtualForTrackBy(fn: TrackByFunction<T> | undefined);
-    private _cdkVirtualForTrackBy;
-    /** The template used to stamp out new elements. */
-    set cdkVirtualForTemplate(value: TemplateRef<CdkVirtualForOfContext<T>>);
-    /**
-     * The size of the cache used to store templates that are not being used for re-use later.
-     * Setting the cache size to `0` will disable caching. Defaults to 20 templates.
-     */
-    get cdkVirtualForTemplateCacheSize(): number;
-    set cdkVirtualForTemplateCacheSize(size: NumberInput);
-    /** Emits whenever the data in the current DataSource changes. */
-    readonly dataStream: Observable<readonly T[]>;
-    /** The differ used to calculate changes to the data. */
-    private _differ;
-    /** The most recent data emitted from the DataSource. */
-    private _data;
-    /** The currently rendered items. */
-    private _renderedItems;
-    /** The currently rendered range of indices. */
-    private _renderedRange;
-    /** Whether the rendered data should be updated during the next ngDoCheck cycle. */
-    private _needsUpdate;
-    private readonly _destroyed;
-    constructor(...args: unknown[]);
-    /**
-     * Measures the combined size (width for horizontal orientation, height for vertical) of all items
-     * in the specified range. Throws an error if the range includes items that are not currently
-     * rendered.
-     */
-    measureRangeSize(range: ListRange, orientation: 'horizontal' | 'vertical'): number;
-    ngDoCheck(): void;
-    ngOnDestroy(): void;
-    /** React to scroll state changes in the viewport. */
-    private _onRenderedDataChange;
-    /** Swap out one `DataSource` for another. */
-    private _changeDataSource;
-    /** Update the `CdkVirtualForOfContext` for all views. */
-    private _updateContext;
-    /** Apply changes to the DOM. */
-    private _applyChanges;
-    /** Update the computed properties on the `CdkVirtualForOfContext`. */
-    private _updateComputedContextProperties;
-    private _getEmbeddedViewArgs;
-    static ngTemplateContextGuard<T>(directive: CdkVirtualForOf<T>, context: unknown): context is CdkVirtualForOfContext<T>;
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkVirtualForOf<any>, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkVirtualForOf<any>, "[cdkVirtualFor][cdkVirtualForOf]", never, { "cdkVirtualForOf": { "alias": "cdkVirtualForOf"; "required": false; }; "cdkVirtualForTrackBy": { "alias": "cdkVirtualForTrackBy"; "required": false; }; "cdkVirtualForTemplate": { "alias": "cdkVirtualForTemplate"; "required": false; }; "cdkVirtualForTemplateCacheSize": { "alias": "cdkVirtualForTemplateCacheSize"; "required": false; }; }, {}, never, never, true, never>;
-}
-
-/** The context for an item rendered by `CdkVirtualForOf` */
-export declare type CdkVirtualForOfContext<T> = {
-    /** The item value. */
-    $implicit: T;
-    /** The DataSource, Observable, or NgIterable that was passed to *cdkVirtualFor. */
-    cdkVirtualForOf: DataSource<T> | Observable<T[]> | NgIterable<T>;
-    /** The index of the item in the DataSource. */
-    index: number;
-    /** The number of items in the DataSource. */
-    count: number;
-    /** Whether this is the first item in the DataSource. */
-    first: boolean;
-    /** Whether this is the last item in the DataSource. */
-    last: boolean;
-    /** Whether the index is even. */
-    even: boolean;
-    /** Whether the index is odd. */
-    odd: boolean;
-};
-
+declare const VIRTUAL_SCROLLABLE: InjectionToken<CdkVirtualScrollable>;
 /**
  * Extending the {@link CdkScrollable} to be used as scrolling container for virtual scrolling.
  */
-export declare abstract class CdkVirtualScrollable extends CdkScrollable {
+declare abstract class CdkVirtualScrollable extends CdkScrollable {
     constructor(...args: unknown[]);
     /**
      * Measure the viewport size for the provided orientation.
@@ -213,36 +172,8 @@ export declare abstract class CdkVirtualScrollable extends CdkScrollable {
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkVirtualScrollable, never, never, {}, {}, never, never, true, never>;
 }
 
-/**
- * Provides a virtual scrollable for the element it is attached to.
- */
-export declare class CdkVirtualScrollableElement extends CdkVirtualScrollable {
-    constructor(...args: unknown[]);
-    measureBoundingClientRectWithScrollOffset(from: 'left' | 'top' | 'right' | 'bottom'): number;
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkVirtualScrollableElement, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkVirtualScrollableElement, "[cdkVirtualScrollingElement]", never, {}, {}, never, never, true, never>;
-}
-
-/**
- * Provides as virtual scrollable for the global / window scrollbar.
- */
-export declare class CdkVirtualScrollableWindow extends CdkVirtualScrollable {
-    constructor(...args: unknown[]);
-    measureBoundingClientRectWithScrollOffset(from: 'left' | 'top' | 'right' | 'bottom'): number;
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkVirtualScrollableWindow, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkVirtualScrollableWindow, "cdk-virtual-scroll-viewport[scrollWindow]", never, {}, {}, never, never, true, never>;
-}
-
-/**
- * An item to be repeated by the VirtualScrollViewport
- */
-export declare interface CdkVirtualScrollRepeater<T> {
-    readonly dataStream: Observable<readonly T[]>;
-    measureRangeSize(range: ListRange, orientation: 'horizontal' | 'vertical'): number;
-}
-
 /** A viewport that virtualizes its scrolling with the help of `CdkVirtualForOf`. */
-export declare class CdkVirtualScrollViewport extends CdkVirtualScrollable implements OnInit, OnDestroy {
+declare class CdkVirtualScrollViewport extends CdkVirtualScrollable implements OnInit, OnDestroy {
     elementRef: ElementRef<HTMLElement>;
     private _changeDetectorRef;
     private _scrollStrategy;
@@ -380,26 +311,37 @@ export declare class CdkVirtualScrollViewport extends CdkVirtualScrollable imple
     static ngAcceptInputType_appendOnly: unknown;
 }
 
-/** Time in ms to throttle the resize events by default. */
-export declare const DEFAULT_RESIZE_TIME = 20;
-
-/** Time in ms to throttle the scrolling events by default. */
-export declare const DEFAULT_SCROLL_TIME = 20;
-
-export declare type _End = {
-    end?: number;
-};
-
-/**
- * An extended version of ScrollToOptions that allows expressing scroll offsets relative to the
- * top, bottom, left, right, start, or end of the viewport rather than just the top and left.
- * Please note: the top and bottom properties are mutually exclusive, as are the left, right,
- * start, and end properties.
- */
-export declare type ExtendedScrollToOptions = _XAxis & _YAxis & ScrollOptions;
+/** The injection token used to specify the virtual scrolling strategy. */
+declare const VIRTUAL_SCROLL_STRATEGY: InjectionToken<VirtualScrollStrategy>;
+/** A strategy that dictates which items should be rendered in the viewport. */
+interface VirtualScrollStrategy {
+    /** Emits when the index of the first element visible in the viewport changes. */
+    scrolledIndexChange: Observable<number>;
+    /**
+     * Attaches this scroll strategy to a viewport.
+     * @param viewport The viewport to attach this strategy to.
+     */
+    attach(viewport: CdkVirtualScrollViewport): void;
+    /** Detaches this scroll strategy from the currently attached viewport. */
+    detach(): void;
+    /** Called when the viewport is scrolled (debounced using requestAnimationFrame). */
+    onContentScrolled(): void;
+    /** Called when the length of the data changes. */
+    onDataLengthChanged(): void;
+    /** Called when the range of items rendered in the DOM has changed. */
+    onContentRendered(): void;
+    /** Called when the offset of the rendered items changed. */
+    onRenderedOffsetChanged(): void;
+    /**
+     * Scroll to the offset for the given index.
+     * @param index The index of the element to scroll to.
+     * @param behavior The ScrollBehavior to use when scrolling.
+     */
+    scrollToIndex(index: number, behavior: ScrollBehavior): void;
+}
 
 /** Virtual scrolling strategy for lists with items of known fixed size. */
-export declare class FixedSizeVirtualScrollStrategy implements VirtualScrollStrategy {
+declare class FixedSizeVirtualScrollStrategy implements VirtualScrollStrategy {
     private readonly _scrolledIndexChange;
     /** @docs-private Implemented as part of VirtualScrollStrategy. */
     scrolledIndexChange: Observable<number>;
@@ -450,152 +392,175 @@ export declare class FixedSizeVirtualScrollStrategy implements VirtualScrollStra
     /** Update the viewport's rendered range. */
     private _updateRenderedRange;
 }
-
 /**
  * Provider factory for `FixedSizeVirtualScrollStrategy` that simply extracts the already created
  * `FixedSizeVirtualScrollStrategy` from the given directive.
  * @param fixedSizeDir The instance of `CdkFixedSizeVirtualScroll` to extract the
  *     `FixedSizeVirtualScrollStrategy` from.
  */
-export declare function _fixedSizeVirtualScrollStrategyFactory(fixedSizeDir: CdkFixedSizeVirtualScroll): FixedSizeVirtualScrollStrategy;
-
-declare namespace i1 {
-    export {
-        _Without,
-        _XOR,
-        _Top,
-        _Bottom,
-        _Left,
-        _Right,
-        _Start,
-        _End,
-        _XAxis,
-        _YAxis,
-        ExtendedScrollToOptions,
-        CdkScrollable
-    }
+declare function _fixedSizeVirtualScrollStrategyFactory(fixedSizeDir: CdkFixedSizeVirtualScroll): FixedSizeVirtualScrollStrategy;
+/** A virtual scroll strategy that supports fixed-size items. */
+declare class CdkFixedSizeVirtualScroll implements OnChanges {
+    /** The size of the items in the list (in pixels). */
+    get itemSize(): number;
+    set itemSize(value: NumberInput);
+    _itemSize: number;
+    /**
+     * The minimum amount of buffer rendered beyond the viewport (in pixels).
+     * If the amount of buffer dips below this number, more items will be rendered. Defaults to 100px.
+     */
+    get minBufferPx(): number;
+    set minBufferPx(value: NumberInput);
+    _minBufferPx: number;
+    /**
+     * The number of pixels worth of buffer to render for when rendering new items. Defaults to 200px.
+     */
+    get maxBufferPx(): number;
+    set maxBufferPx(value: NumberInput);
+    _maxBufferPx: number;
+    /** The scroll strategy used by this directive. */
+    _scrollStrategy: FixedSizeVirtualScrollStrategy;
+    ngOnChanges(): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkFixedSizeVirtualScroll, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkFixedSizeVirtualScroll, "cdk-virtual-scroll-viewport[itemSize]", never, { "itemSize": { "alias": "itemSize"; "required": false; }; "minBufferPx": { "alias": "minBufferPx"; "required": false; }; "maxBufferPx": { "alias": "maxBufferPx"; "required": false; }; }, {}, never, never, true, never>;
 }
 
-declare namespace i3 {
-    export {
-        CdkVirtualScrollViewport
-    }
-}
-
-declare namespace i4 {
-    export {
-        _fixedSizeVirtualScrollStrategyFactory,
-        FixedSizeVirtualScrollStrategy,
-        CdkFixedSizeVirtualScroll
-    }
-}
-
-declare namespace i5 {
-    export {
-        CdkVirtualForOfContext,
-        CdkVirtualForOf
-    }
-}
-
-declare namespace i6 {
-    export {
-        CdkVirtualScrollableWindow
-    }
-}
-
-declare namespace i7 {
-    export {
-        CdkVirtualScrollableElement
-    }
-}
-
-export declare type _Left = {
-    left?: number;
+/** The context for an item rendered by `CdkVirtualForOf` */
+type CdkVirtualForOfContext<T> = {
+    /** The item value. */
+    $implicit: T;
+    /** The DataSource, Observable, or NgIterable that was passed to *cdkVirtualFor. */
+    cdkVirtualForOf: DataSource<T> | Observable<T[]> | NgIterable<T>;
+    /** The index of the item in the DataSource. */
+    index: number;
+    /** The number of items in the DataSource. */
+    count: number;
+    /** Whether this is the first item in the DataSource. */
+    first: boolean;
+    /** Whether this is the last item in the DataSource. */
+    last: boolean;
+    /** Whether the index is even. */
+    even: boolean;
+    /** Whether the index is odd. */
+    odd: boolean;
 };
-
-export declare type _Right = {
-    right?: number;
-};
+/**
+ * A directive similar to `ngForOf` to be used for rendering data inside a virtual scrolling
+ * container.
+ */
+declare class CdkVirtualForOf<T> implements CdkVirtualScrollRepeater<T>, CollectionViewer, DoCheck, OnDestroy {
+    private _viewContainerRef;
+    private _template;
+    private _differs;
+    private _viewRepeater;
+    private _viewport;
+    /** Emits when the rendered view of the data changes. */
+    readonly viewChange: Subject<ListRange>;
+    /** Subject that emits when a new DataSource instance is given. */
+    private readonly _dataSourceChanges;
+    /** The DataSource to display. */
+    get cdkVirtualForOf(): DataSource<T> | Observable<T[]> | NgIterable<T> | null | undefined;
+    set cdkVirtualForOf(value: DataSource<T> | Observable<T[]> | NgIterable<T> | null | undefined);
+    _cdkVirtualForOf: DataSource<T> | Observable<T[]> | NgIterable<T> | null | undefined;
+    /**
+     * The `TrackByFunction` to use for tracking changes. The `TrackByFunction` takes the index and
+     * the item and produces a value to be used as the item's identity when tracking changes.
+     */
+    get cdkVirtualForTrackBy(): TrackByFunction<T> | undefined;
+    set cdkVirtualForTrackBy(fn: TrackByFunction<T> | undefined);
+    private _cdkVirtualForTrackBy;
+    /** The template used to stamp out new elements. */
+    set cdkVirtualForTemplate(value: TemplateRef<CdkVirtualForOfContext<T>>);
+    /**
+     * The size of the cache used to store templates that are not being used for re-use later.
+     * Setting the cache size to `0` will disable caching. Defaults to 20 templates.
+     */
+    get cdkVirtualForTemplateCacheSize(): number;
+    set cdkVirtualForTemplateCacheSize(size: NumberInput);
+    /** Emits whenever the data in the current DataSource changes. */
+    readonly dataStream: Observable<readonly T[]>;
+    /** The differ used to calculate changes to the data. */
+    private _differ;
+    /** The most recent data emitted from the DataSource. */
+    private _data;
+    /** The currently rendered items. */
+    private _renderedItems;
+    /** The currently rendered range of indices. */
+    private _renderedRange;
+    /** Whether the rendered data should be updated during the next ngDoCheck cycle. */
+    private _needsUpdate;
+    private readonly _destroyed;
+    constructor(...args: unknown[]);
+    /**
+     * Measures the combined size (width for horizontal orientation, height for vertical) of all items
+     * in the specified range. Throws an error if the range includes items that are not currently
+     * rendered.
+     */
+    measureRangeSize(range: ListRange, orientation: 'horizontal' | 'vertical'): number;
+    ngDoCheck(): void;
+    ngOnDestroy(): void;
+    /** React to scroll state changes in the viewport. */
+    private _onRenderedDataChange;
+    /** Swap out one `DataSource` for another. */
+    private _changeDataSource;
+    /** Update the `CdkVirtualForOfContext` for all views. */
+    private _updateContext;
+    /** Apply changes to the DOM. */
+    private _applyChanges;
+    /** Update the computed properties on the `CdkVirtualForOfContext`. */
+    private _updateComputedContextProperties;
+    private _getEmbeddedViewArgs;
+    static ngTemplateContextGuard<T>(directive: CdkVirtualForOf<T>, context: unknown): context is CdkVirtualForOfContext<T>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkVirtualForOf<any>, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkVirtualForOf<any>, "[cdkVirtualFor][cdkVirtualForOf]", never, { "cdkVirtualForOf": { "alias": "cdkVirtualForOf"; "required": false; }; "cdkVirtualForTrackBy": { "alias": "cdkVirtualForTrackBy"; "required": false; }; "cdkVirtualForTemplate": { "alias": "cdkVirtualForTemplate"; "required": false; }; "cdkVirtualForTemplateCacheSize": { "alias": "cdkVirtualForTemplateCacheSize"; "required": false; }; }, {}, never, never, true, never>;
+}
 
 /**
- * Service contained all registered Scrollable references and emits an event when any one of the
- * Scrollable references emit a scrolled event.
+ * Provides as virtual scrollable for the global / window scrollbar.
  */
-export declare class ScrollDispatcher implements OnDestroy {
-    private _ngZone;
-    private _platform;
-    private _renderer;
-    private _cleanupGlobalListener;
+declare class CdkVirtualScrollableWindow extends CdkVirtualScrollable {
     constructor(...args: unknown[]);
-    /** Subject for notifying that a registered scrollable reference element has been scrolled. */
-    private readonly _scrolled;
-    /** Keeps track of the amount of subscriptions to `scrolled`. Used for cleaning up afterwards. */
-    private _scrolledCount;
-    /**
-     * Map of all the scrollable references that are registered with the service and their
-     * scroll event subscriptions.
-     */
-    scrollContainers: Map<CdkScrollable, Subscription>;
-    /**
-     * Registers a scrollable instance with the service and listens for its scrolled events. When the
-     * scrollable is scrolled, the service emits the event to its scrolled observable.
-     * @param scrollable Scrollable instance to be registered.
-     */
-    register(scrollable: CdkScrollable): void;
-    /**
-     * De-registers a Scrollable reference and unsubscribes from its scroll event observable.
-     * @param scrollable Scrollable instance to be deregistered.
-     */
-    deregister(scrollable: CdkScrollable): void;
-    /**
-     * Returns an observable that emits an event whenever any of the registered Scrollable
-     * references (or window, document, or body) fire a scrolled event. Can provide a time in ms
-     * to override the default "throttle" time.
-     *
-     * **Note:** in order to avoid hitting change detection for every scroll event,
-     * all of the events emitted from this stream will be run outside the Angular zone.
-     * If you need to update any data bindings as a result of a scroll event, you have
-     * to run the callback using `NgZone.run`.
-     */
-    scrolled(auditTimeInMs?: number): Observable<CdkScrollable | void>;
-    ngOnDestroy(): void;
-    /**
-     * Returns an observable that emits whenever any of the
-     * scrollable ancestors of an element are scrolled.
-     * @param elementOrElementRef Element whose ancestors to listen for.
-     * @param auditTimeInMs Time to throttle the scroll events.
-     */
-    ancestorScrolled(elementOrElementRef: ElementRef | HTMLElement, auditTimeInMs?: number): Observable<CdkScrollable | void>;
-    /** Returns all registered Scrollables that contain the provided element. */
-    getAncestorScrollContainers(elementOrElementRef: ElementRef | HTMLElement): CdkScrollable[];
-    /** Returns true if the element is contained within the provided Scrollable. */
-    private _scrollableContainsElement;
-    static ɵfac: i0.ɵɵFactoryDeclaration<ScrollDispatcher, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<ScrollDispatcher>;
+    measureBoundingClientRectWithScrollOffset(from: 'left' | 'top' | 'right' | 'bottom'): number;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkVirtualScrollableWindow, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkVirtualScrollableWindow, "cdk-virtual-scroll-viewport[scrollWindow]", never, {}, {}, never, never, true, never>;
 }
 
+/**
+ * Provides a virtual scrollable for the element it is attached to.
+ */
+declare class CdkVirtualScrollableElement extends CdkVirtualScrollable {
+    constructor(...args: unknown[]);
+    measureBoundingClientRectWithScrollOffset(from: 'left' | 'top' | 'right' | 'bottom'): number;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkVirtualScrollableElement, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkVirtualScrollableElement, "[cdkVirtualScrollingElement]", never, {}, {}, never, never, true, never>;
+}
+
+declare class CdkScrollableModule {
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkScrollableModule, never>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<CdkScrollableModule, never, [typeof CdkScrollable], [typeof CdkScrollable]>;
+    static ɵinj: i0.ɵɵInjectorDeclaration<CdkScrollableModule>;
+}
 /**
  * @docs-primary-export
  */
-export declare class ScrollingModule {
+declare class ScrollingModule {
     static ɵfac: i0.ɵɵFactoryDeclaration<ScrollingModule, never>;
-    static ɵmod: i0.ɵɵNgModuleDeclaration<ScrollingModule, never, [typeof i2.BidiModule, typeof CdkScrollableModule, typeof i3.CdkVirtualScrollViewport, typeof i4.CdkFixedSizeVirtualScroll, typeof i5.CdkVirtualForOf, typeof i6.CdkVirtualScrollableWindow, typeof i7.CdkVirtualScrollableElement], [typeof i2.BidiModule, typeof CdkScrollableModule, typeof i4.CdkFixedSizeVirtualScroll, typeof i5.CdkVirtualForOf, typeof i3.CdkVirtualScrollViewport, typeof i6.CdkVirtualScrollableWindow, typeof i7.CdkVirtualScrollableElement]>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<ScrollingModule, never, [typeof i2.BidiModule, typeof CdkScrollableModule, typeof CdkVirtualScrollViewport, typeof CdkFixedSizeVirtualScroll, typeof CdkVirtualForOf, typeof CdkVirtualScrollableWindow, typeof CdkVirtualScrollableElement], [typeof i2.BidiModule, typeof CdkScrollableModule, typeof CdkFixedSizeVirtualScroll, typeof CdkVirtualForOf, typeof CdkVirtualScrollViewport, typeof CdkVirtualScrollableWindow, typeof CdkVirtualScrollableElement]>;
     static ɵinj: i0.ɵɵInjectorDeclaration<ScrollingModule>;
 }
 
-export declare type _Start = {
-    start?: number;
-};
-
-export declare type _Top = {
-    top?: number;
-};
-
+/** Time in ms to throttle the resize events by default. */
+declare const DEFAULT_RESIZE_TIME = 20;
+/** Object that holds the scroll position of the viewport in each direction. */
+interface ViewportScrollPosition {
+    top: number;
+    left: number;
+}
 /**
  * Simple utility for getting the bounds of the browser viewport.
  * @docs-private
  */
-export declare class ViewportRuler implements OnDestroy {
+declare class ViewportRuler implements OnDestroy {
     private _platform;
     private _listeners;
     /** Cached viewport dimensions. */
@@ -636,52 +601,4 @@ export declare class ViewportRuler implements OnDestroy {
     static ɵprov: i0.ɵɵInjectableDeclaration<ViewportRuler>;
 }
 
-/** Object that holds the scroll position of the viewport in each direction. */
-export declare interface ViewportScrollPosition {
-    top: number;
-    left: number;
-}
-
-/** The injection token used to specify the virtual scrolling strategy. */
-export declare const VIRTUAL_SCROLL_STRATEGY: InjectionToken<VirtualScrollStrategy>;
-
-export declare const VIRTUAL_SCROLLABLE: InjectionToken<CdkVirtualScrollable>;
-
-/** A strategy that dictates which items should be rendered in the viewport. */
-export declare interface VirtualScrollStrategy {
-    /** Emits when the index of the first element visible in the viewport changes. */
-    scrolledIndexChange: Observable<number>;
-    /**
-     * Attaches this scroll strategy to a viewport.
-     * @param viewport The viewport to attach this strategy to.
-     */
-    attach(viewport: CdkVirtualScrollViewport): void;
-    /** Detaches this scroll strategy from the currently attached viewport. */
-    detach(): void;
-    /** Called when the viewport is scrolled (debounced using requestAnimationFrame). */
-    onContentScrolled(): void;
-    /** Called when the length of the data changes. */
-    onDataLengthChanged(): void;
-    /** Called when the range of items rendered in the DOM has changed. */
-    onContentRendered(): void;
-    /** Called when the offset of the rendered items changed. */
-    onRenderedOffsetChanged(): void;
-    /**
-     * Scroll to the offset for the given index.
-     * @param index The index of the element to scroll to.
-     * @param behavior The ScrollBehavior to use when scrolling.
-     */
-    scrollToIndex(index: number, behavior: ScrollBehavior): void;
-}
-
-export declare type _Without<T> = {
-    [P in keyof T]?: never;
-};
-
-export declare type _XAxis = _XOR<_XOR<_Left, _Right>, _XOR<_Start, _End>>;
-
-export declare type _XOR<T, U> = (_Without<T> & U) | (_Without<U> & T);
-
-export declare type _YAxis = _XOR<_Top, _Bottom>;
-
-export { }
+export { CdkFixedSizeVirtualScroll, CdkScrollable, CdkScrollableModule, CdkVirtualForOf, type CdkVirtualForOfContext, type CdkVirtualScrollRepeater, CdkVirtualScrollViewport, CdkVirtualScrollable, CdkVirtualScrollableElement, CdkVirtualScrollableWindow, DEFAULT_RESIZE_TIME, DEFAULT_SCROLL_TIME, type ExtendedScrollToOptions, FixedSizeVirtualScrollStrategy, ScrollDispatcher, ScrollingModule, VIRTUAL_SCROLLABLE, VIRTUAL_SCROLL_STRATEGY, ViewportRuler, type ViewportScrollPosition, type VirtualScrollStrategy, type _Bottom, type _End, type _Left, type _Right, type _Start, type _Top, type _Without, type _XAxis, type _XOR, type _YAxis, _fixedSizeVirtualScrollStrategyFactory };

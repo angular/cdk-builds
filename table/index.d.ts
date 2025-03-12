@@ -1,67 +1,20 @@
-import { AfterContentChecked } from '@angular/core';
-import { AfterContentInit } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { ChangeDetectorRef } from '@angular/core';
-import { CollectionViewer } from '@angular/cdk/collections';
-import { DataSource } from '@angular/cdk/collections';
-import { Direction } from '@angular/cdk/bidi';
-import { Directionality } from '@angular/cdk/bidi';
-import { ElementRef } from '@angular/core';
-import { EventEmitter } from '@angular/core';
+import { Directionality, Direction } from '@angular/cdk/bidi';
+import { DataSource, CollectionViewer, _ViewRepeater } from '@angular/cdk/collections';
+export { DataSource } from '@angular/cdk/collections';
 import * as i0 from '@angular/core';
-import * as i1 from '@angular/cdk/scrolling';
-import { InjectionToken } from '@angular/core';
-import { Injector } from '@angular/core';
-import { IterableChanges } from '@angular/core';
-import { IterableDiffer } from '@angular/core';
-import { IterableDiffers } from '@angular/core';
-import { Observable } from 'rxjs';
-import { OnChanges } from '@angular/core';
-import { OnDestroy } from '@angular/core';
-import { OnInit } from '@angular/core';
-import { QueryList } from '@angular/core';
-import { SimpleChanges } from '@angular/core';
-import { TemplateRef } from '@angular/core';
-import { TrackByFunction } from '@angular/core';
-import { ViewContainerRef } from '@angular/core';
-import { _ViewRepeater } from '@angular/cdk/collections';
+import { TemplateRef, ElementRef, InjectionToken, OnChanges, IterableDiffers, IterableDiffer, SimpleChanges, IterableChanges, OnDestroy, ViewContainerRef, AfterContentInit, AfterContentChecked, OnInit, ChangeDetectorRef, TrackByFunction, EventEmitter, QueryList, Injector } from '@angular/core';
+import { Observable, BehaviorSubject } from 'rxjs';
+import * as i3 from '@angular/cdk/scrolling';
 
-/** Base class for the cells. Adds a CSS classname that identifies the column it renders in. */
-export declare class BaseCdkCell {
-    constructor(columnDef: CdkColumnDef, elementRef: ElementRef);
-}
-
-/**
- * Base class for the CdkHeaderRowDef and CdkRowDef that handles checking their columns inputs
- * for changes and notifying the table.
- */
-export declare abstract class BaseRowDef implements OnChanges {
-    template: TemplateRef<any>;
-    protected _differs: IterableDiffers;
-    /** The columns to be displayed on this row. */
-    columns: Iterable<string>;
-    /** Differ used to check if any changes were made to the columns. */
-    protected _columnsDiffer: IterableDiffer<any>;
-    constructor(...args: unknown[]);
-    ngOnChanges(changes: SimpleChanges): void;
-    /**
-     * Returns the difference between the current columns and the columns from the last diff, or null
-     * if there is no difference.
-     */
-    getColumnsDiff(): IterableChanges<any> | null;
-    /** Gets this row def's relevant cell template from the provided column def. */
-    extractCellTemplate(column: CdkColumnDef): TemplateRef<any>;
-    static ɵfac: i0.ɵɵFactoryDeclaration<BaseRowDef, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<BaseRowDef, never, never, {}, {}, never, never, true, never>;
-}
-
+/** @docs-private */
+type Constructor<T> = new (...args: any[]) => T;
 /**
  * Interface for a mixin to provide a directive with a function that checks if the sticky input has
  * been changed since the last time the function was called. Essentially adds a dirty-check to the
  * sticky value.
  * @docs-private
  */
-export declare interface CanStick {
+interface CanStick {
     /** Whether sticky positioning should be applied. */
     sticky: boolean;
     /** Whether the sticky value has changed since this was last called. */
@@ -69,119 +22,60 @@ export declare interface CanStick {
     /** Resets the dirty check for cases where the sticky state has been used without checking. */
     resetStickyChanged(): void;
 }
-
 /** @docs-private */
-export declare type CanStickCtor = Constructor<CanStick>;
-
+type CanStickCtor = Constructor<CanStick>;
 /**
- * The row template that can be used by the mat-table. Should not be used outside of the
- * material library.
- */
-export declare const CDK_ROW_TEMPLATE = "<ng-container cdkCellOutlet></ng-container>";
-
-/**
- * Used to provide a table to some of the sub-components without causing a circular dependency.
+ * Mixin to provide a directive with a function that checks if the sticky input has been
+ * changed since the last time the function was called. Essentially adds a dirty-check to the
+ * sticky value.
  * @docs-private
+ * @deprecated Implement the `CanStick` interface instead.
+ * @breaking-change 19.0.0
  */
-export declare const CDK_TABLE: InjectionToken<any>;
+declare function mixinHasStickyInput<T extends Constructor<{}>>(base: T): CanStickCtor & T;
 
-/**
- * The table template that can be used by the mat-table. Should not be used outside of the
- * material library.
- * @docs-private
- */
-export declare const CDK_TABLE_TEMPLATE = "\n  <ng-content select=\"caption\"/>\n  <ng-content select=\"colgroup, col\"/>\n\n  <!--\n    Unprojected content throws a hydration error so we need this to capture it.\n    It gets removed on the client so it doesn't affect the layout.\n  -->\n  @if (_isServer) {\n    <ng-content/>\n  }\n\n  @if (_isNativeHtmlTable) {\n    <thead role=\"rowgroup\">\n      <ng-container headerRowOutlet/>\n    </thead>\n    <tbody role=\"rowgroup\">\n      <ng-container rowOutlet/>\n      <ng-container noDataRowOutlet/>\n    </tbody>\n    <tfoot role=\"rowgroup\">\n      <ng-container footerRowOutlet/>\n    </tfoot>\n  } @else {\n    <ng-container headerRowOutlet/>\n    <ng-container rowOutlet/>\n    <ng-container noDataRowOutlet/>\n    <ng-container footerRowOutlet/>\n  }\n";
-
-/** Cell template container that adds the right classes and role. */
-export declare class CdkCell extends BaseCdkCell {
-    constructor(...args: unknown[]);
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkCell, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkCell, "cdk-cell, td[cdk-cell]", never, {}, {}, never, never, true, never>;
+/** Base interface for a cell definition. Captures a column's cell template definition. */
+interface CellDef {
+    template: TemplateRef<any>;
 }
-
 /**
  * Cell definition for a CDK table.
  * Captures the template of a column's data row cell as well as cell-specific properties.
  */
-export declare class CdkCellDef implements CellDef {
+declare class CdkCellDef implements CellDef {
     /** @docs-private */
     template: TemplateRef<any>;
     constructor(...args: unknown[]);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkCellDef, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkCellDef, "[cdkCellDef]", never, {}, {}, never, never, true, never>;
 }
-
 /**
- * Outlet for rendering cells inside of a row or header row.
- * @docs-private
+ * Header cell definition for a CDK table.
+ * Captures the template of a column's header cell and as well as cell-specific properties.
  */
-export declare class CdkCellOutlet implements OnDestroy {
-    _viewContainer: ViewContainerRef;
-    /** The ordered list of cells to render within this outlet's view container */
-    cells: CdkCellDef[];
-    /** The data context to be provided to each cell */
-    context: any;
-    /**
-     * Static property containing the latest constructed instance of this class.
-     * Used by the CDK table when each CdkHeaderRow and CdkRow component is created using
-     * createEmbeddedView. After one of these components are created, this property will provide
-     * a handle to provide that component's cells and context. After init, the CdkCellOutlet will
-     * construct the cells with the provided context.
-     */
-    static mostRecentCellOutlet: CdkCellOutlet | null;
+declare class CdkHeaderCellDef implements CellDef {
+    /** @docs-private */
+    template: TemplateRef<any>;
     constructor(...args: unknown[]);
-    ngOnDestroy(): void;
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkCellOutlet, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkCellOutlet, "[cdkCellOutlet]", never, {}, {}, never, never, true, never>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkHeaderCellDef, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkHeaderCellDef, "[cdkHeaderCellDef]", never, {}, {}, never, never, true, never>;
 }
-
 /**
- * Context provided to the row cells when `multiTemplateDataRows` is true. This context is the same
- * as CdkCellOutletRowContext except that the single `index` value is replaced by `dataIndex` and
- * `renderIndex`.
+ * Footer cell definition for a CDK table.
+ * Captures the template of a column's footer cell and as well as cell-specific properties.
  */
-export declare interface CdkCellOutletMultiRowContext<T> {
-    /** Data for the row that this cell is located within. */
-    $implicit?: T;
-    /** Index of the data object in the provided data array. */
-    dataIndex?: number;
-    /** Index location of the rendered row that this cell is located within. */
-    renderIndex?: number;
-    /** Length of the number of total rows. */
-    count?: number;
-    /** True if this cell is contained in the first row. */
-    first?: boolean;
-    /** True if this cell is contained in the last row. */
-    last?: boolean;
-    /** True if this cell is contained in a row with an even-numbered index. */
-    even?: boolean;
-    /** True if this cell is contained in a row with an odd-numbered index. */
-    odd?: boolean;
+declare class CdkFooterCellDef implements CellDef {
+    /** @docs-private */
+    template: TemplateRef<any>;
+    constructor(...args: unknown[]);
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkFooterCellDef, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkFooterCellDef, "[cdkFooterCellDef]", never, {}, {}, never, never, true, never>;
 }
-
-/** Context provided to the row cells when `multiTemplateDataRows` is false */
-export declare interface CdkCellOutletRowContext<T> {
-    /** Data for the row that this cell is located within. */
-    $implicit?: T;
-    /** Index of the data object in the provided data array. */
-    index?: number;
-    /** Length of the number of total rows. */
-    count?: number;
-    /** True if this cell is contained in the first row. */
-    first?: boolean;
-    /** True if this cell is contained in the last row. */
-    last?: boolean;
-    /** True if this cell is contained in a row with an even-numbered index. */
-    even?: boolean;
-    /** True if this cell is contained in a row with an odd-numbered index. */
-    odd?: boolean;
-}
-
 /**
  * Column definition for the CDK table.
  * Defines a set of cells available for a table column.
  */
-export declare class CdkColumnDef implements CanStick {
+declare class CdkColumnDef implements CanStick {
     _table?: any;
     private _hasStickyChanged;
     /** Unique name for this column. */
@@ -242,84 +136,96 @@ export declare class CdkColumnDef implements CanStick {
     static ngAcceptInputType_sticky: unknown;
     static ngAcceptInputType_stickyEnd: unknown;
 }
-
-/** Footer cell template container that adds the right classes and role. */
-export declare class CdkFooterCell extends BaseCdkCell {
-    constructor(...args: unknown[]);
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkFooterCell, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkFooterCell, "cdk-footer-cell, td[cdk-footer-cell]", never, {}, {}, never, never, true, never>;
+/** Base class for the cells. Adds a CSS classname that identifies the column it renders in. */
+declare class BaseCdkCell {
+    constructor(columnDef: CdkColumnDef, elementRef: ElementRef);
 }
-
-/**
- * Footer cell definition for a CDK table.
- * Captures the template of a column's footer cell and as well as cell-specific properties.
- */
-export declare class CdkFooterCellDef implements CellDef {
-    /** @docs-private */
-    template: TemplateRef<any>;
-    constructor(...args: unknown[]);
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkFooterCellDef, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkFooterCellDef, "[cdkFooterCellDef]", never, {}, {}, never, never, true, never>;
-}
-
-/** Footer template container that contains the cell outlet. Adds the right class and role. */
-export declare class CdkFooterRow {
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkFooterRow, never>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<CdkFooterRow, "cdk-footer-row, tr[cdk-footer-row]", never, {}, {}, never, never, true, never>;
-}
-
-/**
- * Footer row definition for the CDK table.
- * Captures the footer row's template and other footer properties such as the columns to display.
- */
-export declare class CdkFooterRowDef extends BaseRowDef implements CanStick, OnChanges {
-    _table?: any;
-    private _hasStickyChanged;
-    /** Whether the row is sticky. */
-    get sticky(): boolean;
-    set sticky(value: boolean);
-    private _sticky;
-    constructor(...args: unknown[]);
-    ngOnChanges(changes: SimpleChanges): void;
-    /** Whether the sticky state has changed. */
-    hasStickyChanged(): boolean;
-    /** Resets the sticky changed state. */
-    resetStickyChanged(): void;
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkFooterRowDef, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkFooterRowDef, "[cdkFooterRowDef]", never, { "columns": { "alias": "cdkFooterRowDef"; "required": false; }; "sticky": { "alias": "cdkFooterRowDefSticky"; "required": false; }; }, {}, never, never, true, never>;
-    static ngAcceptInputType_sticky: unknown;
-}
-
 /** Header cell template container that adds the right classes and role. */
-export declare class CdkHeaderCell extends BaseCdkCell {
+declare class CdkHeaderCell extends BaseCdkCell {
     constructor(...args: unknown[]);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkHeaderCell, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkHeaderCell, "cdk-header-cell, th[cdk-header-cell]", never, {}, {}, never, never, true, never>;
 }
+/** Footer cell template container that adds the right classes and role. */
+declare class CdkFooterCell extends BaseCdkCell {
+    constructor(...args: unknown[]);
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkFooterCell, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkFooterCell, "cdk-footer-cell, td[cdk-footer-cell]", never, {}, {}, never, never, true, never>;
+}
+/** Cell template container that adds the right classes and role. */
+declare class CdkCell extends BaseCdkCell {
+    constructor(...args: unknown[]);
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkCell, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkCell, "cdk-cell, td[cdk-cell]", never, {}, {}, never, never, true, never>;
+}
 
 /**
- * Header cell definition for a CDK table.
- * Captures the template of a column's header cell and as well as cell-specific properties.
+ * @docs-private
  */
-export declare class CdkHeaderCellDef implements CellDef {
-    /** @docs-private */
-    template: TemplateRef<any>;
+declare class _Schedule {
+    tasks: (() => unknown)[];
+    endTasks: (() => unknown)[];
+}
+/** Injection token used to provide a coalesced style scheduler. */
+declare const _COALESCED_STYLE_SCHEDULER: InjectionToken<_CoalescedStyleScheduler>;
+/**
+ * Allows grouping up CSSDom mutations after the current execution context.
+ * This can significantly improve performance when separate consecutive functions are
+ * reading from the CSSDom and then mutating it.
+ *
+ * @docs-private
+ */
+declare class _CoalescedStyleScheduler {
+    private _currentSchedule;
+    private _ngZone;
     constructor(...args: unknown[]);
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkHeaderCellDef, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkHeaderCellDef, "[cdkHeaderCellDef]", never, {}, {}, never, never, true, never>;
+    /**
+     * Schedules the specified task to run at the end of the current VM turn.
+     */
+    schedule(task: () => unknown): void;
+    /**
+     * Schedules the specified task to run after other scheduled tasks at the end of the current
+     * VM turn.
+     */
+    scheduleEnd(task: () => unknown): void;
+    private _createScheduleIfNeeded;
+    static ɵfac: i0.ɵɵFactoryDeclaration<_CoalescedStyleScheduler, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<_CoalescedStyleScheduler>;
 }
 
-/** Header template container that contains the cell outlet. Adds the right class and role. */
-export declare class CdkHeaderRow {
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkHeaderRow, never>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<CdkHeaderRow, "cdk-header-row, tr[cdk-header-row]", never, {}, {}, never, never, true, never>;
+/**
+ * The row template that can be used by the mat-table. Should not be used outside of the
+ * material library.
+ */
+declare const CDK_ROW_TEMPLATE = "<ng-container cdkCellOutlet></ng-container>";
+/**
+ * Base class for the CdkHeaderRowDef and CdkRowDef that handles checking their columns inputs
+ * for changes and notifying the table.
+ */
+declare abstract class BaseRowDef implements OnChanges {
+    template: TemplateRef<any>;
+    protected _differs: IterableDiffers;
+    /** The columns to be displayed on this row. */
+    columns: Iterable<string>;
+    /** Differ used to check if any changes were made to the columns. */
+    protected _columnsDiffer: IterableDiffer<any>;
+    constructor(...args: unknown[]);
+    ngOnChanges(changes: SimpleChanges): void;
+    /**
+     * Returns the difference between the current columns and the columns from the last diff, or null
+     * if there is no difference.
+     */
+    getColumnsDiff(): IterableChanges<any> | null;
+    /** Gets this row def's relevant cell template from the provided column def. */
+    extractCellTemplate(column: CdkColumnDef): TemplateRef<any>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<BaseRowDef, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<BaseRowDef, never, never, {}, {}, never, never, true, never>;
 }
-
 /**
  * Header row definition for the CDK table.
  * Captures the header row's template and other header properties such as the columns to display.
  */
-export declare class CdkHeaderRowDef extends BaseRowDef implements CanStick, OnChanges {
+declare class CdkHeaderRowDef extends BaseRowDef implements CanStick, OnChanges {
     _table?: any;
     private _hasStickyChanged;
     /** Whether the row is sticky. */
@@ -336,37 +242,33 @@ export declare class CdkHeaderRowDef extends BaseRowDef implements CanStick, OnC
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkHeaderRowDef, "[cdkHeaderRowDef]", never, { "columns": { "alias": "cdkHeaderRowDef"; "required": false; }; "sticky": { "alias": "cdkHeaderRowDefSticky"; "required": false; }; }, {}, never, never, true, never>;
     static ngAcceptInputType_sticky: unknown;
 }
-
-/** Row that can be used to display a message when no data is shown in the table. */
-export declare class CdkNoDataRow {
-    templateRef: TemplateRef<any>;
-    _contentClassName: string;
-    constructor(...args: unknown[]);
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkNoDataRow, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkNoDataRow, "ng-template[cdkNoDataRow]", never, {}, {}, never, never, true, never>;
-}
-
 /**
- * Enables the recycle view repeater strategy, which reduces rendering latency. Not compatible with
- * tables that animate rows.
+ * Footer row definition for the CDK table.
+ * Captures the footer row's template and other footer properties such as the columns to display.
  */
-export declare class CdkRecycleRows {
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkRecycleRows, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkRecycleRows, "cdk-table[recycleRows], table[cdk-table][recycleRows]", never, {}, {}, never, never, true, never>;
+declare class CdkFooterRowDef extends BaseRowDef implements CanStick, OnChanges {
+    _table?: any;
+    private _hasStickyChanged;
+    /** Whether the row is sticky. */
+    get sticky(): boolean;
+    set sticky(value: boolean);
+    private _sticky;
+    constructor(...args: unknown[]);
+    ngOnChanges(changes: SimpleChanges): void;
+    /** Whether the sticky state has changed. */
+    hasStickyChanged(): boolean;
+    /** Resets the sticky changed state. */
+    resetStickyChanged(): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkFooterRowDef, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkFooterRowDef, "[cdkFooterRowDef]", never, { "columns": { "alias": "cdkFooterRowDef"; "required": false; }; "sticky": { "alias": "cdkFooterRowDefSticky"; "required": false; }; }, {}, never, never, true, never>;
+    static ngAcceptInputType_sticky: unknown;
 }
-
-/** Data row template container that contains the cell outlet. Adds the right class and role. */
-export declare class CdkRow {
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkRow, never>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<CdkRow, "cdk-row, tr[cdk-row]", never, {}, {}, never, never, true, never>;
-}
-
 /**
  * Data row definition for the CDK table.
  * Captures the header row's template and other row properties such as the columns to display and
  * a when predicate that describes when this row should be used.
  */
-export declare class CdkRowDef<T> extends BaseRowDef {
+declare class CdkRowDef<T> extends BaseRowDef {
     _table?: any;
     /**
      * Function that should return true if this row template should be used for the provided index
@@ -379,14 +281,213 @@ export declare class CdkRowDef<T> extends BaseRowDef {
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkRowDef<any>, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkRowDef<any>, "[cdkRowDef]", never, { "columns": { "alias": "cdkRowDefColumns"; "required": false; }; "when": { "alias": "cdkRowDefWhen"; "required": false; }; }, {}, never, never, true, never>;
 }
+/** Context provided to the row cells when `multiTemplateDataRows` is false */
+interface CdkCellOutletRowContext<T> {
+    /** Data for the row that this cell is located within. */
+    $implicit?: T;
+    /** Index of the data object in the provided data array. */
+    index?: number;
+    /** Length of the number of total rows. */
+    count?: number;
+    /** True if this cell is contained in the first row. */
+    first?: boolean;
+    /** True if this cell is contained in the last row. */
+    last?: boolean;
+    /** True if this cell is contained in a row with an even-numbered index. */
+    even?: boolean;
+    /** True if this cell is contained in a row with an odd-numbered index. */
+    odd?: boolean;
+}
+/**
+ * Context provided to the row cells when `multiTemplateDataRows` is true. This context is the same
+ * as CdkCellOutletRowContext except that the single `index` value is replaced by `dataIndex` and
+ * `renderIndex`.
+ */
+interface CdkCellOutletMultiRowContext<T> {
+    /** Data for the row that this cell is located within. */
+    $implicit?: T;
+    /** Index of the data object in the provided data array. */
+    dataIndex?: number;
+    /** Index location of the rendered row that this cell is located within. */
+    renderIndex?: number;
+    /** Length of the number of total rows. */
+    count?: number;
+    /** True if this cell is contained in the first row. */
+    first?: boolean;
+    /** True if this cell is contained in the last row. */
+    last?: boolean;
+    /** True if this cell is contained in a row with an even-numbered index. */
+    even?: boolean;
+    /** True if this cell is contained in a row with an odd-numbered index. */
+    odd?: boolean;
+}
+/**
+ * Outlet for rendering cells inside of a row or header row.
+ * @docs-private
+ */
+declare class CdkCellOutlet implements OnDestroy {
+    _viewContainer: ViewContainerRef;
+    /** The ordered list of cells to render within this outlet's view container */
+    cells: CdkCellDef[];
+    /** The data context to be provided to each cell */
+    context: any;
+    /**
+     * Static property containing the latest constructed instance of this class.
+     * Used by the CDK table when each CdkHeaderRow and CdkRow component is created using
+     * createEmbeddedView. After one of these components are created, this property will provide
+     * a handle to provide that component's cells and context. After init, the CdkCellOutlet will
+     * construct the cells with the provided context.
+     */
+    static mostRecentCellOutlet: CdkCellOutlet | null;
+    constructor(...args: unknown[]);
+    ngOnDestroy(): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkCellOutlet, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkCellOutlet, "[cdkCellOutlet]", never, {}, {}, never, never, true, never>;
+}
+/** Header template container that contains the cell outlet. Adds the right class and role. */
+declare class CdkHeaderRow {
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkHeaderRow, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<CdkHeaderRow, "cdk-header-row, tr[cdk-header-row]", never, {}, {}, never, never, true, never>;
+}
+/** Footer template container that contains the cell outlet. Adds the right class and role. */
+declare class CdkFooterRow {
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkFooterRow, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<CdkFooterRow, "cdk-footer-row, tr[cdk-footer-row]", never, {}, {}, never, never, true, never>;
+}
+/** Data row template container that contains the cell outlet. Adds the right class and role. */
+declare class CdkRow {
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkRow, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<CdkRow, "cdk-row, tr[cdk-row]", never, {}, {}, never, never, true, never>;
+}
+/** Row that can be used to display a message when no data is shown in the table. */
+declare class CdkNoDataRow {
+    templateRef: TemplateRef<any>;
+    _contentClassName: string;
+    constructor(...args: unknown[]);
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkNoDataRow, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkNoDataRow, "ng-template[cdkNoDataRow]", never, {}, {}, never, never, true, never>;
+}
 
+/** The injection token used to specify the StickyPositioningListener. */
+declare const STICKY_POSITIONING_LISTENER: InjectionToken<StickyPositioningListener>;
+type StickySize = number | null | undefined;
+type StickyOffset = number | null | undefined;
+interface StickyUpdate {
+    elements?: readonly (HTMLElement[] | undefined)[];
+    offsets?: StickyOffset[];
+    sizes: StickySize[];
+}
+/**
+ * If provided, CdkTable will call the methods below when it updates the size/
+ * position/etc of its sticky rows and columns.
+ */
+interface StickyPositioningListener {
+    /** Called when CdkTable updates its sticky start columns. */
+    stickyColumnsUpdated(update: StickyUpdate): void;
+    /** Called when CdkTable updates its sticky end columns. */
+    stickyEndColumnsUpdated(update: StickyUpdate): void;
+    /** Called when CdkTable updates its sticky header rows. */
+    stickyHeaderRowsUpdated(update: StickyUpdate): void;
+    /** Called when CdkTable updates its sticky footer rows. */
+    stickyFooterRowsUpdated(update: StickyUpdate): void;
+}
+
+/**
+ * Enables the recycle view repeater strategy, which reduces rendering latency. Not compatible with
+ * tables that animate rows.
+ */
+declare class CdkRecycleRows {
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkRecycleRows, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkRecycleRows, "cdk-table[recycleRows], table[cdk-table][recycleRows]", never, {}, {}, never, never, true, never>;
+}
+/** Interface used to provide an outlet for rows to be inserted into. */
+interface RowOutlet {
+    viewContainer: ViewContainerRef;
+}
+/** Possible types that can be set as the data source for a `CdkTable`. */
+type CdkTableDataSourceInput<T> = readonly T[] | DataSource<T> | Observable<readonly T[]>;
+/**
+ * Provides a handle for the table to grab the view container's ng-container to insert data rows.
+ * @docs-private
+ */
+declare class DataRowOutlet implements RowOutlet {
+    viewContainer: ViewContainerRef;
+    elementRef: ElementRef<any>;
+    constructor(...args: unknown[]);
+    static ɵfac: i0.ɵɵFactoryDeclaration<DataRowOutlet, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<DataRowOutlet, "[rowOutlet]", never, {}, {}, never, never, true, never>;
+}
+/**
+ * Provides a handle for the table to grab the view container's ng-container to insert the header.
+ * @docs-private
+ */
+declare class HeaderRowOutlet implements RowOutlet {
+    viewContainer: ViewContainerRef;
+    elementRef: ElementRef<any>;
+    constructor(...args: unknown[]);
+    static ɵfac: i0.ɵɵFactoryDeclaration<HeaderRowOutlet, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<HeaderRowOutlet, "[headerRowOutlet]", never, {}, {}, never, never, true, never>;
+}
+/**
+ * Provides a handle for the table to grab the view container's ng-container to insert the footer.
+ * @docs-private
+ */
+declare class FooterRowOutlet implements RowOutlet {
+    viewContainer: ViewContainerRef;
+    elementRef: ElementRef<any>;
+    constructor(...args: unknown[]);
+    static ɵfac: i0.ɵɵFactoryDeclaration<FooterRowOutlet, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<FooterRowOutlet, "[footerRowOutlet]", never, {}, {}, never, never, true, never>;
+}
+/**
+ * Provides a handle for the table to grab the view
+ * container's ng-container to insert the no data row.
+ * @docs-private
+ */
+declare class NoDataRowOutlet implements RowOutlet {
+    viewContainer: ViewContainerRef;
+    elementRef: ElementRef<any>;
+    constructor(...args: unknown[]);
+    static ɵfac: i0.ɵɵFactoryDeclaration<NoDataRowOutlet, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<NoDataRowOutlet, "[noDataRowOutlet]", never, {}, {}, never, never, true, never>;
+}
+/**
+ * The table template that can be used by the mat-table. Should not be used outside of the
+ * material library.
+ * @docs-private
+ */
+declare const CDK_TABLE_TEMPLATE = "\n  <ng-content select=\"caption\"/>\n  <ng-content select=\"colgroup, col\"/>\n\n  <!--\n    Unprojected content throws a hydration error so we need this to capture it.\n    It gets removed on the client so it doesn't affect the layout.\n  -->\n  @if (_isServer) {\n    <ng-content/>\n  }\n\n  @if (_isNativeHtmlTable) {\n    <thead role=\"rowgroup\">\n      <ng-container headerRowOutlet/>\n    </thead>\n    <tbody role=\"rowgroup\">\n      <ng-container rowOutlet/>\n      <ng-container noDataRowOutlet/>\n    </tbody>\n    <tfoot role=\"rowgroup\">\n      <ng-container footerRowOutlet/>\n    </tfoot>\n  } @else {\n    <ng-container headerRowOutlet/>\n    <ng-container rowOutlet/>\n    <ng-container noDataRowOutlet/>\n    <ng-container footerRowOutlet/>\n  }\n";
+/**
+ * Interface used to conveniently type the possible context interfaces for the render row.
+ * @docs-private
+ */
+interface RowContext<T> extends CdkCellOutletMultiRowContext<T>, CdkCellOutletRowContext<T> {
+}
+/**
+ * Set of properties that represents the identity of a single rendered row.
+ *
+ * When the table needs to determine the list of rows to render, it will do so by iterating through
+ * each data object and evaluating its list of row templates to display (when multiTemplateDataRows
+ * is false, there is only one template per data object). For each pair of data object and row
+ * template, a `RenderRow` is added to the list of rows to render. If the data object and row
+ * template pair has already been rendered, the previously used `RenderRow` is added; else a new
+ * `RenderRow` is * created. Once the list is complete and all data objects have been iterated
+ * through, a diff is performed to determine the changes that need to be made to the rendered rows.
+ *
+ * @docs-private
+ */
+interface RenderRow<T> {
+    data: T;
+    dataIndex: number;
+    rowDef: CdkRowDef<T>;
+}
 /**
  * A data table that can render a header row, data rows, and a footer row.
  * Uses the dataSource input to determine the data to be rendered. The data can be provided either
  * as a data array, an Observable stream that emits the data array to render, or a DataSource with a
  * connect function that will return an Observable stream that emits the data array to render.
  */
-export declare class CdkTable<T> implements AfterContentInit, AfterContentChecked, CollectionViewer, OnDestroy, OnInit {
+declare class CdkTable<T> implements AfterContentInit, AfterContentChecked, CollectionViewer, OnDestroy, OnInit {
     protected readonly _differs: IterableDiffers;
     protected readonly _changeDetectorRef: ChangeDetectorRef;
     protected readonly _elementRef: ElementRef<any>;
@@ -761,15 +862,6 @@ export declare class CdkTable<T> implements AfterContentInit, AfterContentChecke
     static ngAcceptInputType_fixedLayout: unknown;
 }
 
-/** Possible types that can be set as the data source for a `CdkTable`. */
-export declare type CdkTableDataSourceInput<T> = readonly T[] | DataSource<T> | Observable<readonly T[]>;
-
-export declare class CdkTableModule {
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkTableModule, never>;
-    static ɵmod: i0.ɵɵNgModuleDeclaration<CdkTableModule, never, [typeof i1.ScrollingModule, typeof i2.CdkTable, typeof i3.CdkRowDef, typeof i4.CdkCellDef, typeof i3.CdkCellOutlet, typeof i4.CdkHeaderCellDef, typeof i4.CdkFooterCellDef, typeof i4.CdkColumnDef, typeof i4.CdkCell, typeof i3.CdkRow, typeof i4.CdkHeaderCell, typeof i4.CdkFooterCell, typeof i3.CdkHeaderRow, typeof i3.CdkHeaderRowDef, typeof i3.CdkFooterRow, typeof i3.CdkFooterRowDef, typeof i2.DataRowOutlet, typeof i2.HeaderRowOutlet, typeof i2.FooterRowOutlet, typeof i5.CdkTextColumn, typeof i3.CdkNoDataRow, typeof i2.CdkRecycleRows, typeof i2.NoDataRowOutlet], [typeof i2.CdkTable, typeof i3.CdkRowDef, typeof i4.CdkCellDef, typeof i3.CdkCellOutlet, typeof i4.CdkHeaderCellDef, typeof i4.CdkFooterCellDef, typeof i4.CdkColumnDef, typeof i4.CdkCell, typeof i3.CdkRow, typeof i4.CdkHeaderCell, typeof i4.CdkFooterCell, typeof i3.CdkHeaderRow, typeof i3.CdkHeaderRowDef, typeof i3.CdkFooterRow, typeof i3.CdkFooterRowDef, typeof i2.DataRowOutlet, typeof i2.HeaderRowOutlet, typeof i2.FooterRowOutlet, typeof i5.CdkTextColumn, typeof i3.CdkNoDataRow, typeof i2.CdkRecycleRows, typeof i2.NoDataRowOutlet]>;
-    static ɵinj: i0.ɵɵInjectorDeclaration<CdkTableModule>;
-}
-
 /**
  * Column that simply shows text content for the header and row cells. Assumes that the table
  * is using the native table implementation (`<table>`).
@@ -779,7 +871,7 @@ export declare class CdkTableModule {
  * the `dataAccessor` input. Change the text justification to the start or end using the `justify`
  * input.
  */
-export declare class CdkTextColumn<T> implements OnDestroy, OnInit {
+declare class CdkTextColumn<T> implements OnDestroy, OnInit {
     private _table;
     private _options;
     /** Column name that should be used to reference this column. */
@@ -832,231 +924,28 @@ export declare class CdkTextColumn<T> implements OnDestroy, OnInit {
     static ɵcmp: i0.ɵɵComponentDeclaration<CdkTextColumn<any>, "cdk-text-column", never, { "name": { "alias": "name"; "required": false; }; "headerText": { "alias": "headerText"; "required": false; }; "dataAccessor": { "alias": "dataAccessor"; "required": false; }; "justify": { "alias": "justify"; "required": false; }; }, {}, never, never, true, never>;
 }
 
-/** Base interface for a cell definition. Captures a column's cell template definition. */
-export declare interface CellDef {
-    template: TemplateRef<any>;
-}
-
-/** Injection token used to provide a coalesced style scheduler. */
-export declare const _COALESCED_STYLE_SCHEDULER: InjectionToken<_CoalescedStyleScheduler>;
-
-/**
- * Allows grouping up CSSDom mutations after the current execution context.
- * This can significantly improve performance when separate consecutive functions are
- * reading from the CSSDom and then mutating it.
- *
- * @docs-private
- */
-export declare class _CoalescedStyleScheduler {
-    private _currentSchedule;
-    private _ngZone;
-    constructor(...args: unknown[]);
-    /**
-     * Schedules the specified task to run at the end of the current VM turn.
-     */
-    schedule(task: () => unknown): void;
-    /**
-     * Schedules the specified task to run after other scheduled tasks at the end of the current
-     * VM turn.
-     */
-    scheduleEnd(task: () => unknown): void;
-    private _createScheduleIfNeeded;
-    static ɵfac: i0.ɵɵFactoryDeclaration<_CoalescedStyleScheduler, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<_CoalescedStyleScheduler>;
-}
-
-
-/** @docs-private */
-export declare type Constructor<T> = new (...args: any[]) => T;
-
-/**
- * Provides a handle for the table to grab the view container's ng-container to insert data rows.
- * @docs-private
- */
-export declare class DataRowOutlet implements RowOutlet {
-    viewContainer: ViewContainerRef;
-    elementRef: ElementRef<any>;
-    constructor(...args: unknown[]);
-    static ɵfac: i0.ɵɵFactoryDeclaration<DataRowOutlet, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<DataRowOutlet, "[rowOutlet]", never, {}, {}, never, never, true, never>;
-}
-
-export { DataSource }
-
-/**
- * Provides a handle for the table to grab the view container's ng-container to insert the footer.
- * @docs-private
- */
-export declare class FooterRowOutlet implements RowOutlet {
-    viewContainer: ViewContainerRef;
-    elementRef: ElementRef<any>;
-    constructor(...args: unknown[]);
-    static ɵfac: i0.ɵɵFactoryDeclaration<FooterRowOutlet, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<FooterRowOutlet, "[footerRowOutlet]", never, {}, {}, never, never, true, never>;
+declare class CdkTableModule {
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkTableModule, never>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<CdkTableModule, never, [typeof i3.ScrollingModule, typeof CdkTable, typeof CdkRowDef, typeof CdkCellDef, typeof CdkCellOutlet, typeof CdkHeaderCellDef, typeof CdkFooterCellDef, typeof CdkColumnDef, typeof CdkCell, typeof CdkRow, typeof CdkHeaderCell, typeof CdkFooterCell, typeof CdkHeaderRow, typeof CdkHeaderRowDef, typeof CdkFooterRow, typeof CdkFooterRowDef, typeof DataRowOutlet, typeof HeaderRowOutlet, typeof FooterRowOutlet, typeof CdkTextColumn, typeof CdkNoDataRow, typeof CdkRecycleRows, typeof NoDataRowOutlet], [typeof CdkTable, typeof CdkRowDef, typeof CdkCellDef, typeof CdkCellOutlet, typeof CdkHeaderCellDef, typeof CdkFooterCellDef, typeof CdkColumnDef, typeof CdkCell, typeof CdkRow, typeof CdkHeaderCell, typeof CdkFooterCell, typeof CdkHeaderRow, typeof CdkHeaderRowDef, typeof CdkFooterRow, typeof CdkFooterRowDef, typeof DataRowOutlet, typeof HeaderRowOutlet, typeof FooterRowOutlet, typeof CdkTextColumn, typeof CdkNoDataRow, typeof CdkRecycleRows, typeof NoDataRowOutlet]>;
+    static ɵinj: i0.ɵɵInjectorDeclaration<CdkTableModule>;
 }
 
 /**
- * Provides a handle for the table to grab the view container's ng-container to insert the header.
+ * Directions that can be used when setting sticky positioning.
  * @docs-private
  */
-export declare class HeaderRowOutlet implements RowOutlet {
-    viewContainer: ViewContainerRef;
-    elementRef: ElementRef<any>;
-    constructor(...args: unknown[]);
-    static ɵfac: i0.ɵɵFactoryDeclaration<HeaderRowOutlet, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<HeaderRowOutlet, "[headerRowOutlet]", never, {}, {}, never, never, true, never>;
-}
 
-declare namespace i2 {
-    export {
-        CdkRecycleRows,
-        RowOutlet,
-        CdkTableDataSourceInput,
-        DataRowOutlet,
-        HeaderRowOutlet,
-        FooterRowOutlet,
-        NoDataRowOutlet,
-        CDK_TABLE_TEMPLATE,
-        RowContext,
-        RenderRow,
-        CdkTable
-    }
-}
-
-declare namespace i3 {
-    export {
-        CDK_ROW_TEMPLATE,
-        BaseRowDef,
-        CdkHeaderRowDef,
-        CdkFooterRowDef,
-        CdkRowDef,
-        CdkCellOutletRowContext,
-        CdkCellOutletMultiRowContext,
-        CdkCellOutlet,
-        CdkHeaderRow,
-        CdkFooterRow,
-        CdkRow,
-        CdkNoDataRow
-    }
-}
-
-declare namespace i4 {
-    export {
-        CellDef,
-        CdkCellDef,
-        CdkHeaderCellDef,
-        CdkFooterCellDef,
-        CdkColumnDef,
-        BaseCdkCell,
-        CdkHeaderCell,
-        CdkFooterCell,
-        CdkCell
-    }
-}
-
-declare namespace i5 {
-    export {
-        CdkTextColumn
-    }
-}
-
-/**
- * Mixin to provide a directive with a function that checks if the sticky input has been
- * changed since the last time the function was called. Essentially adds a dirty-check to the
- * sticky value.
- * @docs-private
- * @deprecated Implement the `CanStick` interface instead.
- * @breaking-change 19.0.0
- */
-export declare function mixinHasStickyInput<T extends Constructor<{}>>(base: T): CanStickCtor & T;
-
-/**
- * Provides a handle for the table to grab the view
- * container's ng-container to insert the no data row.
- * @docs-private
- */
-export declare class NoDataRowOutlet implements RowOutlet {
-    viewContainer: ViewContainerRef;
-    elementRef: ElementRef<any>;
-    constructor(...args: unknown[]);
-    static ɵfac: i0.ɵɵFactoryDeclaration<NoDataRowOutlet, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<NoDataRowOutlet, "[noDataRowOutlet]", never, {}, {}, never, never, true, never>;
-}
-
-/**
- * Set of properties that represents the identity of a single rendered row.
- *
- * When the table needs to determine the list of rows to render, it will do so by iterating through
- * each data object and evaluating its list of row templates to display (when multiTemplateDataRows
- * is false, there is only one template per data object). For each pair of data object and row
- * template, a `RenderRow` is added to the list of rows to render. If the data object and row
- * template pair has already been rendered, the previously used `RenderRow` is added; else a new
- * `RenderRow` is * created. Once the list is complete and all data objects have been iterated
- * through, a diff is performed to determine the changes that need to be made to the rendered rows.
- *
- * @docs-private
- */
-export declare interface RenderRow<T> {
-    data: T;
-    dataIndex: number;
-    rowDef: CdkRowDef<T>;
-}
-
-/**
- * Interface used to conveniently type the possible context interfaces for the render row.
- * @docs-private
- */
-export declare interface RowContext<T> extends CdkCellOutletMultiRowContext<T>, CdkCellOutletRowContext<T> {
-}
-
-/** Interface used to provide an outlet for rows to be inserted into. */
-export declare interface RowOutlet {
-    viewContainer: ViewContainerRef;
-}
-
-/**
- * @docs-private
- */
-export declare class _Schedule {
-    tasks: (() => unknown)[];
-    endTasks: (() => unknown)[];
-}
-
+type StickyDirection = 'top' | 'bottom' | 'left' | 'right';
 /**
  * List of all possible directions that can be used for sticky positioning.
  * @docs-private
  */
-export declare const STICKY_DIRECTIONS: StickyDirection[];
-
-/** The injection token used to specify the StickyPositioningListener. */
-export declare const STICKY_POSITIONING_LISTENER: InjectionToken<StickyPositioningListener>;
-
-export declare type StickyDirection = 'top' | 'bottom' | 'left' | 'right';
-
-export declare type StickyOffset = number | null | undefined;
-
-/**
- * If provided, CdkTable will call the methods below when it updates the size/
- * position/etc of its sticky rows and columns.
- */
-export declare interface StickyPositioningListener {
-    /** Called when CdkTable updates its sticky start columns. */
-    stickyColumnsUpdated(update: StickyUpdate): void;
-    /** Called when CdkTable updates its sticky end columns. */
-    stickyEndColumnsUpdated(update: StickyUpdate): void;
-    /** Called when CdkTable updates its sticky header rows. */
-    stickyHeaderRowsUpdated(update: StickyUpdate): void;
-    /** Called when CdkTable updates its sticky footer rows. */
-    stickyFooterRowsUpdated(update: StickyUpdate): void;
-}
-
-export declare type StickySize = number | null | undefined;
-
+declare const STICKY_DIRECTIONS: StickyDirection[];
 /**
  * Applies and removes sticky positioning styles to the `CdkTable` rows and columns cells.
  * @docs-private
  */
-export declare class StickyStyler {
+declare class StickyStyler {
     private _isNativeHtmlTable;
     private _stickCellCss;
     direction: Direction;
@@ -1188,17 +1077,13 @@ export declare class StickyStyler {
     private _afterNextRender;
 }
 
-export declare interface StickyUpdate {
-    elements?: readonly (HTMLElement[] | undefined)[];
-    offsets?: StickyOffset[];
-    sizes: StickySize[];
-}
-
-/** Injection token that can be used to specify the text column options. */
-export declare const TEXT_COLUMN_OPTIONS: InjectionToken<TextColumnOptions<any>>;
-
+/**
+ * Used to provide a table to some of the sub-components without causing a circular dependency.
+ * @docs-private
+ */
+declare const CDK_TABLE: InjectionToken<any>;
 /** Configurable options for `CdkTextColumn`. */
-export declare interface TextColumnOptions<T> {
+interface TextColumnOptions<T> {
     /**
      * Default function that provides the header text based on the column name if a header
      * text is not provided.
@@ -1207,5 +1092,7 @@ export declare interface TextColumnOptions<T> {
     /** Default data accessor to use if one is not provided. */
     defaultDataAccessor?: (data: T, name: string) => string;
 }
+/** Injection token that can be used to specify the text column options. */
+declare const TEXT_COLUMN_OPTIONS: InjectionToken<TextColumnOptions<any>>;
 
-export { }
+export { BaseCdkCell, BaseRowDef, CDK_ROW_TEMPLATE, CDK_TABLE, CDK_TABLE_TEMPLATE, type CanStick, type CanStickCtor, CdkCell, CdkCellDef, CdkCellOutlet, type CdkCellOutletMultiRowContext, type CdkCellOutletRowContext, CdkColumnDef, CdkFooterCell, CdkFooterCellDef, CdkFooterRow, CdkFooterRowDef, CdkHeaderCell, CdkHeaderCellDef, CdkHeaderRow, CdkHeaderRowDef, CdkNoDataRow, CdkRecycleRows, CdkRow, CdkRowDef, CdkTable, type CdkTableDataSourceInput, CdkTableModule, CdkTextColumn, type CellDef, type Constructor, DataRowOutlet, FooterRowOutlet, HeaderRowOutlet, NoDataRowOutlet, type RenderRow, type RowContext, type RowOutlet, STICKY_DIRECTIONS, STICKY_POSITIONING_LISTENER, type StickyDirection, type StickyOffset, type StickyPositioningListener, type StickySize, StickyStyler, type StickyUpdate, TEXT_COLUMN_OPTIONS, type TextColumnOptions, _COALESCED_STYLE_SCHEDULER, _CoalescedStyleScheduler, _Schedule, mixinHasStickyInput };

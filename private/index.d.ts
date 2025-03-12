@@ -5,7 +5,7 @@ import { Type } from '@angular/core';
  * Service that loads structural styles dynamically
  * and ensures that they're only loaded once per app.
  */
-export declare class _CdkPrivateStyleLoader {
+declare class _CdkPrivateStyleLoader {
     private _appRef;
     private _injector;
     private _environmentInjector;
@@ -22,9 +22,9 @@ export declare class _CdkPrivateStyleLoader {
  * Component used to load the .cdk-visually-hidden styles.
  * @docs-private
  */
-export declare class _VisuallyHiddenLoader {
+declare class _VisuallyHiddenLoader {
     static ɵfac: i0.ɵɵFactoryDeclaration<_VisuallyHiddenLoader, never>;
     static ɵcmp: i0.ɵɵComponentDeclaration<_VisuallyHiddenLoader, "ng-component", ["cdkVisuallyHidden"], {}, {}, never, never, true, never>;
 }
 
-export { }
+export { _CdkPrivateStyleLoader, _VisuallyHiddenLoader };

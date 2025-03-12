@@ -1,11 +1,11 @@
-import { Directionality } from '@angular/cdk/bidi';
 import { _VIEW_REPEATER_STRATEGY, _RecycleViewRepeaterStrategy, isDataSource, _ViewRepeaterOperation, _DisposeViewRepeaterStrategy } from '@angular/cdk/collections';
 export { DataSource } from '@angular/cdk/collections';
+import { Directionality } from '@angular/cdk/bidi';
 import { Platform } from '@angular/cdk/platform';
 import { ViewportRuler, ScrollingModule } from '@angular/cdk/scrolling';
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { InjectionToken, inject, TemplateRef, Directive, booleanAttribute, Input, ContentChild, ElementRef, NgZone, Injectable, IterableDiffers, ViewContainerRef, Component, ChangeDetectionStrategy, ViewEncapsulation, afterNextRender, EmbeddedViewRef, ChangeDetectorRef, EventEmitter, Injector, HostAttributeToken, Output, ContentChildren, ViewChild, NgModule } from '@angular/core';
+import { InjectionToken, inject, TemplateRef, Directive, booleanAttribute, Input, ContentChild, ElementRef, NgZone, Injectable, IterableDiffers, ViewContainerRef, Component, ChangeDetectionStrategy, ViewEncapsulation, afterNextRender, ChangeDetectorRef, EventEmitter, Injector, HostAttributeToken, Output, ContentChildren, ViewChild, NgModule } from '@angular/core';
 import { Subject, BehaviorSubject, isObservable, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
@@ -1312,12 +1312,6 @@ const CDK_TABLE_TEMPLATE =
   }
 `;
 /**
- * Class used to conveniently type the embedded view ref for rows with a context.
- * @docs-private
- */
-class RowViewRef extends EmbeddedViewRef {
-}
-/**
  * A data table that can render a header row, data rows, and a footer row.
  * Uses the dataSource input to determine the data to be rendered. The data can be provided either
  * as a data array, an Observable stream that emits the data array to render, or a DataSource with a
@@ -2595,10 +2589,6 @@ function mixinHasStickyInput(base) {
         }
     };
 }
-
-/**
- * Generated bundle index. Do not edit.
- */
 
 export { BaseCdkCell, BaseRowDef, CDK_ROW_TEMPLATE, CDK_TABLE, CDK_TABLE_TEMPLATE, CdkCell, CdkCellDef, CdkCellOutlet, CdkColumnDef, CdkFooterCell, CdkFooterCellDef, CdkFooterRow, CdkFooterRowDef, CdkHeaderCell, CdkHeaderCellDef, CdkHeaderRow, CdkHeaderRowDef, CdkNoDataRow, CdkRecycleRows, CdkRow, CdkRowDef, CdkTable, CdkTableModule, CdkTextColumn, DataRowOutlet, FooterRowOutlet, HeaderRowOutlet, NoDataRowOutlet, STICKY_DIRECTIONS, STICKY_POSITIONING_LISTENER, StickyStyler, TEXT_COLUMN_OPTIONS, _COALESCED_STYLE_SCHEDULER, _CoalescedStyleScheduler, _Schedule, mixinHasStickyInput };
 //# sourceMappingURL=table.mjs.map

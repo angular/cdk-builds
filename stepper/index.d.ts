@@ -1,21 +1,70 @@
-import { AbstractControl } from '@angular/forms';
-import { AfterContentInit } from '@angular/core';
-import { AfterViewInit } from '@angular/core';
-import { ElementRef } from '@angular/core';
-import { EventEmitter } from '@angular/core';
-import { FocusableOption } from '@angular/cdk/a11y';
-import { FormGroupDirective } from '@angular/forms';
 import * as i0 from '@angular/core';
-import * as i1 from '@angular/cdk/bidi';
-import { InjectionToken } from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { OnChanges } from '@angular/core';
-import { OnDestroy } from '@angular/core';
-import { QueryList } from '@angular/core';
+import { ElementRef, TemplateRef, InjectionToken, OnChanges, QueryList, EventEmitter, AfterContentInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { NgForm, FormGroupDirective, AbstractControl } from '@angular/forms';
 import { Subject } from 'rxjs';
-import { TemplateRef } from '@angular/core';
+import { FocusableOption } from '@angular/cdk/a11y';
+import * as i2 from '@angular/cdk/bidi';
 
-export declare class CdkStep implements OnChanges {
+declare class CdkStepHeader implements FocusableOption {
+    _elementRef: ElementRef<HTMLElement>;
+    constructor(...args: unknown[]);
+    /** Focuses the step header. */
+    focus(): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkStepHeader, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepHeader, "[cdkStepHeader]", never, {}, {}, never, never, true, never>;
+}
+
+declare class CdkStepLabel {
+    template: TemplateRef<any>;
+    constructor(...args: unknown[]);
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkStepLabel, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepLabel, "[cdkStepLabel]", never, {}, {}, never, never, true, never>;
+}
+
+/**
+ * Position state of the content of each step in stepper that is used for transitioning
+ * the content into correct position upon step selection change.
+ */
+type StepContentPositionState = 'previous' | 'current' | 'next';
+/** Possible orientation of a stepper. */
+type StepperOrientation = 'horizontal' | 'vertical';
+/** Change event emitted on selection changes. */
+declare class StepperSelectionEvent {
+    /** Index of the step now selected. */
+    selectedIndex: number;
+    /** Index of the step previously selected. */
+    previouslySelectedIndex: number;
+    /** The step instance now selected. */
+    selectedStep: CdkStep;
+    /** The step instance previously selected. */
+    previouslySelectedStep: CdkStep;
+}
+/** The state of each step. */
+type StepState = 'number' | 'edit' | 'done' | 'error' | string;
+/** Enum to represent the different states of the steps. */
+declare const STEP_STATE: {
+    NUMBER: string;
+    EDIT: string;
+    DONE: string;
+    ERROR: string;
+};
+/** InjectionToken that can be used to specify the global stepper options. */
+declare const STEPPER_GLOBAL_OPTIONS: InjectionToken<StepperOptions>;
+/** Configurable options for stepper. */
+interface StepperOptions {
+    /**
+     * Whether the stepper should display an error state or not.
+     * Default behavior is assumed to be false.
+     */
+    showError?: boolean;
+    /**
+     * Whether the stepper should display the default indicator type
+     * or not.
+     * Default behavior is assumed to be true.
+     */
+    displayDefaultIndicatorType?: boolean;
+}
+declare class CdkStep implements OnChanges {
     private _stepperOptions;
     _stepper: CdkStepper;
     _displayDefaultIndicatorType: boolean;
@@ -74,24 +123,7 @@ export declare class CdkStep implements OnChanges {
     static ngAcceptInputType_completed: unknown;
     static ngAcceptInputType_hasError: unknown;
 }
-
-export declare class CdkStepHeader implements FocusableOption {
-    _elementRef: ElementRef<HTMLElement>;
-    constructor(...args: unknown[]);
-    /** Focuses the step header. */
-    focus(): void;
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkStepHeader, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepHeader, "[cdkStepHeader]", never, {}, {}, never, never, true, never>;
-}
-
-export declare class CdkStepLabel {
-    template: TemplateRef<any>;
-    constructor(...args: unknown[]);
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkStepLabel, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepLabel, "[cdkStepLabel]", never, {}, {}, never, never, true, never>;
-}
-
-export declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDestroy {
+declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDestroy {
     private _dir;
     private _changeDetectorRef;
     protected _elementRef: ElementRef<HTMLElement>;
@@ -165,14 +197,8 @@ export declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDe
     static ngAcceptInputType_selectedIndex: unknown;
 }
 
-export declare class CdkStepperModule {
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkStepperModule, never>;
-    static ɵmod: i0.ɵɵNgModuleDeclaration<CdkStepperModule, never, [typeof i1.BidiModule, typeof i2.CdkStep, typeof i2.CdkStepper, typeof i3.CdkStepHeader, typeof i4.CdkStepLabel, typeof i5.CdkStepperNext, typeof i5.CdkStepperPrevious], [typeof i2.CdkStep, typeof i2.CdkStepper, typeof i3.CdkStepHeader, typeof i4.CdkStepLabel, typeof i5.CdkStepperNext, typeof i5.CdkStepperPrevious]>;
-    static ɵinj: i0.ɵɵInjectorDeclaration<CdkStepperModule>;
-}
-
 /** Button that moves to the next step in a stepper workflow. */
-export declare class CdkStepperNext {
+declare class CdkStepperNext {
     _stepper: CdkStepper;
     /** Type of the next button. Defaults to "submit" if not specified. */
     type: string;
@@ -180,9 +206,8 @@ export declare class CdkStepperNext {
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkStepperNext, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepperNext, "button[cdkStepperNext]", never, { "type": { "alias": "type"; "required": false; }; }, {}, never, never, true, never>;
 }
-
 /** Button that moves to the previous step in a stepper workflow. */
-export declare class CdkStepperPrevious {
+declare class CdkStepperPrevious {
     _stepper: CdkStepper;
     /** Type of the previous button. Defaults to "button" if not specified. */
     type: string;
@@ -191,87 +216,10 @@ export declare class CdkStepperPrevious {
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepperPrevious, "button[cdkStepperPrevious]", never, { "type": { "alias": "type"; "required": false; }; }, {}, never, never, true, never>;
 }
 
-declare namespace i2 {
-    export {
-        StepContentPositionState,
-        StepperOrientation,
-        StepperSelectionEvent,
-        StepState,
-        STEP_STATE,
-        STEPPER_GLOBAL_OPTIONS,
-        StepperOptions,
-        CdkStep,
-        CdkStepper
-    }
+declare class CdkStepperModule {
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkStepperModule, never>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<CdkStepperModule, never, [typeof i2.BidiModule, typeof CdkStep, typeof CdkStepper, typeof CdkStepHeader, typeof CdkStepLabel, typeof CdkStepperNext, typeof CdkStepperPrevious], [typeof CdkStep, typeof CdkStepper, typeof CdkStepHeader, typeof CdkStepLabel, typeof CdkStepperNext, typeof CdkStepperPrevious]>;
+    static ɵinj: i0.ɵɵInjectorDeclaration<CdkStepperModule>;
 }
 
-declare namespace i3 {
-    export {
-        CdkStepHeader
-    }
-}
-
-declare namespace i4 {
-    export {
-        CdkStepLabel
-    }
-}
-
-declare namespace i5 {
-    export {
-        CdkStepperNext,
-        CdkStepperPrevious
-    }
-}
-
-/** Enum to represent the different states of the steps. */
-export declare const STEP_STATE: {
-    NUMBER: string;
-    EDIT: string;
-    DONE: string;
-    ERROR: string;
-};
-
-/**
- * Position state of the content of each step in stepper that is used for transitioning
- * the content into correct position upon step selection change.
- */
-export declare type StepContentPositionState = 'previous' | 'current' | 'next';
-
-/** InjectionToken that can be used to specify the global stepper options. */
-export declare const STEPPER_GLOBAL_OPTIONS: InjectionToken<StepperOptions>;
-
-/** Configurable options for stepper. */
-export declare interface StepperOptions {
-    /**
-     * Whether the stepper should display an error state or not.
-     * Default behavior is assumed to be false.
-     */
-    showError?: boolean;
-    /**
-     * Whether the stepper should display the default indicator type
-     * or not.
-     * Default behavior is assumed to be true.
-     */
-    displayDefaultIndicatorType?: boolean;
-}
-
-/** Possible orientation of a stepper. */
-export declare type StepperOrientation = 'horizontal' | 'vertical';
-
-/** Change event emitted on selection changes. */
-export declare class StepperSelectionEvent {
-    /** Index of the step now selected. */
-    selectedIndex: number;
-    /** Index of the step previously selected. */
-    previouslySelectedIndex: number;
-    /** The step instance now selected. */
-    selectedStep: CdkStep;
-    /** The step instance previously selected. */
-    previouslySelectedStep: CdkStep;
-}
-
-/** The state of each step. */
-export declare type StepState = 'number' | 'edit' | 'done' | 'error' | string;
-
-export { }
+export { CdkStep, CdkStepHeader, CdkStepLabel, CdkStepper, CdkStepperModule, CdkStepperNext, CdkStepperPrevious, STEPPER_GLOBAL_OPTIONS, STEP_STATE, type StepContentPositionState, type StepState, type StepperOptions, type StepperOrientation, StepperSelectionEvent };
