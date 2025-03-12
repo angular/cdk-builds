@@ -1064,7 +1064,11 @@ export declare const LIVE_ANNOUNCER_DEFAULT_OPTIONS: InjectionToken<LiveAnnounce
 
 export declare const LIVE_ANNOUNCER_ELEMENT_TOKEN: InjectionToken<HTMLElement | null>;
 
-/** @docs-private */
+/**
+ * @docs-private
+ * @deprecated No longer used, will be removed.
+ * @breaking-change 21.0.0
+ */
 export declare function LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY(): null;
 
 export declare class LiveAnnouncer implements OnDestroy {
@@ -1230,10 +1234,18 @@ export declare function removeAriaReferencedId(el: Element, attr: `aria-${string
 /** Injection token that determines the key manager to use. */
 export declare const TREE_KEY_MANAGER: InjectionToken<TreeKeyManagerFactory<any>>;
 
-/** @docs-private */
+/**
+ * @docs-private
+ * @deprecated No longer used, will be removed.
+ * @breaking-change 21.0.0
+ */
 export declare function TREE_KEY_MANAGER_FACTORY<T extends TreeKeyManagerItem>(): TreeKeyManagerFactory<T>;
 
-/** @docs-private */
+/**
+ * @docs-private
+ * @deprecated No longer used, will be removed.
+ * @breaking-change 21.0.0
+ */
 export declare const TREE_KEY_MANAGER_FACTORY_PROVIDER: {
     provide: InjectionToken<TreeKeyManagerFactory<any>>;
     useFactory: typeof TREE_KEY_MANAGER_FACTORY;

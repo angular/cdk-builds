@@ -1055,7 +1055,11 @@ class TreeKeyManager {
         this._activeItem?.activate();
     }
 }
-/** @docs-private */
+/**
+ * @docs-private
+ * @deprecated No longer used, will be removed.
+ * @breaking-change 21.0.0
+ */
 function TREE_KEY_MANAGER_FACTORY() {
     return (items, options) => new TreeKeyManager(items, options);
 }
@@ -1064,7 +1068,11 @@ const TREE_KEY_MANAGER = new InjectionToken('tree-key-manager', {
     providedIn: 'root',
     factory: TREE_KEY_MANAGER_FACTORY,
 });
-/** @docs-private */
+/**
+ * @docs-private
+ * @deprecated No longer used, will be removed.
+ * @breaking-change 21.0.0
+ */
 const TREE_KEY_MANAGER_FACTORY_PROVIDER = {
     provide: TREE_KEY_MANAGER,
     useFactory: TREE_KEY_MANAGER_FACTORY,
@@ -2123,7 +2131,11 @@ const LIVE_ANNOUNCER_ELEMENT_TOKEN = new InjectionToken('liveAnnouncerElement', 
     providedIn: 'root',
     factory: LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY,
 });
-/** @docs-private */
+/**
+ * @docs-private
+ * @deprecated No longer used, will be removed.
+ * @breaking-change 21.0.0
+ */
 function LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY() {
     return null;
 }
