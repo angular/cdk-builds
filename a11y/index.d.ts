@@ -6,8 +6,8 @@ export { b as ListKeyManager, a as ListKeyManagerModifierKey, L as ListKeyManage
 import { Subject, Observable } from 'rxjs';
 import { T as TreeKeyManagerItem, a as TreeKeyManagerStrategy, b as TreeKeyManagerFactory, c as TreeKeyManagerOptions } from '../tree-key-manager-strategy.d-603161dd.js';
 export { b as TreeKeyManagerFactory, T as TreeKeyManagerItem, c as TreeKeyManagerOptions, a as TreeKeyManagerStrategy } from '../tree-key-manager-strategy.d-603161dd.js';
-import { F as FocusTrap, I as InteractivityChecker } from '../a11y-module.d-b20dbdc8.js';
-export { h as A11yModule, A as AriaLivePoliteness, c as CdkAriaLive, C as CdkTrapFocus, F as FocusTrap, a as FocusTrapFactory, I as InteractivityChecker, b as IsFocusableConfig, g as LIVE_ANNOUNCER_DEFAULT_OPTIONS, d as LIVE_ANNOUNCER_ELEMENT_TOKEN, e as LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, L as LiveAnnouncer, f as LiveAnnouncerDefaultOptions } from '../a11y-module.d-b20dbdc8.js';
+import { F as FocusTrap, I as InteractivityChecker } from '../a11y-module.d-7d03e079.js';
+export { h as A11yModule, A as AriaLivePoliteness, c as CdkAriaLive, C as CdkTrapFocus, F as FocusTrap, a as FocusTrapFactory, I as InteractivityChecker, b as IsFocusableConfig, g as LIVE_ANNOUNCER_DEFAULT_OPTIONS, d as LIVE_ANNOUNCER_ELEMENT_TOKEN, e as LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, L as LiveAnnouncer, f as LiveAnnouncerDefaultOptions } from '../a11y-module.d-7d03e079.js';
 export { C as CdkMonitorFocus, d as FOCUS_MONITOR_DEFAULT_OPTIONS, e as FocusMonitor, b as FocusMonitorDetectionMode, c as FocusMonitorOptions, a as FocusOptions, F as FocusOrigin } from '../focus-monitor.d-810a02e6.js';
 import '../observe-content.d-c08bc882.js';
 import '../number-property.d-ce316715.js';
@@ -271,11 +271,19 @@ declare class TreeKeyManager<T extends TreeKeyManagerItem> implements TreeKeyMan
     private _expandAllItemsAtCurrentItemLevel;
     private _activateCurrentItem;
 }
-/** @docs-private */
+/**
+ * @docs-private
+ * @deprecated No longer used, will be removed.
+ * @breaking-change 21.0.0
+ */
 declare function TREE_KEY_MANAGER_FACTORY<T extends TreeKeyManagerItem>(): TreeKeyManagerFactory<T>;
 /** Injection token that determines the key manager to use. */
 declare const TREE_KEY_MANAGER: InjectionToken<TreeKeyManagerFactory<any>>;
-/** @docs-private */
+/**
+ * @docs-private
+ * @deprecated No longer used, will be removed.
+ * @breaking-change 21.0.0
+ */
 declare const TREE_KEY_MANAGER_FACTORY_PROVIDER: {
     provide: InjectionToken<TreeKeyManagerFactory<any>>;
     useFactory: typeof TREE_KEY_MANAGER_FACTORY;

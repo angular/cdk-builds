@@ -623,7 +623,11 @@ const LIVE_ANNOUNCER_ELEMENT_TOKEN = new InjectionToken('liveAnnouncerElement', 
     providedIn: 'root',
     factory: LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY,
 });
-/** @docs-private */
+/**
+ * @docs-private
+ * @deprecated No longer used, will be removed.
+ * @breaking-change 21.0.0
+ */
 function LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY() {
     return null;
 }
@@ -945,4 +949,4 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.1", 
         }], ctorParameters: () => [] });
 
 export { A11yModule as A, CdkTrapFocus as C, FocusTrap as F, HighContrastModeDetector as H, InteractivityChecker as I, LiveAnnouncer as L, HighContrastMode as a, FocusTrapFactory as b, IsFocusableConfig as c, CdkAriaLive as d, LIVE_ANNOUNCER_ELEMENT_TOKEN as e, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY as f, LIVE_ANNOUNCER_DEFAULT_OPTIONS as g };
-//# sourceMappingURL=a11y-module-c42f67ef.mjs.map
+//# sourceMappingURL=a11y-module-e6996d20.mjs.map

@@ -1,7 +1,7 @@
 import * as i0 from '@angular/core';
 import { ViewContainerRef, Injector, StaticProvider, Type, OnDestroy, ElementRef, NgZone, ChangeDetectorRef, ComponentRef, EmbeddedViewRef, TemplateRef, InjectionToken } from '@angular/core';
 import { F as FocusOrigin } from '../focus-monitor.d-810a02e6.js';
-import { a as FocusTrapFactory, h as A11yModule } from '../a11y-module.d-b20dbdc8.js';
+import { a as FocusTrapFactory, h as A11yModule } from '../a11y-module.d-7d03e079.js';
 import { B as BasePortalOutlet, C as CdkPortalOutlet, a as ComponentPortal, T as TemplatePortal, D as DomPortal, b as ComponentType, P as PortalModule } from '../portal-directives.d-d345bd53.js';
 import { a as Direction } from '../bidi-module.d-f8648621.js';
 import { P as PositionStrategy, S as ScrollStrategy, O as OverlayRef, a as OverlayModule } from '../overlay-module.d-5d06db8a.js';

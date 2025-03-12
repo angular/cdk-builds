@@ -333,7 +333,11 @@ class TreeKeyManager {
         this._activeItem?.activate();
     }
 }
-/** @docs-private */
+/**
+ * @docs-private
+ * @deprecated No longer used, will be removed.
+ * @breaking-change 21.0.0
+ */
 function TREE_KEY_MANAGER_FACTORY() {
     return (items, options) => new TreeKeyManager(items, options);
 }
@@ -342,11 +346,15 @@ const TREE_KEY_MANAGER = new InjectionToken('tree-key-manager', {
     providedIn: 'root',
     factory: TREE_KEY_MANAGER_FACTORY,
 });
-/** @docs-private */
+/**
+ * @docs-private
+ * @deprecated No longer used, will be removed.
+ * @breaking-change 21.0.0
+ */
 const TREE_KEY_MANAGER_FACTORY_PROVIDER = {
     provide: TREE_KEY_MANAGER,
     useFactory: TREE_KEY_MANAGER_FACTORY,
 };
 
 export { TREE_KEY_MANAGER as T, TreeKeyManager as a, TREE_KEY_MANAGER_FACTORY as b, TREE_KEY_MANAGER_FACTORY_PROVIDER as c };
-//# sourceMappingURL=tree-key-manager-4673f008.mjs.map
+//# sourceMappingURL=tree-key-manager-2f20c79c.mjs.map

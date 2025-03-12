@@ -21,7 +21,11 @@ const DIR_DOCUMENT = new InjectionToken('cdk-dir-doc', {
     providedIn: 'root',
     factory: DIR_DOCUMENT_FACTORY,
 });
-/** @docs-private */
+/**
+ * @docs-private
+ * @deprecated No longer used, will be removed.
+ * @breaking-change 21.0.0
+ */
 function DIR_DOCUMENT_FACTORY() {
     return inject(DOCUMENT);
 }
@@ -65,4 +69,4 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.1", 
         }], ctorParameters: () => [] });
 
 export { Directionality as D, _resolveDirectionality as _, DIR_DOCUMENT as a };
-//# sourceMappingURL=directionality-54a4f176.mjs.map
+//# sourceMappingURL=directionality-7ea26429.mjs.map

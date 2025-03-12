@@ -4,12 +4,12 @@ import { Subject, of, Observable, Subscription, animationFrameScheduler, asapSch
 import { distinctUntilChanged, auditTime, filter, startWith, takeUntil, pairwise, switchMap, shareReplay } from 'rxjs/operators';
 import { a as coerceNumberProperty, c as coerceElement } from './element-705567fe.mjs';
 import { P as Platform } from './platform-1be098b0.mjs';
-import { D as Directionality } from './directionality-54a4f176.mjs';
+import { D as Directionality } from './directionality-7ea26429.mjs';
 import { g as getRtlScrollAxisType, R as RtlScrollAxisType, s as supportsScrollBehavior } from './scrolling-61955dd1.mjs';
 import { DOCUMENT } from '@angular/common';
 import { b as _VIEW_REPEATER_STRATEGY, A as ArrayDataSource, _ as _RecycleViewRepeaterStrategy } from './recycle-view-repeater-strategy-c1712813.mjs';
 import { i as isDataSource } from './data-source-5320b6fd.mjs';
-import { B as BidiModule } from './bidi-module-924a0b08.mjs';
+import { B as BidiModule } from './bidi-module-0726b65c.mjs';
 
 /** The injection token used to specify the virtual scrolling strategy. */
 const VIRTUAL_SCROLL_STRATEGY = new InjectionToken('VIRTUAL_SCROLL_STRATEGY');
@@ -1460,4 +1460,4 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.1", 
         }] });
 
 export { CdkScrollableModule as C, DEFAULT_SCROLL_TIME as D, FixedSizeVirtualScrollStrategy as F, ScrollDispatcher as S, ViewportRuler as V, _fixedSizeVirtualScrollStrategyFactory as _, ScrollingModule as a, CdkScrollable as b, CdkFixedSizeVirtualScroll as c, DEFAULT_RESIZE_TIME as d, CdkVirtualForOf as e, VIRTUAL_SCROLL_STRATEGY as f, CdkVirtualScrollViewport as g, VIRTUAL_SCROLLABLE as h, CdkVirtualScrollable as i, CdkVirtualScrollableElement as j, CdkVirtualScrollableWindow as k };
-//# sourceMappingURL=scrolling-module-5b35d76d.mjs.map
+//# sourceMappingURL=scrolling-module-aa9eeac5.mjs.map

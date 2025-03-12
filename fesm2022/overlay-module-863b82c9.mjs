@@ -10,14 +10,14 @@ import { Subject, Subscription, merge } from 'rxjs';
 import { filter, takeUntil, takeWhile } from 'rxjs/operators';
 import { c as coerceCssPixelValue } from './css-pixel-value-286c9a60.mjs';
 import { c as coerceArray } from './array-ee3b4bab.mjs';
-import { S as ScrollDispatcher, V as ViewportRuler, a as ScrollingModule } from './scrolling-module-5b35d76d.mjs';
+import { S as ScrollDispatcher, V as ViewportRuler, a as ScrollingModule } from './scrolling-module-aa9eeac5.mjs';
 import { s as supportsScrollBehavior } from './scrolling-61955dd1.mjs';
 import { D as DomPortalOutlet, T as TemplatePortal, P as PortalModule } from './portal-directives-c88fea11.mjs';
-import { D as Directionality } from './directionality-54a4f176.mjs';
+import { D as Directionality } from './directionality-7ea26429.mjs';
 import { _ as _IdGenerator } from './id-generator-fba495fb.mjs';
 import { e as ESCAPE } from './keycodes-107cd3e4.mjs';
 import { h as hasModifierKey } from './modifiers-33a5859e.mjs';
-import { B as BidiModule } from './bidi-module-924a0b08.mjs';
+import { B as BidiModule } from './bidi-module-0726b65c.mjs';
 
 const scrollBehaviorSupported = supportsScrollBehavior();
 /**
@@ -2992,11 +2992,19 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.1", 
             }], overlayOutsideClick: [{
                 type: Output
             }] } });
-/** @docs-private */
+/**
+ * @docs-private
+ * @deprecated No longer used, will be removed.
+ * @breaking-change 21.0.0
+ */
 function CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY(overlay) {
     return () => overlay.scrollStrategies.reposition();
 }
-/** @docs-private */
+/**
+ * @docs-private
+ * @deprecated No longer used, will be removed.
+ * @breaking-change 21.0.0
+ */
 const CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER = {
     provide: CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY,
     deps: [Overlay],
@@ -3018,4 +3026,4 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.1", 
         }] });
 
 export { BlockScrollStrategy as B, CdkOverlayOrigin as C, FlexibleConnectedPositionStrategy as F, GlobalPositionStrategy as G, NoopScrollStrategy as N, OverlayRef as O, RepositionScrollStrategy as R, STANDARD_DROPDOWN_BELOW_POSITIONS as S, Overlay as a, OverlayContainer as b, OverlayConfig as c, OverlayModule as d, STANDARD_DROPDOWN_ADJACENT_POSITIONS as e, CdkConnectedOverlay as f, OverlayPositionBuilder as g, ConnectionPositionPair as h, ScrollingVisibility as i, ConnectedOverlayPositionChange as j, validateHorizontalPosition as k, ScrollStrategyOptions as l, CloseScrollStrategy as m, OverlayOutsideClickDispatcher as n, OverlayKeyboardDispatcher as o, validateVerticalPosition as v };
-//# sourceMappingURL=overlay-module-3e3443fd.mjs.map
+//# sourceMappingURL=overlay-module-863b82c9.mjs.map

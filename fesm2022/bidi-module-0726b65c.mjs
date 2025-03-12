@@ -1,6 +1,6 @@
 import * as i0 from '@angular/core';
 import { EventEmitter, Directive, Output, Input, NgModule } from '@angular/core';
-import { _ as _resolveDirectionality, D as Directionality } from './directionality-54a4f176.mjs';
+import { _ as _resolveDirectionality, D as Directionality } from './directionality-7ea26429.mjs';
 
 /**
  * Directive to listen for changes of direction of part of the DOM.
@@ -75,4 +75,4 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.1", 
         }] });
 
 export { BidiModule as B, Dir as D };
-//# sourceMappingURL=bidi-module-924a0b08.mjs.map
+//# sourceMappingURL=bidi-module-0726b65c.mjs.map
