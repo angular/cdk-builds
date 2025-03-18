@@ -1,35 +1,6 @@
+export { P as Platform } from '../platform.d-0a5b4792.js';
 import * as i0 from '@angular/core';
 import { Renderer2 } from '@angular/core';
-
-/**
- * Service to detect the current platform by comparing the userAgent strings and
- * checking browser-specific global properties.
- */
-declare class Platform {
-    private _platformId;
-    /** Whether the Angular application is being rendered in the browser. */
-    isBrowser: boolean;
-    /** Whether the current browser is Microsoft Edge. */
-    EDGE: boolean;
-    /** Whether the current rendering engine is Microsoft Trident. */
-    TRIDENT: boolean;
-    /** Whether the current rendering engine is Blink. */
-    BLINK: boolean;
-    /** Whether the current rendering engine is WebKit. */
-    WEBKIT: boolean;
-    /** Whether the current platform is Apple iOS. */
-    IOS: boolean;
-    /** Whether the current browser is Firefox. */
-    FIREFOX: boolean;
-    /** Whether the current platform is Android. */
-    ANDROID: boolean;
-    /** Whether the current browser is Safari. */
-    SAFARI: boolean;
-    /** Backwards-compatible constructor. */
-    constructor(..._args: unknown[]);
-    static ɵfac: i0.ɵɵFactoryDeclaration<Platform, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<Platform>;
-}
 
 declare class PlatformModule {
     static ɵfac: i0.ɵɵFactoryDeclaration<PlatformModule, never>;
@@ -108,4 +79,4 @@ interface _ListenerOptions {
  */
 declare function _bindEventWithOptions(renderer: Renderer2, target: EventTarget, eventName: string, callback: (event: any) => boolean | void, options: _ListenerOptions): () => void;
 
-export { Platform, PlatformModule, RtlScrollAxisType, type _ListenerOptions, _bindEventWithOptions, _getEventTarget, _getFocusedElementPierceShadowDom, _getShadowRoot, _isTestEnvironment, _supportsShadowDom, getRtlScrollAxisType, getSupportedInputTypes, normalizePassiveListenerOptions, supportsPassiveEventListeners, supportsScrollBehavior };
+export { PlatformModule, RtlScrollAxisType, type _ListenerOptions, _bindEventWithOptions, _getEventTarget, _getFocusedElementPierceShadowDom, _getShadowRoot, _isTestEnvironment, _supportsShadowDom, getRtlScrollAxisType, getSupportedInputTypes, normalizePassiveListenerOptions, supportsPassiveEventListeners, supportsScrollBehavior };

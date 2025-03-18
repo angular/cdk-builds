@@ -1,10 +1,11 @@
 import * as i0 from '@angular/core';
 import { InjectionToken, ElementRef, NgZone, OnDestroy, EventEmitter, AfterViewInit, TemplateRef, OnChanges, SimpleChanges, ViewContainerRef, Renderer2 } from '@angular/core';
-import { Direction } from '@angular/cdk/bidi';
-import * as i3 from '@angular/cdk/scrolling';
-import { ViewportRuler } from '@angular/cdk/scrolling';
+import { a as Direction } from '../bidi-module.d-f8648621.js';
 import { Subject, Observable } from 'rxjs';
-import { NumberInput } from '@angular/cdk/coercion';
+import { V as ViewportRuler } from '../viewport-ruler.d-f3d3e82f.js';
+import { N as NumberInput } from '../number-property.d-ce316715.js';
+import { b as CdkScrollableModule } from '../scrolling-module.d-e181b1be.js';
+import '../data-source.d-7cab2c9d.js';
 
 /** Possible values that can be used to configure the drag start delay. */
 type DragStartDelay = number | {
@@ -1371,7 +1372,7 @@ declare class CdkDropListGroup<T> implements OnDestroy {
 
 declare class DragDropModule {
     static ɵfac: i0.ɵɵFactoryDeclaration<DragDropModule, never>;
-    static ɵmod: i0.ɵɵNgModuleDeclaration<DragDropModule, never, [typeof CdkDropList, typeof CdkDropListGroup, typeof CdkDrag, typeof CdkDragHandle, typeof CdkDragPreview, typeof CdkDragPlaceholder], [typeof i3.CdkScrollableModule, typeof CdkDropList, typeof CdkDropListGroup, typeof CdkDrag, typeof CdkDragHandle, typeof CdkDragPreview, typeof CdkDragPlaceholder]>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<DragDropModule, never, [typeof CdkDropList, typeof CdkDropListGroup, typeof CdkDrag, typeof CdkDragHandle, typeof CdkDragPreview, typeof CdkDragPlaceholder], [typeof CdkScrollableModule, typeof CdkDropList, typeof CdkDropListGroup, typeof CdkDrag, typeof CdkDragHandle, typeof CdkDragPreview, typeof CdkDragPlaceholder]>;
     static ɵinj: i0.ɵɵInjectorDeclaration<DragDropModule>;
 }
 

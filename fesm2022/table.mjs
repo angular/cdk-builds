@@ -1,14 +1,19 @@
-import { _VIEW_REPEATER_STRATEGY, _RecycleViewRepeaterStrategy, isDataSource, _ViewRepeaterOperation, _DisposeViewRepeaterStrategy } from '@angular/cdk/collections';
-export { DataSource } from '@angular/cdk/collections';
-import { Directionality } from '@angular/cdk/bidi';
-import { Platform } from '@angular/cdk/platform';
-import { ViewportRuler, ScrollingModule } from '@angular/cdk/scrolling';
+import { i as isDataSource } from './data-source-5320b6fd.mjs';
+export { D as DataSource } from './data-source-5320b6fd.mjs';
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
 import { InjectionToken, inject, TemplateRef, Directive, booleanAttribute, Input, ContentChild, ElementRef, NgZone, Injectable, IterableDiffers, ViewContainerRef, Component, ChangeDetectionStrategy, ViewEncapsulation, afterNextRender, ChangeDetectorRef, EventEmitter, Injector, HostAttributeToken, Output, ContentChildren, ViewChild, NgModule } from '@angular/core';
 import { Subject, BehaviorSubject, isObservable, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { b as _VIEW_REPEATER_STRATEGY, _ as _RecycleViewRepeaterStrategy, a as _ViewRepeaterOperation } from './recycle-view-repeater-strategy-c1712813.mjs';
+import { _ as _DisposeViewRepeaterStrategy } from './dispose-view-repeater-strategy-b11b87ea.mjs';
+import { D as Directionality } from './directionality-0a678adc.mjs';
+import { P as Platform } from './platform-610a08ae.mjs';
+import { V as ViewportRuler, a as ScrollingModule } from './scrolling-module-dbd83632.mjs';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import './element-705567fe.mjs';
+import './scrolling-61955dd1.mjs';
+import './bidi-module-56dd006c.mjs';
 
 /**
  * Used to provide a table to some of the sub-components without causing a circular dependency.

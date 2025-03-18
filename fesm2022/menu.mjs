@@ -1,14 +1,34 @@
 import * as i0 from '@angular/core';
 import { Directive, InjectionToken, Optional, SkipSelf, Inject, inject, Injectable, Injector, ViewContainerRef, EventEmitter, NgZone, RendererFactory2, ElementRef, ChangeDetectorRef, Renderer2, booleanAttribute, Input, Output, signal, computed, ContentChildren, NgModule } from '@angular/core';
-import { Overlay, OverlayConfig, STANDARD_DROPDOWN_BELOW_POSITIONS, STANDARD_DROPDOWN_ADJACENT_POSITIONS, OverlayModule } from '@angular/cdk/overlay';
-import { ENTER, SPACE, UP_ARROW, hasModifierKey, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, TAB, ESCAPE } from '@angular/cdk/keycodes';
 import { startWith, debounceTime, distinctUntilChanged, takeUntil, mergeMap, mapTo, mergeAll, switchMap, skipWhile, skip } from 'rxjs/operators';
-import { UniqueSelectionDispatcher } from '@angular/cdk/collections';
-import { _IdGenerator, InputModalityDetector, FocusMonitor, FocusKeyManager } from '@angular/cdk/a11y';
+import { U as UniqueSelectionDispatcher } from './unique-selection-dispatcher-8d1187be.mjs';
 import { Subject, merge, partition } from 'rxjs';
-import { TemplatePortal } from '@angular/cdk/portal';
-import { Directionality } from '@angular/cdk/bidi';
-import { _getEventTarget } from '@angular/cdk/platform';
+import { _ as _IdGenerator } from './id-generator-1959b006.mjs';
+import { a as Overlay, c as OverlayConfig, S as STANDARD_DROPDOWN_BELOW_POSITIONS, e as STANDARD_DROPDOWN_ADJACENT_POSITIONS, d as OverlayModule } from './overlay-module-7f527d71.mjs';
+import { T as TemplatePortal } from './portal-directives-06c9f3e0.mjs';
+import { h as ENTER, k as SPACE, U as UP_ARROW, D as DOWN_ARROW, L as LEFT_ARROW, R as RIGHT_ARROW, T as TAB, e as ESCAPE } from './keycodes-107cd3e4.mjs';
+import { I as InputModalityDetector, d as FocusMonitor } from './focus-monitor-81212fa3.mjs';
+import { D as Directionality } from './directionality-0a678adc.mjs';
+import { h as hasModifierKey } from './modifiers-33a5859e.mjs';
+import { _ as _getEventTarget } from './shadow-dom-9f403d00.mjs';
+import { F as FocusKeyManager } from './focus-key-manager-58d29acd.mjs';
+import '@angular/common';
+import './platform-610a08ae.mjs';
+import './backwards-compatibility-bcbe473e.mjs';
+import './test-environment-34eef1ee.mjs';
+import './style-loader-51b80670.mjs';
+import './css-pixel-value-286c9a60.mjs';
+import './array-ee3b4bab.mjs';
+import './scrolling-module-dbd83632.mjs';
+import './element-705567fe.mjs';
+import './scrolling-61955dd1.mjs';
+import './recycle-view-repeater-strategy-c1712813.mjs';
+import './data-source-5320b6fd.mjs';
+import './bidi-module-56dd006c.mjs';
+import './fake-event-detection-7055b1bd.mjs';
+import './passive-listeners-c0bdc49f.mjs';
+import './list-key-manager-c7b5cefb.mjs';
+import './typeahead-11ae39bd.mjs';
 
 /**
  * A grouping container for `CdkMenuItemRadio` instances, similar to a `role="radiogroup"` element.

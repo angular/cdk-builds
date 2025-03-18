@@ -1,13 +1,21 @@
-import * as i3 from '@angular/cdk/a11y';
-import { FocusTrapFactory, FocusOrigin } from '@angular/cdk/a11y';
-import * as i2 from '@angular/cdk/portal';
-import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, TemplatePortal, DomPortal } from '@angular/cdk/portal';
 import * as i0 from '@angular/core';
 import { ViewContainerRef, Injector, StaticProvider, Type, OnDestroy, ElementRef, NgZone, ChangeDetectorRef, ComponentRef, EmbeddedViewRef, TemplateRef, InjectionToken } from '@angular/core';
-import { Direction } from '@angular/cdk/bidi';
-import * as i1 from '@angular/cdk/overlay';
-import { PositionStrategy, ScrollStrategy, OverlayRef, ComponentType, Overlay } from '@angular/cdk/overlay';
+import { F as FocusOrigin } from '../focus-monitor.d-810a02e6.js';
+import { a as FocusTrapFactory, h as A11yModule } from '../a11y-module.d-7d03e079.js';
+import { B as BasePortalOutlet, C as CdkPortalOutlet, a as ComponentPortal, T as TemplatePortal, D as DomPortal, b as ComponentType, P as PortalModule } from '../portal-directives.d-ef3fad92.js';
+import { a as Direction } from '../bidi-module.d-f8648621.js';
+import { P as PositionStrategy, S as ScrollStrategy, O as OverlayRef, a as OverlayModule } from '../overlay-module.d-13717e08.js';
 import { Observable, Subject } from 'rxjs';
+import * as _angular_cdk_portal from '@angular/cdk/portal';
+import { O as Overlay } from '../overlay.d-f1a41275.js';
+import '../observe-content.d-c08bc882.js';
+import '../number-property.d-ce316715.js';
+import '../scrolling-module.d-e181b1be.js';
+import '../data-source.d-7cab2c9d.js';
+import '@angular/common';
+import '../viewport-ruler.d-f3d3e82f.js';
+import '../platform.d-0a5b4792.js';
+import '../style-loader.d-19baab84.js';
 
 /** Options for where to set focus to automatically on dialog open */
 type AutoFocusTarget = 'dialog' | 'first-tabbable' | 'first-heading';
@@ -386,7 +394,7 @@ declare class Dialog implements OnDestroy {
 
 declare class DialogModule {
     static ɵfac: i0.ɵɵFactoryDeclaration<DialogModule, never>;
-    static ɵmod: i0.ɵɵNgModuleDeclaration<DialogModule, never, [typeof i1.OverlayModule, typeof i2.PortalModule, typeof i3.A11yModule, typeof CdkDialogContainer], [typeof i2.PortalModule, typeof CdkDialogContainer]>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<DialogModule, never, [typeof OverlayModule, typeof PortalModule, typeof A11yModule, typeof CdkDialogContainer], [typeof PortalModule, typeof CdkDialogContainer]>;
     static ɵinj: i0.ɵɵInjectorDeclaration<DialogModule>;
 }
 
@@ -395,7 +403,7 @@ declare const DIALOG_SCROLL_STRATEGY: InjectionToken<() => ScrollStrategy>;
 /** Injection token for the Dialog's Data. */
 declare const DIALOG_DATA: InjectionToken<any>;
 /** Injection token that can be used to provide default options for the dialog module. */
-declare const DEFAULT_DIALOG_CONFIG: InjectionToken<DialogConfig<unknown, unknown, i2.BasePortalOutlet>>;
+declare const DEFAULT_DIALOG_CONFIG: InjectionToken<DialogConfig<unknown, unknown, _angular_cdk_portal.BasePortalOutlet>>;
 /**
  * @docs-private
  * @deprecated No longer used. To be removed.

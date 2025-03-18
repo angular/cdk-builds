@@ -1,9 +1,10 @@
-import { ListKeyManagerOption, Highlightable, ActiveDescendantKeyManager } from '@angular/cdk/a11y';
-import { SelectionModel } from '@angular/cdk/collections';
 import * as i0 from '@angular/core';
 import { OnDestroy, AfterContentInit, QueryList, NgZone, ChangeDetectorRef } from '@angular/core';
-import { ControlValueAccessor } from '@angular/forms';
+import { H as Highlightable, A as ActiveDescendantKeyManager } from '../activedescendant-key-manager.d-11921e3a.js';
+import { L as ListKeyManagerOption } from '../list-key-manager.d-72e9a2e7.js';
 import { Subject } from 'rxjs';
+import { S as SelectionModel } from '../selection-model.d-0f0cc883.js';
+import { ControlValueAccessor } from '@angular/forms';
 
 /**
  * An implementation of SelectionModel that internally always represents the selection as a

@@ -1,14 +1,22 @@
 import * as i0 from '@angular/core';
 import { signal, Component, ViewEncapsulation, ChangeDetectionStrategy, inject, NgZone, RendererFactory2, Injectable, InjectionToken, ElementRef, booleanAttribute, Directive, Input, ViewContainerRef, ChangeDetectorRef, EventEmitter, Injector, afterNextRender, numberAttribute, Output, TemplateRef, NgModule } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { ViewportRuler, ScrollDispatcher, CdkScrollableModule } from '@angular/cdk/scrolling';
-import { isFakeTouchstartFromScreenReader, isFakeMousedownFromScreenReader, _IdGenerator } from '@angular/cdk/a11y';
-import { coerceElement, coerceNumberProperty, coerceArray } from '@angular/cdk/coercion';
-import { _getEventTarget, _bindEventWithOptions, _getShadowRoot } from '@angular/cdk/platform';
 import { Subject, Subscription, interval, animationFrameScheduler, Observable, merge, BehaviorSubject } from 'rxjs';
+import { _ as _getEventTarget, a as _getShadowRoot } from './shadow-dom-9f403d00.mjs';
+import { a as isFakeTouchstartFromScreenReader, i as isFakeMousedownFromScreenReader } from './fake-event-detection-7055b1bd.mjs';
+import { c as coerceElement, a as coerceNumberProperty } from './element-705567fe.mjs';
+import { _ as _bindEventWithOptions } from './backwards-compatibility-bcbe473e.mjs';
 import { takeUntil, map, take, tap, switchMap, startWith } from 'rxjs/operators';
-import { _CdkPrivateStyleLoader } from '@angular/cdk/private';
-import { Directionality } from '@angular/cdk/bidi';
+import { _ as _CdkPrivateStyleLoader } from './style-loader-51b80670.mjs';
+import { V as ViewportRuler, S as ScrollDispatcher, C as CdkScrollableModule } from './scrolling-module-dbd83632.mjs';
+import { D as Directionality } from './directionality-0a678adc.mjs';
+import { _ as _IdGenerator } from './id-generator-1959b006.mjs';
+import { c as coerceArray } from './array-ee3b4bab.mjs';
+import './platform-610a08ae.mjs';
+import './scrolling-61955dd1.mjs';
+import './recycle-view-repeater-strategy-c1712813.mjs';
+import './data-source-5320b6fd.mjs';
+import './bidi-module-56dd006c.mjs';
 
 /** Creates a deep clone of an element. */
 function deepCloneNode(node) {

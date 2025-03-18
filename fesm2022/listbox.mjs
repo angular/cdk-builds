@@ -1,14 +1,19 @@
-import { _IdGenerator, ActiveDescendantKeyManager } from '@angular/cdk/a11y';
-import { Directionality } from '@angular/cdk/bidi';
-import { coerceArray } from '@angular/cdk/coercion';
-import { SelectionModel } from '@angular/cdk/collections';
-import { A, hasModifierKey, SPACE, ENTER, HOME, END, UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW } from '@angular/cdk/keycodes';
-import { Platform } from '@angular/cdk/platform';
 import * as i0 from '@angular/core';
 import { inject, signal, ElementRef, booleanAttribute, Directive, Input, NgZone, ChangeDetectorRef, Renderer2, forwardRef, Output, ContentChildren, NgModule } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Subject, defer, merge } from 'rxjs';
 import { startWith, switchMap, map, takeUntil, filter } from 'rxjs/operators';
+import { c as A, k as SPACE, h as ENTER, H as HOME, E as END, U as UP_ARROW, D as DOWN_ARROW, L as LEFT_ARROW, R as RIGHT_ARROW } from './keycodes-107cd3e4.mjs';
+import { A as ActiveDescendantKeyManager } from './activedescendant-key-manager-1351a9d3.mjs';
+import { S as SelectionModel } from './selection-model-0f5fc202.mjs';
+import { _ as _IdGenerator } from './id-generator-1959b006.mjs';
+import { D as Directionality } from './directionality-0a678adc.mjs';
+import { P as Platform } from './platform-610a08ae.mjs';
+import { h as hasModifierKey } from './modifiers-33a5859e.mjs';
+import { c as coerceArray } from './array-ee3b4bab.mjs';
+import './list-key-manager-c7b5cefb.mjs';
+import './typeahead-11ae39bd.mjs';
+import '@angular/common';
 
 /**
  * An implementation of SelectionModel that internally always represents the selection as a

@@ -1,14 +1,34 @@
-import { FocusTrapFactory, InteractivityChecker, FocusMonitor, _IdGenerator, A11yModule } from '@angular/cdk/a11y';
-import { OverlayRef, Overlay, OverlayContainer, OverlayConfig, OverlayModule } from '@angular/cdk/overlay';
-import { Platform, _getFocusedElementPierceShadowDom } from '@angular/cdk/platform';
-import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, TemplatePortal, PortalModule } from '@angular/cdk/portal';
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
 import { inject, ElementRef, NgZone, Renderer2, ChangeDetectorRef, Injector, afterNextRender, Component, ViewEncapsulation, ChangeDetectionStrategy, ViewChild, InjectionToken, TemplateRef, Injectable, NgModule } from '@angular/core';
-import { ESCAPE, hasModifierKey } from '@angular/cdk/keycodes';
+import { B as BasePortalOutlet, C as CdkPortalOutlet, a as ComponentPortal, T as TemplatePortal, P as PortalModule } from './portal-directives-06c9f3e0.mjs';
+import { b as FocusTrapFactory, I as InteractivityChecker, A as A11yModule } from './a11y-module-012407f8.mjs';
+import { O as OverlayRef, a as Overlay, b as OverlayContainer, c as OverlayConfig, d as OverlayModule } from './overlay-module-7f527d71.mjs';
+import { d as FocusMonitor } from './focus-monitor-81212fa3.mjs';
+import { P as Platform } from './platform-610a08ae.mjs';
+import { b as _getFocusedElementPierceShadowDom } from './shadow-dom-9f403d00.mjs';
 import { Subject, defer, of } from 'rxjs';
-import { Directionality } from '@angular/cdk/bidi';
+import { e as ESCAPE } from './keycodes-107cd3e4.mjs';
+import { h as hasModifierKey } from './modifiers-33a5859e.mjs';
 import { startWith } from 'rxjs/operators';
+import { _ as _IdGenerator } from './id-generator-1959b006.mjs';
+import { D as Directionality } from './directionality-0a678adc.mjs';
+import './style-loader-51b80670.mjs';
+import './visually-hidden-7e8689f8.mjs';
+import './breakpoints-observer-63bede13.mjs';
+import './array-ee3b4bab.mjs';
+import './observe-content-41b1b248.mjs';
+import './element-705567fe.mjs';
+import './backwards-compatibility-bcbe473e.mjs';
+import './test-environment-34eef1ee.mjs';
+import './css-pixel-value-286c9a60.mjs';
+import './scrolling-module-dbd83632.mjs';
+import './scrolling-61955dd1.mjs';
+import './recycle-view-repeater-strategy-c1712813.mjs';
+import './data-source-5320b6fd.mjs';
+import './bidi-module-56dd006c.mjs';
+import './fake-event-detection-7055b1bd.mjs';
+import './passive-listeners-c0bdc49f.mjs';
 
 /** Configuration for opening a modal dialog. */
 class DialogConfig {
