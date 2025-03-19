@@ -316,6 +316,8 @@ class OverlayConfig {
     hasBackdrop = false;
     /** Custom class to add to the backdrop */
     backdropClass = 'cdk-overlay-dark-backdrop';
+    /** Whether to disable any built-in animations. */
+    disableAnimations;
     /** The width of the overlay panel. If a number is provided, pixel units are assumed. */
     width;
     /** The height of the overlay panel. If a number is provided, pixel units are assumed. */
@@ -2519,7 +2521,7 @@ class Overlay {
         const portalOutlet = this._createPortalOutlet(pane);
         const overlayConfig = new OverlayConfig(config);
         overlayConfig.direction = overlayConfig.direction || this._directionality.value;
-        return new OverlayRef(portalOutlet, host, pane, overlayConfig, this._ngZone, this._keyboardDispatcher, this._document, this._location, this._outsideClickDispatcher, this._animationsModuleType === 'NoopAnimations', this._injector.get(EnvironmentInjector), this._renderer);
+        return new OverlayRef(portalOutlet, host, pane, overlayConfig, this._ngZone, this._keyboardDispatcher, this._document, this._location, this._outsideClickDispatcher, config?.disableAnimations ?? this._animationsModuleType === 'NoopAnimations', this._injector.get(EnvironmentInjector), this._renderer);
     }
     /**
      * Gets a position builder that can be used, via fluent API,
@@ -3026,4 +3028,4 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.1", 
         }] });
 
 export { BlockScrollStrategy as B, CdkOverlayOrigin as C, FlexibleConnectedPositionStrategy as F, GlobalPositionStrategy as G, NoopScrollStrategy as N, OverlayRef as O, RepositionScrollStrategy as R, STANDARD_DROPDOWN_BELOW_POSITIONS as S, Overlay as a, OverlayContainer as b, OverlayConfig as c, OverlayModule as d, STANDARD_DROPDOWN_ADJACENT_POSITIONS as e, CdkConnectedOverlay as f, OverlayPositionBuilder as g, ConnectionPositionPair as h, ScrollingVisibility as i, ConnectedOverlayPositionChange as j, validateHorizontalPosition as k, ScrollStrategyOptions as l, CloseScrollStrategy as m, OverlayOutsideClickDispatcher as n, OverlayKeyboardDispatcher as o, validateVerticalPosition as v };
-//# sourceMappingURL=overlay-module-863b82c9.mjs.map
+//# sourceMappingURL=overlay-module-61073a03.mjs.map

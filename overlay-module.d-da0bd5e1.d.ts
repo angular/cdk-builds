@@ -242,6 +242,8 @@ declare class OverlayConfig {
     hasBackdrop?: boolean;
     /** Custom class to add to the backdrop */
     backdropClass?: string | string[];
+    /** Whether to disable any built-in animations. */
+    disableAnimations?: boolean;
     /** The width of the overlay panel. If a number is provided, pixel units are assumed. */
     width?: number | string;
     /** The height of the overlay panel. If a number is provided, pixel units are assumed. */

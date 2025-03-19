@@ -4,7 +4,7 @@ import { F as FocusOrigin } from '../focus-monitor.d-810a02e6.js';
 import { a as FocusTrapFactory, h as A11yModule } from '../a11y-module.d-7d03e079.js';
 import { B as BasePortalOutlet, C as CdkPortalOutlet, a as ComponentPortal, T as TemplatePortal, D as DomPortal, b as ComponentType, P as PortalModule } from '../portal-directives.d-d345bd53.js';
 import { a as Direction } from '../bidi-module.d-f8648621.js';
-import { P as PositionStrategy, S as ScrollStrategy, O as OverlayRef, a as OverlayModule } from '../overlay-module.d-5d06db8a.js';
+import { P as PositionStrategy, S as ScrollStrategy, O as OverlayRef, a as OverlayModule } from '../overlay-module.d-da0bd5e1.js';
 import { Observable, Subject } from 'rxjs';
 import * as _angular_cdk_portal from '@angular/cdk/portal';
 import '../observe-content.d-c08bc882.js';
@@ -114,6 +114,10 @@ declare class DialogConfig<D = unknown, R = unknown, C extends BasePortalOutlet 
      * browser location changes.
      */
     closeOnOverlayDetachments?: boolean;
+    /**
+     * Whether the built-in overlay animations should be disabled.
+     */
+    disableAnimations?: boolean;
     /**
      * Providers that will be exposed to the contents of the dialog. Can also
      * be provided as a function in order to generate the providers lazily.

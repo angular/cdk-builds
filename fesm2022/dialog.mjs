@@ -3,7 +3,7 @@ import * as i0 from '@angular/core';
 import { inject, ElementRef, NgZone, Renderer2, ChangeDetectorRef, Injector, afterNextRender, Component, ViewEncapsulation, ChangeDetectionStrategy, ViewChild, InjectionToken, TemplateRef, Injectable, NgModule } from '@angular/core';
 import { B as BasePortalOutlet, C as CdkPortalOutlet, a as ComponentPortal, T as TemplatePortal, P as PortalModule } from './portal-directives-c88fea11.mjs';
 import { b as FocusTrapFactory, I as InteractivityChecker, A as A11yModule } from './a11y-module-e6996d20.mjs';
-import { O as OverlayRef, a as Overlay, b as OverlayContainer, c as OverlayConfig, d as OverlayModule } from './overlay-module-863b82c9.mjs';
+import { O as OverlayRef, a as Overlay, b as OverlayContainer, c as OverlayConfig, d as OverlayModule } from './overlay-module-61073a03.mjs';
 import { d as FocusMonitor } from './focus-monitor-cebaa0d1.mjs';
 import { P as Platform } from './platform-1be098b0.mjs';
 import { b as _getFocusedElementPierceShadowDom } from './shadow-dom-9f403d00.mjs';
@@ -124,6 +124,10 @@ class DialogConfig {
      * browser location changes.
      */
     closeOnOverlayDetachments = true;
+    /**
+     * Whether the built-in overlay animations should be disabled.
+     */
+    disableAnimations = false;
     /**
      * Providers that will be exposed to the contents of the dialog. Can also
      * be provided as a function in order to generate the providers lazily.
@@ -649,6 +653,7 @@ class Dialog {
             width: config.width,
             height: config.height,
             disposeOnNavigation: config.closeOnNavigation,
+            disableAnimations: config.disableAnimations,
         });
         if (config.backdropClass) {
             state.backdropClass = config.backdropClass;
