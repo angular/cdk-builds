@@ -180,6 +180,8 @@ class CdkTextareaAutosize {
     _cachedLineHeight;
     /** Cached height of a textarea with only the placeholder. */
     _cachedPlaceholderHeight;
+    /** Cached scroll top of a textarea */
+    _cachedScrollTop;
     /** Used to reference correct document/window */
     _document = inject(DOCUMENT, { optional: true });
     _hasFocus;
@@ -331,6 +333,7 @@ class CdkTextareaAutosize {
         }
         this._cacheTextareaLineHeight();
         this._cacheTextareaPlaceholderHeight();
+        this._cachedScrollTop = this._textareaElement.scrollTop;
         // If we haven't determined the line-height yet, we know we're still hidden and there's no point
         // in checking the height of the textarea.
         if (!this._cachedLineHeight) {
@@ -385,6 +388,7 @@ class CdkTextareaAutosize {
         // it to receive focus on IE and Edge.
         if (!this._destroyed.isStopped && this._hasFocus) {
             textarea.setSelectionRange(selectionStart, selectionEnd);
+            textarea.scrollTop = this._cachedScrollTop;
         }
     }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.1", ngImport: i0, type: CdkTextareaAutosize, deps: [], target: i0.ɵɵFactoryTarget.Directive });
