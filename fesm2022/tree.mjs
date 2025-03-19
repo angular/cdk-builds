@@ -1067,6 +1067,9 @@ class CdkTree {
         // nodes are flat, or if the tree is using a levelAccessor and the nodes are
         // nested.
         if (this.childrenAccessor && nodeType === 'flat') {
+            // clear previously generated data so we don't keep end up retaining data overtime causing
+            // memory leaks.
+            this._clearPreviousCache();
             // This flattens children into a single array.
             this._ariaSets.set(null, [...nodes]);
             return this._flattenNestedNodesWithExpansion(nodes).pipe(map(flattenedNodes => ({
@@ -1095,6 +1098,9 @@ class CdkTree {
             }));
         }
         else {
+            // clear previously generated data so we don't keep end up retaining data overtime causing
+            // memory leaks.
+            this._clearPreviousCache();
             // For nested nodes, we still need to perform the node flattening in order
             // to maintain our caches for various tree operations.
             this._ariaSets.set(null, [...nodes]);
@@ -1116,8 +1122,9 @@ class CdkTree {
         if (!levelAccessor) {
             return;
         }
-        this._parents.clear();
-        this._ariaSets.clear();
+        // clear previously generated data so we don't keep end up retaining data overtime causing
+        // memory leaks.
+        this._clearPreviousCache();
         for (let index = 0; index < flattenedNodes.length; index++) {
             const dataNode = flattenedNodes[index];
             const key = this._getExpansionKey(dataNode);
@@ -1149,6 +1156,12 @@ class CdkTree {
         else {
             callback(toToggle);
         }
+    }
+    /** Clears the maps we use to store parents, level & aria-sets in. */
+    _clearPreviousCache() {
+        this._parents.clear();
+        this._levels.clear();
+        this._ariaSets.clear();
     }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: CdkTree, deps: [], target: i0.ɵɵFactoryTarget.Component });
     static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "19.2.0", type: CdkTree, isStandalone: true, selector: "cdk-tree", inputs: { dataSource: "dataSource", treeControl: "treeControl", levelAccessor: "levelAccessor", childrenAccessor: "childrenAccessor", trackBy: "trackBy", expansionKey: "expansionKey" }, host: { attributes: { "role": "tree" }, listeners: { "keydown": "_sendKeydownToKeyManager($event)" }, classAttribute: "cdk-tree" }, queries: [{ propertyName: "_nodeDefs", predicate: CdkTreeNodeDef, descendants: true }], viewQueries: [{ propertyName: "_nodeOutlet", first: true, predicate: CdkTreeNodeOutlet, descendants: true, static: true }], exportAs: ["cdkTree"], ngImport: i0, template: `<ng-container cdkTreeNodeOutlet></ng-container>`, isInline: true, dependencies: [{ kind: "directive", type: CdkTreeNodeOutlet, selector: "[cdkTreeNodeOutlet]" }], changeDetection: i0.ChangeDetectionStrategy.Default, encapsulation: i0.ViewEncapsulation.None });
