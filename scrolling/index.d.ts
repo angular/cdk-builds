@@ -1,7 +1,7 @@
-export { c as CdkFixedSizeVirtualScroll, C as CdkScrollable, a as CdkScrollableModule, o as CdkVirtualForOf, n as CdkVirtualForOfContext, r as CdkVirtualScrollRepeater, q as CdkVirtualScrollViewport, t as CdkVirtualScrollable, u as CdkVirtualScrollableElement, v as CdkVirtualScrollableWindow, D as DEFAULT_SCROLL_TIME, E as ExtendedScrollToOptions, F as FixedSizeVirtualScrollStrategy, b as ScrollDispatcher, S as ScrollingModule, s as VIRTUAL_SCROLLABLE, V as VIRTUAL_SCROLL_STRATEGY, p as VirtualScrollStrategy, g as _Bottom, k as _End, h as _Left, i as _Right, j as _Start, f as _Top, d as _Without, l as _XAxis, e as _XOR, m as _YAxis, _ as _fixedSizeVirtualScrollStrategyFactory } from '../scrolling-module.d-a08a462d.js';
+export { c as CdkFixedSizeVirtualScroll, C as CdkScrollable, a as CdkScrollableModule, d as CdkVirtualForOf, r as CdkVirtualForOfContext, t as CdkVirtualScrollRepeater, e as CdkVirtualScrollViewport, v as CdkVirtualScrollable, g as CdkVirtualScrollableElement, f as CdkVirtualScrollableWindow, D as DEFAULT_SCROLL_TIME, E as ExtendedScrollToOptions, F as FixedSizeVirtualScrollStrategy, b as ScrollDispatcher, S as ScrollingModule, u as VIRTUAL_SCROLLABLE, V as VIRTUAL_SCROLL_STRATEGY, s as VirtualScrollStrategy, k as _Bottom, o as _End, l as _Left, m as _Right, n as _Start, j as _Top, h as _Without, p as _XAxis, i as _XOR, q as _YAxis, _ as _fixedSizeVirtualScrollStrategyFactory } from '../scrolling-module.d-e4f8e471.js';
 export { D as DEFAULT_RESIZE_TIME, V as ViewportRuler, a as ViewportScrollPosition } from '../viewport-ruler.d-f3d3e82f.js';
+export { b as ɵɵDir } from '../bidi-module.d-f8648621.js';
 import '@angular/core';
-import '../bidi-module.d-f8648621.js';
 import 'rxjs';
 import '../data-source.d-7cab2c9d.js';
 import '../number-property.d-ce316715.js';

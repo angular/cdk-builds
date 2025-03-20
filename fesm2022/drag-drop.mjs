@@ -8,7 +8,8 @@ import { c as coerceElement, a as coerceNumberProperty } from './element-705567f
 import { _ as _bindEventWithOptions } from './backwards-compatibility-bcbe473e.mjs';
 import { takeUntil, map, take, tap, switchMap, startWith } from 'rxjs/operators';
 import { _ as _CdkPrivateStyleLoader } from './style-loader-e14dc585.mjs';
-import { V as ViewportRuler, S as ScrollDispatcher, C as CdkScrollableModule } from './scrolling-module-aa9eeac5.mjs';
+import { V as ViewportRuler, S as ScrollDispatcher, C as CdkScrollableModule } from './scrolling-module-57c5996b.mjs';
+export { b as ɵɵCdkScrollable } from './scrolling-module-57c5996b.mjs';
 import { D as Directionality } from './directionality-7ea26429.mjs';
 import { _ as _IdGenerator } from './id-generator-fba495fb.mjs';
 import { c as coerceArray } from './array-ee3b4bab.mjs';

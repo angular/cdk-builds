@@ -1459,5 +1459,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.1", 
                 }]
         }] });
 
-export { CdkScrollableModule as C, DEFAULT_SCROLL_TIME as D, FixedSizeVirtualScrollStrategy as F, ScrollDispatcher as S, ViewportRuler as V, _fixedSizeVirtualScrollStrategyFactory as _, ScrollingModule as a, CdkScrollable as b, CdkFixedSizeVirtualScroll as c, DEFAULT_RESIZE_TIME as d, CdkVirtualForOf as e, VIRTUAL_SCROLL_STRATEGY as f, CdkVirtualScrollViewport as g, VIRTUAL_SCROLLABLE as h, CdkVirtualScrollable as i, CdkVirtualScrollableElement as j, CdkVirtualScrollableWindow as k };
-//# sourceMappingURL=scrolling-module-aa9eeac5.mjs.map
+export { CdkScrollableModule as C, DEFAULT_SCROLL_TIME as D, FixedSizeVirtualScrollStrategy as F, ScrollDispatcher as S, ViewportRuler as V, _fixedSizeVirtualScrollStrategyFactory as _, ScrollingModule as a, CdkScrollable as b, CdkFixedSizeVirtualScroll as c, CdkVirtualForOf as d, CdkVirtualScrollViewport as e, CdkVirtualScrollableWindow as f, CdkVirtualScrollableElement as g, DEFAULT_RESIZE_TIME as h, VIRTUAL_SCROLL_STRATEGY as i, VIRTUAL_SCROLLABLE as j, CdkVirtualScrollable as k };
+//# sourceMappingURL=scrolling-module-57c5996b.mjs.map

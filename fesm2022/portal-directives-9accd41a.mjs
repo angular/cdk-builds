@@ -611,5 +611,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.1", 
                 }]
         }] });
 
-export { BasePortalOutlet as B, CdkPortalOutlet as C, DomPortalOutlet as D, PortalModule as P, TemplatePortal as T, ComponentPortal as a, Portal as b, DomPortal as c, CdkPortal as d, TemplatePortalDirective as e, PortalHostDirective as f };
-//# sourceMappingURL=portal-directives-c88fea11.mjs.map
+export { BasePortalOutlet as B, CdkPortalOutlet as C, DomPortalOutlet as D, PortalModule as P, TemplatePortal as T, ComponentPortal as a, CdkPortal as b, TemplatePortalDirective as c, PortalHostDirective as d, Portal as e, DomPortal as f };
+//# sourceMappingURL=portal-directives-9accd41a.mjs.map
