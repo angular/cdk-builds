@@ -10,9 +10,9 @@ import { Subject, Subscription, merge } from 'rxjs';
 import { filter, takeUntil, takeWhile } from 'rxjs/operators';
 import { c as coerceCssPixelValue } from './css-pixel-value-286c9a60.mjs';
 import { c as coerceArray } from './array-ee3b4bab.mjs';
-import { S as ScrollDispatcher, V as ViewportRuler, a as ScrollingModule } from './scrolling-module-dbd83632.mjs';
+import { S as ScrollDispatcher, V as ViewportRuler, a as ScrollingModule } from './scrolling-module-3dd0744a.mjs';
 import { s as supportsScrollBehavior } from './scrolling-61955dd1.mjs';
-import { D as DomPortalOutlet, T as TemplatePortal, P as PortalModule } from './portal-directives-06c9f3e0.mjs';
+import { D as DomPortalOutlet, T as TemplatePortal, P as PortalModule } from './portal-directives-6dd242f4.mjs';
 import { D as Directionality } from './directionality-0a678adc.mjs';
 import { _ as _IdGenerator } from './id-generator-1959b006.mjs';
 import { e as ESCAPE } from './keycodes-107cd3e4.mjs';
@@ -3026,4 +3026,4 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.0", ngImpor
         }] });
 
 export { BlockScrollStrategy as B, CdkOverlayOrigin as C, FlexibleConnectedPositionStrategy as F, GlobalPositionStrategy as G, NoopScrollStrategy as N, OverlayRef as O, RepositionScrollStrategy as R, STANDARD_DROPDOWN_BELOW_POSITIONS as S, Overlay as a, OverlayContainer as b, OverlayConfig as c, OverlayModule as d, STANDARD_DROPDOWN_ADJACENT_POSITIONS as e, CdkConnectedOverlay as f, OverlayPositionBuilder as g, ConnectionPositionPair as h, ScrollingVisibility as i, ConnectedOverlayPositionChange as j, validateHorizontalPosition as k, ScrollStrategyOptions as l, CloseScrollStrategy as m, OverlayOutsideClickDispatcher as n, OverlayKeyboardDispatcher as o, validateVerticalPosition as v };
-//# sourceMappingURL=overlay-module-7f527d71.mjs.map
+//# sourceMappingURL=overlay-module-f1619549.mjs.map

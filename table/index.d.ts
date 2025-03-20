@@ -5,7 +5,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { D as DataSource, C as CollectionViewer } from '../data-source.d-7cab2c9d.js';
 export { D as DataSource } from '../data-source.d-7cab2c9d.js';
 import { a as _ViewRepeater } from '../view-repeater.d-79039e1f.js';
-import { S as ScrollingModule } from '../scrolling-module.d-e181b1be.js';
+import { S as ScrollingModule } from '../scrolling-module.d-1f8d4709.js';
 import '../number-property.d-ce316715.js';
 
 /** @docs-private */

@@ -649,5 +649,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.0", ngImpor
                 }]
         }] });
 
-export { BasePortalOutlet as B, CdkPortalOutlet as C, DomPortalOutlet as D, PortalModule as P, TemplatePortal as T, ComponentPortal as a, Portal as b, DomPortal as c, BasePortalHost as d, DomPortalHost as e, CdkPortal as f, TemplatePortalDirective as g, PortalHostDirective as h };
-//# sourceMappingURL=portal-directives-06c9f3e0.mjs.map
+export { BasePortalOutlet as B, CdkPortalOutlet as C, DomPortalOutlet as D, PortalModule as P, TemplatePortal as T, ComponentPortal as a, CdkPortal as b, TemplatePortalDirective as c, PortalHostDirective as d, Portal as e, DomPortal as f, BasePortalHost as g, DomPortalHost as h };
+//# sourceMappingURL=portal-directives-6dd242f4.mjs.map

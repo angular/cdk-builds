@@ -1,8 +1,8 @@
-import { S as ScrollStrategy, O as OverlayRef, P as PositionStrategy, F as FlexibleConnectedPositionStrategyOrigin, b as FlexibleConnectedPositionStrategy, c as OverlayConfig } from './overlay-module.d-13717e08.js';
+import { S as ScrollStrategy, O as OverlayRef, P as PositionStrategy, F as FlexibleConnectedPositionStrategyOrigin, b as FlexibleConnectedPositionStrategy, c as OverlayConfig } from './overlay-module.d-2b07cfa6.js';
 import * as i0 from '@angular/core';
 import { NgZone } from '@angular/core';
 import { V as ViewportRuler } from './viewport-ruler.d-f3d3e82f.js';
-import { a as ScrollDispatcher } from './scrolling-module.d-e181b1be.js';
+import { a as ScrollDispatcher } from './scrolling-module.d-1f8d4709.js';
 
 /**
  * Strategy that will prevent the user from scrolling while the overlay is visible.

@@ -1,4 +1,4 @@
-export { d as BasePortalHost, B as BasePortalOutlet, f as CdkPortal, C as CdkPortalOutlet, a as ComponentPortal, c as DomPortal, e as DomPortalHost, D as DomPortalOutlet, b as Portal, h as PortalHostDirective, P as PortalModule, T as TemplatePortal, g as TemplatePortalDirective } from './portal-directives-06c9f3e0.mjs';
+export { g as BasePortalHost, B as BasePortalOutlet, b as CdkPortal, C as CdkPortalOutlet, a as ComponentPortal, f as DomPortal, h as DomPortalHost, D as DomPortalOutlet, e as Portal, d as PortalHostDirective, P as PortalModule, T as TemplatePortal, c as TemplatePortalDirective } from './portal-directives-6dd242f4.mjs';
 import '@angular/core';
 import '@angular/common';
 
