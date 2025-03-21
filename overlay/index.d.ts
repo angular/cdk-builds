@@ -6,7 +6,7 @@ export { B as BlockScrollStrategy, C as CloseScrollStrategy, G as GlobalPosition
 import * as i0 from '@angular/core';
 import { OnDestroy } from '@angular/core';
 export { b as ComponentType } from '../portal-directives.d-a65be59b.js';
-import '../bidi-module.d-f8648621.js';
+export { b as ɵɵDir } from '../bidi-module.d-f8648621.js';
 import '@angular/common';
 import 'rxjs';
 import '../platform.d-0a5b4792.js';

@@ -3,6 +3,7 @@ export { B as BlockScrollStrategy, f as CdkConnectedOverlay, C as CdkOverlayOrig
 import * as i0 from '@angular/core';
 import { inject, RendererFactory2, Injectable } from '@angular/core';
 export { b as CdkScrollable, S as ScrollDispatcher, V as ViewportRuler, c as ɵɵCdkFixedSizeVirtualScroll, C as ɵɵCdkScrollableModule, d as ɵɵCdkVirtualForOf, e as ɵɵCdkVirtualScrollViewport, g as ɵɵCdkVirtualScrollableElement, f as ɵɵCdkVirtualScrollableWindow } from './scrolling-module-3dd0744a.mjs';
+export { D as ɵɵDir } from './bidi-module-56dd006c.mjs';
 import '@angular/common';
 import './platform-610a08ae.mjs';
 import './backwards-compatibility-bcbe473e.mjs';
@@ -19,7 +20,6 @@ import './directionality-0a678adc.mjs';
 import './id-generator-1959b006.mjs';
 import './keycodes-107cd3e4.mjs';
 import './modifiers-33a5859e.mjs';
-import './bidi-module-56dd006c.mjs';
 import './element-705567fe.mjs';
 import './recycle-view-repeater-strategy-c1712813.mjs';
 import './data-source-5320b6fd.mjs';
