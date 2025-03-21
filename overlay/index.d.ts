@@ -7,7 +7,7 @@ export { V as ViewportRuler } from '../viewport-ruler.d-f3d3e82f.js';
 import * as i0 from '@angular/core';
 import { NgZone, OnDestroy } from '@angular/core';
 export { b as ComponentType } from '../portal-directives.d-fefec9d6.js';
-import '../bidi-module.d-f8648621.js';
+export { b as ɵɵDir } from '../bidi-module.d-f8648621.js';
 import '@angular/common';
 import 'rxjs';
 import '../platform.d-0a5b4792.js';
