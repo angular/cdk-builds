@@ -1827,6 +1827,8 @@ class CdkContextMenuTrigger extends CdkMenuTriggerBase {
             if (item === this.childMenu && this.isOpen()) {
                 this.closed.next();
                 this.overlayRef.detach();
+                this.childMenu = undefined;
+                this._changeDetectorRef.markForCheck();
             }
         });
     }
