@@ -35,13 +35,13 @@ class _CdkPrivateStyleLoader {
             data.refs.push(createComponent(loader, { environmentInjector: this._environmentInjector }));
         }
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.1", ngImport: i0, type: _CdkPrivateStyleLoader, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.0.0-next.1", ngImport: i0, type: _CdkPrivateStyleLoader, providedIn: 'root' });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.3", ngImport: i0, type: _CdkPrivateStyleLoader, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.0.0-next.3", ngImport: i0, type: _CdkPrivateStyleLoader, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.1", ngImport: i0, type: _CdkPrivateStyleLoader, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.3", ngImport: i0, type: _CdkPrivateStyleLoader, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });
 
 export { _CdkPrivateStyleLoader as _ };
-//# sourceMappingURL=style-loader-e14dc585.mjs.map
+//# sourceMappingURL=style-loader-9fc0a4d2.mjs.map
