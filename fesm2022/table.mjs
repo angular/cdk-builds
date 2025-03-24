@@ -9,8 +9,8 @@ import { b as _VIEW_REPEATER_STRATEGY, _ as _RecycleViewRepeaterStrategy, a as _
 import { _ as _DisposeViewRepeaterStrategy } from './dispose-view-repeater-strategy-b11b87ea.mjs';
 import { D as Directionality } from './directionality-ea6ab987.mjs';
 import { P as Platform } from './platform-2be6a529.mjs';
-import { V as ViewportRuler, a as ScrollingModule } from './scrolling-module-842cb6a1.mjs';
-import './element-705567fe.mjs';
+import { V as ViewportRuler, a as ScrollingModule } from './scrolling-module-72941c9f.mjs';
+import './element-08c51fcd.mjs';
 import './scrolling-61955dd1.mjs';
 import './bidi-module-e73b8776.mjs';
 

@@ -10,7 +10,7 @@ import { _ as _IdGenerator } from './id-generator-ec45a122.mjs';
 import { D as Directionality } from './directionality-ea6ab987.mjs';
 import { P as Platform } from './platform-2be6a529.mjs';
 import { h as hasModifierKey } from './modifiers-33a5859e.mjs';
-import { c as coerceArray } from './array-ee3b4bab.mjs';
+import { c as coerceArray } from './array-88e1bec3.mjs';
 import './list-key-manager-c7b5cefb.mjs';
 import './typeahead-11ae39bd.mjs';
 import '@angular/common';

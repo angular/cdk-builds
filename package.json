@@ -163,10 +163,8 @@
     "rxjs": "^6.5.3 || ^7.4.0"
   },
   "dependencies": {
+    "parse5": "^7.1.2",
     "tslib": "^2.3.0"
-  },
-  "optionalDependencies": {
-    "parse5": "^7.1.2"
   },
   "schematics": "./schematics/collection.json",
   "ng-update": {
