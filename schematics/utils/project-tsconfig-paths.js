@@ -6,6 +6,15 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getTargetTsconfigPath = getTargetTsconfigPath;
 exports.getWorkspaceConfigGracefully = getWorkspaceConfigGracefully;
@@ -15,20 +24,23 @@ const workspace_1 = require("@schematics/angular/utility/workspace");
 const defaultWorkspaceConfigPaths = ['/angular.json', '/.angular.json'];
 /** Gets the tsconfig path from the given target within the specified project. */
 function getTargetTsconfigPath(project, targetName) {
-    const tsconfig = project.targets?.get(targetName)?.options?.['tsConfig'];
+    var _a, _b, _c;
+    const tsconfig = (_c = (_b = (_a = project.targets) === null || _a === void 0 ? void 0 : _a.get(targetName)) === null || _b === void 0 ? void 0 : _b.options) === null || _c === void 0 ? void 0 : _c['tsConfig'];
     return tsconfig ? (0, core_1.normalize)(tsconfig) : null;
 }
 /** Resolve the workspace configuration of the specified tree gracefully. */
-async function getWorkspaceConfigGracefully(tree) {
-    const path = defaultWorkspaceConfigPaths.find(filePath => tree.exists(filePath));
-    if (!path) {
-        return null;
-    }
-    try {
-        return (0, workspace_1.getWorkspace)(tree, path);
-    }
-    catch {
-        return null;
-    }
+function getWorkspaceConfigGracefully(tree) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const path = defaultWorkspaceConfigPaths.find(filePath => tree.exists(filePath));
+        if (!path) {
+            return null;
+        }
+        try {
+            return (0, workspace_1.getWorkspace)(tree, path);
+        }
+        catch (_a) {
+            return null;
+        }
+    });
 }
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicHJvamVjdC10c2NvbmZpZy1wYXRocy5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uLy4uLy4uL3NyYy9jZGsvc2NoZW1hdGljcy91dGlscy9wcm9qZWN0LXRzY29uZmlnLXBhdGhzLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7QUFBQTs7Ozs7O0dBTUc7O0FBV0gsc0RBTUM7QUFHRCxvRUFjQztBQWhDRCwrQ0FBMkQ7QUFFM0QscUVBQW1FO0FBR25FLHFFQUFxRTtBQUNyRSxNQUFNLDJCQUEyQixHQUFHLENBQUMsZUFBZSxFQUFFLGdCQUFnQixDQUFDLENBQUM7QUFFeEUsaUZBQWlGO0FBQ2pGLFNBQWdCLHFCQUFxQixDQUNuQyxPQUFxQyxFQUNyQyxVQUFrQjtJQUVsQixNQUFNLFFBQVEsR0FBRyxPQUFPLENBQUMsT0FBTyxFQUFFLEdBQUcsQ0FBQyxVQUFVLENBQUMsRUFBRSxPQUFPLEVBQUUsQ0FBQyxVQUFVLENBQUMsQ0FBQztJQUN6RSxPQUFPLFFBQVEsQ0FBQyxDQUFDLENBQUMsSUFBQSxnQkFBUyxFQUFDLFFBQWtCLENBQUMsQ0FBQyxDQUFDLENBQUMsSUFBSSxDQUFDO0FBQ3pELENBQUM7QUFFRCw0RUFBNEU7QUFDckUsS0FBSyxVQUFVLDRCQUE0QixDQUNoRCxJQUFVO0lBRVYsTUFBTSxJQUFJLEdBQUcsMkJBQTJCLENBQUMsSUFBSSxDQUFDLFFBQVEsQ0FBQyxFQUFFLENBQUMsSUFBSSxDQUFDLE1BQU0sQ0FBQyxRQUFRLENBQUMsQ0FBQyxDQUFDO0lBRWpGLElBQUksQ0FBQyxJQUFJLEVBQUUsQ0FBQztRQUNWLE9BQU8sSUFBSSxDQUFDO0lBQ2QsQ0FBQztJQUVELElBQUksQ0FBQztRQUNILE9BQU8sSUFBQSx3QkFBWSxFQUFDLElBQUksRUFBRSxJQUFJLENBQUMsQ0FBQztJQUNsQyxDQUFDO0lBQUMsTUFBTSxDQUFDO1FBQ1AsT0FBTyxJQUFJLENBQUM7SUFDZCxDQUFDO0FBQ0gsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogQGxpY2Vuc2VcbiAqIENvcHlyaWdodCBHb29nbGUgTExDIEFsbCBSaWdodHMgUmVzZXJ2ZWQuXG4gKlxuICogVXNlIG9mIHRoaXMgc291cmNlIGNvZGUgaXMgZ292ZXJuZWQgYnkgYW4gTUlULXN0eWxlIGxpY2Vuc2UgdGhhdCBjYW4gYmVcbiAqIGZvdW5kIGluIHRoZSBMSUNFTlNFIGZpbGUgYXQgaHR0cHM6Ly9hbmd1bGFyLmRldi9saWNlbnNlXG4gKi9cblxuaW1wb3J0IHtub3JtYWxpemUsIHdvcmtzcGFjZXN9IGZyb20gJ0Bhbmd1bGFyLWRldmtpdC9jb3JlJztcbmltcG9ydCB7VHJlZX0gZnJvbSAnQGFuZ3VsYXItZGV2a2l0L3NjaGVtYXRpY3MnO1xuaW1wb3J0IHtnZXRXb3Jrc3BhY2V9IGZyb20gJ0BzY2hlbWF0aWNzL2FuZ3VsYXIvdXRpbGl0eS93b3Jrc3BhY2UnO1xuaW1wb3J0IHtXb3Jrc3BhY2VQYXRofSBmcm9tICcuLi91cGRhdGUtdG9vbC9maWxlLXN5c3RlbSc7XG5cbi8qKiBOYW1lIG9mIHRoZSBkZWZhdWx0IEFuZ3VsYXIgQ0xJIHdvcmtzcGFjZSBjb25maWd1cmF0aW9uIGZpbGVzLiAqL1xuY29uc3QgZGVmYXVsdFdvcmtzcGFjZUNvbmZpZ1BhdGhzID0gWycvYW5ndWxhci5qc29uJywgJy8uYW5ndWxhci5qc29uJ107XG5cbi8qKiBHZXRzIHRoZSB0c2NvbmZpZyBwYXRoIGZyb20gdGhlIGdpdmVuIHRhcmdldCB3aXRoaW4gdGhlIHNwZWNpZmllZCBwcm9qZWN0LiAqL1xuZXhwb3J0IGZ1bmN0aW9uIGdldFRhcmdldFRzY29uZmlnUGF0aChcbiAgcHJvamVjdDogd29ya3NwYWNlcy5Qcm9qZWN0RGVmaW5pdGlvbixcbiAgdGFyZ2V0TmFtZTogc3RyaW5nLFxuKTogV29ya3NwYWNlUGF0aCB8IG51bGwge1xuICBjb25zdCB0c2NvbmZpZyA9IHByb2plY3QudGFyZ2V0cz8uZ2V0KHRhcmdldE5hbWUpPy5vcHRpb25zPy5bJ3RzQ29uZmlnJ107XG4gIHJldHVybiB0c2NvbmZpZyA/IG5vcm1hbGl6ZSh0c2NvbmZpZyBhcyBzdHJpbmcpIDogbnVsbDtcbn1cblxuLyoqIFJlc29sdmUgdGhlIHdvcmtzcGFjZSBjb25maWd1cmF0aW9uIG9mIHRoZSBzcGVjaWZpZWQgdHJlZSBncmFjZWZ1bGx5LiAqL1xuZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIGdldFdvcmtzcGFjZUNvbmZpZ0dyYWNlZnVsbHkoXG4gIHRyZWU6IFRyZWUsXG4pOiBQcm9taXNlPHdvcmtzcGFjZXMuV29ya3NwYWNlRGVmaW5pdGlvbiB8IG51bGw+IHtcbiAgY29uc3QgcGF0aCA9IGRlZmF1bHRXb3Jrc3BhY2VDb25maWdQYXRocy5maW5kKGZpbGVQYXRoID0+IHRyZWUuZXhpc3RzKGZpbGVQYXRoKSk7XG5cbiAgaWYgKCFwYXRoKSB7XG4gICAgcmV0dXJuIG51bGw7XG4gIH1cblxuICB0cnkge1xuICAgIHJldHVybiBnZXRXb3Jrc3BhY2UodHJlZSwgcGF0aCk7XG4gIH0gY2F0Y2gge1xuICAgIHJldHVybiBudWxsO1xuICB9XG59XG4iXX0=
+//# sourceMappingURL=project-tsconfig-paths.js.map

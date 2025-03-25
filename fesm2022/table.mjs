@@ -9,9 +9,9 @@ import { b as _VIEW_REPEATER_STRATEGY, _ as _RecycleViewRepeaterStrategy, a as _
 import { _ as _DisposeViewRepeaterStrategy } from './dispose-view-repeater-strategy-b11b87ea.mjs';
 import { D as Directionality } from './directionality-0a678adc.mjs';
 import { P as Platform } from './platform-610a08ae.mjs';
-import { V as ViewportRuler, a as ScrollingModule } from './scrolling-module-3dd0744a.mjs';
+import { V as ViewportRuler, a as ScrollingModule } from './scrolling-module-aa1faac1.mjs';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import './element-705567fe.mjs';
+import './element-08c51fcd.mjs';
 import './scrolling-61955dd1.mjs';
 import './bidi-module-56dd006c.mjs';
 

@@ -4,7 +4,7 @@ import { EMPTY, Subject } from 'rxjs';
 import { P as Platform } from './platform-610a08ae.mjs';
 import { _ as _CdkPrivateStyleLoader } from './style-loader-51b80670.mjs';
 import { _ as _bindEventWithOptions } from './backwards-compatibility-bcbe473e.mjs';
-import { c as coerceElement, a as coerceNumberProperty } from './element-705567fe.mjs';
+import { c as coerceElement, a as coerceNumberProperty } from './element-08c51fcd.mjs';
 import { DOCUMENT } from '@angular/common';
 import { auditTime } from 'rxjs/operators';
 
