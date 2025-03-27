@@ -4,7 +4,7 @@ import { startWith, debounceTime, distinctUntilChanged, takeUntil, mergeMap, map
 import { U as UniqueSelectionDispatcher } from './unique-selection-dispatcher-e6c4d739.mjs';
 import { Subject, merge, partition } from 'rxjs';
 import { _ as _IdGenerator } from './id-generator-17bab5dc.mjs';
-import { a as Overlay, c as OverlayConfig, S as STANDARD_DROPDOWN_BELOW_POSITIONS, e as STANDARD_DROPDOWN_ADJACENT_POSITIONS, d as OverlayModule } from './overlay-module-be6ad76c.mjs';
+import { a as Overlay, c as OverlayConfig, S as STANDARD_DROPDOWN_BELOW_POSITIONS, e as STANDARD_DROPDOWN_ADJACENT_POSITIONS, d as OverlayModule } from './overlay-module-c7b56fbd.mjs';
 import { T as TemplatePortal } from './portal-directives-eaf2f36d.mjs';
 import { h as ENTER, k as SPACE, U as UP_ARROW, D as DOWN_ARROW, L as LEFT_ARROW, R as RIGHT_ARROW, T as TAB, e as ESCAPE } from './keycodes-107cd3e4.mjs';
 import { I as InputModalityDetector, d as FocusMonitor } from './focus-monitor-9de761eb.mjs';

@@ -1,17 +1,17 @@
 import * as i0 from '@angular/core';
-import { inject, NgZone, Injectable, RendererFactory2, Component, ChangeDetectionStrategy, ViewEncapsulation, untracked, afterRender, afterNextRender, ElementRef, Injector, ANIMATION_MODULE_TYPE, EnvironmentInjector, ApplicationRef, InjectionToken, Directive, EventEmitter, TemplateRef, ViewContainerRef, booleanAttribute, Input, Output, NgModule } from '@angular/core';
+import { inject, NgZone, Injectable, RendererFactory2, Component, ChangeDetectionStrategy, ViewEncapsulation, afterNextRender, ElementRef, Injector, ANIMATION_MODULE_TYPE, EnvironmentInjector, ApplicationRef, InjectionToken, Directive, EventEmitter, TemplateRef, ViewContainerRef, booleanAttribute, Input, Output, NgModule } from '@angular/core';
 import { DOCUMENT, Location } from '@angular/common';
 import { P as Platform } from './platform-c420ddb8.mjs';
 import { _ as _bindEventWithOptions } from './backwards-compatibility-bcbe473e.mjs';
 import { _ as _getEventTarget } from './shadow-dom-9f403d00.mjs';
 import { _ as _isTestEnvironment } from './test-environment-34eef1ee.mjs';
 import { _ as _CdkPrivateStyleLoader } from './style-loader-eab5d9b5.mjs';
-import { Subject, Subscription, merge } from 'rxjs';
-import { filter, takeUntil, takeWhile } from 'rxjs/operators';
+import { Subject, Subscription } from 'rxjs';
 import { c as coerceCssPixelValue } from './css-pixel-value-447bbfe8.mjs';
 import { c as coerceArray } from './array-88e1bec3.mjs';
 import { S as ScrollDispatcher, V as ViewportRuler, a as ScrollingModule } from './scrolling-module-fe90b6cb.mjs';
 import { s as supportsScrollBehavior } from './scrolling-61955dd1.mjs';
+import { filter, takeWhile } from 'rxjs/operators';
 import { D as DomPortalOutlet, T as TemplatePortal, P as PortalModule } from './portal-directives-eaf2f36d.mjs';
 import { D as Directionality } from './directionality-68522730.mjs';
 import { _ as _IdGenerator } from './id-generator-17bab5dc.mjs';
@@ -814,6 +814,8 @@ class OverlayRef {
     _scrollStrategy;
     _locationChanges = Subscription.EMPTY;
     _backdropRef = null;
+    _detachContentMutationObserver;
+    _detachContentAfterRenderRef;
     /**
      * Reference to the parent of the `_host` at the time it was detached. Used to restore
      * the `_host` to its original position in the DOM when it gets re-attached.
@@ -823,8 +825,6 @@ class OverlayRef {
     _keydownEvents = new Subject();
     /** Stream of mouse outside events dispatched to this overlay. */
     _outsidePointerEvents = new Subject();
-    _renders = new Subject();
-    _afterRenderRef;
     /** Reference to the currently-running `afterNextRender` call. */
     _afterNextRenderRef;
     constructor(_portalOutlet, _host, _pane, _config, _ngZone, _keyboardDispatcher, _document, _location, _outsideClickDispatcher, _animationsDisabled = false, _injector, _renderer) {
@@ -845,12 +845,6 @@ class OverlayRef {
             this._scrollStrategy.attach(this);
         }
         this._positionStrategy = _config.positionStrategy;
-        // Users could open the overlay from an `effect`, in which case we need to
-        // run the `afterRender` as `untracked`. We don't recommend that users do
-        // this, but we also don't want to break users who are doing it.
-        this._afterRenderRef = untracked(() => afterRender(() => {
-            this._renders.next();
-        }, { injector: this._injector }));
     }
     /** The overlay's HTML element */
     get overlayElement() {
@@ -913,6 +907,7 @@ class OverlayRef {
         }
         // Only emit the `attachments` event once all other setup is done.
         this._attachments.next();
+        this._completeDetachContent();
         // Track this overlay by the keyboard dispatcher
         this._keyboardDispatcher.add(this);
         if (this._config.disposeOnNavigation) {
@@ -961,6 +956,7 @@ class OverlayRef {
         const detachmentResult = this._portalOutlet.detach();
         // Only emit after everything is detached.
         this._detachments.next();
+        this._completeDetachContent();
         // Remove this overlay from keyboard dispatcher tracking.
         this._keyboardDispatcher.remove(this);
         // Keeping the host element in the DOM can cause scroll jank, because it still gets
@@ -993,8 +989,7 @@ class OverlayRef {
             this._detachments.next();
         }
         this._detachments.complete();
-        this._afterRenderRef.destroy();
-        this._renders.complete();
+        this._completeDetachContent();
     }
     /** Whether the overlay has attached content. */
     hasAttached() {
@@ -1164,32 +1159,54 @@ class OverlayRef {
             isAdd ? element.classList.add(...classes) : element.classList.remove(...classes);
         }
     }
-    /** Detaches the overlay content next time the zone stabilizes. */
+    /** Detaches the overlay once the content finishes animating and is removed from the DOM. */
     _detachContentWhenEmpty() {
-        // Normally we wouldn't have to explicitly run this outside the `NgZone`, however
-        // if the consumer is using `zone-patch-rxjs`, the `Subscription.unsubscribe` call will
-        // be patched to run inside the zone, which will throw us into an infinite loop.
-        this._ngZone.runOutsideAngular(() => {
-            // We can't remove the host here immediately, because the overlay pane's content
-            // might still be animating. This stream helps us avoid interrupting the animation
-            // by waiting for the pane to become empty.
-            const subscription = this._renders
-                .pipe(takeUntil(merge(this._attachments, this._detachments)))
-                .subscribe(() => {
-                // Needs a couple of checks for the pane and host, because
-                // they may have been removed by the time the zone stabilizes.
-                if (!this._pane || !this._host || this._pane.children.length === 0) {
-                    if (this._pane && this._config.panelClass) {
-                        this._toggleClasses(this._pane, this._config.panelClass, false);
-                    }
-                    if (this._host && this._host.parentElement) {
-                        this._previousHostParent = this._host.parentElement;
-                        this._host.remove();
-                    }
-                    subscription.unsubscribe();
-                }
+        let rethrow = false;
+        // Attempt to detach on the next render.
+        try {
+            this._detachContentAfterRenderRef = afterNextRender(() => {
+                // Rethrow if we encounter an actual error detaching.
+                rethrow = true;
+                this._detachContent();
+            }, {
+                injector: this._injector,
             });
-        });
+        }
+        catch (e) {
+            if (rethrow) {
+                throw e;
+            }
+            // afterNextRender throws if the EnvironmentInjector is has already been destroyed.
+            // This may happen in tests that don't properly flush all async work.
+            // In order to avoid breaking those tests, we just detach immediately in this case.
+            this._detachContent();
+        }
+        // Otherwise wait until the content finishes animating out and detach.
+        if (globalThis.MutationObserver && this._pane) {
+            this._detachContentMutationObserver ||= new globalThis.MutationObserver(() => {
+                this._detachContent();
+            });
+            this._detachContentMutationObserver.observe(this._pane, { childList: true });
+        }
+    }
+    _detachContent() {
+        // Needs a couple of checks for the pane and host, because
+        // they may have been removed by the time the zone stabilizes.
+        if (!this._pane || !this._host || this._pane.children.length === 0) {
+            if (this._pane && this._config.panelClass) {
+                this._toggleClasses(this._pane, this._config.panelClass, false);
+            }
+            if (this._host && this._host.parentElement) {
+                this._previousHostParent = this._host.parentElement;
+                this._host.remove();
+            }
+            this._completeDetachContent();
+        }
+    }
+    _completeDetachContent() {
+        this._detachContentAfterRenderRef?.destroy();
+        this._detachContentAfterRenderRef = undefined;
+        this._detachContentMutationObserver?.disconnect();
     }
     /** Disposes of a scroll strategy. */
     _disposeScrollStrategy() {
@@ -3028,4 +3045,4 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.4", 
         }] });
 
 export { BlockScrollStrategy as B, CdkOverlayOrigin as C, FlexibleConnectedPositionStrategy as F, GlobalPositionStrategy as G, NoopScrollStrategy as N, OverlayRef as O, RepositionScrollStrategy as R, STANDARD_DROPDOWN_BELOW_POSITIONS as S, Overlay as a, OverlayContainer as b, OverlayConfig as c, OverlayModule as d, STANDARD_DROPDOWN_ADJACENT_POSITIONS as e, CdkConnectedOverlay as f, OverlayPositionBuilder as g, ConnectionPositionPair as h, ScrollingVisibility as i, ConnectedOverlayPositionChange as j, validateHorizontalPosition as k, ScrollStrategyOptions as l, CloseScrollStrategy as m, OverlayOutsideClickDispatcher as n, OverlayKeyboardDispatcher as o, validateVerticalPosition as v };
-//# sourceMappingURL=overlay-module-be6ad76c.mjs.map
+//# sourceMappingURL=overlay-module-c7b56fbd.mjs.map

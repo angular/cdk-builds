@@ -117,6 +117,8 @@ declare class OverlayRef implements PortalOutlet {
     private _scrollStrategy;
     private _locationChanges;
     private _backdropRef;
+    private _detachContentMutationObserver;
+    private _detachContentAfterRenderRef;
     /**
      * Reference to the parent of the `_host` at the time it was detached. Used to restore
      * the `_host` to its original position in the DOM when it gets re-attached.
@@ -126,8 +128,6 @@ declare class OverlayRef implements PortalOutlet {
     readonly _keydownEvents: Subject<KeyboardEvent>;
     /** Stream of mouse outside events dispatched to this overlay. */
     readonly _outsidePointerEvents: Subject<MouseEvent>;
-    private _renders;
-    private _afterRenderRef;
     /** Reference to the currently-running `afterNextRender` call. */
     private _afterNextRenderRef;
     constructor(_portalOutlet: PortalOutlet, _host: HTMLElement, _pane: HTMLElement, _config: ImmutableObject<OverlayConfig>, _ngZone: NgZone, _keyboardDispatcher: OverlayKeyboardDispatcher, _document: Document, _location: Location, _outsideClickDispatcher: OverlayOutsideClickDispatcher, _animationsDisabled: boolean | undefined, _injector: EnvironmentInjector, _renderer: Renderer2);
@@ -203,8 +203,10 @@ declare class OverlayRef implements PortalOutlet {
     detachBackdrop(): void;
     /** Toggles a single CSS class or an array of classes on an element. */
     private _toggleClasses;
-    /** Detaches the overlay content next time the zone stabilizes. */
+    /** Detaches the overlay once the content finishes animating and is removed from the DOM. */
     private _detachContentWhenEmpty;
+    private _detachContent;
+    private _completeDetachContent;
     /** Disposes of a scroll strategy. */
     private _disposeScrollStrategy;
 }
