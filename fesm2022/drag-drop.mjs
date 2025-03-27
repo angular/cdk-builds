@@ -8,16 +8,16 @@ import { c as coerceElement, a as coerceNumberProperty } from './element-08c51fc
 import { _ as _bindEventWithOptions } from './backwards-compatibility-bcbe473e.mjs';
 import { takeUntil, map, take, tap, switchMap, startWith } from 'rxjs/operators';
 import { _ as _CdkPrivateStyleLoader } from './style-loader-9fc0a4d2.mjs';
-import { V as ViewportRuler, S as ScrollDispatcher, C as CdkScrollableModule } from './scrolling-module-72941c9f.mjs';
-export { b as ɵɵCdkScrollable } from './scrolling-module-72941c9f.mjs';
-import { D as Directionality } from './directionality-ea6ab987.mjs';
+import { V as ViewportRuler, S as ScrollDispatcher, C as CdkScrollableModule } from './scrolling-module-bc11d347.mjs';
+export { b as ɵɵCdkScrollable } from './scrolling-module-bc11d347.mjs';
+import { D as Directionality } from './directionality-1fd091ac.mjs';
 import { _ as _IdGenerator } from './id-generator-ec45a122.mjs';
 import { c as coerceArray } from './array-88e1bec3.mjs';
 import './platform-2be6a529.mjs';
 import './scrolling-61955dd1.mjs';
 import './recycle-view-repeater-strategy-c1712813.mjs';
 import './data-source-5320b6fd.mjs';
-import './bidi-module-e73b8776.mjs';
+import './bidi-module-07a133a2.mjs';
 
 /** Creates a deep clone of an element. */
 function deepCloneNode(node) {

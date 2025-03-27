@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { InjectionToken, inject, EventEmitter, Injectable } from '@angular/core';
+import { InjectionToken, inject, signal, EventEmitter, Injectable } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 /**
@@ -46,7 +46,13 @@ function _resolveDirectionality(rawValue) {
  */
 class Directionality {
     /** The current 'ltr' or 'rtl' value. */
-    value = 'ltr';
+    get value() {
+        return this.valueSignal();
+    }
+    /**
+     * The current 'ltr' or 'rtl' value.
+     */
+    valueSignal = signal('ltr');
     /** Stream that emits whenever the 'ltr' / 'rtl' state changes. */
     change = new EventEmitter();
     constructor() {
@@ -54,7 +60,7 @@ class Directionality {
         if (_document) {
             const bodyDir = _document.body ? _document.body.dir : null;
             const htmlDir = _document.documentElement ? _document.documentElement.dir : null;
-            this.value = _resolveDirectionality(bodyDir || htmlDir || 'ltr');
+            this.valueSignal.set(_resolveDirectionality(bodyDir || htmlDir || 'ltr'));
         }
     }
     ngOnDestroy() {
@@ -69,4 +75,4 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.3", 
         }], ctorParameters: () => [] });
 
 export { Directionality as D, _resolveDirectionality as _, DIR_DOCUMENT as a };
-//# sourceMappingURL=directionality-ea6ab987.mjs.map
+//# sourceMappingURL=directionality-1fd091ac.mjs.map

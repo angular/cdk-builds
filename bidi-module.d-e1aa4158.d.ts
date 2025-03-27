@@ -8,7 +8,11 @@ type Direction = 'ltr' | 'rtl';
  */
 declare class Directionality implements OnDestroy {
     /** The current 'ltr' or 'rtl' value. */
-    readonly value: Direction;
+    get value(): Direction;
+    /**
+     * The current 'ltr' or 'rtl' value.
+     */
+    readonly valueSignal: i0.WritableSignal<Direction>;
     /** Stream that emits whenever the 'ltr' / 'rtl' state changes. */
     readonly change: EventEmitter<Direction>;
     constructor(...args: unknown[]);
@@ -24,8 +28,6 @@ declare class Directionality implements OnDestroy {
  * Directionality to get the closest direction.
  */
 declare class Dir implements Directionality, AfterContentInit, OnDestroy {
-    /** Normalized direction that accounts for invalid/unsupported values. */
-    private _dir;
     /** Whether the `value` has been set to its initial value. */
     private _isInitialized;
     /** Direction as passed in by the consumer. */
@@ -37,6 +39,7 @@ declare class Dir implements Directionality, AfterContentInit, OnDestroy {
     set dir(value: Direction | 'auto');
     /** Current layout direction of the element. */
     get value(): Direction;
+    readonly valueSignal: i0.WritableSignal<Direction>;
     /** Initialize once default value has been set. */
     ngAfterContentInit(): void;
     ngOnDestroy(): void;

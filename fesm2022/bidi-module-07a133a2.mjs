@@ -1,6 +1,6 @@
 import * as i0 from '@angular/core';
-import { EventEmitter, Directive, Output, Input, NgModule } from '@angular/core';
-import { _ as _resolveDirectionality, D as Directionality } from './directionality-ea6ab987.mjs';
+import { EventEmitter, signal, Directive, Output, Input, NgModule } from '@angular/core';
+import { _ as _resolveDirectionality, D as Directionality } from './directionality-1fd091ac.mjs';
 
 /**
  * Directive to listen for changes of direction of part of the DOM.
@@ -9,8 +9,6 @@ import { _ as _resolveDirectionality, D as Directionality } from './directionali
  * Directionality to get the closest direction.
  */
 class Dir {
-    /** Normalized direction that accounts for invalid/unsupported values. */
-    _dir = 'ltr';
     /** Whether the `value` has been set to its initial value. */
     _isInitialized = false;
     /** Direction as passed in by the consumer. */
@@ -19,23 +17,24 @@ class Dir {
     change = new EventEmitter();
     /** @docs-private */
     get dir() {
-        return this._dir;
+        return this.valueSignal();
     }
     set dir(value) {
-        const previousValue = this._dir;
+        const previousValue = this.valueSignal();
         // Note: `_resolveDirectionality` resolves the language based on the browser's language,
         // whereas the browser does it based on the content of the element. Since doing so based
         // on the content can be expensive, for now we're doing the simpler matching.
-        this._dir = _resolveDirectionality(value);
+        this.valueSignal.set(_resolveDirectionality(value));
         this._rawDir = value;
-        if (previousValue !== this._dir && this._isInitialized) {
-            this.change.emit(this._dir);
+        if (previousValue !== this.valueSignal() && this._isInitialized) {
+            this.change.emit(this.valueSignal());
         }
     }
     /** Current layout direction of the element. */
     get value() {
         return this.dir;
     }
+    valueSignal = signal('ltr');
     /** Initialize once default value has been set. */
     ngAfterContentInit() {
         this._isInitialized = true;
@@ -75,4 +74,4 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.3", 
         }] });
 
 export { BidiModule as B, Dir as D };
-//# sourceMappingURL=bidi-module-e73b8776.mjs.map
+//# sourceMappingURL=bidi-module-07a133a2.mjs.map

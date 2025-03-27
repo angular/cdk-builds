@@ -10,14 +10,14 @@ import { Subject, Subscription, merge } from 'rxjs';
 import { filter, takeUntil, takeWhile } from 'rxjs/operators';
 import { c as coerceCssPixelValue } from './css-pixel-value-447bbfe8.mjs';
 import { c as coerceArray } from './array-88e1bec3.mjs';
-import { S as ScrollDispatcher, V as ViewportRuler, a as ScrollingModule } from './scrolling-module-72941c9f.mjs';
+import { S as ScrollDispatcher, V as ViewportRuler, a as ScrollingModule } from './scrolling-module-bc11d347.mjs';
 import { s as supportsScrollBehavior } from './scrolling-61955dd1.mjs';
 import { D as DomPortalOutlet, T as TemplatePortal, P as PortalModule } from './portal-directives-9cd98881.mjs';
-import { D as Directionality } from './directionality-ea6ab987.mjs';
+import { D as Directionality } from './directionality-1fd091ac.mjs';
 import { _ as _IdGenerator } from './id-generator-ec45a122.mjs';
 import { e as ESCAPE } from './keycodes-107cd3e4.mjs';
 import { h as hasModifierKey } from './modifiers-33a5859e.mjs';
-import { B as BidiModule } from './bidi-module-e73b8776.mjs';
+import { B as BidiModule } from './bidi-module-07a133a2.mjs';
 
 const scrollBehaviorSupported = supportsScrollBehavior();
 /**
@@ -3028,4 +3028,4 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.3", 
         }] });
 
 export { BlockScrollStrategy as B, CdkOverlayOrigin as C, FlexibleConnectedPositionStrategy as F, GlobalPositionStrategy as G, NoopScrollStrategy as N, OverlayRef as O, RepositionScrollStrategy as R, STANDARD_DROPDOWN_BELOW_POSITIONS as S, Overlay as a, OverlayContainer as b, OverlayConfig as c, OverlayModule as d, STANDARD_DROPDOWN_ADJACENT_POSITIONS as e, CdkConnectedOverlay as f, OverlayPositionBuilder as g, ConnectionPositionPair as h, ScrollingVisibility as i, ConnectedOverlayPositionChange as j, validateHorizontalPosition as k, ScrollStrategyOptions as l, CloseScrollStrategy as m, OverlayOutsideClickDispatcher as n, OverlayKeyboardDispatcher as o, validateVerticalPosition as v };
-//# sourceMappingURL=overlay-module-6e7b742f.mjs.map
+//# sourceMappingURL=overlay-module-84bb8104.mjs.map

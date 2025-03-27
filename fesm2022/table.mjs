@@ -7,12 +7,12 @@ import { Subject, BehaviorSubject, isObservable, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { b as _VIEW_REPEATER_STRATEGY, _ as _RecycleViewRepeaterStrategy, a as _ViewRepeaterOperation } from './recycle-view-repeater-strategy-c1712813.mjs';
 import { _ as _DisposeViewRepeaterStrategy } from './dispose-view-repeater-strategy-b11b87ea.mjs';
-import { D as Directionality } from './directionality-ea6ab987.mjs';
+import { D as Directionality } from './directionality-1fd091ac.mjs';
 import { P as Platform } from './platform-2be6a529.mjs';
-import { V as ViewportRuler, a as ScrollingModule } from './scrolling-module-72941c9f.mjs';
+import { V as ViewportRuler, a as ScrollingModule } from './scrolling-module-bc11d347.mjs';
 import './element-08c51fcd.mjs';
 import './scrolling-61955dd1.mjs';
-import './bidi-module-e73b8776.mjs';
+import './bidi-module-07a133a2.mjs';
 
 /**
  * Used to provide a table to some of the sub-components without causing a circular dependency.

@@ -4,7 +4,7 @@ import { take, filter, takeUntil, startWith, tap, switchMap, map, reduce, concat
 import * as i0 from '@angular/core';
 import { InjectionToken, inject, ViewContainerRef, Directive, TemplateRef, IterableDiffers, ChangeDetectorRef, ElementRef, Component, ViewEncapsulation, ChangeDetectionStrategy, Input, ViewChild, ContentChildren, EventEmitter, booleanAttribute, Output, numberAttribute, NgModule } from '@angular/core';
 import { T as TREE_KEY_MANAGER } from './tree-key-manager-2f20c79c.mjs';
-import { D as Directionality } from './directionality-ea6ab987.mjs';
+import { D as Directionality } from './directionality-1fd091ac.mjs';
 import { i as isDataSource } from './data-source-5320b6fd.mjs';
 import { c as coerceObservable } from './observable-97c0792c.mjs';
 import './typeahead-11ae39bd.mjs';
