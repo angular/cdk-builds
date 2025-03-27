@@ -1,4 +1,4 @@
-export { a as CdkObserveContent, C as ContentObserver, M as MutationObserverFactory, O as ObserversModule } from './observe-content-459e1d12.mjs';
+export { a as CdkObserveContent, C as ContentObserver, M as MutationObserverFactory, O as ObserversModule } from './observe-content-89413c81.mjs';
 import '@angular/core';
 import 'rxjs';
 import 'rxjs/operators';
