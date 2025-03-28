@@ -2,22 +2,22 @@ import * as i0 from '@angular/core';
 import { signal, Component, ViewEncapsulation, ChangeDetectionStrategy, inject, NgZone, RendererFactory2, Injectable, InjectionToken, ElementRef, booleanAttribute, Directive, Input, ViewContainerRef, ChangeDetectorRef, EventEmitter, Injector, afterNextRender, numberAttribute, Output, TemplateRef, NgModule } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { Subject, Subscription, interval, animationFrameScheduler, Observable, merge, BehaviorSubject } from 'rxjs';
-import { _ as _getEventTarget, a as _getShadowRoot } from './shadow-dom-9f403d00.mjs';
-import { a as isFakeTouchstartFromScreenReader, i as isFakeMousedownFromScreenReader } from './fake-event-detection-7055b1bd.mjs';
-import { c as coerceElement, a as coerceNumberProperty } from './element-08c51fcd.mjs';
-import { _ as _bindEventWithOptions } from './backwards-compatibility-bcbe473e.mjs';
+import { _ as _getEventTarget, a as _getShadowRoot } from './shadow-dom-318658ae.mjs';
+import { a as isFakeTouchstartFromScreenReader, i as isFakeMousedownFromScreenReader } from './fake-event-detection-84590b88.mjs';
+import { c as coerceElement, a as coerceNumberProperty } from './element-15999318.mjs';
+import { _ as _bindEventWithOptions } from './backwards-compatibility-08253a84.mjs';
 import { takeUntil, map, take, tap, switchMap, startWith } from 'rxjs/operators';
-import { _ as _CdkPrivateStyleLoader } from './style-loader-eab5d9b5.mjs';
-import { V as ViewportRuler, S as ScrollDispatcher, C as CdkScrollableModule } from './scrolling-module-fe90b6cb.mjs';
-export { b as ɵɵCdkScrollable } from './scrolling-module-fe90b6cb.mjs';
-import { D as Directionality } from './directionality-68522730.mjs';
-import { _ as _IdGenerator } from './id-generator-17bab5dc.mjs';
-import { c as coerceArray } from './array-88e1bec3.mjs';
-import './platform-c420ddb8.mjs';
-import './scrolling-61955dd1.mjs';
-import './recycle-view-repeater-strategy-c1712813.mjs';
-import './data-source-5320b6fd.mjs';
-import './bidi-module-ebd3e0d6.mjs';
+import { _ as _CdkPrivateStyleLoader } from './style-loader-902ffada.mjs';
+import { V as ViewportRuler, S as ScrollDispatcher, C as CdkScrollableModule } from './scrolling-module-7394419e.mjs';
+export { b as ɵɵCdkScrollable } from './scrolling-module-7394419e.mjs';
+import { D as Directionality } from './directionality-d3343e21.mjs';
+import { _ as _IdGenerator } from './id-generator-c0f67d1b.mjs';
+import { c as coerceArray } from './array-6239d2f8.mjs';
+import './platform-fd50034d.mjs';
+import './scrolling-59340c46.mjs';
+import './recycle-view-repeater-strategy-0f32b0a8.mjs';
+import './data-source-d79c6e09.mjs';
+import './bidi-module-bd809f3d.mjs';
 
 /** Creates a deep clone of an element. */
 function deepCloneNode(node) {

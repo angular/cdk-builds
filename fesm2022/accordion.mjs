@@ -1,8 +1,8 @@
 import * as i0 from '@angular/core';
 import { InjectionToken, inject, booleanAttribute, Directive, Input, ChangeDetectorRef, EventEmitter, Output, NgModule } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
-import { _ as _IdGenerator } from './id-generator-17bab5dc.mjs';
-import { U as UniqueSelectionDispatcher } from './unique-selection-dispatcher-e6c4d739.mjs';
+import { _ as _IdGenerator } from './id-generator-c0f67d1b.mjs';
+import { U as UniqueSelectionDispatcher } from './unique-selection-dispatcher-b23237b2.mjs';
 
 /**
  * Injection token that can be used to reference instances of `CdkAccordion`. It serves

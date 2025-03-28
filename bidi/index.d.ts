@@ -1,4 +1,4 @@
-export { B as BidiModule, b as Dir, a as Direction, D as Directionality } from '../bidi-module.d-e1aa4158.js';
+export { B as BidiModule, b as Dir, a as Direction, D as Directionality } from '../bidi-module.d-e045bff7.js';
 import { InjectionToken } from '@angular/core';
 
 /**
