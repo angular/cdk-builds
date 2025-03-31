@@ -318,6 +318,8 @@ declare class CdkDropList<T = any> implements OnDestroy {
     private _scrollDispatcher;
     private _dir;
     private _group;
+    /** Refs that have been synced with the drop ref most recently. */
+    private _latestSortedRefs;
     /** Emits when the list has been destroyed. */
     private readonly _destroyed;
     /** Whether the element's scrollable parents have been resolved. */
