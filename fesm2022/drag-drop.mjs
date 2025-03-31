@@ -3894,6 +3894,8 @@ class CdkDropList {
         optional: true,
         skipSelf: true,
     });
+    /** Refs that have been synced with the drop ref most recently. */
+    _latestSortedRefs;
     /** Emits when the list has been destroyed. */
     _destroyed = new Subject();
     /** Whether the element's scrollable parents have been resolved. */
@@ -4010,14 +4012,22 @@ class CdkDropList {
         // Only sync the items while dragging since this method is
         // called when items are being initialized one-by-one.
         if (this._dropListRef.isDragging()) {
-            this._syncItemsWithRef();
+            this._syncItemsWithRef(this.getSortedItems().map(item => item._dragRef));
         }
     }
     /** Removes an item from the drop list. */
     removeItem(item) {
         this._unsortedItems.delete(item);
         // This method might be called on destroy so we always want to sync with the ref.
-        this._syncItemsWithRef();
+        // Note that we reuse the last set of synced items, rather than re-sorting the whole
+        // list, because it can slow down re-renders of large lists (see #30737).
+        if (this._latestSortedRefs) {
+            const index = this._latestSortedRefs.indexOf(item._dragRef);
+            if (index > -1) {
+                this._latestSortedRefs.splice(index, 1);
+                this._syncItemsWithRef(this._latestSortedRefs);
+            }
+        }
     }
     /** Gets the registered items in the list, sorted by their position in the DOM. */
     getSortedItems() {
@@ -4039,6 +4049,7 @@ class CdkDropList {
         if (this._group) {
             this._group._items.delete(this);
         }
+        this._latestSortedRefs = undefined;
         this._unsortedItems.clear();
         this._dropListRef.dispose();
         this._destroyed.next();
@@ -4100,7 +4111,7 @@ class CdkDropList {
     /** Handles events from the underlying DropListRef. */
     _handleEvents(ref) {
         ref.beforeStarted.subscribe(() => {
-            this._syncItemsWithRef();
+            this._syncItemsWithRef(this.getSortedItems().map(item => item._dragRef));
             this._changeDetectorRef.markForCheck();
         });
         ref.entered.subscribe(event => {
@@ -4155,8 +4166,9 @@ class CdkDropList {
         }
     }
     /** Syncs up the registered drag items with underlying drop list ref. */
-    _syncItemsWithRef() {
-        this._dropListRef.withItems(this.getSortedItems().map(item => item._dragRef));
+    _syncItemsWithRef(items) {
+        this._latestSortedRefs = items;
+        this._dropListRef.withItems(items);
     }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.4", ngImport: i0, type: CdkDropList, deps: [], target: i0.ɵɵFactoryTarget.Directive });
     static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "20.0.0-next.4", type: CdkDropList, isStandalone: true, selector: "[cdkDropList], cdk-drop-list", inputs: { connectedTo: ["cdkDropListConnectedTo", "connectedTo"], data: ["cdkDropListData", "data"], orientation: ["cdkDropListOrientation", "orientation"], id: "id", lockAxis: ["cdkDropListLockAxis", "lockAxis"], disabled: ["cdkDropListDisabled", "disabled", booleanAttribute], sortingDisabled: ["cdkDropListSortingDisabled", "sortingDisabled", booleanAttribute], enterPredicate: ["cdkDropListEnterPredicate", "enterPredicate"], sortPredicate: ["cdkDropListSortPredicate", "sortPredicate"], autoScrollDisabled: ["cdkDropListAutoScrollDisabled", "autoScrollDisabled", booleanAttribute], autoScrollStep: ["cdkDropListAutoScrollStep", "autoScrollStep"], elementContainerSelector: ["cdkDropListElementContainer", "elementContainerSelector"] }, outputs: { dropped: "cdkDropListDropped", entered: "cdkDropListEntered", exited: "cdkDropListExited", sorted: "cdkDropListSorted" }, host: { properties: { "attr.id": "id", "class.cdk-drop-list-disabled": "disabled", "class.cdk-drop-list-dragging": "_dropListRef.isDragging()", "class.cdk-drop-list-receiving": "_dropListRef.isReceiving()" }, classAttribute: "cdk-drop-list" }, providers: [
