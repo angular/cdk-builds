@@ -5,7 +5,6 @@ import { Subject, Subscription, interval, animationFrameScheduler, Observable, m
 import { _ as _getEventTarget, a as _getShadowRoot } from './shadow-dom-318658ae.mjs';
 import { a as isFakeTouchstartFromScreenReader, i as isFakeMousedownFromScreenReader } from './fake-event-detection-84590b88.mjs';
 import { c as coerceElement, a as coerceNumberProperty } from './element-15999318.mjs';
-import { _ as _bindEventWithOptions } from './backwards-compatibility-08253a84.mjs';
 import { takeUntil, map, take, tap, switchMap, startWith } from 'rxjs/operators';
 import { _ as _CdkPrivateStyleLoader } from './style-loader-902ffada.mjs';
 import { V as ViewportRuler, S as ScrollDispatcher, C as CdkScrollableModule } from './scrolling-module-7394419e.mjs';
@@ -721,10 +720,11 @@ class DragRef {
         const element = coerceElement(rootElement);
         if (element !== this._rootElement) {
             this._removeRootElementListeners();
+            const renderer = this._renderer;
             this._rootElementCleanups = this._ngZone.runOutsideAngular(() => [
-                _bindEventWithOptions(this._renderer, element, 'mousedown', this._pointerDown, activeEventListenerOptions),
-                _bindEventWithOptions(this._renderer, element, 'touchstart', this._pointerDown, passiveEventListenerOptions),
-                _bindEventWithOptions(this._renderer, element, 'dragstart', this._nativeDragStart, activeEventListenerOptions),
+                renderer.listen(element, 'mousedown', this._pointerDown, activeEventListenerOptions),
+                renderer.listen(element, 'touchstart', this._pointerDown, passiveEventListenerOptions),
+                renderer.listen(element, 'dragstart', this._nativeDragStart, activeEventListenerOptions),
             ]);
             this._initialTransform = undefined;
             this._rootElement = element;
@@ -1034,7 +1034,7 @@ class DragRef {
             // In some browsers the global `selectstart` that we maintain in the `DragDropRegistry`
             // doesn't cross the shadow boundary so we have to prevent it at the shadow root (see #28792).
             this._ngZone.runOutsideAngular(() => {
-                this._cleanupShadowRootSelectStart = _bindEventWithOptions(this._renderer, shadowRoot, 'selectstart', shadowDomSelectStart, activeCapturingEventOptions$1);
+                this._cleanupShadowRootSelectStart = this._renderer.listen(shadowRoot, 'selectstart', shadowDomSelectStart, activeCapturingEventOptions$1);
             });
         }
         if (dropContainer) {
@@ -3038,7 +3038,7 @@ class DragDropRegistry {
                 // The event handler has to be explicitly active,
                 // because newer browsers make it passive by default.
                 this._cleanupDocumentTouchmove?.();
-                this._cleanupDocumentTouchmove = _bindEventWithOptions(this._renderer, this._document, 'touchmove', this._persistentTouchmoveListener, activeCapturingEventOptions);
+                this._cleanupDocumentTouchmove = this._renderer.listen(this._document, 'touchmove', this._persistentTouchmoveListener, activeCapturingEventOptions);
             });
         }
     }
@@ -3098,7 +3098,7 @@ class DragDropRegistry {
                 ]);
             }
             this._ngZone.runOutsideAngular(() => {
-                this._globalListeners = toBind.map(([name, handler, options]) => _bindEventWithOptions(this._renderer, this._document, name, handler, options));
+                this._globalListeners = toBind.map(([name, handler, options]) => this._renderer.listen(this._document, name, handler, options));
             });
         }
     }
@@ -3135,7 +3135,7 @@ class DragDropRegistry {
             // `fromEvent` it'll only happen if the subscription is outside the `NgZone`.
             streams.push(new Observable((observer) => {
                 return this._ngZone.runOutsideAngular(() => {
-                    const cleanup = _bindEventWithOptions(this._renderer, shadowRoot, 'scroll', (event) => {
+                    const cleanup = this._renderer.listen(shadowRoot, 'scroll', (event) => {
                         if (this._activeDragInstances().length) {
                             observer.next(event);
                         }

@@ -5,7 +5,6 @@ export { n as normalizePassiveListenerOptions, s as supportsPassiveEventListener
 export { R as RtlScrollAxisType, g as getRtlScrollAxisType, s as supportsScrollBehavior } from './scrolling-59340c46.mjs';
 export { _ as _getEventTarget, b as _getFocusedElementPierceShadowDom, a as _getShadowRoot, c as _supportsShadowDom } from './shadow-dom-318658ae.mjs';
 export { _ as _isTestEnvironment } from './test-environment-f6f8bc13.mjs';
-export { _ as _bindEventWithOptions } from './backwards-compatibility-08253a84.mjs';
 import '@angular/common';
 
 class PlatformModule {

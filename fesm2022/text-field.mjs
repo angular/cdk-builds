@@ -3,7 +3,6 @@ import { Component, ChangeDetectionStrategy, ViewEncapsulation, inject, NgZone, 
 import { EMPTY, Subject } from 'rxjs';
 import { P as Platform } from './platform-fd50034d.mjs';
 import { _ as _CdkPrivateStyleLoader } from './style-loader-902ffada.mjs';
-import { _ as _bindEventWithOptions } from './backwards-compatibility-08253a84.mjs';
 import { c as coerceElement, a as coerceNumberProperty } from './element-15999318.mjs';
 import { DOCUMENT } from '@angular/common';
 import { auditTime } from 'rxjs/operators';
@@ -61,7 +60,7 @@ class AutofillMonitor {
         };
         const unlisten = this._ngZone.runOutsideAngular(() => {
             element.classList.add('cdk-text-field-autofill-monitored');
-            return _bindEventWithOptions(this._renderer, element, 'animationstart', listener, listenerOptions);
+            return this._renderer.listen(element, 'animationstart', listener, listenerOptions);
         });
         this._monitoredElements.set(element, { subject, unlisten });
         return subject;

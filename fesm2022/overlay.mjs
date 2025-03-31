@@ -1,12 +1,11 @@
-import { b as OverlayContainer } from './overlay-module-b0a0d199.mjs';
-export { B as BlockScrollStrategy, f as CdkConnectedOverlay, C as CdkOverlayOrigin, m as CloseScrollStrategy, j as ConnectedOverlayPositionChange, h as ConnectionPositionPair, F as FlexibleConnectedPositionStrategy, G as GlobalPositionStrategy, N as NoopScrollStrategy, a as Overlay, c as OverlayConfig, b as OverlayContainer, o as OverlayKeyboardDispatcher, d as OverlayModule, n as OverlayOutsideClickDispatcher, g as OverlayPositionBuilder, O as OverlayRef, R as RepositionScrollStrategy, e as STANDARD_DROPDOWN_ADJACENT_POSITIONS, S as STANDARD_DROPDOWN_BELOW_POSITIONS, l as ScrollStrategyOptions, i as ScrollingVisibility, k as validateHorizontalPosition, v as validateVerticalPosition } from './overlay-module-b0a0d199.mjs';
+import { b as OverlayContainer } from './overlay-module-778cde6a.mjs';
+export { B as BlockScrollStrategy, f as CdkConnectedOverlay, C as CdkOverlayOrigin, m as CloseScrollStrategy, j as ConnectedOverlayPositionChange, h as ConnectionPositionPair, F as FlexibleConnectedPositionStrategy, G as GlobalPositionStrategy, N as NoopScrollStrategy, a as Overlay, c as OverlayConfig, b as OverlayContainer, o as OverlayKeyboardDispatcher, d as OverlayModule, n as OverlayOutsideClickDispatcher, g as OverlayPositionBuilder, O as OverlayRef, R as RepositionScrollStrategy, e as STANDARD_DROPDOWN_ADJACENT_POSITIONS, S as STANDARD_DROPDOWN_BELOW_POSITIONS, l as ScrollStrategyOptions, i as ScrollingVisibility, k as validateHorizontalPosition, v as validateVerticalPosition } from './overlay-module-778cde6a.mjs';
 import * as i0 from '@angular/core';
 import { inject, RendererFactory2, Injectable } from '@angular/core';
 export { b as CdkScrollable, S as ScrollDispatcher, V as ViewportRuler, c as ɵɵCdkFixedSizeVirtualScroll, C as ɵɵCdkScrollableModule, d as ɵɵCdkVirtualForOf, e as ɵɵCdkVirtualScrollViewport, g as ɵɵCdkVirtualScrollableElement, f as ɵɵCdkVirtualScrollableWindow } from './scrolling-module-7394419e.mjs';
 export { D as ɵɵDir } from './bidi-module-bd809f3d.mjs';
 import '@angular/common';
 import './platform-fd50034d.mjs';
-import './backwards-compatibility-08253a84.mjs';
 import './shadow-dom-318658ae.mjs';
 import './test-environment-f6f8bc13.mjs';
 import './style-loader-902ffada.mjs';

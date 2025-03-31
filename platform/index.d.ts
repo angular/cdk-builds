@@ -1,6 +1,5 @@
 export { P as Platform } from '../platform.d-4dc3e073.js';
 import * as i0 from '@angular/core';
-import { Renderer2 } from '@angular/core';
 
 declare class PlatformModule {
     static ɵfac: i0.ɵɵFactoryDeclaration<PlatformModule, never>;
@@ -65,18 +64,4 @@ declare function _getEventTarget<T extends EventTarget>(event: Event): T | null;
 /** Gets whether the code is currently running in a test environment. */
 declare function _isTestEnvironment(): boolean;
 
-/** Options when binding events manually. */
-interface _ListenerOptions {
-    capture?: boolean;
-    once?: boolean;
-    passive?: boolean;
-}
-/**
- * Binds an event listener with specific options in a backwards-compatible way.
- * This function is necessary, because `Renderer2.listen` only supports listener options
- * after 19.1 and during the v19 period we support any 19.x version.
- * @docs-private
- */
-declare function _bindEventWithOptions(renderer: Renderer2, target: EventTarget, eventName: string, callback: (event: any) => boolean | void, options: _ListenerOptions): () => void;
-
-export { PlatformModule, RtlScrollAxisType, type _ListenerOptions, _bindEventWithOptions, _getEventTarget, _getFocusedElementPierceShadowDom, _getShadowRoot, _isTestEnvironment, _supportsShadowDom, getRtlScrollAxisType, getSupportedInputTypes, normalizePassiveListenerOptions, supportsPassiveEventListeners, supportsScrollBehavior };
+export { PlatformModule, RtlScrollAxisType, _getEventTarget, _getFocusedElementPierceShadowDom, _getShadowRoot, _isTestEnvironment, _supportsShadowDom, getRtlScrollAxisType, getSupportedInputTypes, normalizePassiveListenerOptions, supportsPassiveEventListeners, supportsScrollBehavior };

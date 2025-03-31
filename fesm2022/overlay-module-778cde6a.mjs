@@ -2,7 +2,6 @@ import * as i0 from '@angular/core';
 import { inject, NgZone, Injectable, RendererFactory2, Component, ChangeDetectionStrategy, ViewEncapsulation, afterNextRender, ElementRef, Injector, ANIMATION_MODULE_TYPE, EnvironmentInjector, ApplicationRef, InjectionToken, Directive, EventEmitter, TemplateRef, ViewContainerRef, booleanAttribute, Input, Output, NgModule } from '@angular/core';
 import { DOCUMENT, Location } from '@angular/common';
 import { P as Platform } from './platform-fd50034d.mjs';
-import { _ as _bindEventWithOptions } from './backwards-compatibility-08253a84.mjs';
 import { _ as _getEventTarget } from './shadow-dom-318658ae.mjs';
 import { _ as _isTestEnvironment } from './test-environment-f6f8bc13.mjs';
 import { _ as _CdkPrivateStyleLoader } from './style-loader-902ffada.mjs';
@@ -575,11 +574,12 @@ class OverlayOutsideClickDispatcher extends BaseOverlayDispatcher {
         if (!this._isAttached) {
             const body = this._document.body;
             const eventOptions = { capture: true };
+            const renderer = this._renderer;
             this._cleanups = this._ngZone.runOutsideAngular(() => [
-                _bindEventWithOptions(this._renderer, body, 'pointerdown', this._pointerDownListener, eventOptions),
-                _bindEventWithOptions(this._renderer, body, 'click', this._clickListener, eventOptions),
-                _bindEventWithOptions(this._renderer, body, 'auxclick', this._clickListener, eventOptions),
-                _bindEventWithOptions(this._renderer, body, 'contextmenu', this._clickListener, eventOptions),
+                renderer.listen(body, 'pointerdown', this._pointerDownListener, eventOptions),
+                renderer.listen(body, 'click', this._clickListener, eventOptions),
+                renderer.listen(body, 'auxclick', this._clickListener, eventOptions),
+                renderer.listen(body, 'contextmenu', this._clickListener, eventOptions),
             ]);
             // click event is not fired on iOS. To make element "clickable" we are
             // setting the cursor to pointer
@@ -3045,4 +3045,4 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.4", 
         }] });
 
 export { BlockScrollStrategy as B, CdkOverlayOrigin as C, FlexibleConnectedPositionStrategy as F, GlobalPositionStrategy as G, NoopScrollStrategy as N, OverlayRef as O, RepositionScrollStrategy as R, STANDARD_DROPDOWN_BELOW_POSITIONS as S, Overlay as a, OverlayContainer as b, OverlayConfig as c, OverlayModule as d, STANDARD_DROPDOWN_ADJACENT_POSITIONS as e, CdkConnectedOverlay as f, OverlayPositionBuilder as g, ConnectionPositionPair as h, ScrollingVisibility as i, ConnectedOverlayPositionChange as j, validateHorizontalPosition as k, ScrollStrategyOptions as l, CloseScrollStrategy as m, OverlayOutsideClickDispatcher as n, OverlayKeyboardDispatcher as o, validateVerticalPosition as v };
-//# sourceMappingURL=overlay-module-b0a0d199.mjs.map
+//# sourceMappingURL=overlay-module-778cde6a.mjs.map

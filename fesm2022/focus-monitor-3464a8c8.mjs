@@ -6,7 +6,6 @@ import { DOCUMENT } from '@angular/common';
 import { i as isFakeMousedownFromScreenReader, a as isFakeTouchstartFromScreenReader } from './fake-event-detection-84590b88.mjs';
 import { A as ALT, C as CONTROL, M as MAC_META, a as META, S as SHIFT } from './keycodes-0e4398c6.mjs';
 import { _ as _getEventTarget, a as _getShadowRoot } from './shadow-dom-318658ae.mjs';
-import { _ as _bindEventWithOptions } from './backwards-compatibility-08253a84.mjs';
 import { P as Platform } from './platform-fd50034d.mjs';
 import { n as normalizePassiveListenerOptions } from './passive-listeners-93cf8be8.mjs';
 import { c as coerceElement } from './element-15999318.mjs';
@@ -153,9 +152,9 @@ class InputModalityDetector {
             const renderer = inject(RendererFactory2).createRenderer(null, null);
             this._listenerCleanups = ngZone.runOutsideAngular(() => {
                 return [
-                    _bindEventWithOptions(renderer, document, 'keydown', this._onKeydown, modalityEventListenerOptions),
-                    _bindEventWithOptions(renderer, document, 'mousedown', this._onMousedown, modalityEventListenerOptions),
-                    _bindEventWithOptions(renderer, document, 'touchstart', this._onTouchstart, modalityEventListenerOptions),
+                    renderer.listen(document, 'keydown', this._onKeydown, modalityEventListenerOptions),
+                    renderer.listen(document, 'mousedown', this._onMousedown, modalityEventListenerOptions),
+                    renderer.listen(document, 'touchstart', this._onTouchstart, modalityEventListenerOptions),
                 ];
             });
         }
@@ -626,4 +625,4 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.4", 
             }] } });
 
 export { CdkMonitorFocus as C, FocusMonitorDetectionMode as F, InputModalityDetector as I, INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS as a, INPUT_MODALITY_DETECTOR_OPTIONS as b, FOCUS_MONITOR_DEFAULT_OPTIONS as c, FocusMonitor as d };
-//# sourceMappingURL=focus-monitor-bff5e857.mjs.map
+//# sourceMappingURL=focus-monitor-3464a8c8.mjs.map

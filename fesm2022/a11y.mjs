@@ -1,6 +1,6 @@
-export { C as CdkMonitorFocus, c as FOCUS_MONITOR_DEFAULT_OPTIONS, d as FocusMonitor, F as FocusMonitorDetectionMode, a as INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS, b as INPUT_MODALITY_DETECTOR_OPTIONS, I as InputModalityDetector } from './focus-monitor-bff5e857.mjs';
-import { F as FocusTrap, I as InteractivityChecker } from './a11y-module-6653f869.mjs';
-export { A as A11yModule, d as CdkAriaLive, C as CdkTrapFocus, F as FocusTrap, b as FocusTrapFactory, a as HighContrastMode, H as HighContrastModeDetector, I as InteractivityChecker, c as IsFocusableConfig, g as LIVE_ANNOUNCER_DEFAULT_OPTIONS, e as LIVE_ANNOUNCER_ELEMENT_TOKEN, f as LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, L as LiveAnnouncer } from './a11y-module-6653f869.mjs';
+export { C as CdkMonitorFocus, c as FOCUS_MONITOR_DEFAULT_OPTIONS, d as FocusMonitor, F as FocusMonitorDetectionMode, a as INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS, b as INPUT_MODALITY_DETECTOR_OPTIONS, I as InputModalityDetector } from './focus-monitor-3464a8c8.mjs';
+import { F as FocusTrap, I as InteractivityChecker } from './a11y-module-f780e811.mjs';
+export { A as A11yModule, d as CdkAriaLive, C as CdkTrapFocus, F as FocusTrap, b as FocusTrapFactory, a as HighContrastMode, H as HighContrastModeDetector, I as InteractivityChecker, c as IsFocusableConfig, g as LIVE_ANNOUNCER_DEFAULT_OPTIONS, e as LIVE_ANNOUNCER_ELEMENT_TOKEN, f as LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, L as LiveAnnouncer } from './a11y-module-f780e811.mjs';
 export { _ as _IdGenerator } from './id-generator-c0f67d1b.mjs';
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
@@ -18,7 +18,6 @@ export { i as isFakeMousedownFromScreenReader, a as isFakeTouchstartFromScreenRe
 import 'rxjs/operators';
 import './keycodes-0e4398c6.mjs';
 import './shadow-dom-318658ae.mjs';
-import './backwards-compatibility-08253a84.mjs';
 import './passive-listeners-93cf8be8.mjs';
 import './element-15999318.mjs';
 import './breakpoints-observer-af989fcc.mjs';
