@@ -673,14 +673,6 @@ var TestKey;
 })(TestKey || (TestKey = {}));
 
 /**
- * Returns an error which reports that no keys have been specified.
- * @docs-private
- */
-function getNoKeysSpecifiedError() {
-    return Error('No keys have been specified.');
-}
-
-/**
  * Gets text of element excluding certain selectors within the element.
  * @param element Element to get text from,
  * @param excludeSelector Selector identifying which elements to exclude,
@@ -694,5 +686,5 @@ function _getTextWithExcludedElements(element, excludeSelector) {
     return (clone.textContent || '').trim();
 }
 
-export { ComponentHarness as C, HarnessPredicate as H, TestKey as T, _getTextWithExcludedElements as _, ContentContainerComponentHarness as a, HarnessEnvironment as b, getNoKeysSpecifiedError as g, handleAutoChangeDetectionStatus as h, manualChangeDetection as m, parallel as p, stopHandlingAutoChangeDetectionStatus as s };
-//# sourceMappingURL=text-filtering-55cbd0d9.mjs.map
+export { ComponentHarness as C, HarnessPredicate as H, TestKey as T, _getTextWithExcludedElements as _, ContentContainerComponentHarness as a, HarnessEnvironment as b, handleAutoChangeDetectionStatus as h, manualChangeDetection as m, parallel as p, stopHandlingAutoChangeDetectionStatus as s };
+//# sourceMappingURL=text-filtering-e9a6b8d9.mjs.map
