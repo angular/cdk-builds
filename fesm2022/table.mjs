@@ -10,7 +10,7 @@ import { _ as _DisposeViewRepeaterStrategy } from './dispose-view-repeater-strat
 import { D as Directionality } from './directionality-9d44e426.mjs';
 import { P as Platform } from './platform-20fc4de8.mjs';
 import { V as ViewportRuler, a as ScrollingModule } from './scrolling-module-722545e3.mjs';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import { c as coerceBooleanProperty } from './boolean-property-c43e9a8f.mjs';
 import './element-15999318.mjs';
 import './scrolling-59340c46.mjs';
 import './bidi-module-04c03e58.mjs';

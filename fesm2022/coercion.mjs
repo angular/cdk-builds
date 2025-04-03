@@ -1,12 +1,8 @@
+export { c as coerceBooleanProperty } from './boolean-property-c43e9a8f.mjs';
 export { _ as _isNumberValue, c as coerceElement, a as coerceNumberProperty } from './element-15999318.mjs';
 export { c as coerceArray } from './array-6239d2f8.mjs';
 export { c as coerceCssPixelValue } from './css-pixel-value-5d0cae55.mjs';
 import '@angular/core';
-
-/** Coerces a data-bound value (typically a string) to a boolean. */
-function coerceBooleanProperty(value) {
-    return value != null && `${value}` !== 'false';
-}
 
 /**
  * Coerces a value to an array of trimmed non-empty strings.
@@ -39,5 +35,5 @@ function coerceStringArray(value, separator = /\s+/) {
     return result;
 }
 
-export { coerceBooleanProperty, coerceStringArray };
+export { coerceStringArray };
 //# sourceMappingURL=coercion.mjs.map
