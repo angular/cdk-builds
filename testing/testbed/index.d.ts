@@ -1,5 +1,4 @@
-import { h as HarnessEnvironment, c as HarnessLoader, C as ComponentHarness, f as ComponentHarnessConstructor } from '../../harness-environment.d-3ca3cb56.js';
-import { a as TestElement, M as ModifierKeys, T as TestKey, b as TextOptions, c as ElementDimensions, E as EventData } from '../../test-element.d-7723af18.js';
+import { h as HarnessEnvironment, c as HarnessLoader, i as TestElement, C as ComponentHarness, f as ComponentHarnessConstructor, M as ModifierKeys, T as TestKey, j as TextOptions, k as ElementDimensions, E as EventData } from '../../harness-environment.d-300a0fdc.js';
 import { ComponentFixture } from '@angular/core/testing';
 
 /** Options to configure the environment. */

@@ -140,10 +140,6 @@
       "types": "./testing/index.d.ts",
       "default": "./fesm2022/testing.mjs"
     },
-    "./testing/private": {
-      "types": "./testing/private/index.d.ts",
-      "default": "./fesm2022/testing/private.mjs"
-    },
     "./testing/selenium-webdriver": {
       "types": "./testing/selenium-webdriver/index.d.ts",
       "default": "./fesm2022/testing/selenium-webdriver.mjs"
