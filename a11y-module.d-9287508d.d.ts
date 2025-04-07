@@ -310,4 +310,5 @@ declare class A11yModule {
     static ɵinj: i0.ɵɵInjectorDeclaration<A11yModule>;
 }
 
-export { type AriaLivePoliteness as A, CdkTrapFocus as C, FocusTrap as F, InteractivityChecker as I, LiveAnnouncer as L, FocusTrapFactory as a, IsFocusableConfig as b, CdkAriaLive as c, LIVE_ANNOUNCER_ELEMENT_TOKEN as d, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY as e, type LiveAnnouncerDefaultOptions as f, LIVE_ANNOUNCER_DEFAULT_OPTIONS as g, A11yModule as h };
+export { CdkTrapFocus as C, FocusTrap as F, InteractivityChecker as I, LiveAnnouncer as L, FocusTrapFactory as a, IsFocusableConfig as b, CdkAriaLive as c, LIVE_ANNOUNCER_ELEMENT_TOKEN as d, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY as e, LIVE_ANNOUNCER_DEFAULT_OPTIONS as g, A11yModule as h };
+export type { AriaLivePoliteness as A, LiveAnnouncerDefaultOptions as f };

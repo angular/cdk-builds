@@ -153,4 +153,5 @@ declare class UnitTestElement implements TestElement {
     private _dispatchMouseEventSequence;
 }
 
-export { TestbedHarnessEnvironment, type TestbedHarnessEnvironmentOptions, UnitTestElement };
+export { TestbedHarnessEnvironment, UnitTestElement };
+export type { TestbedHarnessEnvironmentOptions };

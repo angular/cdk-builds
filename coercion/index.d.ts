@@ -41,4 +41,5 @@ declare function coerceElement<T>(elementOrRef: ElementRef<T> | T): T;
  */
 declare function coerceStringArray(value: any, separator?: string | RegExp): string[];
 
-export { type BooleanInput, coerceArray, coerceBooleanProperty, coerceCssPixelValue, coerceElement, coerceStringArray };
+export { coerceArray, coerceBooleanProperty, coerceCssPixelValue, coerceElement, coerceStringArray };
+export type { BooleanInput };

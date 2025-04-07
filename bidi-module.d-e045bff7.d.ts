@@ -53,4 +53,5 @@ declare class BidiModule {
     static ɵinj: i0.ɵɵInjectorDeclaration<BidiModule>;
 }
 
-export { BidiModule as B, Directionality as D, type Direction as a, Dir as b };
+export { BidiModule as B, Directionality as D, Dir as b };
+export type { Direction as a };

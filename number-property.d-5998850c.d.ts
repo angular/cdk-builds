@@ -12,4 +12,5 @@ declare function coerceNumberProperty<D>(value: any, fallback: D): number | D;
  */
 declare function _isNumberValue(value: any): boolean;
 
-export { type NumberInput as N, _isNumberValue as _, coerceNumberProperty as c };
+export { _isNumberValue as _, coerceNumberProperty as c };
+export type { NumberInput as N };

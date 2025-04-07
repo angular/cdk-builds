@@ -90,4 +90,5 @@ declare function parallel<T1, T2>(values: () => [T1 | PromiseLike<T1>, T2 | Prom
  */
 declare function parallel<T>(values: () => (T | PromiseLike<T>)[]): Promise<T[]>;
 
-export { type AutoChangeDetectionStatus, _getTextWithExcludedElements, getNoKeysSpecifiedError, handleAutoChangeDetectionStatus, manualChangeDetection, parallel, stopHandlingAutoChangeDetectionStatus };
+export { _getTextWithExcludedElements, getNoKeysSpecifiedError, handleAutoChangeDetectionStatus, manualChangeDetection, parallel, stopHandlingAutoChangeDetectionStatus };
+export type { AutoChangeDetectionStatus };

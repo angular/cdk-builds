@@ -1,4 +1,4 @@
-export { P as Platform } from './platform-fd50034d.mjs';
+export { P as Platform } from './platform-c1b1bdd7.mjs';
 import * as i0 from '@angular/core';
 import { NgModule } from '@angular/core';
 export { n as normalizePassiveListenerOptions, s as supportsPassiveEventListeners } from './passive-listeners-93cf8be8.mjs';
@@ -8,11 +8,11 @@ export { _ as _isTestEnvironment } from './test-environment-f6f8bc13.mjs';
 import '@angular/common';
 
 class PlatformModule {
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.4", ngImport: i0, type: PlatformModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-    static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "20.0.0-next.4", ngImport: i0, type: PlatformModule });
-    static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "20.0.0-next.4", ngImport: i0, type: PlatformModule });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: PlatformModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+    static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "20.0.0-next.5", ngImport: i0, type: PlatformModule });
+    static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: PlatformModule });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.4", ngImport: i0, type: PlatformModule, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: PlatformModule, decorators: [{
             type: NgModule,
             args: [{}]
         }] });

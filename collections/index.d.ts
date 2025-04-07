@@ -95,4 +95,5 @@ interface TreeDataNodeFlattener<T> {
     nodeDescendents(node: T, nodes: T[], onlyExpandable: boolean): void;
 }
 
-export { ArrayDataSource, type TreeDataNodeFlattener, _DisposeViewRepeaterStrategy, _RecycleViewRepeaterStrategy };
+export { ArrayDataSource, _DisposeViewRepeaterStrategy, _RecycleViewRepeaterStrategy };
+export type { TreeDataNodeFlattener };

@@ -1374,4 +1374,5 @@ declare class DragDropModule {
     static ɵinj: i0.ɵɵInjectorDeclaration<DragDropModule>;
 }
 
-export { CDK_DRAG_CONFIG, CDK_DRAG_HANDLE, CDK_DRAG_PARENT, CDK_DRAG_PLACEHOLDER, CDK_DRAG_PREVIEW, CDK_DROP_LIST, CDK_DROP_LIST_GROUP, CdkDrag, type CdkDragDrop, type CdkDragEnd, type CdkDragEnter, type CdkDragExit, CdkDragHandle, type CdkDragMove, CdkDragPlaceholder, CdkDragPreview, type CdkDragRelease, type CdkDragSortEvent, type CdkDragStart, CdkDropList, CdkDropListGroup, type DragAxis, type DragConstrainPosition, DragDrop, type DragDropConfig, DragDropModule, DragDropRegistry, DragRef, type DragRefConfig, type DragStartDelay, type DropListOrientation, DropListRef, type Point, type PreviewContainer, copyArrayItem, moveItemInArray, transferArrayItem };
+export { CDK_DRAG_CONFIG, CDK_DRAG_HANDLE, CDK_DRAG_PARENT, CDK_DRAG_PLACEHOLDER, CDK_DRAG_PREVIEW, CDK_DROP_LIST, CDK_DROP_LIST_GROUP, CdkDrag, CdkDragHandle, CdkDragPlaceholder, CdkDragPreview, CdkDropList, CdkDropListGroup, DragDrop, DragDropModule, DragDropRegistry, DragRef, DropListRef, copyArrayItem, moveItemInArray, transferArrayItem };
+export type { CdkDragDrop, CdkDragEnd, CdkDragEnter, CdkDragExit, CdkDragMove, CdkDragRelease, CdkDragSortEvent, CdkDragStart, DragAxis, DragConstrainPosition, DragDropConfig, DragRefConfig, DragStartDelay, DropListOrientation, Point, PreviewContainer };

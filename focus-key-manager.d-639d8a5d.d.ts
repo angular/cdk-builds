@@ -30,4 +30,5 @@ declare class FocusKeyManager<T> extends ListKeyManager<FocusableOption & T> {
     setActiveItem(item: T): void;
 }
 
-export { type FocusableOption as F, FocusKeyManager as a };
+export { FocusKeyManager as a };
+export type { FocusableOption as F };

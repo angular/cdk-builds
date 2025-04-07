@@ -403,4 +403,5 @@ declare const DIALOG_DATA: InjectionToken<any>;
 /** Injection token that can be used to provide default options for the dialog module. */
 declare const DEFAULT_DIALOG_CONFIG: InjectionToken<DialogConfig<unknown, unknown, _angular_cdk_portal.BasePortalOutlet>>;
 
-export { type AutoFocusTarget, CdkDialogContainer, DEFAULT_DIALOG_CONFIG, DIALOG_DATA, DIALOG_SCROLL_STRATEGY, Dialog, type DialogCloseOptions, DialogConfig, DialogModule, DialogRef, type DialogRole, throwDialogContentAlreadyAttachedError };
+export { CdkDialogContainer, DEFAULT_DIALOG_CONFIG, DIALOG_DATA, DIALOG_SCROLL_STRATEGY, Dialog, DialogConfig, DialogModule, DialogRef, throwDialogContentAlreadyAttachedError };
+export type { AutoFocusTarget, DialogCloseOptions, DialogRole };

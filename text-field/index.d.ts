@@ -152,4 +152,5 @@ declare class TextFieldModule {
     static ɵinj: i0.ɵɵInjectorDeclaration<TextFieldModule>;
 }
 
-export { type AutofillEvent, AutofillMonitor, CdkAutofill, CdkTextareaAutosize, TextFieldModule };
+export { AutofillMonitor, CdkAutofill, CdkTextareaAutosize, TextFieldModule };
+export type { AutofillEvent };

@@ -206,4 +206,5 @@ declare class CdkMonitorFocus implements AfterViewInit, OnDestroy {
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMonitorFocus, "[cdkMonitorElementFocus], [cdkMonitorSubtreeFocus]", ["cdkMonitorFocus"], {}, { "cdkFocusChange": "cdkFocusChange"; }, never, never, true, never>;
 }
 
-export { CdkMonitorFocus as C, type FocusOrigin as F, type FocusOptions as a, FocusMonitorDetectionMode as b, type FocusMonitorOptions as c, FOCUS_MONITOR_DEFAULT_OPTIONS as d, FocusMonitor as e };
+export { CdkMonitorFocus as C, FocusMonitorDetectionMode as b, FOCUS_MONITOR_DEFAULT_OPTIONS as d, FocusMonitor as e };
+export type { FocusOrigin as F, FocusOptions as a, FocusMonitorOptions as c };

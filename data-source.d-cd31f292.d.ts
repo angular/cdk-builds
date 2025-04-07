@@ -39,4 +39,5 @@ declare abstract class DataSource<T> {
 /** Checks whether an object is a data source. */
 declare function isDataSource(value: any): value is DataSource<any>;
 
-export { type CollectionViewer as C, DataSource as D, type ListRange as L, isDataSource as i };
+export { DataSource as D, isDataSource as i };
+export type { CollectionViewer as C, ListRange as L };

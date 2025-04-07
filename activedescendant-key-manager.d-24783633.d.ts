@@ -28,4 +28,5 @@ declare class ActiveDescendantKeyManager<T> extends ListKeyManager<Highlightable
     setActiveItem(item: T): void;
 }
 
-export { ActiveDescendantKeyManager as A, type Highlightable as H };
+export { ActiveDescendantKeyManager as A };
+export type { Highlightable as H };

@@ -616,4 +616,5 @@ declare abstract class HarnessEnvironment<E> implements HarnessLoader, LocatorFa
     private _getQueryResultForElement;
 }
 
-export { type AsyncFactoryFn as A, type BaseHarnessFilters as B, ComponentHarness as C, type EventData as E, type HarnessQuery as H, type LocatorFnResult as L, type ModifierKeys as M, TestKey as T, type AsyncPredicate as a, type AsyncOptionPredicate as b, type HarnessLoader as c, type LocatorFactory as d, ContentContainerComponentHarness as e, type ComponentHarnessConstructor as f, HarnessPredicate as g, HarnessEnvironment as h, type TestElement as i, type TextOptions as j, type ElementDimensions as k };
+export { ComponentHarness as C, TestKey as T, ContentContainerComponentHarness as e, HarnessPredicate as g, HarnessEnvironment as h };
+export type { AsyncFactoryFn as A, BaseHarnessFilters as B, EventData as E, HarnessQuery as H, LocatorFnResult as L, ModifierKeys as M, AsyncPredicate as a, AsyncOptionPredicate as b, HarnessLoader as c, LocatorFactory as d, ComponentHarnessConstructor as f, TestElement as i, TextOptions as j, ElementDimensions as k };

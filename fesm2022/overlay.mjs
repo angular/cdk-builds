@@ -1,22 +1,22 @@
-import { b as OverlayContainer } from './overlay-module-778cde6a.mjs';
-export { B as BlockScrollStrategy, f as CdkConnectedOverlay, C as CdkOverlayOrigin, m as CloseScrollStrategy, j as ConnectedOverlayPositionChange, h as ConnectionPositionPair, F as FlexibleConnectedPositionStrategy, G as GlobalPositionStrategy, N as NoopScrollStrategy, a as Overlay, c as OverlayConfig, b as OverlayContainer, o as OverlayKeyboardDispatcher, d as OverlayModule, n as OverlayOutsideClickDispatcher, g as OverlayPositionBuilder, O as OverlayRef, R as RepositionScrollStrategy, e as STANDARD_DROPDOWN_ADJACENT_POSITIONS, S as STANDARD_DROPDOWN_BELOW_POSITIONS, l as ScrollStrategyOptions, i as ScrollingVisibility, k as validateHorizontalPosition, v as validateVerticalPosition } from './overlay-module-778cde6a.mjs';
+import { b as OverlayContainer } from './overlay-module-5d8d15be.mjs';
+export { B as BlockScrollStrategy, f as CdkConnectedOverlay, C as CdkOverlayOrigin, m as CloseScrollStrategy, j as ConnectedOverlayPositionChange, h as ConnectionPositionPair, F as FlexibleConnectedPositionStrategy, G as GlobalPositionStrategy, N as NoopScrollStrategy, a as Overlay, c as OverlayConfig, b as OverlayContainer, o as OverlayKeyboardDispatcher, d as OverlayModule, n as OverlayOutsideClickDispatcher, g as OverlayPositionBuilder, O as OverlayRef, R as RepositionScrollStrategy, e as STANDARD_DROPDOWN_ADJACENT_POSITIONS, S as STANDARD_DROPDOWN_BELOW_POSITIONS, l as ScrollStrategyOptions, i as ScrollingVisibility, k as validateHorizontalPosition, v as validateVerticalPosition } from './overlay-module-5d8d15be.mjs';
 import * as i0 from '@angular/core';
 import { inject, RendererFactory2, Injectable } from '@angular/core';
-export { b as CdkScrollable, S as ScrollDispatcher, V as ViewportRuler, c as ɵɵCdkFixedSizeVirtualScroll, C as ɵɵCdkScrollableModule, d as ɵɵCdkVirtualForOf, e as ɵɵCdkVirtualScrollViewport, g as ɵɵCdkVirtualScrollableElement, f as ɵɵCdkVirtualScrollableWindow } from './scrolling-module-7394419e.mjs';
-export { D as ɵɵDir } from './bidi-module-bd809f3d.mjs';
+export { b as CdkScrollable, S as ScrollDispatcher, V as ViewportRuler, c as ɵɵCdkFixedSizeVirtualScroll, C as ɵɵCdkScrollableModule, d as ɵɵCdkVirtualForOf, e as ɵɵCdkVirtualScrollViewport, g as ɵɵCdkVirtualScrollableElement, f as ɵɵCdkVirtualScrollableWindow } from './scrolling-module-db09fe12.mjs';
+export { D as ɵɵDir } from './bidi-module-47619e0e.mjs';
 import '@angular/common';
-import './platform-fd50034d.mjs';
+import './platform-c1b1bdd7.mjs';
 import './shadow-dom-318658ae.mjs';
 import './test-environment-f6f8bc13.mjs';
-import './style-loader-902ffada.mjs';
+import './style-loader-a65409b0.mjs';
 import 'rxjs';
 import './css-pixel-value-5d0cae55.mjs';
 import './array-6239d2f8.mjs';
 import './scrolling-59340c46.mjs';
 import 'rxjs/operators';
-import './portal-directives-26ab1686.mjs';
-import './directionality-d3343e21.mjs';
-import './id-generator-c0f67d1b.mjs';
+import './portal-directives-6b062ca2.mjs';
+import './directionality-3790eff7.mjs';
+import './id-generator-a301ed62.mjs';
 import './keycodes-0e4398c6.mjs';
 import './modifiers-3e8908bb.mjs';
 import './element-15999318.mjs';
@@ -89,10 +89,10 @@ class FullscreenOverlayContainer extends OverlayContainer {
             _document.msFullscreenElement ||
             null);
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.4", ngImport: i0, type: FullscreenOverlayContainer, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.0.0-next.4", ngImport: i0, type: FullscreenOverlayContainer, providedIn: 'root' });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: FullscreenOverlayContainer, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: FullscreenOverlayContainer, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.4", ngImport: i0, type: FullscreenOverlayContainer, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: FullscreenOverlayContainer, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: () => [] });

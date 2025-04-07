@@ -29,4 +29,5 @@ declare class UniqueSelectionDispatcher implements OnDestroy {
     static ɵprov: i0.ɵɵInjectableDeclaration<UniqueSelectionDispatcher>;
 }
 
-export { UniqueSelectionDispatcher as U, type UniqueSelectionDispatcherListener as a };
+export { UniqueSelectionDispatcher as U };
+export type { UniqueSelectionDispatcherListener as a };

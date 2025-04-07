@@ -349,4 +349,5 @@ declare class CdkListboxModule {
     static ɵinj: i0.ɵɵInjectorDeclaration<CdkListboxModule>;
 }
 
-export { CdkListbox, CdkListboxModule, CdkOption, type ListboxValueChangeEvent };
+export { CdkListbox, CdkListboxModule, CdkOption };
+export type { ListboxValueChangeEvent };

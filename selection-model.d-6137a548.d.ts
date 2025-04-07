@@ -108,4 +108,5 @@ interface SelectionChange<T> {
  */
 declare function getMultipleValuesInSingleSelectionError(): Error;
 
-export { SelectionModel as S, type SelectionChange as a, getMultipleValuesInSingleSelectionError as g };
+export { SelectionModel as S, getMultipleValuesInSingleSelectionError as g };
+export type { SelectionChange as a };

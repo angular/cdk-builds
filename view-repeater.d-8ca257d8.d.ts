@@ -85,4 +85,5 @@ interface _ViewRepeater<T, R, C extends _ViewRepeaterItemContext<T>> {
  */
 declare const _VIEW_REPEATER_STRATEGY: InjectionToken<_ViewRepeater<unknown, unknown, _ViewRepeaterItemContext<unknown>>>;
 
-export { type _ViewRepeaterItemContext as _, type _ViewRepeater as a, type _ViewRepeaterItemContextFactory as b, type _ViewRepeaterItemValueResolver as c, type _ViewRepeaterItemChanged as d, type _ViewRepeaterItemInsertArgs as e, _ViewRepeaterOperation as f, type _ViewRepeaterItemChange as g, _VIEW_REPEATER_STRATEGY as h };
+export { _ViewRepeaterOperation as f, _VIEW_REPEATER_STRATEGY as h };
+export type { _ViewRepeaterItemContext as _, _ViewRepeater as a, _ViewRepeaterItemContextFactory as b, _ViewRepeaterItemValueResolver as c, _ViewRepeaterItemChanged as d, _ViewRepeaterItemInsertArgs as e, _ViewRepeaterItemChange as g };

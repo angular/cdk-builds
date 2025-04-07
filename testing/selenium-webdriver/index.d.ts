@@ -146,4 +146,5 @@ declare class SeleniumWebDriverHarnessEnvironment extends HarnessEnvironment<() 
     protected getAllRawElements(selector: string): Promise<(() => webdriver.WebElement)[]>;
 }
 
-export { SeleniumWebDriverElement, SeleniumWebDriverHarnessEnvironment, type WebDriverHarnessEnvironmentOptions, waitForAngularReady };
+export { SeleniumWebDriverElement, SeleniumWebDriverHarnessEnvironment, waitForAngularReady };
+export type { WebDriverHarnessEnvironmentOptions };

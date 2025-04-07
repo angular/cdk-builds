@@ -224,4 +224,5 @@ declare class CdkStepperModule {
     static ɵinj: i0.ɵɵInjectorDeclaration<CdkStepperModule>;
 }
 
-export { CdkStep, CdkStepHeader, CdkStepLabel, CdkStepper, CdkStepperModule, CdkStepperNext, CdkStepperPrevious, STEPPER_GLOBAL_OPTIONS, STEP_STATE, type StepContentPositionState, type StepState, type StepperOptions, type StepperOrientation, StepperSelectionEvent };
+export { CdkStep, CdkStepHeader, CdkStepLabel, CdkStepper, CdkStepperModule, CdkStepperNext, CdkStepperPrevious, STEPPER_GLOBAL_OPTIONS, STEP_STATE, StepperSelectionEvent };
+export type { StepContentPositionState, StepState, StepperOptions, StepperOrientation };

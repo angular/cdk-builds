@@ -97,4 +97,5 @@ declare class ClipboardModule {
     static ɵinj: i0.ɵɵInjectorDeclaration<ClipboardModule>;
 }
 
-export { CDK_COPY_TO_CLIPBOARD_CONFIG, CdkCopyToClipboard, type CdkCopyToClipboardConfig, Clipboard, ClipboardModule, PendingCopy };
+export { CDK_COPY_TO_CLIPBOARD_CONFIG, CdkCopyToClipboard, Clipboard, ClipboardModule, PendingCopy };
+export type { CdkCopyToClipboardConfig };

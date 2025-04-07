@@ -328,4 +328,5 @@ declare class FullscreenOverlayContainer extends OverlayContainer implements OnD
     static ɵprov: i0.ɵɵInjectableDeclaration<FullscreenOverlayContainer>;
 }
 
-export { BlockScrollStrategy, CloseScrollStrategy, FullscreenOverlayContainer, GlobalPositionStrategy, NoopScrollStrategy, Overlay, OverlayPositionBuilder, RepositionScrollStrategy, type RepositionScrollStrategyConfig, ScrollStrategyOptions };
+export { BlockScrollStrategy, CloseScrollStrategy, FullscreenOverlayContainer, GlobalPositionStrategy, NoopScrollStrategy, Overlay, OverlayPositionBuilder, RepositionScrollStrategy, ScrollStrategyOptions };
+export type { RepositionScrollStrategyConfig };

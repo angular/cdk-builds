@@ -54,4 +54,5 @@ declare class ViewportRuler implements OnDestroy {
     static ɵprov: i0.ɵɵInjectableDeclaration<ViewportRuler>;
 }
 
-export { DEFAULT_RESIZE_TIME as D, ViewportRuler as V, type ViewportScrollPosition as a };
+export { DEFAULT_RESIZE_TIME as D, ViewportRuler as V };
+export type { ViewportScrollPosition as a };

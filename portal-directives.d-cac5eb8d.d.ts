@@ -207,4 +207,5 @@ declare class PortalModule {
     static ɵinj: i0.ɵɵInjectorDeclaration<PortalModule>;
 }
 
-export { BasePortalOutlet as B, CdkPortalOutlet as C, DomPortal as D, PortalModule as P, TemplatePortal as T, ComponentPortal as a, type ComponentType as b, CdkPortal as c, TemplatePortalDirective as d, PortalHostDirective as e, type PortalOutlet as f, Portal as g, type CdkPortalOutletAttachedRef as h };
+export { BasePortalOutlet as B, CdkPortalOutlet as C, DomPortal as D, PortalModule as P, TemplatePortal as T, ComponentPortal as a, CdkPortal as c, TemplatePortalDirective as d, PortalHostDirective as e, Portal as g };
+export type { ComponentType as b, PortalOutlet as f, CdkPortalOutletAttachedRef as h };

@@ -1,13 +1,13 @@
-export { C as CdkMonitorFocus, c as FOCUS_MONITOR_DEFAULT_OPTIONS, d as FocusMonitor, F as FocusMonitorDetectionMode, a as INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS, b as INPUT_MODALITY_DETECTOR_OPTIONS, I as InputModalityDetector } from './focus-monitor-3464a8c8.mjs';
-import { F as FocusTrap, I as InteractivityChecker } from './a11y-module-f780e811.mjs';
-export { A as A11yModule, d as CdkAriaLive, C as CdkTrapFocus, F as FocusTrap, b as FocusTrapFactory, a as HighContrastMode, H as HighContrastModeDetector, I as InteractivityChecker, c as IsFocusableConfig, g as LIVE_ANNOUNCER_DEFAULT_OPTIONS, e as LIVE_ANNOUNCER_ELEMENT_TOKEN, f as LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, L as LiveAnnouncer } from './a11y-module-f780e811.mjs';
-export { _ as _IdGenerator } from './id-generator-c0f67d1b.mjs';
+export { C as CdkMonitorFocus, c as FOCUS_MONITOR_DEFAULT_OPTIONS, d as FocusMonitor, F as FocusMonitorDetectionMode, a as INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS, b as INPUT_MODALITY_DETECTOR_OPTIONS, I as InputModalityDetector } from './focus-monitor-392c3a24.mjs';
+import { F as FocusTrap, I as InteractivityChecker } from './a11y-module-6de1405e.mjs';
+export { A as A11yModule, d as CdkAriaLive, C as CdkTrapFocus, F as FocusTrap, b as FocusTrapFactory, a as HighContrastMode, H as HighContrastModeDetector, I as InteractivityChecker, c as IsFocusableConfig, g as LIVE_ANNOUNCER_DEFAULT_OPTIONS, e as LIVE_ANNOUNCER_ELEMENT_TOKEN, f as LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, L as LiveAnnouncer } from './a11y-module-6de1405e.mjs';
+export { _ as _IdGenerator } from './id-generator-a301ed62.mjs';
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
 import { inject, APP_ID, Injectable, InjectionToken, NgZone, Injector } from '@angular/core';
-import { P as Platform } from './platform-fd50034d.mjs';
-import { _ as _CdkPrivateStyleLoader } from './style-loader-902ffada.mjs';
-import { _ as _VisuallyHiddenLoader } from './visually-hidden-cfa9d7fd.mjs';
+import { P as Platform } from './platform-c1b1bdd7.mjs';
+import { _ as _CdkPrivateStyleLoader } from './style-loader-a65409b0.mjs';
+import { _ as _VisuallyHiddenLoader } from './visually-hidden-2dbd82d0.mjs';
 export { A as ActiveDescendantKeyManager } from './activedescendant-key-manager-f0c079ca.mjs';
 export { F as FocusKeyManager } from './focus-key-manager-ff488563.mjs';
 export { L as ListKeyManager } from './list-key-manager-f9c3e90c.mjs';
@@ -20,9 +20,9 @@ import './keycodes-0e4398c6.mjs';
 import './shadow-dom-318658ae.mjs';
 import './passive-listeners-93cf8be8.mjs';
 import './element-15999318.mjs';
-import './breakpoints-observer-af989fcc.mjs';
+import './breakpoints-observer-d1b95318.mjs';
 import './array-6239d2f8.mjs';
-import './observe-content-f2aba0c9.mjs';
+import './observe-content-ec102cc9.mjs';
 import './typeahead-0113d27c.mjs';
 import './modifiers-3e8908bb.mjs';
 import './observable-3cba8a1c.mjs';
@@ -260,10 +260,10 @@ class AriaDescriber {
     _isElementNode(element) {
         return element.nodeType === this._document.ELEMENT_NODE;
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.4", ngImport: i0, type: AriaDescriber, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.0.0-next.4", ngImport: i0, type: AriaDescriber, providedIn: 'root' });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: AriaDescriber, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: AriaDescriber, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.4", ngImport: i0, type: AriaDescriber, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: AriaDescriber, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: () => [] });
@@ -495,10 +495,10 @@ class FocusTrapManager {
             }
         }
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.4", ngImport: i0, type: FocusTrapManager, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.0.0-next.4", ngImport: i0, type: FocusTrapManager, providedIn: 'root' });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: FocusTrapManager, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: FocusTrapManager, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.4", ngImport: i0, type: FocusTrapManager, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: FocusTrapManager, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });
@@ -526,10 +526,10 @@ class ConfigurableFocusTrapFactory {
         }
         return new ConfigurableFocusTrap(element, this._checker, this._ngZone, this._document, this._focusTrapManager, this._inertStrategy, configObject, this._injector);
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.4", ngImport: i0, type: ConfigurableFocusTrapFactory, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.0.0-next.4", ngImport: i0, type: ConfigurableFocusTrapFactory, providedIn: 'root' });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: ConfigurableFocusTrapFactory, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: ConfigurableFocusTrapFactory, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.4", ngImport: i0, type: ConfigurableFocusTrapFactory, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: ConfigurableFocusTrapFactory, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: () => [] });

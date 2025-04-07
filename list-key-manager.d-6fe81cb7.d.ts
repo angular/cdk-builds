@@ -161,4 +161,5 @@ declare class ListKeyManager<T extends ListKeyManagerOption> {
     private _itemsChanged;
 }
 
-export { type ListKeyManagerOption as L, type ListKeyManagerModifierKey as a, ListKeyManager as b };
+export { ListKeyManager as b };
+export type { ListKeyManagerOption as L, ListKeyManagerModifierKey as a };
