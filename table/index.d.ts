@@ -488,7 +488,7 @@ declare class CdkTable<T> implements AfterContentInit, AfterContentChecked, Coll
     protected readonly _stickyPositioningListener: StickyPositioningListener;
     private _document;
     /** Latest data provided by the data source. */
-    protected _data: readonly T[];
+    protected _data: readonly T[] | undefined;
     /** Subject that emits when the component has been destroyed. */
     private readonly _onDestroy;
     /** List of the rendered rows as identified by their `RenderRow` object. */
