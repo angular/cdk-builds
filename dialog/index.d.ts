@@ -149,7 +149,7 @@ declare function throwDialogContentAlreadyAttachedError(): void;
  * @docs-private
  */
 declare class CdkDialogContainer<C extends DialogConfig = DialogConfig> extends BasePortalOutlet implements OnDestroy {
-    protected _elementRef: ElementRef<any>;
+    protected _elementRef: ElementRef<HTMLElement>;
     protected _focusTrapFactory: FocusTrapFactory;
     readonly _config: C;
     private _interactivityChecker;
@@ -225,7 +225,7 @@ declare class CdkDialogContainer<C extends DialogConfig = DialogConfig> extends 
      * Moves the focus inside the focus trap. When autoFocus is not set to 'dialog', if focus
      * cannot be moved then focus will go to the dialog container.
      */
-    protected _trapFocus(): void;
+    protected _trapFocus(options?: FocusOptions): void;
     /** Restores focus to the element that was focused before the dialog opened. */
     private _restoreFocus;
     /** Focuses the dialog container. */
