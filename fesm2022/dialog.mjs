@@ -302,7 +302,7 @@ class CdkDialogContainer extends BasePortalOutlet {
      * Moves the focus inside the focus trap. When autoFocus is not set to 'dialog', if focus
      * cannot be moved then focus will go to the dialog container.
      */
-    _trapFocus() {
+    _trapFocus(options) {
         if (this._isDestroyed) {
             return;
         }
@@ -320,23 +320,23 @@ class CdkDialogContainer extends BasePortalOutlet {
                     // if the focus isn't inside the dialog already, because it's possible that the consumer
                     // turned off `autoFocus` in order to move focus themselves.
                     if (!this._containsFocus()) {
-                        element.focus();
+                        element.focus(options);
                     }
                     break;
                 case true:
                 case 'first-tabbable':
-                    const focusedSuccessfully = this._focusTrap?.focusInitialElement();
+                    const focusedSuccessfully = this._focusTrap?.focusInitialElement(options);
                     // If we weren't able to find a focusable element in the dialog, then focus the dialog
                     // container instead.
                     if (!focusedSuccessfully) {
-                        this._focusDialogContainer();
+                        this._focusDialogContainer(options);
                     }
                     break;
                 case 'first-heading':
-                    this._focusByCssSelector('h1, h2, h3, h4, h5, h6, [role="heading"]');
+                    this._focusByCssSelector('h1, h2, h3, h4, h5, h6, [role="heading"]', options);
                     break;
                 default:
-                    this._focusByCssSelector(this._config.autoFocus);
+                    this._focusByCssSelector(this._config.autoFocus, options);
                     break;
             }
         }, { injector: this._injector });
@@ -382,10 +382,10 @@ class CdkDialogContainer extends BasePortalOutlet {
         }
     }
     /** Focuses the dialog container. */
-    _focusDialogContainer() {
+    _focusDialogContainer(options) {
         // Note that there is no focus method when rendering on the server.
         if (this._elementRef.nativeElement.focus) {
-            this._elementRef.nativeElement.focus();
+            this._elementRef.nativeElement.focus(options);
         }
     }
     /** Returns whether focus is inside the dialog. */
