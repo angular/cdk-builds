@@ -1,8 +1,8 @@
 import { flush } from '@angular/core/testing';
 import { takeWhile } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
-import { g as getNoKeysSpecifiedError, _ as _getTextWithExcludedElements, T as TestKey, b as HarnessEnvironment, h as handleAutoChangeDetectionStatus, s as stopHandlingAutoChangeDetectionStatus } from '../text-filtering-55cbd0d9.mjs';
-import { aV as PERIOD, B as BACKSPACE, T as TAB, h as ENTER, S as SHIFT, C as CONTROL, A as ALT, e as ESCAPE, b as PAGE_UP, P as PAGE_DOWN, E as END, H as HOME, L as LEFT_ARROW, U as UP_ARROW, R as RIGHT_ARROW, D as DOWN_ARROW, I as INSERT, n as DELETE, au as F1, av as F2, aw as F3, ax as F4, ay as F5, az as F6, aA as F7, aB as F8, aC as F9, aD as F10, aE as F11, aF as F12, a as META, aT as COMMA } from '../keycodes-0e4398c6.mjs';
+import { getNoKeysSpecifiedError, _getTextWithExcludedElements, TestKey, HarnessEnvironment, handleAutoChangeDetectionStatus, stopHandlingAutoChangeDetectionStatus } from '../testing.mjs';
+import { PERIOD, COMMA, META, F12, F11, F10, F9, F8, F7, F6, F5, F4, F3, F2, F1, DELETE, INSERT, DOWN_ARROW, RIGHT_ARROW, UP_ARROW, LEFT_ARROW, HOME, END, PAGE_DOWN, PAGE_UP, ESCAPE, ALT, CONTROL, SHIFT, ENTER, TAB, BACKSPACE } from '../keycodes-DPWmI2Ix.mjs';
 
 /** Unique symbol that is used to patch a property to a proxy zone. */
 const stateObservableSymbol = Symbol('ProxyZone_PATCHED#stateObservable');

@@ -1,27 +1,27 @@
-import { b as OverlayContainer } from './overlay-module-b66614f1.mjs';
-export { B as BlockScrollStrategy, f as CdkConnectedOverlay, C as CdkOverlayOrigin, m as CloseScrollStrategy, j as ConnectedOverlayPositionChange, h as ConnectionPositionPair, F as FlexibleConnectedPositionStrategy, G as GlobalPositionStrategy, N as NoopScrollStrategy, a as Overlay, c as OverlayConfig, b as OverlayContainer, o as OverlayKeyboardDispatcher, d as OverlayModule, n as OverlayOutsideClickDispatcher, g as OverlayPositionBuilder, O as OverlayRef, R as RepositionScrollStrategy, e as STANDARD_DROPDOWN_ADJACENT_POSITIONS, S as STANDARD_DROPDOWN_BELOW_POSITIONS, l as ScrollStrategyOptions, i as ScrollingVisibility, k as validateHorizontalPosition, v as validateVerticalPosition } from './overlay-module-b66614f1.mjs';
+import { OverlayContainer } from './overlay-module-j06tupc_.mjs';
+export { BlockScrollStrategy, CdkConnectedOverlay, CdkOverlayOrigin, CloseScrollStrategy, ConnectedOverlayPositionChange, ConnectionPositionPair, FlexibleConnectedPositionStrategy, GlobalPositionStrategy, NoopScrollStrategy, Overlay, OverlayConfig, OverlayKeyboardDispatcher, OverlayModule, OverlayOutsideClickDispatcher, OverlayPositionBuilder, OverlayRef, RepositionScrollStrategy, STANDARD_DROPDOWN_ADJACENT_POSITIONS, STANDARD_DROPDOWN_BELOW_POSITIONS, ScrollStrategyOptions, ScrollingVisibility, validateHorizontalPosition, validateVerticalPosition } from './overlay-module-j06tupc_.mjs';
 import * as i0 from '@angular/core';
 import { inject, RendererFactory2, Injectable } from '@angular/core';
-export { b as CdkScrollable, S as ScrollDispatcher, V as ViewportRuler, c as ɵɵCdkFixedSizeVirtualScroll, C as ɵɵCdkScrollableModule, d as ɵɵCdkVirtualForOf, e as ɵɵCdkVirtualScrollViewport, g as ɵɵCdkVirtualScrollableElement, f as ɵɵCdkVirtualScrollableWindow } from './scrolling-module-db09fe12.mjs';
-export { D as ɵɵDir } from './bidi-module-47619e0e.mjs';
+export { CdkScrollable, ScrollDispatcher, ViewportRuler, CdkFixedSizeVirtualScroll as ɵɵCdkFixedSizeVirtualScroll, CdkScrollableModule as ɵɵCdkScrollableModule, CdkVirtualForOf as ɵɵCdkVirtualForOf, CdkVirtualScrollViewport as ɵɵCdkVirtualScrollViewport, CdkVirtualScrollableElement as ɵɵCdkVirtualScrollableElement, CdkVirtualScrollableWindow as ɵɵCdkVirtualScrollableWindow } from './scrolling.mjs';
+export { Dir as ɵɵDir } from './bidi.mjs';
 import '@angular/common';
-import './platform-c1b1bdd7.mjs';
-import './shadow-dom-318658ae.mjs';
-import './test-environment-f6f8bc13.mjs';
-import './style-loader-a65409b0.mjs';
+import './platform-BInyKIh1.mjs';
+import './shadow-dom-DFvX9W95.mjs';
+import './test-environment-BgaaXvCA.mjs';
+import './style-loader-DpEDdstc.mjs';
 import 'rxjs';
-import './css-pixel-value-5d0cae55.mjs';
-import './array-6239d2f8.mjs';
-import './scrolling-59340c46.mjs';
+import './css-pixel-value-C1yoKJ7R.mjs';
+import './array-Hg8isvLj.mjs';
+import './scrolling-BXVcIfjZ.mjs';
 import 'rxjs/operators';
-import './portal-directives-6b062ca2.mjs';
-import './directionality-3790eff7.mjs';
-import './id-generator-a301ed62.mjs';
-import './keycodes-0e4398c6.mjs';
-import './modifiers-3e8908bb.mjs';
-import './element-15999318.mjs';
-import './recycle-view-repeater-strategy-0f32b0a8.mjs';
-import './data-source-d79c6e09.mjs';
+import './portal.mjs';
+import './directionality-6lVHj23y.mjs';
+import './id-generator-B33AfkWd.mjs';
+import './keycodes-DPWmI2Ix.mjs';
+import './keycodes.mjs';
+import './element-CpqV8p-X.mjs';
+import './recycle-view-repeater-strategy-Ce0p4WhD.mjs';
+import './data-source-CL6Fasig.mjs';
 
 /**
  * Alternative to OverlayContainer that supports correct displaying of overlay elements in
@@ -97,5 +97,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", 
             args: [{ providedIn: 'root' }]
         }], ctorParameters: () => [] });
 
-export { FullscreenOverlayContainer };
+export { FullscreenOverlayContainer, OverlayContainer };
 //# sourceMappingURL=overlay.mjs.map

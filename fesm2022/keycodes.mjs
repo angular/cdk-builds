@@ -1,3 +1,15 @@
-export { c as A, A as ALT, aX as APOSTROPHE, w as AT_SIGN, x as B, a_ as BACKSLASH, B as BACKSPACE, y as C, j as CAPS_LOCK, a$ as CLOSE_SQUARE_BRACKET, aT as COMMA, ae as CONTEXT_MENU, C as CONTROL, z as D, aU as DASH, n as DELETE, D as DOWN_ARROW, G as E, t as EIGHT, E as END, h as ENTER, aS as EQUALS, e as ESCAPE, J as F, au as F1, aD as F10, aE as F11, aF as F12, av as F2, aw as F3, ax as F4, ay as F5, az as F6, aA as F7, aB as F8, aC as F9, v as FF_EQUALS, aJ as FF_MINUS, aN as FF_MUTE, u as FF_SEMICOLON, aO as FF_VOLUME_DOWN, aQ as FF_VOLUME_UP, aI as FIRST_MEDIA, q as FIVE, F as FOUR, K as G, V as H, H as HOME, W as I, I as INSERT, X as J, Y as K, _ as L, aP as LAST_MEDIA, L as LEFT_ARROW, $ as M, f as MAC_ENTER, M as MAC_META, ac as MAC_WK_CMD_LEFT, ad as MAC_WK_CMD_RIGHT, a as META, aK as MUTE, a0 as N, N as NINE, at as NUMPAD_DIVIDE, an as NUMPAD_EIGHT, ak as NUMPAD_FIVE, aj as NUMPAD_FOUR, ar as NUMPAD_MINUS, ap as NUMPAD_MULTIPLY, ao as NUMPAD_NINE, ag as NUMPAD_ONE, as as NUMPAD_PERIOD, aq as NUMPAD_PLUS, am as NUMPAD_SEVEN, al as NUMPAD_SIX, ai as NUMPAD_THREE, ah as NUMPAD_TWO, af as NUMPAD_ZERO, g as NUM_CENTER, aG as NUM_LOCK, a1 as O, O as ONE, aZ as OPEN_SQUARE_BRACKET, a2 as P, P as PAGE_DOWN, b as PAGE_UP, i as PAUSE, aV as PERIOD, l as PLUS_SIGN, m as PRINT_SCREEN, a3 as Q, Q as QUESTION_MARK, a4 as R, R as RIGHT_ARROW, a5 as S, aH as SCROLL_LOCK, aR as SEMICOLON, s as SEVEN, S as SHIFT, b0 as SINGLE_QUOTE, r as SIX, aW as SLASH, k as SPACE, a6 as T, T as TAB, p as THREE, aY as TILDE, o as TWO, a7 as U, U as UP_ARROW, a8 as V, aL as VOLUME_DOWN, aM as VOLUME_UP, a9 as W, aa as X, ab as Y, Z, d as ZERO } from './keycodes-0e4398c6.mjs';
-export { h as hasModifierKey } from './modifiers-3e8908bb.mjs';
+export { A, ALT, APOSTROPHE, AT_SIGN, B, BACKSLASH, BACKSPACE, C, CAPS_LOCK, CLOSE_SQUARE_BRACKET, COMMA, CONTEXT_MENU, CONTROL, D, DASH, DELETE, DOWN_ARROW, E, EIGHT, END, ENTER, EQUALS, ESCAPE, F, F1, F10, F11, F12, F2, F3, F4, F5, F6, F7, F8, F9, FF_EQUALS, FF_MINUS, FF_MUTE, FF_SEMICOLON, FF_VOLUME_DOWN, FF_VOLUME_UP, FIRST_MEDIA, FIVE, FOUR, G, H, HOME, I, INSERT, J, K, L, LAST_MEDIA, LEFT_ARROW, M, MAC_ENTER, MAC_META, MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, META, MUTE, N, NINE, NUMPAD_DIVIDE, NUMPAD_EIGHT, NUMPAD_FIVE, NUMPAD_FOUR, NUMPAD_MINUS, NUMPAD_MULTIPLY, NUMPAD_NINE, NUMPAD_ONE, NUMPAD_PERIOD, NUMPAD_PLUS, NUMPAD_SEVEN, NUMPAD_SIX, NUMPAD_THREE, NUMPAD_TWO, NUMPAD_ZERO, NUM_CENTER, NUM_LOCK, O, ONE, OPEN_SQUARE_BRACKET, P, PAGE_DOWN, PAGE_UP, PAUSE, PERIOD, PLUS_SIGN, PRINT_SCREEN, Q, QUESTION_MARK, R, RIGHT_ARROW, S, SCROLL_LOCK, SEMICOLON, SEVEN, SHIFT, SINGLE_QUOTE, SIX, SLASH, SPACE, T, TAB, THREE, TILDE, TWO, U, UP_ARROW, V, VOLUME_DOWN, VOLUME_UP, W, X, Y, Z, ZERO } from './keycodes-DPWmI2Ix.mjs';
+
+/**
+ * Checks whether a modifier key is pressed.
+ * @param event Event to be checked.
+ */
+function hasModifierKey(event, ...modifiers) {
+    if (modifiers.length) {
+        return modifiers.some(modifier => event[modifier]);
+    }
+    return event.altKey || event.shiftKey || event.ctrlKey || event.metaKey;
+}
+
+export { hasModifierKey };
 //# sourceMappingURL=keycodes.mjs.map

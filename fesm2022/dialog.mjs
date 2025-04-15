@@ -1,34 +1,34 @@
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { inject, ElementRef, NgZone, Renderer2, ChangeDetectorRef, Injector, afterNextRender, Component, ViewEncapsulation, ChangeDetectionStrategy, ViewChild, InjectionToken, TemplateRef, Injectable, NgModule } from '@angular/core';
-import { B as BasePortalOutlet, C as CdkPortalOutlet, a as ComponentPortal, T as TemplatePortal, P as PortalModule } from './portal-directives-6b062ca2.mjs';
-export { b as ɵɵCdkPortal, C as ɵɵCdkPortalOutlet, d as ɵɵPortalHostDirective, c as ɵɵTemplatePortalDirective } from './portal-directives-6b062ca2.mjs';
-import { b as FocusTrapFactory, I as InteractivityChecker, A as A11yModule } from './a11y-module-6de1405e.mjs';
-import { O as OverlayRef, a as Overlay, b as OverlayContainer, c as OverlayConfig, d as OverlayModule } from './overlay-module-b66614f1.mjs';
-import { d as FocusMonitor } from './focus-monitor-392c3a24.mjs';
-import { P as Platform } from './platform-c1b1bdd7.mjs';
-import { b as _getFocusedElementPierceShadowDom } from './shadow-dom-318658ae.mjs';
+import { inject, ElementRef, NgZone, Renderer2, ChangeDetectorRef, Injector, afterNextRender, ViewChild, ChangeDetectionStrategy, ViewEncapsulation, Component, InjectionToken, TemplateRef, Injectable, NgModule } from '@angular/core';
+import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, TemplatePortal, PortalModule } from './portal.mjs';
+export { CdkPortal as ɵɵCdkPortal, PortalHostDirective as ɵɵPortalHostDirective, TemplatePortalDirective as ɵɵTemplatePortalDirective } from './portal.mjs';
+import { FocusTrapFactory, InteractivityChecker, A11yModule } from './a11y-module-tRUj0Pog.mjs';
+import { OverlayRef, Overlay, OverlayContainer, OverlayConfig, OverlayModule } from './overlay-module-j06tupc_.mjs';
+import { FocusMonitor } from './focus-monitor-BZnK-7fT.mjs';
+import { Platform } from './platform-BInyKIh1.mjs';
+import { _getFocusedElementPierceShadowDom } from './shadow-dom-DFvX9W95.mjs';
 import { Subject, defer, of } from 'rxjs';
-import { e as ESCAPE } from './keycodes-0e4398c6.mjs';
-import { h as hasModifierKey } from './modifiers-3e8908bb.mjs';
+import { ESCAPE } from './keycodes-DPWmI2Ix.mjs';
+import { hasModifierKey } from './keycodes.mjs';
 import { startWith } from 'rxjs/operators';
-import { _ as _IdGenerator } from './id-generator-a301ed62.mjs';
-import { D as Directionality } from './directionality-3790eff7.mjs';
-import './style-loader-a65409b0.mjs';
-import './visually-hidden-2dbd82d0.mjs';
-import './breakpoints-observer-d1b95318.mjs';
-import './array-6239d2f8.mjs';
-import './observe-content-ec102cc9.mjs';
-import './element-15999318.mjs';
-import './test-environment-f6f8bc13.mjs';
-import './css-pixel-value-5d0cae55.mjs';
-import './scrolling-module-db09fe12.mjs';
-import './scrolling-59340c46.mjs';
-import './recycle-view-repeater-strategy-0f32b0a8.mjs';
-import './data-source-d79c6e09.mjs';
-import './bidi-module-47619e0e.mjs';
-import './fake-event-detection-84590b88.mjs';
-import './passive-listeners-93cf8be8.mjs';
+import { _IdGenerator } from './id-generator-B33AfkWd.mjs';
+import { Directionality } from './directionality-6lVHj23y.mjs';
+import './style-loader-DpEDdstc.mjs';
+import './private.mjs';
+import './breakpoints-observer-CsCzbYlX.mjs';
+import './array-Hg8isvLj.mjs';
+import './observers.mjs';
+import './element-CpqV8p-X.mjs';
+import './test-environment-BgaaXvCA.mjs';
+import './css-pixel-value-C1yoKJ7R.mjs';
+import './scrolling.mjs';
+import './scrolling-BXVcIfjZ.mjs';
+import './bidi.mjs';
+import './recycle-view-repeater-strategy-Ce0p4WhD.mjs';
+import './data-source-CL6Fasig.mjs';
+import './fake-event-detection-D0_6qVp2.mjs';
+import './passive-listeners-ZmZRMx8D.mjs';
 
 /** Configuration for opening a modal dialog. */
 class DialogConfig {
@@ -846,5 +846,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", 
                 }]
         }] });
 
-export { CdkDialogContainer, DEFAULT_DIALOG_CONFIG, DIALOG_DATA, DIALOG_SCROLL_STRATEGY, Dialog, DialogConfig, DialogModule, DialogRef, throwDialogContentAlreadyAttachedError };
+export { CdkDialogContainer, DEFAULT_DIALOG_CONFIG, DIALOG_DATA, DIALOG_SCROLL_STRATEGY, Dialog, DialogConfig, DialogModule, DialogRef, throwDialogContentAlreadyAttachedError, CdkPortalOutlet as ɵɵCdkPortalOutlet };
 //# sourceMappingURL=dialog.mjs.map

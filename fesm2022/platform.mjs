@@ -1,10 +1,10 @@
-export { P as Platform } from './platform-c1b1bdd7.mjs';
+export { Platform } from './platform-BInyKIh1.mjs';
 import * as i0 from '@angular/core';
 import { NgModule } from '@angular/core';
-export { n as normalizePassiveListenerOptions, s as supportsPassiveEventListeners } from './passive-listeners-93cf8be8.mjs';
-export { R as RtlScrollAxisType, g as getRtlScrollAxisType, s as supportsScrollBehavior } from './scrolling-59340c46.mjs';
-export { _ as _getEventTarget, b as _getFocusedElementPierceShadowDom, a as _getShadowRoot, c as _supportsShadowDom } from './shadow-dom-318658ae.mjs';
-export { _ as _isTestEnvironment } from './test-environment-f6f8bc13.mjs';
+export { normalizePassiveListenerOptions, supportsPassiveEventListeners } from './passive-listeners-ZmZRMx8D.mjs';
+export { RtlScrollAxisType, getRtlScrollAxisType, supportsScrollBehavior } from './scrolling-BXVcIfjZ.mjs';
+export { _getEventTarget, _getFocusedElementPierceShadowDom, _getShadowRoot, _supportsShadowDom } from './shadow-dom-DFvX9W95.mjs';
+export { _isTestEnvironment } from './test-environment-BgaaXvCA.mjs';
 import '@angular/common';
 
 class PlatformModule {

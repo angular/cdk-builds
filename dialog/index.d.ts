@@ -1,21 +1,21 @@
 import * as i0 from '@angular/core';
 import { ViewContainerRef, Injector, StaticProvider, Type, OnDestroy, ElementRef, NgZone, ChangeDetectorRef, ComponentRef, EmbeddedViewRef, TemplateRef, InjectionToken } from '@angular/core';
-import { F as FocusOrigin } from '../focus-monitor.d-b42086db.js';
-import { a as FocusTrapFactory, h as A11yModule } from '../a11y-module.d-9287508d.js';
-import { B as BasePortalOutlet, C as CdkPortalOutlet, a as ComponentPortal, T as TemplatePortal, D as DomPortal, b as ComponentType, P as PortalModule } from '../portal-directives.d-cac5eb8d.js';
-export { c as ɵɵCdkPortal, C as ɵɵCdkPortalOutlet, e as ɵɵPortalHostDirective, d as ɵɵTemplatePortalDirective } from '../portal-directives.d-cac5eb8d.js';
-import { a as Direction } from '../bidi-module.d-e045bff7.js';
-import { P as PositionStrategy, S as ScrollStrategy, O as OverlayRef, a as OverlayModule } from '../overlay-module.d-7674c06c.js';
+import { FocusOrigin } from '../focus-monitor.d-BBkiOKUH.js';
+import { FocusTrapFactory, A11yModule } from '../a11y-module.d-DrV0SO0k.js';
+import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, TemplatePortal, DomPortal, ComponentType, PortalModule } from '../portal-directives.d-D9c4J36c.js';
+export { CdkPortal as ɵɵCdkPortal, PortalHostDirective as ɵɵPortalHostDirective, TemplatePortalDirective as ɵɵTemplatePortalDirective } from '../portal-directives.d-D9c4J36c.js';
+import { Direction } from '../bidi-module.d-bsVYOt0R.js';
+import { PositionStrategy, ScrollStrategy, OverlayRef, OverlayModule } from '../overlay-module.d-24bhgNtF.js';
 import { Observable, Subject } from 'rxjs';
 import * as _angular_cdk_portal from '@angular/cdk/portal';
-import '../observe-content.d-8b3dea1d.js';
-import '../number-property.d-5998850c.js';
-import '../scrolling-module.d-132f8fdb.js';
-import '../data-source.d-cd31f292.js';
+import '../observers/index.js';
+import '../number-property.d-BzBQchZ2.js';
+import '../scrolling-module.d-CuNwYGVM.js';
+import '../data-source.d-DAIyaEMO.js';
 import '@angular/common';
-import '../viewport-ruler.d-17d129ea.js';
-import '../platform.d-4dc3e073.js';
-import '../style-loader.d-972eab2d.js';
+import '../scrolling/index.js';
+import '../platform.d-cnFZCLss.js';
+import '../style-loader.d-DbvWk0ty.js';
 
 /** Options for where to set focus to automatically on dialog open */
 type AutoFocusTarget = 'dialog' | 'first-tabbable' | 'first-heading';
@@ -403,5 +403,5 @@ declare const DIALOG_DATA: InjectionToken<any>;
 /** Injection token that can be used to provide default options for the dialog module. */
 declare const DEFAULT_DIALOG_CONFIG: InjectionToken<DialogConfig<unknown, unknown, _angular_cdk_portal.BasePortalOutlet>>;
 
-export { CdkDialogContainer, DEFAULT_DIALOG_CONFIG, DIALOG_DATA, DIALOG_SCROLL_STRATEGY, Dialog, DialogConfig, DialogModule, DialogRef, throwDialogContentAlreadyAttachedError };
+export { CdkDialogContainer, DEFAULT_DIALOG_CONFIG, DIALOG_DATA, DIALOG_SCROLL_STRATEGY, Dialog, DialogConfig, DialogModule, DialogRef, throwDialogContentAlreadyAttachedError, CdkPortalOutlet as ɵɵCdkPortalOutlet };
 export type { AutoFocusTarget, DialogCloseOptions, DialogRole };
