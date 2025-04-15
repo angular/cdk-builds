@@ -1,5 +1,5 @@
 import * as webdriver from 'selenium-webdriver';
-import { i as TestElement, M as ModifierKeys, T as TestKey, j as TextOptions, k as ElementDimensions, E as EventData, h as HarnessEnvironment, c as HarnessLoader } from '../../harness-environment.d-300a0fdc.js';
+import { TestElement, ModifierKeys, TestKey, TextOptions, ElementDimensions, EventData, HarnessEnvironment, HarnessLoader } from '../../harness-environment.d-ByFLvxZh.js';
 
 /** A `TestElement` implementation for WebDriver. */
 declare class SeleniumWebDriverElement implements TestElement {
@@ -146,4 +146,5 @@ declare class SeleniumWebDriverHarnessEnvironment extends HarnessEnvironment<() 
     protected getAllRawElements(selector: string): Promise<(() => webdriver.WebElement)[]>;
 }
 
-export { SeleniumWebDriverElement, SeleniumWebDriverHarnessEnvironment, type WebDriverHarnessEnvironmentOptions, waitForAngularReady };
+export { SeleniumWebDriverElement, SeleniumWebDriverHarnessEnvironment, waitForAngularReady };
+export type { WebDriverHarnessEnvironmentOptions };

@@ -1,4 +1,4 @@
-export { P as Platform } from '../platform.d-4dc3e073.js';
+export { Platform } from '../platform.d-cnFZCLss.js';
 import * as i0 from '@angular/core';
 import { Renderer2 } from '@angular/core';
 
@@ -79,4 +79,5 @@ interface _ListenerOptions {
  */
 declare function _bindEventWithOptions(renderer: Renderer2, target: EventTarget, eventName: string, callback: (event: any) => boolean | void, options: _ListenerOptions): () => void;
 
-export { PlatformModule, RtlScrollAxisType, type _ListenerOptions, _bindEventWithOptions, _getEventTarget, _getFocusedElementPierceShadowDom, _getShadowRoot, _isTestEnvironment, _supportsShadowDom, getRtlScrollAxisType, getSupportedInputTypes, normalizePassiveListenerOptions, supportsPassiveEventListeners, supportsScrollBehavior };
+export { PlatformModule, RtlScrollAxisType, _bindEventWithOptions, _getEventTarget, _getFocusedElementPierceShadowDom, _getShadowRoot, _isTestEnvironment, _supportsShadowDom, getRtlScrollAxisType, getSupportedInputTypes, normalizePassiveListenerOptions, supportsPassiveEventListeners, supportsScrollBehavior };
+export type { _ListenerOptions };

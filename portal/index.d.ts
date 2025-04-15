@@ -1,5 +1,5 @@
-import { B as BasePortalOutlet, a as ComponentPortal, T as TemplatePortal, D as DomPortal } from '../portal-directives.d-d581f5ee.js';
-export { i as BasePortalHost, B as BasePortalOutlet, c as CdkPortal, C as CdkPortalOutlet, j as CdkPortalOutletAttachedRef, a as ComponentPortal, b as ComponentType, D as DomPortal, g as Portal, h as PortalHost, e as PortalHostDirective, P as PortalModule, f as PortalOutlet, T as TemplatePortal, d as TemplatePortalDirective } from '../portal-directives.d-d581f5ee.js';
+import { BasePortalOutlet, ComponentPortal, TemplatePortal, DomPortal } from '../portal-directives.d-C698lRc2.js';
+export { BasePortalHost, CdkPortal, CdkPortalOutlet, CdkPortalOutletAttachedRef, ComponentType, Portal, PortalHost, PortalHostDirective, PortalModule, PortalOutlet, TemplatePortalDirective } from '../portal-directives.d-C698lRc2.js';
 import { ApplicationRef, Injector, ComponentRef, EmbeddedViewRef } from '@angular/core';
 
 /**
@@ -83,4 +83,4 @@ declare class PortalInjector implements Injector {
     get(token: any, notFoundValue?: any): any;
 }
 
-export { DomPortalHost, DomPortalOutlet, PortalInjector };
+export { BasePortalOutlet, ComponentPortal, DomPortal, DomPortalHost, DomPortalOutlet, PortalInjector, TemplatePortal };

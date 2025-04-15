@@ -85,4 +85,5 @@ declare class MediaMatcher {
     static ɵprov: i0.ɵɵInjectableDeclaration<MediaMatcher>;
 }
 
-export { BreakpointObserver, type BreakpointState, Breakpoints, LayoutModule, MediaMatcher };
+export { BreakpointObserver, Breakpoints, LayoutModule, MediaMatcher };
+export type { BreakpointState };

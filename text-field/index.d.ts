@@ -1,7 +1,7 @@
 import * as i0 from '@angular/core';
 import { OnDestroy, ElementRef, OnInit, EventEmitter, AfterViewInit, DoCheck } from '@angular/core';
 import { Observable } from 'rxjs';
-import { N as NumberInput } from '../number-property.d-5998850c.js';
+import { NumberInput } from '../number-property.d-BzBQchZ2.js';
 
 /** An event that is emitted when the autofill state of an input changes. */
 type AutofillEvent = {
@@ -152,4 +152,5 @@ declare class TextFieldModule {
     static ɵinj: i0.ɵɵInjectorDeclaration<TextFieldModule>;
 }
 
-export { type AutofillEvent, AutofillMonitor, CdkAutofill, CdkTextareaAutosize, TextFieldModule };
+export { AutofillMonitor, CdkAutofill, CdkTextareaAutosize, TextFieldModule };
+export type { AutofillEvent };

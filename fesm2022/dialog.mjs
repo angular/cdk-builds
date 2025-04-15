@@ -1,35 +1,35 @@
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { inject, ElementRef, NgZone, Renderer2, ChangeDetectorRef, Injector, afterNextRender, Component, ViewEncapsulation, ChangeDetectionStrategy, ViewChild, InjectionToken, TemplateRef, Injectable, NgModule } from '@angular/core';
-import { B as BasePortalOutlet, C as CdkPortalOutlet, a as ComponentPortal, T as TemplatePortal, P as PortalModule } from './portal-directives-dced6d68.mjs';
-export { b as ɵɵCdkPortal, C as ɵɵCdkPortalOutlet, d as ɵɵPortalHostDirective, c as ɵɵTemplatePortalDirective } from './portal-directives-dced6d68.mjs';
-import { b as FocusTrapFactory, I as InteractivityChecker, A as A11yModule } from './a11y-module-e500b0f2.mjs';
-import { O as OverlayRef, a as Overlay, b as OverlayContainer, c as OverlayConfig, d as OverlayModule } from './overlay-module-dc3a969c.mjs';
-import { d as FocusMonitor } from './focus-monitor-28b6c826.mjs';
-import { P as Platform } from './platform-20fc4de8.mjs';
-import { b as _getFocusedElementPierceShadowDom } from './shadow-dom-318658ae.mjs';
+import { inject, ElementRef, NgZone, Renderer2, ChangeDetectorRef, Injector, afterNextRender, ViewChild, ChangeDetectionStrategy, ViewEncapsulation, Component, InjectionToken, TemplateRef, Injectable, NgModule } from '@angular/core';
+import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, TemplatePortal, PortalModule } from './portal-directives-CtfZjx5e.mjs';
+export { CdkPortal as ɵɵCdkPortal, PortalHostDirective as ɵɵPortalHostDirective, TemplatePortalDirective as ɵɵTemplatePortalDirective } from './portal-directives-CtfZjx5e.mjs';
+import { FocusTrapFactory, InteractivityChecker, A11yModule } from './a11y-module-CgaSR12u.mjs';
+import { OverlayRef, Overlay, OverlayContainer, OverlayConfig, OverlayModule } from './overlay-module-CiiRqp9V.mjs';
+import { FocusMonitor } from './focus-monitor-DJ28zFKt.mjs';
+import { Platform } from './platform-Do3uqmxu.mjs';
+import { _getFocusedElementPierceShadowDom } from './shadow-dom-DFvX9W95.mjs';
 import { Subject, defer, of } from 'rxjs';
-import { e as ESCAPE } from './keycodes-0e4398c6.mjs';
-import { h as hasModifierKey } from './modifiers-3e8908bb.mjs';
+import { ESCAPE } from './keycodes-DPWmI2Ix.mjs';
+import { hasModifierKey } from './keycodes.mjs';
 import { startWith } from 'rxjs/operators';
-import { _ as _IdGenerator } from './id-generator-0b91c6f7.mjs';
-import { D as Directionality } from './directionality-9d44e426.mjs';
-import './style-loader-09eecacc.mjs';
-import './visually-hidden-9a93b8bb.mjs';
-import './breakpoints-observer-8e7409df.mjs';
-import './array-6239d2f8.mjs';
-import './observe-content-937cdfbe.mjs';
-import './element-15999318.mjs';
-import './backwards-compatibility-08253a84.mjs';
-import './test-environment-f6f8bc13.mjs';
-import './css-pixel-value-5d0cae55.mjs';
-import './scrolling-module-722545e3.mjs';
-import './scrolling-59340c46.mjs';
-import './recycle-view-repeater-strategy-0f32b0a8.mjs';
-import './data-source-d79c6e09.mjs';
-import './bidi-module-04c03e58.mjs';
-import './fake-event-detection-84590b88.mjs';
-import './passive-listeners-93cf8be8.mjs';
+import { _IdGenerator } from './id-generator-tlPCNuwi.mjs';
+import { Directionality } from './directionality-DPQw3n2b.mjs';
+import './style-loader-WcmCyO2o.mjs';
+import './private.mjs';
+import './breakpoints-observer-CHAS_XA1.mjs';
+import './array-Hg8isvLj.mjs';
+import './observers.mjs';
+import './element-CpqV8p-X.mjs';
+import './backwards-compatibility-DYuVCOXM.mjs';
+import './test-environment-BgaaXvCA.mjs';
+import './css-pixel-value-C1yoKJ7R.mjs';
+import './scrolling.mjs';
+import './scrolling-BXVcIfjZ.mjs';
+import './bidi.mjs';
+import './recycle-view-repeater-strategy-Ce0p4WhD.mjs';
+import './data-source-CL6Fasig.mjs';
+import './fake-event-detection-D0_6qVp2.mjs';
+import './passive-listeners-ZmZRMx8D.mjs';
 
 /** Configuration for opening a modal dialog. */
 class DialogConfig {
@@ -418,10 +418,10 @@ class CdkDialogContainer extends BasePortalOutlet {
             }
         });
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: CdkDialogContainer, deps: [], target: i0.ɵɵFactoryTarget.Component });
-    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "19.2.0", type: CdkDialogContainer, isStandalone: true, selector: "cdk-dialog-container", host: { attributes: { "tabindex": "-1" }, properties: { "attr.id": "_config.id || null", "attr.role": "_config.role", "attr.aria-modal": "_config.ariaModal", "attr.aria-labelledby": "_config.ariaLabel ? null : _ariaLabelledByQueue[0]", "attr.aria-label": "_config.ariaLabel", "attr.aria-describedby": "_config.ariaDescribedBy || null" }, classAttribute: "cdk-dialog-container" }, viewQueries: [{ propertyName: "_portalOutlet", first: true, predicate: CdkPortalOutlet, descendants: true, static: true }], usesInheritance: true, ngImport: i0, template: "<ng-template cdkPortalOutlet />\n", styles: [".cdk-dialog-container{display:block;width:100%;height:100%;min-height:inherit;max-height:inherit}"], dependencies: [{ kind: "directive", type: CdkPortalOutlet, selector: "[cdkPortalOutlet]", inputs: ["cdkPortalOutlet"], outputs: ["attached"], exportAs: ["cdkPortalOutlet"] }], changeDetection: i0.ChangeDetectionStrategy.Default, encapsulation: i0.ViewEncapsulation.None });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.6", ngImport: i0, type: CdkDialogContainer, deps: [], target: i0.ɵɵFactoryTarget.Component });
+    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "19.2.6", type: CdkDialogContainer, isStandalone: true, selector: "cdk-dialog-container", host: { attributes: { "tabindex": "-1" }, properties: { "attr.id": "_config.id || null", "attr.role": "_config.role", "attr.aria-modal": "_config.ariaModal", "attr.aria-labelledby": "_config.ariaLabel ? null : _ariaLabelledByQueue[0]", "attr.aria-label": "_config.ariaLabel", "attr.aria-describedby": "_config.ariaDescribedBy || null" }, classAttribute: "cdk-dialog-container" }, viewQueries: [{ propertyName: "_portalOutlet", first: true, predicate: CdkPortalOutlet, descendants: true, static: true }], usesInheritance: true, ngImport: i0, template: "<ng-template cdkPortalOutlet />\n", styles: [".cdk-dialog-container{display:block;width:100%;height:100%;min-height:inherit;max-height:inherit}"], dependencies: [{ kind: "directive", type: CdkPortalOutlet, selector: "[cdkPortalOutlet]", inputs: ["cdkPortalOutlet"], outputs: ["attached"], exportAs: ["cdkPortalOutlet"] }], changeDetection: i0.ChangeDetectionStrategy.Default, encapsulation: i0.ViewEncapsulation.None });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: CdkDialogContainer, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.6", ngImport: i0, type: CdkDialogContainer, decorators: [{
             type: Component,
             args: [{ selector: 'cdk-dialog-container', encapsulation: ViewEncapsulation.None, changeDetection: ChangeDetectionStrategy.Default, imports: [CdkPortalOutlet], host: {
                         'class': 'cdk-dialog-container',
@@ -822,10 +822,10 @@ class Dialog {
         const parent = this._parentDialog;
         return parent ? parent._getAfterAllClosed() : this._afterAllClosedAtThisLevel;
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: Dialog, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: Dialog, providedIn: 'root' });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.6", ngImport: i0, type: Dialog, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.2.6", ngImport: i0, type: Dialog, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: Dialog, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.6", ngImport: i0, type: Dialog, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: () => [] });
@@ -841,18 +841,18 @@ function reverseForEach(items, callback) {
 }
 
 class DialogModule {
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: DialogModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-    static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "19.2.0", ngImport: i0, type: DialogModule, imports: [OverlayModule, PortalModule, A11yModule, CdkDialogContainer], exports: [
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.6", ngImport: i0, type: DialogModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+    static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "19.2.6", ngImport: i0, type: DialogModule, imports: [OverlayModule, PortalModule, A11yModule, CdkDialogContainer], exports: [
             // Re-export the PortalModule so that people extending the `CdkDialogContainer`
             // don't have to remember to import it or be faced with an unhelpful error.
             PortalModule,
             CdkDialogContainer] });
-    static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: DialogModule, providers: [Dialog], imports: [OverlayModule, PortalModule, A11yModule, 
+    static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "19.2.6", ngImport: i0, type: DialogModule, providers: [Dialog], imports: [OverlayModule, PortalModule, A11yModule, 
             // Re-export the PortalModule so that people extending the `CdkDialogContainer`
             // don't have to remember to import it or be faced with an unhelpful error.
             PortalModule] });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: DialogModule, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.6", ngImport: i0, type: DialogModule, decorators: [{
             type: NgModule,
             args: [{
                     imports: [OverlayModule, PortalModule, A11yModule, CdkDialogContainer],
@@ -866,5 +866,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.0", ngImpor
                 }]
         }] });
 
-export { CdkDialogContainer, DEFAULT_DIALOG_CONFIG, DIALOG_DATA, DIALOG_SCROLL_STRATEGY, DIALOG_SCROLL_STRATEGY_PROVIDER, DIALOG_SCROLL_STRATEGY_PROVIDER_FACTORY, Dialog, DialogConfig, DialogModule, DialogRef, throwDialogContentAlreadyAttachedError };
+export { CdkDialogContainer, DEFAULT_DIALOG_CONFIG, DIALOG_DATA, DIALOG_SCROLL_STRATEGY, DIALOG_SCROLL_STRATEGY_PROVIDER, DIALOG_SCROLL_STRATEGY_PROVIDER_FACTORY, Dialog, DialogConfig, DialogModule, DialogRef, throwDialogContentAlreadyAttachedError, CdkPortalOutlet as ɵɵCdkPortalOutlet };
 //# sourceMappingURL=dialog.mjs.map

@@ -1,20 +1,20 @@
 import * as i0 from '@angular/core';
 import { ElementRef, Renderer2, QueryList, InjectionToken, Optional, OnDestroy, Injector, ViewContainerRef, EventEmitter, TemplateRef, OnChanges, SimpleChanges, NgZone, AfterContentInit } from '@angular/core';
-import { S as ScrollStrategy, C as ConnectedPosition, O as OverlayRef, a as OverlayModule } from '../overlay-module.d-0970e3e8.js';
+import { ScrollStrategy, ConnectedPosition, OverlayRef, OverlayModule } from '../overlay-module.d-CSrPj90C.js';
 import * as rxjs from 'rxjs';
 import { Observable, Subject } from 'rxjs';
-import { F as FocusOrigin } from '../focus-monitor.d-b42086db.js';
-import { F as FocusableOption, a as FocusKeyManager } from '../focus-key-manager.d-639d8a5d.js';
-import { D as Directionality } from '../bidi-module.d-879a73c7.js';
-import { T as TemplatePortal } from '../portal-directives.d-d581f5ee.js';
-import '../scrolling-module.d-519cb9bf.js';
-import '../data-source.d-cd31f292.js';
-import '../number-property.d-5998850c.js';
+import { FocusOrigin } from '../focus-monitor.d-BBkiOKUH.js';
+import { FocusableOption, FocusKeyManager } from '../focus-key-manager.d-DCiEwxN7.js';
+import { Directionality } from '../bidi-module.d-BSI86Zrk.js';
+import { TemplatePortal } from '../portal-directives.d-C698lRc2.js';
+import '../scrolling-module.d-CUKr8D_p.js';
+import '../data-source.d-DAIyaEMO.js';
+import '../number-property.d-BzBQchZ2.js';
 import '@angular/common';
-import '../viewport-ruler.d-17d129ea.js';
-import '../platform.d-4dc3e073.js';
-import '../style-loader.d-972eab2d.js';
-import '../list-key-manager.d-6fe81cb7.js';
+import '../scrolling/index.js';
+import '../platform.d-cnFZCLss.js';
+import '../style-loader.d-DbvWk0ty.js';
+import '../list-key-manager.d-CylnKWfo.js';
 
 /** Item to track for mouse focus events. */
 interface FocusableElement {
@@ -817,4 +817,5 @@ declare class CdkMenuModule {
     static ɵinj: i0.ɵɵInjectorDeclaration<CdkMenuModule>;
 }
 
-export { CDK_MENU, CdkContextMenuTrigger, CdkMenu, CdkMenuBar, CdkMenuBase, CdkMenuGroup, CdkMenuItem, CdkMenuItemCheckbox, CdkMenuItemRadio, CdkMenuItemSelectable, CdkMenuModule, CdkMenuTrigger, CdkMenuTriggerBase, CdkTargetMenuAim, type CloseOptions, type ContextMenuCoordinates, ContextMenuTracker, FocusNext, type FocusableElement, MENU_AIM, MENU_SCROLL_STRATEGY, MENU_STACK, MENU_TRIGGER, type Menu, type MenuAim, MenuStack, type MenuStackCloseEvent, type MenuStackItem, PARENT_OR_NEW_INLINE_MENU_STACK_PROVIDER, PARENT_OR_NEW_MENU_STACK_PROVIDER, PointerFocusTracker, TargetMenuAim, type Toggler };
+export { CDK_MENU, CdkContextMenuTrigger, CdkMenu, CdkMenuBar, CdkMenuBase, CdkMenuGroup, CdkMenuItem, CdkMenuItemCheckbox, CdkMenuItemRadio, CdkMenuItemSelectable, CdkMenuModule, CdkMenuTrigger, CdkMenuTriggerBase, CdkTargetMenuAim, ContextMenuTracker, FocusNext, MENU_AIM, MENU_SCROLL_STRATEGY, MENU_STACK, MENU_TRIGGER, MenuStack, PARENT_OR_NEW_INLINE_MENU_STACK_PROVIDER, PARENT_OR_NEW_MENU_STACK_PROVIDER, PointerFocusTracker, TargetMenuAim };
+export type { CloseOptions, ContextMenuCoordinates, FocusableElement, Menu, MenuAim, MenuStackCloseEvent, MenuStackItem, Toggler };

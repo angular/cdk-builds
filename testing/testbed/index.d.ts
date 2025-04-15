@@ -1,4 +1,4 @@
-import { h as HarnessEnvironment, c as HarnessLoader, i as TestElement, C as ComponentHarness, f as ComponentHarnessConstructor, M as ModifierKeys, T as TestKey, j as TextOptions, k as ElementDimensions, E as EventData } from '../../harness-environment.d-300a0fdc.js';
+import { HarnessEnvironment, HarnessLoader, TestElement, ComponentHarness, ComponentHarnessConstructor, ModifierKeys, TestKey, TextOptions, ElementDimensions, EventData } from '../../harness-environment.d-ByFLvxZh.js';
 import { ComponentFixture } from '@angular/core/testing';
 
 /** Options to configure the environment. */
@@ -153,4 +153,5 @@ declare class UnitTestElement implements TestElement {
     private _dispatchMouseEventSequence;
 }
 
-export { TestbedHarnessEnvironment, type TestbedHarnessEnvironmentOptions, UnitTestElement };
+export { TestbedHarnessEnvironment, UnitTestElement };
+export type { TestbedHarnessEnvironmentOptions };

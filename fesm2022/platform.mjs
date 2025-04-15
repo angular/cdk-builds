@@ -1,19 +1,19 @@
-export { P as Platform } from './platform-20fc4de8.mjs';
+export { Platform } from './platform-Do3uqmxu.mjs';
 import * as i0 from '@angular/core';
 import { NgModule } from '@angular/core';
-export { n as normalizePassiveListenerOptions, s as supportsPassiveEventListeners } from './passive-listeners-93cf8be8.mjs';
-export { R as RtlScrollAxisType, g as getRtlScrollAxisType, s as supportsScrollBehavior } from './scrolling-59340c46.mjs';
-export { _ as _getEventTarget, b as _getFocusedElementPierceShadowDom, a as _getShadowRoot, c as _supportsShadowDom } from './shadow-dom-318658ae.mjs';
-export { _ as _isTestEnvironment } from './test-environment-f6f8bc13.mjs';
-export { _ as _bindEventWithOptions } from './backwards-compatibility-08253a84.mjs';
+export { normalizePassiveListenerOptions, supportsPassiveEventListeners } from './passive-listeners-ZmZRMx8D.mjs';
+export { RtlScrollAxisType, getRtlScrollAxisType, supportsScrollBehavior } from './scrolling-BXVcIfjZ.mjs';
+export { _getEventTarget, _getFocusedElementPierceShadowDom, _getShadowRoot, _supportsShadowDom } from './shadow-dom-DFvX9W95.mjs';
+export { _isTestEnvironment } from './test-environment-BgaaXvCA.mjs';
+export { _bindEventWithOptions } from './backwards-compatibility-DYuVCOXM.mjs';
 import '@angular/common';
 
 class PlatformModule {
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: PlatformModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-    static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "19.2.0", ngImport: i0, type: PlatformModule });
-    static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: PlatformModule });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.6", ngImport: i0, type: PlatformModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+    static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "19.2.6", ngImport: i0, type: PlatformModule });
+    static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "19.2.6", ngImport: i0, type: PlatformModule });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: PlatformModule, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.6", ngImport: i0, type: PlatformModule, decorators: [{
             type: NgModule,
             args: [{}]
         }] });

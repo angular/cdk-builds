@@ -1,4 +1,4 @@
-export { A as AsyncFactoryFn, b as AsyncOptionPredicate, a as AsyncPredicate, B as BaseHarnessFilters, C as ComponentHarness, f as ComponentHarnessConstructor, e as ContentContainerComponentHarness, k as ElementDimensions, E as EventData, h as HarnessEnvironment, c as HarnessLoader, g as HarnessPredicate, H as HarnessQuery, d as LocatorFactory, L as LocatorFnResult, M as ModifierKeys, i as TestElement, T as TestKey, j as TextOptions } from '../harness-environment.d-300a0fdc.js';
+export { AsyncFactoryFn, AsyncOptionPredicate, AsyncPredicate, BaseHarnessFilters, ComponentHarness, ComponentHarnessConstructor, ContentContainerComponentHarness, ElementDimensions, EventData, HarnessEnvironment, HarnessLoader, HarnessPredicate, HarnessQuery, LocatorFactory, LocatorFnResult, ModifierKeys, TestElement, TestKey, TextOptions } from '../harness-environment.d-ByFLvxZh.js';
 
 /**
  * Returns an error which reports that no keys have been specified.
@@ -90,4 +90,5 @@ declare function parallel<T1, T2>(values: () => [T1 | PromiseLike<T1>, T2 | Prom
  */
 declare function parallel<T>(values: () => (T | PromiseLike<T>)[]): Promise<T[]>;
 
-export { type AutoChangeDetectionStatus, _getTextWithExcludedElements, getNoKeysSpecifiedError, handleAutoChangeDetectionStatus, manualChangeDetection, parallel, stopHandlingAutoChangeDetectionStatus };
+export { _getTextWithExcludedElements, getNoKeysSpecifiedError, handleAutoChangeDetectionStatus, manualChangeDetection, parallel, stopHandlingAutoChangeDetectionStatus };
+export type { AutoChangeDetectionStatus };

@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { InjectionToken, OnDestroy, EventEmitter } from '@angular/core';
+import { OnDestroy, EventEmitter, InjectionToken } from '@angular/core';
 
 /**
  * A pending copy-to-clipboard operation.
@@ -97,4 +97,5 @@ declare class ClipboardModule {
     static ɵinj: i0.ɵɵInjectorDeclaration<ClipboardModule>;
 }
 
-export { CDK_COPY_TO_CLIPBOARD_CONFIG, CdkCopyToClipboard, type CdkCopyToClipboardConfig, Clipboard, ClipboardModule, PendingCopy };
+export { CDK_COPY_TO_CLIPBOARD_CONFIG, CdkCopyToClipboard, Clipboard, ClipboardModule, PendingCopy };
+export type { CdkCopyToClipboardConfig };

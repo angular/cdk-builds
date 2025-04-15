@@ -1,9 +1,9 @@
 import * as i0 from '@angular/core';
 import { OnDestroy, AfterContentInit, QueryList, NgZone, ChangeDetectorRef } from '@angular/core';
-import { H as Highlightable, A as ActiveDescendantKeyManager } from '../activedescendant-key-manager.d-24783633.js';
-import { L as ListKeyManagerOption } from '../list-key-manager.d-6fe81cb7.js';
+import { Highlightable, ActiveDescendantKeyManager } from '../activedescendant-key-manager.d-DSYvyoT0.js';
+import { ListKeyManagerOption } from '../list-key-manager.d-CylnKWfo.js';
 import { Subject } from 'rxjs';
-import { S as SelectionModel } from '../selection-model.d-790127da.js';
+import { SelectionModel } from '../selection-model.d-mtbiEbzs.js';
 import { ControlValueAccessor } from '@angular/forms';
 
 /**
@@ -349,4 +349,5 @@ declare class CdkListboxModule {
     static ɵinj: i0.ɵɵInjectorDeclaration<CdkListboxModule>;
 }
 
-export { CdkListbox, CdkListboxModule, CdkOption, type ListboxValueChangeEvent };
+export { CdkListbox, CdkListboxModule, CdkOption };
+export type { ListboxValueChangeEvent };
