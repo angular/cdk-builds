@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { inject, ElementRef, NgZone, Renderer2, ChangeDetectorRef, Injector, afterNextRender, ViewChild, ChangeDetectionStrategy, ViewEncapsulation, Component, InjectionToken, TemplateRef, Injectable, NgModule } from '@angular/core';
+import { inject, ElementRef, NgZone, Renderer2, ChangeDetectorRef, Injector, afterNextRender, ViewChild, ChangeDetectionStrategy, ViewEncapsulation, Component, InjectionToken, TemplateRef, signal, EventEmitter, Injectable, NgModule } from '@angular/core';
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, TemplatePortal, PortalModule } from './portal.mjs';
 export { CdkPortal as ɵɵCdkPortal, PortalHostDirective as ɵɵPortalHostDirective, TemplatePortalDirective as ɵɵTemplatePortalDirective } from './portal.mjs';
 import { FocusTrapFactory, InteractivityChecker, A11yModule } from './a11y-module-tRUj0Pog.mjs';
@@ -8,7 +8,7 @@ import { OverlayRef, Overlay, OverlayContainer, OverlayConfig, OverlayModule } f
 import { FocusMonitor } from './focus-monitor-BZnK-7fT.mjs';
 import { Platform } from './platform-BInyKIh1.mjs';
 import { _getFocusedElementPierceShadowDom } from './shadow-dom-DFvX9W95.mjs';
-import { Subject, defer, of } from 'rxjs';
+import { Subject, defer } from 'rxjs';
 import { ESCAPE } from './keycodes-DPWmI2Ix.mjs';
 import { hasModifierKey } from './keycodes.mjs';
 import { startWith } from 'rxjs/operators';
@@ -550,6 +550,20 @@ const DIALOG_DATA = new InjectionToken('DialogData');
 /** Injection token that can be used to provide default options for the dialog module. */
 const DEFAULT_DIALOG_CONFIG = new InjectionToken('DefaultDialogConfig');
 
+function getDirectionality(value) {
+    const valueSignal = signal(value);
+    const change = new EventEmitter();
+    return {
+        valueSignal,
+        get value() {
+            return valueSignal();
+        },
+        change,
+        ngOnDestroy() {
+            change.complete();
+        },
+    };
+}
 class Dialog {
     _overlay = inject(Overlay);
     _injector = inject(Injector);
@@ -748,7 +762,7 @@ class Dialog {
                 !userInjector.get(Directionality, null, { optional: true }))) {
             providers.push({
                 provide: Directionality,
-                useValue: { value: config.direction, change: of() },
+                useValue: getDirectionality(config.direction),
             });
         }
         return Injector.create({ parent: userInjector || fallbackInjector, providers });
