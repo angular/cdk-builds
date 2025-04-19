@@ -1,7 +1,6 @@
 import * as i0 from '@angular/core';
-import { inject, Injectable, afterNextRender, NgZone, Injector, ElementRef, booleanAttribute, Input, Directive, InjectionToken, NgModule } from '@angular/core';
-import { CdkMonitorFocus } from './focus-monitor-BZnK-7fT.mjs';
-import { DOCUMENT } from '@angular/common';
+import { inject, Injectable, afterNextRender, NgZone, DOCUMENT, Injector, ElementRef, booleanAttribute, Input, Directive, InjectionToken, NgModule } from '@angular/core';
+import { CdkMonitorFocus } from './focus-monitor-jX8r4DY-.mjs';
 import { Platform } from './platform-BInyKIh1.mjs';
 import { _getFocusedElementPierceShadowDom } from './shadow-dom-DFvX9W95.mjs';
 import { _CdkPrivateStyleLoader } from './style-loader-DpEDdstc.mjs';
@@ -949,4 +948,4 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", 
         }], ctorParameters: () => [] });
 
 export { A11yModule, CdkAriaLive, CdkTrapFocus, FocusTrap, FocusTrapFactory, HighContrastMode, HighContrastModeDetector, InteractivityChecker, IsFocusableConfig, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, LiveAnnouncer };
-//# sourceMappingURL=a11y-module-tRUj0Pog.mjs.map
+//# sourceMappingURL=a11y-module-CEBjqXuv.mjs.map

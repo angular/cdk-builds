@@ -1,6 +1,5 @@
 import * as i0 from '@angular/core';
-import { signal, inject, NgZone, RendererFactory2, ChangeDetectionStrategy, ViewEncapsulation, Component, Injectable, InjectionToken, ElementRef, booleanAttribute, Input, Directive, ViewContainerRef, ChangeDetectorRef, EventEmitter, Injector, afterNextRender, numberAttribute, Output, TemplateRef, NgModule } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { signal, inject, NgZone, DOCUMENT, RendererFactory2, ChangeDetectionStrategy, ViewEncapsulation, Component, Injectable, InjectionToken, ElementRef, booleanAttribute, Input, Directive, ViewContainerRef, ChangeDetectorRef, EventEmitter, Injector, afterNextRender, numberAttribute, Output, TemplateRef, NgModule } from '@angular/core';
 import { Subject, Subscription, interval, animationFrameScheduler, Observable, merge, BehaviorSubject } from 'rxjs';
 import { _getEventTarget, _getShadowRoot } from './shadow-dom-DFvX9W95.mjs';
 import { isFakeTouchstartFromScreenReader, isFakeMousedownFromScreenReader } from './fake-event-detection-D0_6qVp2.mjs';
@@ -9,10 +8,11 @@ import { takeUntil, map, take, tap, switchMap, startWith } from 'rxjs/operators'
 import { _CdkPrivateStyleLoader } from './style-loader-DpEDdstc.mjs';
 import { ViewportRuler, ScrollDispatcher, CdkScrollableModule } from './scrolling.mjs';
 export { CdkScrollable as ɵɵCdkScrollable } from './scrolling.mjs';
-import { Directionality } from './directionality-6lVHj23y.mjs';
+import { Directionality } from './directionality-kM9GX3mp.mjs';
 import { _IdGenerator } from './id-generator-B33AfkWd.mjs';
 import { coerceArray } from './array-Hg8isvLj.mjs';
 import './platform-BInyKIh1.mjs';
+import '@angular/common';
 import './scrolling-BXVcIfjZ.mjs';
 import './bidi.mjs';
 import './recycle-view-repeater-strategy-Ce0p4WhD.mjs';

@@ -3,14 +3,13 @@ import { inject, ElementRef, Directive, TemplateRef, InjectionToken, EventEmitte
 import { ControlContainer } from '@angular/forms';
 import { Subject, of } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
-import { Directionality } from './directionality-6lVHj23y.mjs';
+import { Directionality } from './directionality-kM9GX3mp.mjs';
 import { _IdGenerator } from './id-generator-B33AfkWd.mjs';
 import { FocusKeyManager } from './focus-key-manager-DgyxYbV2.mjs';
 import { hasModifierKey } from './keycodes.mjs';
 import { SPACE, ENTER } from './keycodes-DPWmI2Ix.mjs';
 import { _getFocusedElementPierceShadowDom } from './shadow-dom-DFvX9W95.mjs';
 import { BidiModule } from './bidi.mjs';
-import '@angular/common';
 import './list-key-manager-CYBoL_nN.mjs';
 import './typeahead-BAa3HZoh.mjs';
 

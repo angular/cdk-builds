@@ -1,16 +1,16 @@
 import * as i0 from '@angular/core';
-import { InjectionToken, forwardRef, Input, Directive, inject, NgZone, RendererFactory2, Injectable, ElementRef, Renderer2, ChangeDetectorRef, Injector, afterNextRender, Optional, Inject, booleanAttribute, ViewChild, Output, ChangeDetectionStrategy, ViewEncapsulation, Component, ViewContainerRef, TemplateRef, IterableDiffers, NgModule } from '@angular/core';
+import { InjectionToken, forwardRef, Input, Directive, inject, NgZone, RendererFactory2, Injectable, ElementRef, Renderer2, DOCUMENT, ChangeDetectorRef, Injector, afterNextRender, Optional, Inject, booleanAttribute, ViewChild, Output, ChangeDetectionStrategy, ViewEncapsulation, Component, ViewContainerRef, TemplateRef, IterableDiffers, NgModule } from '@angular/core';
 import { Subject, of, Observable, Subscription, animationFrameScheduler, asapScheduler, isObservable } from 'rxjs';
 import { distinctUntilChanged, auditTime, filter, startWith, takeUntil, pairwise, switchMap, shareReplay } from 'rxjs/operators';
 import { coerceNumberProperty, coerceElement } from './element-CpqV8p-X.mjs';
 import { Platform } from './platform-BInyKIh1.mjs';
-import { Directionality } from './directionality-6lVHj23y.mjs';
+import { Directionality } from './directionality-kM9GX3mp.mjs';
 import { getRtlScrollAxisType, RtlScrollAxisType, supportsScrollBehavior } from './scrolling-BXVcIfjZ.mjs';
 import { BidiModule } from './bidi.mjs';
 export { Dir as ɵɵDir } from './bidi.mjs';
-import { DOCUMENT } from '@angular/common';
 import { _VIEW_REPEATER_STRATEGY, ArrayDataSource, _RecycleViewRepeaterStrategy } from './recycle-view-repeater-strategy-Ce0p4WhD.mjs';
 import { isDataSource } from './data-source-CL6Fasig.mjs';
+import '@angular/common';
 
 /** The injection token used to specify the virtual scrolling strategy. */
 const VIRTUAL_SCROLL_STRATEGY = new InjectionToken('VIRTUAL_SCROLL_STRATEGY');

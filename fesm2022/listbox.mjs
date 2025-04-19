@@ -7,7 +7,7 @@ import { A, SPACE, ENTER, HOME, END, UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARR
 import { ActiveDescendantKeyManager } from './activedescendant-key-manager-BYiHZAZc.mjs';
 import { SelectionModel } from './selection-model-88BErm4w.mjs';
 import { _IdGenerator } from './id-generator-B33AfkWd.mjs';
-import { Directionality } from './directionality-6lVHj23y.mjs';
+import { Directionality } from './directionality-kM9GX3mp.mjs';
 import { Platform } from './platform-BInyKIh1.mjs';
 import { hasModifierKey } from './keycodes.mjs';
 import { coerceArray } from './array-Hg8isvLj.mjs';

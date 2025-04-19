@@ -1,6 +1,6 @@
 import * as i0 from '@angular/core';
-import { inject, NgZone, Injectable, RendererFactory2, ViewEncapsulation, ChangeDetectionStrategy, Component, afterNextRender, ElementRef, Injector, ANIMATION_MODULE_TYPE, EnvironmentInjector, ApplicationRef, InjectionToken, EventEmitter, TemplateRef, ViewContainerRef, booleanAttribute, Directive, Output, Input, NgModule } from '@angular/core';
-import { DOCUMENT, Location } from '@angular/common';
+import { inject, NgZone, DOCUMENT, Injectable, RendererFactory2, ViewEncapsulation, ChangeDetectionStrategy, Component, afterNextRender, ElementRef, Injector, ANIMATION_MODULE_TYPE, EnvironmentInjector, ApplicationRef, InjectionToken, EventEmitter, TemplateRef, ViewContainerRef, booleanAttribute, Directive, Output, Input, NgModule } from '@angular/core';
+import { Location } from '@angular/common';
 import { Platform } from './platform-BInyKIh1.mjs';
 import { _getEventTarget } from './shadow-dom-DFvX9W95.mjs';
 import { _isTestEnvironment } from './test-environment-BgaaXvCA.mjs';
@@ -12,7 +12,7 @@ import { ScrollDispatcher, ViewportRuler, ScrollingModule } from './scrolling.mj
 import { supportsScrollBehavior } from './scrolling-BXVcIfjZ.mjs';
 import { filter, takeWhile } from 'rxjs/operators';
 import { DomPortalOutlet, TemplatePortal, PortalModule } from './portal.mjs';
-import { Directionality } from './directionality-6lVHj23y.mjs';
+import { Directionality } from './directionality-kM9GX3mp.mjs';
 import { _IdGenerator } from './id-generator-B33AfkWd.mjs';
 import { ESCAPE } from './keycodes-DPWmI2Ix.mjs';
 import { hasModifierKey } from './keycodes.mjs';
@@ -3045,4 +3045,4 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", 
         }] });
 
 export { BlockScrollStrategy, CdkConnectedOverlay, CdkOverlayOrigin, CloseScrollStrategy, ConnectedOverlayPositionChange, ConnectionPositionPair, FlexibleConnectedPositionStrategy, GlobalPositionStrategy, NoopScrollStrategy, Overlay, OverlayConfig, OverlayContainer, OverlayKeyboardDispatcher, OverlayModule, OverlayOutsideClickDispatcher, OverlayPositionBuilder, OverlayRef, RepositionScrollStrategy, STANDARD_DROPDOWN_ADJACENT_POSITIONS, STANDARD_DROPDOWN_BELOW_POSITIONS, ScrollStrategyOptions, ScrollingVisibility, validateHorizontalPosition, validateVerticalPosition };
-//# sourceMappingURL=overlay-module-UgjfuiDh.mjs.map
+//# sourceMappingURL=overlay-module-Ql4amrR-.mjs.map

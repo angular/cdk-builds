@@ -1,6 +1,5 @@
 import * as i0 from '@angular/core';
-import { ElementRef, NgModuleRef, Injector, EnvironmentInjector, createComponent, inject, TemplateRef, ViewContainerRef, EventEmitter, Directive, Output, Input, NgModule } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { ElementRef, NgModuleRef, Injector, EnvironmentInjector, createComponent, inject, TemplateRef, ViewContainerRef, DOCUMENT, EventEmitter, Directive, Output, Input, NgModule } from '@angular/core';
 
 /**
  * Throws an exception when attempting to attach a null portal to a host.

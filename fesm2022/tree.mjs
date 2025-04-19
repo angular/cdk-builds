@@ -4,12 +4,11 @@ import { take, filter, takeUntil, startWith, tap, switchMap, map, reduce, concat
 import * as i0 from '@angular/core';
 import { InjectionToken, inject, ViewContainerRef, Directive, TemplateRef, IterableDiffers, ChangeDetectorRef, ElementRef, EventEmitter, booleanAttribute, numberAttribute, ContentChildren, ViewChild, Input, ChangeDetectionStrategy, ViewEncapsulation, Component, Output, NgModule } from '@angular/core';
 import { TREE_KEY_MANAGER } from './tree-key-manager-DIhQ-v4R.mjs';
-import { Directionality } from './directionality-6lVHj23y.mjs';
+import { Directionality } from './directionality-kM9GX3mp.mjs';
 import { isDataSource } from './data-source-CL6Fasig.mjs';
 import { coerceObservable } from './coercion/private.mjs';
 import './typeahead-BAa3HZoh.mjs';
 import './keycodes-DPWmI2Ix.mjs';
-import '@angular/common';
 
 /**
  * Base tree control. It has basic toggle/expand/collapse operations on a single data node.

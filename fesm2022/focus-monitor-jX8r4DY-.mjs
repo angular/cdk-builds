@@ -1,8 +1,7 @@
 import * as i0 from '@angular/core';
-import { InjectionToken, inject, NgZone, RendererFactory2, Injectable, ElementRef, EventEmitter, Output, Directive } from '@angular/core';
+import { InjectionToken, inject, NgZone, DOCUMENT, RendererFactory2, Injectable, ElementRef, EventEmitter, Output, Directive } from '@angular/core';
 import { BehaviorSubject, Subject, of } from 'rxjs';
 import { skip, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { DOCUMENT } from '@angular/common';
 import { isFakeMousedownFromScreenReader, isFakeTouchstartFromScreenReader } from './fake-event-detection-D0_6qVp2.mjs';
 import { ALT, CONTROL, MAC_META, META, SHIFT } from './keycodes-DPWmI2Ix.mjs';
 import { _getEventTarget, _getShadowRoot } from './shadow-dom-DFvX9W95.mjs';
@@ -625,4 +624,4 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", 
             }] } });
 
 export { CdkMonitorFocus, FOCUS_MONITOR_DEFAULT_OPTIONS, FocusMonitor, FocusMonitorDetectionMode, INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS, INPUT_MODALITY_DETECTOR_OPTIONS, InputModalityDetector };
-//# sourceMappingURL=focus-monitor-BZnK-7fT.mjs.map
+//# sourceMappingURL=focus-monitor-jX8r4DY-.mjs.map

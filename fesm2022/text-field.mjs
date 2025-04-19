@@ -1,11 +1,11 @@
 import * as i0 from '@angular/core';
-import { ViewEncapsulation, ChangeDetectionStrategy, Component, inject, NgZone, RendererFactory2, ElementRef, EventEmitter, Injectable, Output, Directive, Renderer2, booleanAttribute, Input, NgModule } from '@angular/core';
+import { ViewEncapsulation, ChangeDetectionStrategy, Component, inject, NgZone, RendererFactory2, ElementRef, EventEmitter, Injectable, Output, Directive, Renderer2, DOCUMENT, booleanAttribute, Input, NgModule } from '@angular/core';
 import { EMPTY, Subject } from 'rxjs';
 import { Platform } from './platform-BInyKIh1.mjs';
 import { _CdkPrivateStyleLoader } from './style-loader-DpEDdstc.mjs';
 import { coerceElement, coerceNumberProperty } from './element-CpqV8p-X.mjs';
-import { DOCUMENT } from '@angular/common';
 import { auditTime } from 'rxjs/operators';
+import '@angular/common';
 
 /** Component used to load the structural styles of the text field. */
 class _CdkTextFieldStyleLoader {

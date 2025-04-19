@@ -1,15 +1,15 @@
 import { isDataSource } from './data-source-CL6Fasig.mjs';
 export { DataSource } from './data-source-CL6Fasig.mjs';
-import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { InjectionToken, inject, TemplateRef, booleanAttribute, ElementRef, Directive, ContentChild, Input, NgZone, Injectable, IterableDiffers, ViewContainerRef, ViewEncapsulation, ChangeDetectionStrategy, Component, afterNextRender, ChangeDetectorRef, EventEmitter, Injector, HostAttributeToken, ContentChildren, Output, ViewChild, NgModule } from '@angular/core';
+import { InjectionToken, inject, TemplateRef, booleanAttribute, ElementRef, Directive, ContentChild, Input, NgZone, Injectable, IterableDiffers, ViewContainerRef, ViewEncapsulation, ChangeDetectionStrategy, Component, afterNextRender, ChangeDetectorRef, DOCUMENT, EventEmitter, Injector, HostAttributeToken, ContentChildren, Output, ViewChild, NgModule } from '@angular/core';
 import { Subject, BehaviorSubject, isObservable, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { _RecycleViewRepeaterStrategy, _VIEW_REPEATER_STRATEGY, _ViewRepeaterOperation } from './recycle-view-repeater-strategy-Ce0p4WhD.mjs';
 import { _DisposeViewRepeaterStrategy } from './dispose-view-repeater-strategy-BLw1RSwm.mjs';
-import { Directionality } from './directionality-6lVHj23y.mjs';
+import { Directionality } from './directionality-kM9GX3mp.mjs';
 import { Platform } from './platform-BInyKIh1.mjs';
 import { ViewportRuler, ScrollingModule } from './scrolling.mjs';
+import '@angular/common';
 import './element-CpqV8p-X.mjs';
 import './scrolling-BXVcIfjZ.mjs';
 import './bidi.mjs';

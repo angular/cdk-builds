@@ -1,6 +1,5 @@
 import * as i0 from '@angular/core';
-import { InjectionToken, inject, signal, EventEmitter, Injectable } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { InjectionToken, inject, DOCUMENT, signal, EventEmitter, Injectable } from '@angular/core';
 
 /**
  * Injection token used to inject the document into Directionality.
@@ -75,4 +74,4 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", 
         }], ctorParameters: () => [] });
 
 export { DIR_DOCUMENT, Directionality, _resolveDirectionality };
-//# sourceMappingURL=directionality-6lVHj23y.mjs.map
+//# sourceMappingURL=directionality-kM9GX3mp.mjs.map
