@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { OnDestroy, NgZone, EnvironmentInjector, Renderer2, ComponentRef, EmbeddedViewRef, ElementRef, OnChanges, EventEmitter, SimpleChanges } from '@angular/core';
+import { OnDestroy, NgZone, EnvironmentInjector, Renderer2, ComponentRef, EmbeddedViewRef, ElementRef, Injector, OnChanges, EventEmitter, SimpleChanges } from '@angular/core';
 import { Direction, Directionality, BidiModule } from './bidi-module.d-bsVYOt0R.js';
 import { PortalOutlet, ComponentPortal, TemplatePortal, PortalModule } from './portal-directives.d-D9c4J36c.js';
 import { CdkScrollable, ScrollingModule } from './scrolling-module.d-CuNwYGVM.js';
@@ -400,6 +400,12 @@ type FlexibleConnectedPositionStrategyOrigin = ElementRef | Element | (Point & {
     height?: number;
 });
 /**
+ * Creates a flexible position strategy.
+ * @param injector Injector used to resolve dependnecies for the position strategy.
+ * @param origin Origin relative to which to position the overlay.
+ */
+declare function createFlexibleConnectedPositionStrategy(injector: Injector, origin: FlexibleConnectedPositionStrategyOrigin): FlexibleConnectedPositionStrategy;
+/**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
  * implicit position relative some origin element. The relative position is defined in terms of
  * a point on the origin element that is connected to a point on the overlay element. For example,
@@ -791,5 +797,5 @@ declare class OverlayModule {
     static ɵinj: i0.ɵɵInjectorDeclaration<OverlayModule>;
 }
 
-export { CdkConnectedOverlay, CdkOverlayOrigin, ConnectedOverlayPositionChange, ConnectionPositionPair, FlexibleConnectedPositionStrategy, OverlayConfig, OverlayContainer, OverlayKeyboardDispatcher, OverlayModule, OverlayOutsideClickDispatcher, OverlayRef, STANDARD_DROPDOWN_ADJACENT_POSITIONS, STANDARD_DROPDOWN_BELOW_POSITIONS, ScrollingVisibility, validateHorizontalPosition, validateVerticalPosition };
+export { CdkConnectedOverlay, CdkOverlayOrigin, ConnectedOverlayPositionChange, ConnectionPositionPair, FlexibleConnectedPositionStrategy, OverlayConfig, OverlayContainer, OverlayKeyboardDispatcher, OverlayModule, OverlayOutsideClickDispatcher, OverlayRef, STANDARD_DROPDOWN_ADJACENT_POSITIONS, STANDARD_DROPDOWN_BELOW_POSITIONS, ScrollingVisibility, createFlexibleConnectedPositionStrategy, validateHorizontalPosition, validateVerticalPosition };
 export type { ConnectedPosition, FlexibleConnectedPositionStrategyOrigin, HorizontalConnectionPos, OriginConnectionPosition, OverlayConnectionPosition, OverlaySizeConfig, PositionStrategy, ScrollStrategy, VerticalConnectionPos };

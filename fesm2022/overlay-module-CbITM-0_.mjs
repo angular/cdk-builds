@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { inject, NgZone, DOCUMENT, Injectable, RendererFactory2, ViewEncapsulation, ChangeDetectionStrategy, Component, afterNextRender, ElementRef, Injector, ANIMATION_MODULE_TYPE, EnvironmentInjector, ApplicationRef, InjectionToken, EventEmitter, TemplateRef, ViewContainerRef, booleanAttribute, Directive, Output, Input, NgModule } from '@angular/core';
+import { DOCUMENT, NgZone, inject, Injector, Injectable, RendererFactory2, ViewEncapsulation, ChangeDetectionStrategy, Component, afterNextRender, ElementRef, ApplicationRef, Renderer2, ANIMATION_MODULE_TYPE, EnvironmentInjector, InjectionToken, EventEmitter, TemplateRef, ViewContainerRef, booleanAttribute, Directive, Output, Input, NgModule } from '@angular/core';
 import { Location } from '@angular/common';
 import { Platform } from './platform-BInyKIh1.mjs';
 import { _getEventTarget } from './shadow-dom-DFvX9W95.mjs';
@@ -8,17 +8,25 @@ import { _CdkPrivateStyleLoader } from './style-loader-DpEDdstc.mjs';
 import { Subject, Subscription } from 'rxjs';
 import { coerceCssPixelValue } from './css-pixel-value-C1yoKJ7R.mjs';
 import { coerceArray } from './array-Hg8isvLj.mjs';
-import { ScrollDispatcher, ViewportRuler, ScrollingModule } from './scrolling.mjs';
+import { ViewportRuler, ScrollDispatcher, ScrollingModule } from './scrolling.mjs';
 import { supportsScrollBehavior } from './scrolling-BXVcIfjZ.mjs';
 import { filter, takeWhile } from 'rxjs/operators';
 import { DomPortalOutlet, TemplatePortal, PortalModule } from './portal.mjs';
-import { Directionality } from './directionality-kM9GX3mp.mjs';
 import { _IdGenerator } from './id-generator-B33AfkWd.mjs';
+import { Directionality } from './directionality-kM9GX3mp.mjs';
 import { ESCAPE } from './keycodes-DPWmI2Ix.mjs';
 import { hasModifierKey } from './keycodes.mjs';
 import { BidiModule } from './bidi.mjs';
 
 const scrollBehaviorSupported = supportsScrollBehavior();
+/**
+ * Creates a scroll strategy that prevents the user from scrolling while the overlay is open.
+ * @param injector Injector used to resolve dependencies of the scroll strategy.
+ * @param config Configuration options for the scroll strategy.
+ */
+function createBlockScrollStrategy(injector) {
+    return new BlockScrollStrategy(injector.get(ViewportRuler), injector.get(DOCUMENT));
+}
 /**
  * Strategy that will prevent the user from scrolling while the overlay is visible.
  */
@@ -100,6 +108,14 @@ function getMatScrollStrategyAlreadyAttachedError() {
 }
 
 /**
+ * Creates a scroll strategy that closes the overlay when the user starts to scroll.
+ * @param injector Injector used to resolve dependencies of the scroll strategy.
+ * @param config Configuration options for the scroll strategy.
+ */
+function createCloseScrollStrategy(injector, config) {
+    return new CloseScrollStrategy(injector.get(ScrollDispatcher), injector.get(NgZone), injector.get(ViewportRuler), config);
+}
+/**
  * Strategy that will close the overlay as soon as the user starts scrolling.
  */
 class CloseScrollStrategy {
@@ -168,6 +184,10 @@ class CloseScrollStrategy {
     };
 }
 
+/** Creates a scroll strategy that does nothing. */
+function createNoopScrollStrategy() {
+    return new NoopScrollStrategy();
+}
 /** Scroll strategy that doesn't do anything. */
 class NoopScrollStrategy {
     /** Does nothing, as this scroll strategy is a no-op. */
@@ -211,6 +231,14 @@ function isElementClippedByScrolling(element, scrollContainers) {
     });
 }
 
+/**
+ * Creates a scroll strategy that updates the overlay's position when the user scrolls.
+ * @param injector Injector used to resolve dependencies of the scroll strategy.
+ * @param config Configuration options for the scroll strategy.
+ */
+function createRepositionScrollStrategy(injector, config) {
+    return new RepositionScrollStrategy(injector.get(ScrollDispatcher), injector.get(ViewportRuler), injector.get(NgZone), config);
+}
 /**
  * Strategy that will update the element position as the user is scrolling.
  */
@@ -275,10 +303,7 @@ class RepositionScrollStrategy {
  * behaviors. This class primarily acts as a factory for ScrollStrategy instances.
  */
 class ScrollStrategyOptions {
-    _scrollDispatcher = inject(ScrollDispatcher);
-    _viewportRuler = inject(ViewportRuler);
-    _ngZone = inject(NgZone);
-    _document = inject(DOCUMENT);
+    _injector = inject(Injector);
     constructor() { }
     /** Do nothing on scroll. */
     noop = () => new NoopScrollStrategy();
@@ -286,15 +311,15 @@ class ScrollStrategyOptions {
      * Close the overlay as soon as the user scrolls.
      * @param config Configuration to be used inside the scroll strategy.
      */
-    close = (config) => new CloseScrollStrategy(this._scrollDispatcher, this._ngZone, this._viewportRuler, config);
+    close = (config) => createCloseScrollStrategy(this._injector, config);
     /** Block scrolling. */
-    block = () => new BlockScrollStrategy(this._viewportRuler, this._document);
+    block = () => createBlockScrollStrategy(this._injector);
     /**
      * Update the overlay's position on scroll.
      * @param config Configuration to be used inside the scroll strategy.
      * Allows debouncing the reposition calls.
      */
-    reposition = (config) => new RepositionScrollStrategy(this._scrollDispatcher, this._viewportRuler, this._ngZone, config);
+    reposition = (config) => createRepositionScrollStrategy(this._injector, config);
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: ScrollStrategyOptions, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
     static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: ScrollStrategyOptions, providedIn: 'root' });
 }
@@ -1222,6 +1247,14 @@ class OverlayRef {
 const boundingBoxClass = 'cdk-overlay-connected-position-bounding-box';
 /** Regex used to split a string on its CSS units. */
 const cssUnitPattern = /([A-Za-z%]+)$/;
+/**
+ * Creates a flexible position strategy.
+ * @param injector Injector used to resolve dependnecies for the position strategy.
+ * @param origin Origin relative to which to position the overlay.
+ */
+function createFlexibleConnectedPositionStrategy(injector, origin) {
+    return new FlexibleConnectedPositionStrategy(origin, injector.get(ViewportRuler), injector.get(DOCUMENT), injector.get(Platform), injector.get(OverlayContainer));
+}
 /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
  * implicit position relative some origin element. The relative position is defined in terms of
@@ -2244,6 +2277,15 @@ const STANDARD_DROPDOWN_ADJACENT_POSITIONS = [
 /** Class to be added to the overlay pane wrapper. */
 const wrapperClass = 'cdk-global-overlay-wrapper';
 /**
+ * Creates a global position strategy.
+ * @param injector Injector used to resolve dependencies for the strategy.
+ */
+function createGlobalPositionStrategy(_injector) {
+    // Note: `injector` is unused, but we may need it in
+    // the future which would introduce a breaking change.
+    return new GlobalPositionStrategy();
+}
+/**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
  * explicit position relative to the browser's viewport. We use flexbox, instead of
  * transforms, in order to avoid issues with subpixel rendering which can cause the
@@ -2473,23 +2515,20 @@ class GlobalPositionStrategy {
 
 /** Builder for overlay position strategy. */
 class OverlayPositionBuilder {
-    _viewportRuler = inject(ViewportRuler);
-    _document = inject(DOCUMENT);
-    _platform = inject(Platform);
-    _overlayContainer = inject(OverlayContainer);
+    _injector = inject(Injector);
     constructor() { }
     /**
      * Creates a global position strategy.
      */
     global() {
-        return new GlobalPositionStrategy();
+        return createGlobalPositionStrategy();
     }
     /**
      * Creates a flexible position strategy.
      * @param origin Origin relative to which to position the overlay.
      */
     flexibleConnectedTo(origin) {
-        return new FlexibleConnectedPositionStrategy(origin, this._viewportRuler, this._document, this._platform, this._overlayContainer);
+        return createFlexibleConnectedPositionStrategy(this._injector, origin);
     }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: OverlayPositionBuilder, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
     static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: OverlayPositionBuilder, providedIn: 'root' });
@@ -2500,6 +2539,35 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", 
         }], ctorParameters: () => [] });
 
 /**
+ * Creates an overlay.
+ * @param injector Injector to use when resolving the overlay's dependencies.
+ * @param config Configuration applied to the overlay.
+ * @returns Reference to the created overlay.
+ */
+function createOverlayRef(injector, config) {
+    // This is done in the overlay container as well, but we have it here
+    // since it's common to mock out the overlay container in tests.
+    injector.get(_CdkPrivateStyleLoader).load(_CdkOverlayStyleLoader);
+    const overlayContainer = injector.get(OverlayContainer);
+    const doc = injector.get(DOCUMENT);
+    const idGenerator = injector.get(_IdGenerator);
+    const appRef = injector.get(ApplicationRef);
+    const directionality = injector.get(Directionality);
+    const host = doc.createElement('div');
+    const pane = doc.createElement('div');
+    pane.id = idGenerator.getId('cdk-overlay-');
+    pane.classList.add('cdk-overlay-pane');
+    host.appendChild(pane);
+    overlayContainer.getContainerElement().appendChild(host);
+    const portalOutlet = new DomPortalOutlet(pane, appRef, injector);
+    const overlayConfig = new OverlayConfig(config);
+    const renderer = injector.get(Renderer2, null, { optional: true }) ||
+        injector.get(RendererFactory2).createRenderer(null, null);
+    overlayConfig.direction = overlayConfig.direction || directionality.value;
+    return new OverlayRef(portalOutlet, host, pane, overlayConfig, injector.get(NgZone), injector.get(OverlayKeyboardDispatcher), doc, injector.get(Location), injector.get(OverlayOutsideClickDispatcher), config?.disableAnimations ??
+        injector.get(ANIMATION_MODULE_TYPE, null, { optional: true }) === 'NoopAnimations', injector.get(EnvironmentInjector), renderer);
+}
+/**
  * Service to create Overlays. Overlays are dynamically added pieces of floating UI, meant to be
  * used as a low-level building block for other components. Dialogs, tooltips, menus,
  * selects, etc. can all be built using overlays. The service should primarily be used by authors
@@ -2509,20 +2577,8 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", 
  */
 class Overlay {
     scrollStrategies = inject(ScrollStrategyOptions);
-    _overlayContainer = inject(OverlayContainer);
     _positionBuilder = inject(OverlayPositionBuilder);
-    _keyboardDispatcher = inject(OverlayKeyboardDispatcher);
     _injector = inject(Injector);
-    _ngZone = inject(NgZone);
-    _document = inject(DOCUMENT);
-    _directionality = inject(Directionality);
-    _location = inject(Location);
-    _outsideClickDispatcher = inject(OverlayOutsideClickDispatcher);
-    _animationsModuleType = inject(ANIMATION_MODULE_TYPE, { optional: true });
-    _idGenerator = inject(_IdGenerator);
-    _renderer = inject(RendererFactory2).createRenderer(null, null);
-    _appRef;
-    _styleLoader = inject(_CdkPrivateStyleLoader);
     constructor() { }
     /**
      * Creates an overlay.
@@ -2530,15 +2586,7 @@ class Overlay {
      * @returns Reference to the created overlay.
      */
     create(config) {
-        // This is done in the overlay container as well, but we have it here
-        // since it's common to mock out the overlay container in tests.
-        this._styleLoader.load(_CdkOverlayStyleLoader);
-        const host = this._createHostElement();
-        const pane = this._createPaneElement(host);
-        const portalOutlet = this._createPortalOutlet(pane);
-        const overlayConfig = new OverlayConfig(config);
-        overlayConfig.direction = overlayConfig.direction || this._directionality.value;
-        return new OverlayRef(portalOutlet, host, pane, overlayConfig, this._ngZone, this._keyboardDispatcher, this._document, this._location, this._outsideClickDispatcher, config?.disableAnimations ?? this._animationsModuleType === 'NoopAnimations', this._injector.get(EnvironmentInjector), this._renderer);
+        return createOverlayRef(this._injector, config);
     }
     /**
      * Gets a position builder that can be used, via fluent API,
@@ -2547,40 +2595,6 @@ class Overlay {
      */
     position() {
         return this._positionBuilder;
-    }
-    /**
-     * Creates the DOM element for an overlay and appends it to the overlay container.
-     * @returns Newly-created pane element
-     */
-    _createPaneElement(host) {
-        const pane = this._document.createElement('div');
-        pane.id = this._idGenerator.getId('cdk-overlay-');
-        pane.classList.add('cdk-overlay-pane');
-        host.appendChild(pane);
-        return pane;
-    }
-    /**
-     * Creates the host element that wraps around an overlay
-     * and can be used for advanced positioning.
-     * @returns Newly-create host element.
-     */
-    _createHostElement() {
-        const host = this._document.createElement('div');
-        this._overlayContainer.getContainerElement().appendChild(host);
-        return host;
-    }
-    /**
-     * Create a DomPortalOutlet into which the overlay content can be loaded.
-     * @param pane The DOM element to turn into a portal outlet.
-     * @returns A portal outlet for the given DOM element.
-     */
-    _createPortalOutlet(pane) {
-        // We have to resolve the ApplicationRef later in order to allow people
-        // to use overlay-based providers during app initialization.
-        if (!this._appRef) {
-            this._appRef = this._injector.get(ApplicationRef);
-        }
-        return new DomPortalOutlet(pane, this._appRef, this._injector);
     }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: Overlay, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
     static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: Overlay, providedIn: 'root' });
@@ -3044,5 +3058,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", 
                 }]
         }] });
 
-export { BlockScrollStrategy, CdkConnectedOverlay, CdkOverlayOrigin, CloseScrollStrategy, ConnectedOverlayPositionChange, ConnectionPositionPair, FlexibleConnectedPositionStrategy, GlobalPositionStrategy, NoopScrollStrategy, Overlay, OverlayConfig, OverlayContainer, OverlayKeyboardDispatcher, OverlayModule, OverlayOutsideClickDispatcher, OverlayPositionBuilder, OverlayRef, RepositionScrollStrategy, STANDARD_DROPDOWN_ADJACENT_POSITIONS, STANDARD_DROPDOWN_BELOW_POSITIONS, ScrollStrategyOptions, ScrollingVisibility, validateHorizontalPosition, validateVerticalPosition };
-//# sourceMappingURL=overlay-module-Ql4amrR-.mjs.map
+export { BlockScrollStrategy, CdkConnectedOverlay, CdkOverlayOrigin, CloseScrollStrategy, ConnectedOverlayPositionChange, ConnectionPositionPair, FlexibleConnectedPositionStrategy, GlobalPositionStrategy, NoopScrollStrategy, Overlay, OverlayConfig, OverlayContainer, OverlayKeyboardDispatcher, OverlayModule, OverlayOutsideClickDispatcher, OverlayPositionBuilder, OverlayRef, RepositionScrollStrategy, STANDARD_DROPDOWN_ADJACENT_POSITIONS, STANDARD_DROPDOWN_BELOW_POSITIONS, ScrollStrategyOptions, ScrollingVisibility, createBlockScrollStrategy, createCloseScrollStrategy, createFlexibleConnectedPositionStrategy, createGlobalPositionStrategy, createNoopScrollStrategy, createOverlayRef, createRepositionScrollStrategy, validateHorizontalPosition, validateVerticalPosition };
+//# sourceMappingURL=overlay-module-CbITM-0_.mjs.map

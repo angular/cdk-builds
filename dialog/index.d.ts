@@ -5,7 +5,7 @@ import { FocusTrapFactory, A11yModule } from '../a11y-module.d-DrV0SO0k.js';
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, TemplatePortal, DomPortal, ComponentType, PortalModule } from '../portal-directives.d-D9c4J36c.js';
 export { CdkPortal as ɵɵCdkPortal, PortalHostDirective as ɵɵPortalHostDirective, TemplatePortalDirective as ɵɵTemplatePortalDirective } from '../portal-directives.d-D9c4J36c.js';
 import { Direction } from '../bidi-module.d-bsVYOt0R.js';
-import { PositionStrategy, ScrollStrategy, OverlayRef, OverlayModule } from '../overlay-module.d-24bhgNtF.js';
+import { PositionStrategy, ScrollStrategy, OverlayRef, OverlayModule } from '../overlay-module.d-CXZs2tcX.js';
 import { Observable, Subject } from 'rxjs';
 import * as _angular_cdk_portal from '@angular/cdk/portal';
 import '../observers/index.js';

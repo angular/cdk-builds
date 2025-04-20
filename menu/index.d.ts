@@ -1,6 +1,6 @@
 import * as i0 from '@angular/core';
 import { ElementRef, Renderer2, QueryList, InjectionToken, Optional, OnDestroy, Injector, ViewContainerRef, EventEmitter, TemplateRef, OnChanges, SimpleChanges, NgZone, AfterContentInit } from '@angular/core';
-import { ScrollStrategy, ConnectedPosition, OverlayRef, OverlayModule } from '../overlay-module.d-24bhgNtF.js';
+import { ScrollStrategy, ConnectedPosition, OverlayRef, OverlayModule } from '../overlay-module.d-CXZs2tcX.js';
 import * as rxjs from 'rxjs';
 import { Observable, Subject } from 'rxjs';
 import { FocusOrigin } from '../focus-monitor.d-BBkiOKUH.js';

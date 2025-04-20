@@ -1,10 +1,10 @@
-import { ScrollStrategy, OverlayRef, PositionStrategy, FlexibleConnectedPositionStrategyOrigin, FlexibleConnectedPositionStrategy, OverlayConfig, OverlayContainer } from '../overlay-module.d-24bhgNtF.js';
-export { CdkConnectedOverlay, CdkOverlayOrigin, ConnectedOverlayPositionChange, ConnectedPosition, ConnectionPositionPair, HorizontalConnectionPos, OriginConnectionPosition, OverlayConnectionPosition, OverlayKeyboardDispatcher, OverlayModule, OverlayOutsideClickDispatcher, OverlaySizeConfig, STANDARD_DROPDOWN_ADJACENT_POSITIONS, STANDARD_DROPDOWN_BELOW_POSITIONS, ScrollingVisibility, VerticalConnectionPos, validateHorizontalPosition, validateVerticalPosition } from '../overlay-module.d-24bhgNtF.js';
+import { ScrollStrategy, OverlayRef, PositionStrategy, FlexibleConnectedPositionStrategyOrigin, FlexibleConnectedPositionStrategy, OverlayConfig, OverlayContainer } from '../overlay-module.d-CXZs2tcX.js';
+export { CdkConnectedOverlay, CdkOverlayOrigin, ConnectedOverlayPositionChange, ConnectedPosition, ConnectionPositionPair, HorizontalConnectionPos, OriginConnectionPosition, OverlayConnectionPosition, OverlayKeyboardDispatcher, OverlayModule, OverlayOutsideClickDispatcher, OverlaySizeConfig, STANDARD_DROPDOWN_ADJACENT_POSITIONS, STANDARD_DROPDOWN_BELOW_POSITIONS, ScrollingVisibility, VerticalConnectionPos, createFlexibleConnectedPositionStrategy, validateHorizontalPosition, validateVerticalPosition } from '../overlay-module.d-CXZs2tcX.js';
 import { ScrollDispatcher } from '../scrolling-module.d-CuNwYGVM.js';
 export { CdkScrollable, CdkFixedSizeVirtualScroll as ɵɵCdkFixedSizeVirtualScroll, CdkScrollableModule as ɵɵCdkScrollableModule, CdkVirtualForOf as ɵɵCdkVirtualForOf, CdkVirtualScrollViewport as ɵɵCdkVirtualScrollViewport, CdkVirtualScrollableElement as ɵɵCdkVirtualScrollableElement, CdkVirtualScrollableWindow as ɵɵCdkVirtualScrollableWindow } from '../scrolling-module.d-CuNwYGVM.js';
 import { ViewportRuler } from '../scrolling/index.js';
 import * as i0 from '@angular/core';
-import { NgZone, OnDestroy } from '@angular/core';
+import { NgZone, Injector, OnDestroy } from '@angular/core';
 export { ComponentType } from '../portal-directives.d-D9c4J36c.js';
 export { Dir as ɵɵDir } from '../bidi-module.d-bsVYOt0R.js';
 import '@angular/common';
@@ -14,6 +14,47 @@ import '../style-loader.d-DbvWk0ty.js';
 import '../data-source.d-DAIyaEMO.js';
 import '../number-property.d-BzBQchZ2.js';
 
+/**
+ * Config options for the RepositionScrollStrategy.
+ */
+interface RepositionScrollStrategyConfig {
+    /** Time in milliseconds to throttle the scroll events. */
+    scrollThrottle?: number;
+    /** Whether to close the overlay once the user has scrolled away completely. */
+    autoClose?: boolean;
+}
+/**
+ * Creates a scroll strategy that updates the overlay's position when the user scrolls.
+ * @param injector Injector used to resolve dependencies of the scroll strategy.
+ * @param config Configuration options for the scroll strategy.
+ */
+declare function createRepositionScrollStrategy(injector: Injector, config?: RepositionScrollStrategyConfig): RepositionScrollStrategy;
+/**
+ * Strategy that will update the element position as the user is scrolling.
+ */
+declare class RepositionScrollStrategy implements ScrollStrategy {
+    private _scrollDispatcher;
+    private _viewportRuler;
+    private _ngZone;
+    private _config?;
+    private _scrollSubscription;
+    private _overlayRef;
+    constructor(_scrollDispatcher: ScrollDispatcher, _viewportRuler: ViewportRuler, _ngZone: NgZone, _config?: RepositionScrollStrategyConfig | undefined);
+    /** Attaches this scroll strategy to an overlay. */
+    attach(overlayRef: OverlayRef): void;
+    /** Enables repositioning of the attached overlay on scroll. */
+    enable(): void;
+    /** Disables repositioning of the attached overlay on scroll. */
+    disable(): void;
+    detach(): void;
+}
+
+/**
+ * Creates a scroll strategy that prevents the user from scrolling while the overlay is open.
+ * @param injector Injector used to resolve dependencies of the scroll strategy.
+ * @param config Configuration options for the scroll strategy.
+ */
+declare function createBlockScrollStrategy(injector: Injector): BlockScrollStrategy;
 /**
  * Strategy that will prevent the user from scrolling while the overlay is visible.
  */
@@ -41,6 +82,12 @@ interface CloseScrollStrategyConfig {
     threshold?: number;
 }
 /**
+ * Creates a scroll strategy that closes the overlay when the user starts to scroll.
+ * @param injector Injector used to resolve dependencies of the scroll strategy.
+ * @param config Configuration options for the scroll strategy.
+ */
+declare function createCloseScrollStrategy(injector: Injector, config?: CloseScrollStrategyConfig): CloseScrollStrategy;
+/**
  * Strategy that will close the overlay as soon as the user starts scrolling.
  */
 declare class CloseScrollStrategy implements ScrollStrategy {
@@ -63,6 +110,8 @@ declare class CloseScrollStrategy implements ScrollStrategy {
     private _detach;
 }
 
+/** Creates a scroll strategy that does nothing. */
+declare function createNoopScrollStrategy(): NoopScrollStrategy;
 /** Scroll strategy that doesn't do anything. */
 declare class NoopScrollStrategy implements ScrollStrategy {
     /** Does nothing, as this scroll strategy is a no-op. */
@@ -74,45 +123,13 @@ declare class NoopScrollStrategy implements ScrollStrategy {
 }
 
 /**
- * Config options for the RepositionScrollStrategy.
- */
-interface RepositionScrollStrategyConfig {
-    /** Time in milliseconds to throttle the scroll events. */
-    scrollThrottle?: number;
-    /** Whether to close the overlay once the user has scrolled away completely. */
-    autoClose?: boolean;
-}
-/**
- * Strategy that will update the element position as the user is scrolling.
- */
-declare class RepositionScrollStrategy implements ScrollStrategy {
-    private _scrollDispatcher;
-    private _viewportRuler;
-    private _ngZone;
-    private _config?;
-    private _scrollSubscription;
-    private _overlayRef;
-    constructor(_scrollDispatcher: ScrollDispatcher, _viewportRuler: ViewportRuler, _ngZone: NgZone, _config?: RepositionScrollStrategyConfig | undefined);
-    /** Attaches this scroll strategy to an overlay. */
-    attach(overlayRef: OverlayRef): void;
-    /** Enables repositioning of the attached overlay on scroll. */
-    enable(): void;
-    /** Disables repositioning of the attached overlay on scroll. */
-    disable(): void;
-    detach(): void;
-}
-
-/**
  * Options for how an overlay will handle scrolling.
  *
  * Users can provide a custom value for `ScrollStrategyOptions` to replace the default
  * behaviors. This class primarily acts as a factory for ScrollStrategy instances.
  */
 declare class ScrollStrategyOptions {
-    private _scrollDispatcher;
-    private _viewportRuler;
-    private _ngZone;
-    private _document;
+    private _injector;
     constructor(...args: unknown[]);
     /** Do nothing on scroll. */
     noop: () => NoopScrollStrategy;
@@ -133,6 +150,11 @@ declare class ScrollStrategyOptions {
     static ɵprov: i0.ɵɵInjectableDeclaration<ScrollStrategyOptions>;
 }
 
+/**
+ * Creates a global position strategy.
+ * @param injector Injector used to resolve dependencies for the strategy.
+ */
+declare function createGlobalPositionStrategy(_injector: Injector): GlobalPositionStrategy;
 /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
  * explicit position relative to the browser's viewport. We use flexbox, instead of
@@ -226,10 +248,7 @@ declare class GlobalPositionStrategy implements PositionStrategy {
 
 /** Builder for overlay position strategy. */
 declare class OverlayPositionBuilder {
-    private _viewportRuler;
-    private _document;
-    private _platform;
-    private _overlayContainer;
+    private _injector;
     constructor(...args: unknown[]);
     /**
      * Creates a global position strategy.
@@ -245,6 +264,13 @@ declare class OverlayPositionBuilder {
 }
 
 /**
+ * Creates an overlay.
+ * @param injector Injector to use when resolving the overlay's dependencies.
+ * @param config Configuration applied to the overlay.
+ * @returns Reference to the created overlay.
+ */
+declare function createOverlayRef(injector: Injector, config?: OverlayConfig): OverlayRef;
+/**
  * Service to create Overlays. Overlays are dynamically added pieces of floating UI, meant to be
  * used as a low-level building block for other components. Dialogs, tooltips, menus,
  * selects, etc. can all be built using overlays. The service should primarily be used by authors
@@ -254,20 +280,8 @@ declare class OverlayPositionBuilder {
  */
 declare class Overlay {
     scrollStrategies: ScrollStrategyOptions;
-    private _overlayContainer;
     private _positionBuilder;
-    private _keyboardDispatcher;
     private _injector;
-    private _ngZone;
-    private _document;
-    private _directionality;
-    private _location;
-    private _outsideClickDispatcher;
-    private _animationsModuleType;
-    private _idGenerator;
-    private _renderer;
-    private _appRef;
-    private _styleLoader;
     constructor(...args: unknown[]);
     /**
      * Creates an overlay.
@@ -281,23 +295,6 @@ declare class Overlay {
      * @returns An overlay position builder.
      */
     position(): OverlayPositionBuilder;
-    /**
-     * Creates the DOM element for an overlay and appends it to the overlay container.
-     * @returns Newly-created pane element
-     */
-    private _createPaneElement;
-    /**
-     * Creates the host element that wraps around an overlay
-     * and can be used for advanced positioning.
-     * @returns Newly-create host element.
-     */
-    private _createHostElement;
-    /**
-     * Create a DomPortalOutlet into which the overlay content can be loaded.
-     * @param pane The DOM element to turn into a portal outlet.
-     * @returns A portal outlet for the given DOM element.
-     */
-    private _createPortalOutlet;
     static ɵfac: i0.ɵɵFactoryDeclaration<Overlay, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<Overlay>;
 }
@@ -327,5 +324,5 @@ declare class FullscreenOverlayContainer extends OverlayContainer implements OnD
     static ɵprov: i0.ɵɵInjectableDeclaration<FullscreenOverlayContainer>;
 }
 
-export { BlockScrollStrategy, CloseScrollStrategy, FlexibleConnectedPositionStrategy, FlexibleConnectedPositionStrategyOrigin, FullscreenOverlayContainer, GlobalPositionStrategy, NoopScrollStrategy, Overlay, OverlayConfig, OverlayContainer, OverlayPositionBuilder, OverlayRef, PositionStrategy, RepositionScrollStrategy, ScrollDispatcher, ScrollStrategy, ScrollStrategyOptions, ViewportRuler };
+export { BlockScrollStrategy, CloseScrollStrategy, FlexibleConnectedPositionStrategy, FlexibleConnectedPositionStrategyOrigin, FullscreenOverlayContainer, GlobalPositionStrategy, NoopScrollStrategy, Overlay, OverlayConfig, OverlayContainer, OverlayPositionBuilder, OverlayRef, PositionStrategy, RepositionScrollStrategy, ScrollDispatcher, ScrollStrategy, ScrollStrategyOptions, ViewportRuler, createBlockScrollStrategy, createCloseScrollStrategy, createGlobalPositionStrategy, createNoopScrollStrategy, createOverlayRef, createRepositionScrollStrategy };
 export type { RepositionScrollStrategyConfig };

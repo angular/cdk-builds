@@ -3,7 +3,7 @@ import { inject, ElementRef, NgZone, Renderer2, DOCUMENT, ChangeDetectorRef, Inj
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, TemplatePortal, PortalModule } from './portal.mjs';
 export { CdkPortal as ɵɵCdkPortal, PortalHostDirective as ɵɵPortalHostDirective, TemplatePortalDirective as ɵɵTemplatePortalDirective } from './portal.mjs';
 import { FocusTrapFactory, InteractivityChecker, A11yModule } from './a11y-module-CEBjqXuv.mjs';
-import { OverlayRef, Overlay, OverlayContainer, OverlayConfig, OverlayModule } from './overlay-module-Ql4amrR-.mjs';
+import { OverlayRef, Overlay, OverlayContainer, OverlayConfig, OverlayModule } from './overlay-module-CbITM-0_.mjs';
 import { FocusMonitor } from './focus-monitor-jX8r4DY-.mjs';
 import { Platform } from './platform-BInyKIh1.mjs';
 import { _getFocusedElementPierceShadowDom } from './shadow-dom-DFvX9W95.mjs';
