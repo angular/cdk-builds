@@ -715,6 +715,8 @@ declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDestroy {
     getRootElement(): HTMLElement;
     /** Resets a standalone drag item to its initial position. */
     reset(): void;
+    /** Resets drag item to end of boundary element. */
+    resetToBoundary(): void;
     /**
      * Gets the pixel coordinates of the draggable outside of a drop container.
      */
@@ -1153,6 +1155,8 @@ declare class DragRef<T = any> {
     isDragging(): boolean;
     /** Resets a standalone drag item to its initial position. */
     reset(): void;
+    /** Resets drag item to end of boundary element. */
+    resetToBoundary(): void;
     /**
      * Sets a handle as disabled. While a handle is disabled, it'll capture and interrupt dragging.
      * @param handle Handle element that should be disabled.
