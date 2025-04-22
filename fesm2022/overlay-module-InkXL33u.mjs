@@ -94,9 +94,9 @@ class BlockScrollStrategy {
         if (html.classList.contains('cdk-global-scrollblock') || this._isEnabled) {
             return false;
         }
-        const body = this._document.body;
+        const rootElement = this._document.documentElement;
         const viewport = this._viewportRuler.getViewportSize();
-        return body.scrollHeight > viewport.height || body.scrollWidth > viewport.width;
+        return rootElement.scrollHeight > viewport.height || rootElement.scrollWidth > viewport.width;
     }
 }
 
@@ -3059,4 +3059,4 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", 
         }] });
 
 export { BlockScrollStrategy as B, CdkOverlayOrigin as C, FlexibleConnectedPositionStrategy as F, GlobalPositionStrategy as G, NoopScrollStrategy as N, OverlayContainer as O, RepositionScrollStrategy as R, STANDARD_DROPDOWN_ADJACENT_POSITIONS as S, Overlay as a, CdkConnectedOverlay as b, createOverlayRef as c, OverlayRef as d, OverlayPositionBuilder as e, createGlobalPositionStrategy as f, STANDARD_DROPDOWN_BELOW_POSITIONS as g, createFlexibleConnectedPositionStrategy as h, OverlayConfig as i, ConnectionPositionPair as j, ScrollingVisibility as k, ConnectedOverlayPositionChange as l, validateHorizontalPosition as m, ScrollStrategyOptions as n, createRepositionScrollStrategy as o, CloseScrollStrategy as p, createCloseScrollStrategy as q, createNoopScrollStrategy as r, createBlockScrollStrategy as s, OverlayModule as t, OverlayOutsideClickDispatcher as u, validateVerticalPosition as v, OverlayKeyboardDispatcher as w };
-//# sourceMappingURL=overlay-module-Ch9Xp7P2.mjs.map
+//# sourceMappingURL=overlay-module-InkXL33u.mjs.map
