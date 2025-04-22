@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { InjectionToken, OnDestroy, EventEmitter } from '@angular/core';
+import { OnDestroy, EventEmitter, InjectionToken } from '@angular/core';
 
 /**
  * A pending copy-to-clipboard operation.

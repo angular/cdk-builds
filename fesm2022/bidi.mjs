@@ -1,7 +1,7 @@
-import { _ as _resolveDirectionality, D as Directionality } from './directionality-Ck5Uc9Se.mjs';
-export { a as DIR_DOCUMENT } from './directionality-Ck5Uc9Se.mjs';
+import { _resolveDirectionality, Directionality } from './directionality-kM9GX3mp.mjs';
+export { DIR_DOCUMENT } from './directionality-kM9GX3mp.mjs';
 import * as i0 from '@angular/core';
-import { EventEmitter, signal, Directive, Output, Input, NgModule } from '@angular/core';
+import { EventEmitter, signal, Input, Output, Directive, NgModule } from '@angular/core';
 
 /**
  * Directive to listen for changes of direction of part of the DOM.

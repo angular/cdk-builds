@@ -1,6 +1,6 @@
-export { _ as _CdkPrivateStyleLoader } from './style-loader-BDEAZOey.mjs';
+export { _CdkPrivateStyleLoader } from './style-loader-DpEDdstc.mjs';
 import * as i0 from '@angular/core';
-import { Component, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, ViewEncapsulation, Component } from '@angular/core';
 
 /**
  * Component used to load the .cdk-visually-hidden styles.

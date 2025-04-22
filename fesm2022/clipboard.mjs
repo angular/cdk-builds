@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { inject, DOCUMENT, Injectable, InjectionToken, NgZone, EventEmitter, Directive, Input, Output, NgModule } from '@angular/core';
+import { inject, DOCUMENT, Injectable, InjectionToken, NgZone, EventEmitter, Output, Input, Directive, NgModule } from '@angular/core';
 
 /**
  * A pending copy-to-clipboard operation.

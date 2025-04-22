@@ -1,11 +1,11 @@
 import * as i0 from '@angular/core';
 import { NgModule } from '@angular/core';
-export { B as BreakpointObserver, M as MediaMatcher } from './breakpoints-observer-DpQzdtrE.mjs';
+export { BreakpointObserver, MediaMatcher } from './breakpoints-observer-CsCzbYlX.mjs';
 import 'rxjs';
 import 'rxjs/operators';
-import './platform-CPg0IbDW.mjs';
+import './platform-BInyKIh1.mjs';
 import '@angular/common';
-import './array-I1yfCXUO.mjs';
+import './array-Hg8isvLj.mjs';
 
 class LayoutModule {
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: LayoutModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });

@@ -1,22 +1,22 @@
 import * as i0 from '@angular/core';
-import { signal, Component, ViewEncapsulation, ChangeDetectionStrategy, inject, NgZone, DOCUMENT, RendererFactory2, Injectable, InjectionToken, ElementRef, booleanAttribute, Directive, Input, ViewContainerRef, ChangeDetectorRef, EventEmitter, Injector, afterNextRender, numberAttribute, Output, TemplateRef, NgModule } from '@angular/core';
+import { signal, inject, NgZone, DOCUMENT, RendererFactory2, ChangeDetectionStrategy, ViewEncapsulation, Component, Injectable, InjectionToken, ElementRef, booleanAttribute, Input, Directive, ViewContainerRef, ChangeDetectorRef, EventEmitter, Injector, afterNextRender, numberAttribute, Output, TemplateRef, NgModule } from '@angular/core';
 import { Subject, Subscription, interval, animationFrameScheduler, Observable, merge, BehaviorSubject } from 'rxjs';
-import { _ as _getEventTarget, a as _getShadowRoot } from './shadow-dom-B0oHn41l.mjs';
-import { a as isFakeTouchstartFromScreenReader, i as isFakeMousedownFromScreenReader } from './fake-event-detection-DWOdFTFz.mjs';
-import { a as coerceElement, c as coerceNumberProperty } from './element-x4z00URv.mjs';
+import { _getEventTarget, _getShadowRoot } from './shadow-dom-DFvX9W95.mjs';
+import { isFakeTouchstartFromScreenReader, isFakeMousedownFromScreenReader } from './fake-event-detection-D0_6qVp2.mjs';
+import { coerceElement, coerceNumberProperty } from './element-CpqV8p-X.mjs';
 import { takeUntil, map, take, tap, switchMap, startWith } from 'rxjs/operators';
-import { _ as _CdkPrivateStyleLoader } from './style-loader-BDEAZOey.mjs';
+import { _CdkPrivateStyleLoader } from './style-loader-DpEDdstc.mjs';
 import { ViewportRuler, ScrollDispatcher, CdkScrollableModule } from './scrolling.mjs';
 export { CdkScrollable as ɵɵCdkScrollable } from './scrolling.mjs';
-import { D as Directionality } from './directionality-Ck5Uc9Se.mjs';
-import { _ as _IdGenerator } from './id-generator-BwB8lolC.mjs';
-import { c as coerceArray } from './array-I1yfCXUO.mjs';
-import './platform-CPg0IbDW.mjs';
+import { Directionality } from './directionality-kM9GX3mp.mjs';
+import { _IdGenerator } from './id-generator-B33AfkWd.mjs';
+import { coerceArray } from './array-Hg8isvLj.mjs';
+import './platform-BInyKIh1.mjs';
 import '@angular/common';
-import './scrolling-BkvA05C8.mjs';
+import './scrolling-BXVcIfjZ.mjs';
 import './bidi.mjs';
-import './recycle-view-repeater-strategy-DoWdPqVw.mjs';
-import './data-source-D34wiQZj.mjs';
+import './recycle-view-repeater-strategy-Ce0p4WhD.mjs';
+import './data-source-CL6Fasig.mjs';
 
 /** Creates a deep clone of an element. */
 function deepCloneNode(node) {
