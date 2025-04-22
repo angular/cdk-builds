@@ -1,16 +1,16 @@
 import * as i0 from '@angular/core';
-import { InjectionToken, forwardRef, Directive, Input, inject, NgZone, RendererFactory2, Injectable, ElementRef, Renderer2, ChangeDetectorRef, Injector, afterNextRender, booleanAttribute, Optional, Inject, Component, ViewEncapsulation, ChangeDetectionStrategy, Output, ViewChild, ViewContainerRef, TemplateRef, IterableDiffers, NgModule } from '@angular/core';
+import { InjectionToken, forwardRef, Input, Directive, inject, NgZone, RendererFactory2, Injectable, ElementRef, Renderer2, ChangeDetectorRef, Injector, afterNextRender, Optional, Inject, booleanAttribute, ViewChild, Output, ChangeDetectionStrategy, ViewEncapsulation, Component, ViewContainerRef, TemplateRef, IterableDiffers, NgModule } from '@angular/core';
 import { Subject, of, Observable, Subscription, animationFrameScheduler, asapScheduler, isObservable } from 'rxjs';
 import { distinctUntilChanged, auditTime, filter, startWith, takeUntil, pairwise, switchMap, shareReplay } from 'rxjs/operators';
-import { c as coerceNumberProperty, a as coerceElement } from './element-x4z00URv.mjs';
-import { P as Platform } from './platform-DmdVEw_C.mjs';
-import { D as Directionality } from './directionality-CBXD4hga.mjs';
-import { g as getRtlScrollAxisType, R as RtlScrollAxisType, s as supportsScrollBehavior } from './scrolling-BkvA05C8.mjs';
+import { coerceNumberProperty, coerceElement } from './element-CpqV8p-X.mjs';
+import { Platform } from './platform-Do3uqmxu.mjs';
+import { Directionality } from './directionality-DPQw3n2b.mjs';
+import { getRtlScrollAxisType, RtlScrollAxisType, supportsScrollBehavior } from './scrolling-BXVcIfjZ.mjs';
 import { BidiModule } from './bidi.mjs';
 export { Dir as ɵɵDir } from './bidi.mjs';
 import { DOCUMENT } from '@angular/common';
-import { b as _VIEW_REPEATER_STRATEGY, A as ArrayDataSource, _ as _RecycleViewRepeaterStrategy } from './recycle-view-repeater-strategy-DoWdPqVw.mjs';
-import { i as isDataSource } from './data-source-D34wiQZj.mjs';
+import { _VIEW_REPEATER_STRATEGY, ArrayDataSource, _RecycleViewRepeaterStrategy } from './recycle-view-repeater-strategy-Ce0p4WhD.mjs';
+import { isDataSource } from './data-source-CL6Fasig.mjs';
 
 /** The injection token used to specify the virtual scrolling strategy. */
 const VIRTUAL_SCROLL_STRATEGY = new InjectionToken('VIRTUAL_SCROLL_STRATEGY');

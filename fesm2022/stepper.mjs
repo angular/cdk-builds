@@ -1,18 +1,18 @@
 import * as i0 from '@angular/core';
-import { inject, ElementRef, Directive, TemplateRef, InjectionToken, EventEmitter, booleanAttribute, Component, ViewEncapsulation, ChangeDetectionStrategy, ContentChild, ContentChildren, ViewChild, Input, Output, ChangeDetectorRef, QueryList, numberAttribute, NgModule } from '@angular/core';
+import { inject, ElementRef, Directive, TemplateRef, InjectionToken, EventEmitter, booleanAttribute, ChangeDetectorRef, QueryList, numberAttribute, Input, Output, ViewChild, ContentChildren, ContentChild, ChangeDetectionStrategy, ViewEncapsulation, Component, NgModule } from '@angular/core';
 import { ControlContainer } from '@angular/forms';
 import { Subject, of } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
-import { D as Directionality } from './directionality-CBXD4hga.mjs';
-import { _ as _IdGenerator } from './id-generator-Dw_9dSDu.mjs';
-import { F as FocusKeyManager } from './focus-key-manager-C1rAQJ5z.mjs';
+import { Directionality } from './directionality-DPQw3n2b.mjs';
+import { _IdGenerator } from './id-generator-tlPCNuwi.mjs';
+import { FocusKeyManager } from './focus-key-manager-DgyxYbV2.mjs';
 import { hasModifierKey } from './keycodes.mjs';
-import { S as SPACE, c as ENTER } from './keycodes-CpHkExLC.mjs';
-import { c as _getFocusedElementPierceShadowDom } from './shadow-dom-B0oHn41l.mjs';
+import { SPACE, ENTER } from './keycodes-DPWmI2Ix.mjs';
+import { _getFocusedElementPierceShadowDom } from './shadow-dom-DFvX9W95.mjs';
 import { BidiModule } from './bidi.mjs';
 import '@angular/common';
-import './list-key-manager-CyOIXo8P.mjs';
-import './typeahead-9ZW4Dtsf.mjs';
+import './list-key-manager-CYBoL_nN.mjs';
+import './typeahead-BAa3HZoh.mjs';
 
 class CdkStepHeader {
     _elementRef = inject(ElementRef);

@@ -1,8 +1,8 @@
 import * as i0 from '@angular/core';
-import { Injectable, inject, NgZone, ElementRef, EventEmitter, booleanAttribute, Directive, Output, Input, NgModule } from '@angular/core';
+import { inject, NgZone, ElementRef, EventEmitter, booleanAttribute, Injectable, Input, Output, Directive, NgModule } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { map, filter, debounceTime } from 'rxjs/operators';
-import { c as coerceNumberProperty, a as coerceElement } from './element-x4z00URv.mjs';
+import { coerceElement, coerceNumberProperty } from './element-CpqV8p-X.mjs';
 
 // Angular may add, remove, or edit comment nodes during change detection. We don't care about
 // these changes because they don't affect the user-preceived content, and worse it can cause
