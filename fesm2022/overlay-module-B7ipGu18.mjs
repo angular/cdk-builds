@@ -87,9 +87,9 @@ class BlockScrollStrategy {
         if (html.classList.contains('cdk-global-scrollblock') || this._isEnabled) {
             return false;
         }
-        const body = this._document.body;
+        const rootElement = this._document.documentElement;
         const viewport = this._viewportRuler.getViewportSize();
-        return body.scrollHeight > viewport.height || body.scrollWidth > viewport.width;
+        return rootElement.scrollHeight > viewport.height || rootElement.scrollWidth > viewport.width;
     }
 }
 
@@ -3026,4 +3026,4 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.6", ngImpor
         }] });
 
 export { BlockScrollStrategy, CdkConnectedOverlay, CdkOverlayOrigin, CloseScrollStrategy, ConnectedOverlayPositionChange, ConnectionPositionPair, FlexibleConnectedPositionStrategy, GlobalPositionStrategy, NoopScrollStrategy, Overlay, OverlayConfig, OverlayContainer, OverlayKeyboardDispatcher, OverlayModule, OverlayOutsideClickDispatcher, OverlayPositionBuilder, OverlayRef, RepositionScrollStrategy, STANDARD_DROPDOWN_ADJACENT_POSITIONS, STANDARD_DROPDOWN_BELOW_POSITIONS, ScrollStrategyOptions, ScrollingVisibility, validateHorizontalPosition, validateVerticalPosition };
-//# sourceMappingURL=overlay-module-DVlnSjmr.mjs.map
+//# sourceMappingURL=overlay-module-B7ipGu18.mjs.map
