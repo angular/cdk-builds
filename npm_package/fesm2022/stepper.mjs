@@ -329,9 +329,13 @@ class CdkStepper {
             .withWrap()
             .withHomeAndEnd()
             .withVerticalOrientation(this._orientation === 'vertical');
+        // The selected index may have changed between when the component was created and when the
+        // key manager was initialized. Use `updateActiveItem` so it's correct, but it doesn't steal
+        // away focus from the user.
+        this._keyManager.updateActiveItem(this.selectedIndex);
         (this._dir ? this._dir.change : of())
             .pipe(startWith(this._layoutDirection()), takeUntil(this._destroyed))
-            .subscribe(direction => this._keyManager.withHorizontalOrientation(direction));
+            .subscribe(direction => this._keyManager?.withHorizontalOrientation(direction));
         this._keyManager.updateActiveItem(this._selectedIndex);
         // No need to `takeUntil` here, because we're the ones destroying `steps`.
         this.steps.changes.subscribe(() => {
@@ -453,9 +457,11 @@ class CdkStepper {
         // lost when the active step content is hidden. We can't be more granular with the check
         // (e.g. checking whether focus is inside the active step), because we don't have a
         // reference to the elements that are rendering out the content.
-        this._containsFocus()
-            ? this._keyManager.setActiveItem(newIndex)
-            : this._keyManager.updateActiveItem(newIndex);
+        if (this._keyManager) {
+            this._containsFocus()
+                ? this._keyManager.setActiveItem(newIndex)
+                : this._keyManager.updateActiveItem(newIndex);
+        }
         this._selectedIndex = newIndex;
         this.selectedIndexChange.emit(this._selectedIndex);
         this._stateChanged();
@@ -464,14 +470,14 @@ class CdkStepper {
         const hasModifier = hasModifierKey(event);
         const keyCode = event.keyCode;
         const manager = this._keyManager;
-        if (manager.activeItemIndex != null &&
+        if (manager?.activeItemIndex != null &&
             !hasModifier &&
             (keyCode === SPACE || keyCode === ENTER)) {
             this.selectedIndex = manager.activeItemIndex;
             event.preventDefault();
         }
         else {
-            manager.setFocusOrigin('keyboard').onKeydown(event);
+            manager?.setFocusOrigin('keyboard').onKeydown(event);
         }
     }
     _anyControlsInvalidOrPending(index) {
