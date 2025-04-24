@@ -47,6 +47,8 @@ declare class DialogConfig<D = unknown, R = unknown, C extends BasePortalOutlet 
     backdropClass?: string | string[];
     /** Whether the dialog closes with the escape key or pointer events outside the panel element. */
     disableClose?: boolean;
+    /** Function used to determine whether the dialog is allowed to close. */
+    closePredicate?: <Result = unknown, Component = unknown, Config extends DialogConfig = DialogConfig>(result: Result | undefined, config: Config, componentInstance: Component | null) => boolean;
     /** Width of the dialog. */
     width?: string;
     /** Height of the dialog. */
@@ -151,7 +153,6 @@ declare class CdkDialogContainer<C extends DialogConfig = DialogConfig> extends 
     readonly _config: C;
     private _interactivityChecker;
     protected _ngZone: NgZone;
-    private _overlayRef;
     private _focusMonitor;
     private _renderer;
     private _platform;
@@ -231,8 +232,6 @@ declare class CdkDialogContainer<C extends DialogConfig = DialogConfig> extends 
     private _containsFocus;
     /** Sets up the focus trap. */
     private _initializeFocusTrap;
-    /** Sets up the listener that handles clicks on the dialog backdrop. */
-    private _handleBackdropClicks;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkDialogContainer<any>, never>;
     static ɵcmp: i0.ɵɵComponentDeclaration<CdkDialogContainer<any>, "cdk-dialog-container", never, {}, {}, never, never, true, never>;
 }
@@ -261,6 +260,7 @@ declare class DialogRef<R = unknown, C = unknown> {
     /** Instance of the container that is rendering out the dialog content. */
     readonly containerInstance: BasePortalOutlet & {
         _closeInteractionType?: FocusOrigin;
+        _recaptureFocus?: () => void;
     };
     /** Whether the user is allowed to close the dialog. */
     disableClose: boolean | undefined;
@@ -295,6 +295,8 @@ declare class DialogRef<R = unknown, C = unknown> {
     addPanelClass(classes: string | string[]): this;
     /** Remove a CSS class or an array of classes from the overlay pane. */
     removePanelClass(classes: string | string[]): this;
+    /** Whether the dialog is allowed to close. */
+    private _canClose;
 }
 
 declare class Dialog implements OnDestroy {

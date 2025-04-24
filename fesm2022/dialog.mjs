@@ -3,7 +3,6 @@ import { inject, ElementRef, NgZone, Renderer2, DOCUMENT, ChangeDetectorRef, Inj
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, TemplatePortal, PortalModule } from './portal.mjs';
 export { CdkPortal as ɵɵCdkPortal, PortalHostDirective as ɵɵPortalHostDirective, TemplatePortalDirective as ɵɵTemplatePortalDirective } from './portal.mjs';
 import { F as FocusTrapFactory, I as InteractivityChecker, A as A11yModule } from './a11y-module-DpEjWNCj.mjs';
-import { d as OverlayRef, a as Overlay, O as OverlayContainer, i as OverlayConfig, t as OverlayModule } from './overlay-module-InkXL33u.mjs';
 import { F as FocusMonitor } from './focus-monitor-DKFfep8Q.mjs';
 import { P as Platform } from './platform-CPg0IbDW.mjs';
 import { c as _getFocusedElementPierceShadowDom } from './shadow-dom-B0oHn41l.mjs';
@@ -11,6 +10,7 @@ import { Subject, defer } from 'rxjs';
 import { g as ESCAPE } from './keycodes-CpHkExLC.mjs';
 import { hasModifierKey } from './keycodes.mjs';
 import { startWith } from 'rxjs/operators';
+import { a as Overlay, O as OverlayContainer, i as OverlayConfig, d as OverlayRef, t as OverlayModule } from './overlay-module-InkXL33u.mjs';
 import { _ as _IdGenerator } from './id-generator-BwB8lolC.mjs';
 import { D as Directionality } from './directionality-Ck5Uc9Se.mjs';
 import './style-loader-BDEAZOey.mjs';
@@ -19,6 +19,8 @@ import './breakpoints-observer-DpQzdtrE.mjs';
 import './array-I1yfCXUO.mjs';
 import './observers.mjs';
 import './element-x4z00URv.mjs';
+import './fake-event-detection-DWOdFTFz.mjs';
+import './passive-listeners-esHZRgIN.mjs';
 import '@angular/common';
 import './test-environment-CT0XxPyp.mjs';
 import './css-pixel-value-C_HEqLhI.mjs';
@@ -27,8 +29,6 @@ import './scrolling-BkvA05C8.mjs';
 import './bidi.mjs';
 import './recycle-view-repeater-strategy-DoWdPqVw.mjs';
 import './data-source-D34wiQZj.mjs';
-import './fake-event-detection-DWOdFTFz.mjs';
-import './passive-listeners-esHZRgIN.mjs';
 
 /** Configuration for opening a modal dialog. */
 class DialogConfig {
@@ -56,6 +56,8 @@ class DialogConfig {
     backdropClass = '';
     /** Whether the dialog closes with the escape key or pointer events outside the panel element. */
     disableClose = false;
+    /** Function used to determine whether the dialog is allowed to close. */
+    closePredicate;
     /** Width of the dialog. */
     width = '';
     /** Height of the dialog. */
@@ -159,7 +161,6 @@ class CdkDialogContainer extends BasePortalOutlet {
     _config;
     _interactivityChecker = inject(InteractivityChecker);
     _ngZone = inject(NgZone);
-    _overlayRef = inject(OverlayRef);
     _focusMonitor = inject(FocusMonitor);
     _renderer = inject(Renderer2);
     _platform = inject(Platform);
@@ -208,7 +209,6 @@ class CdkDialogContainer extends BasePortalOutlet {
     }
     _contentAttached() {
         this._initializeFocusTrap();
-        this._handleBackdropClicks();
         this._captureInitialFocus();
     }
     /**
@@ -384,9 +384,7 @@ class CdkDialogContainer extends BasePortalOutlet {
     /** Focuses the dialog container. */
     _focusDialogContainer(options) {
         // Note that there is no focus method when rendering on the server.
-        if (this._elementRef.nativeElement.focus) {
-            this._elementRef.nativeElement.focus(options);
-        }
+        this._elementRef.nativeElement.focus?.(options);
     }
     /** Returns whether focus is inside the dialog. */
     _containsFocus() {
@@ -404,16 +402,6 @@ class CdkDialogContainer extends BasePortalOutlet {
                 this._elementFocusedBeforeDialogWasOpened = _getFocusedElementPierceShadowDom();
             }
         }
-    }
-    /** Sets up the listener that handles clicks on the dialog backdrop. */
-    _handleBackdropClicks() {
-        // Clicking on the backdrop will move focus out of dialog.
-        // Recapture it if closing via the backdrop is disabled.
-        this._overlayRef.backdropClick().subscribe(() => {
-            if (this._config.disableClose) {
-                this._recaptureFocus();
-            }
-        });
     }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: CdkDialogContainer, deps: [], target: i0.ɵɵFactoryTarget.Component });
     static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "20.0.0-next.5", type: CdkDialogContainer, isStandalone: true, selector: "cdk-dialog-container", host: { attributes: { "tabindex": "-1" }, properties: { "attr.id": "_config.id || null", "attr.role": "_config.role", "attr.aria-modal": "_config.ariaModal", "attr.aria-labelledby": "_config.ariaLabel ? null : _ariaLabelledByQueue[0]", "attr.aria-label": "_config.ariaLabel", "attr.aria-describedby": "_config.ariaDescribedBy || null" }, classAttribute: "cdk-dialog-container" }, viewQueries: [{ propertyName: "_portalOutlet", first: true, predicate: CdkPortalOutlet, descendants: true, static: true }], usesInheritance: true, ngImport: i0, template: "<ng-template cdkPortalOutlet />\n", styles: [".cdk-dialog-container{display:block;width:100%;height:100%;min-height:inherit;max-height:inherit}\n"], dependencies: [{ kind: "directive", type: CdkPortalOutlet, selector: "[cdkPortalOutlet]", inputs: ["cdkPortalOutlet"], outputs: ["attached"], exportAs: ["cdkPortalOutlet"] }], changeDetection: i0.ChangeDetectionStrategy.Default, encapsulation: i0.ViewEncapsulation.None });
@@ -482,8 +470,13 @@ class DialogRef {
             }
         });
         this.backdropClick.subscribe(() => {
-            if (!this.disableClose) {
+            if (!this.disableClose && this._canClose()) {
                 this.close(undefined, { focusOrigin: 'mouse' });
+            }
+            else {
+                // Clicking on the backdrop will move focus out of dialog.
+                // Recapture it if closing via the backdrop is disabled.
+                this.containerInstance._recaptureFocus?.();
             }
         });
         this._detachSubscription = overlayRef.detachments().subscribe(() => {
@@ -499,7 +492,7 @@ class DialogRef {
      * @param options Additional options to customize the closing behavior.
      */
     close(result, options) {
-        if (this.containerInstance) {
+        if (this._canClose(result)) {
             const closedSubject = this.closed;
             this.containerInstance._closeInteractionType = options?.focusOrigin || 'program';
             // Drop the detach subscription first since it can be triggered by the
@@ -534,6 +527,12 @@ class DialogRef {
     removePanelClass(classes) {
         this.overlayRef.removePanelClass(classes);
         return this;
+    }
+    /** Whether the dialog is allowed to close. */
+    _canClose(result) {
+        const config = this.config;
+        return (!!this.containerInstance &&
+            (!config.closePredicate || config.closePredicate(result, config, this.componentInstance)));
     }
 }
 
