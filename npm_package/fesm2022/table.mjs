@@ -1278,44 +1278,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", 
                 }]
         }], ctorParameters: () => [] });
 /**
- * The table template that can be used by the mat-table. Should not be used outside of the
- * material library.
- * @docs-private
- */
-const CDK_TABLE_TEMPLATE = 
-// Note that according to MDN, the `caption` element has to be projected as the **first**
-// element in the table. See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/caption
-`
-  <ng-content select="caption"/>
-  <ng-content select="colgroup, col"/>
-
-  <!--
-    Unprojected content throws a hydration error so we need this to capture it.
-    It gets removed on the client so it doesn't affect the layout.
-  -->
-  @if (_isServer) {
-    <ng-content/>
-  }
-
-  @if (_isNativeHtmlTable) {
-    <thead role="rowgroup">
-      <ng-container headerRowOutlet/>
-    </thead>
-    <tbody role="rowgroup">
-      <ng-container rowOutlet/>
-      <ng-container noDataRowOutlet/>
-    </tbody>
-    <tfoot role="rowgroup">
-      <ng-container footerRowOutlet/>
-    </tfoot>
-  } @else {
-    <ng-container headerRowOutlet/>
-    <ng-container rowOutlet/>
-    <ng-container noDataRowOutlet/>
-    <ng-container footerRowOutlet/>
-  }
-`;
-/**
  * A data table that can render a header row, data rows, and a footer row.
  * Uses the dataSource input to determine the data to be rendered. The data can be provided either
  * as a data array, an Observable stream that emits the data array to render, or a DataSource with a
@@ -2249,11 +2211,69 @@ class CdkTable {
             { provide: _COALESCED_STYLE_SCHEDULER, useClass: _CoalescedStyleScheduler },
             // Prevent nested tables from seeing this table's StickyPositioningListener.
             { provide: STICKY_POSITIONING_LISTENER, useValue: null },
-        ], queries: [{ propertyName: "_noDataRow", first: true, predicate: CdkNoDataRow, descendants: true }, { propertyName: "_contentColumnDefs", predicate: CdkColumnDef, descendants: true }, { propertyName: "_contentRowDefs", predicate: CdkRowDef, descendants: true }, { propertyName: "_contentHeaderRowDefs", predicate: CdkHeaderRowDef, descendants: true }, { propertyName: "_contentFooterRowDefs", predicate: CdkFooterRowDef, descendants: true }], exportAs: ["cdkTable"], ngImport: i0, template: "\n  <ng-content select=\"caption\"/>\n  <ng-content select=\"colgroup, col\"/>\n\n  <!--\n    Unprojected content throws a hydration error so we need this to capture it.\n    It gets removed on the client so it doesn't affect the layout.\n  -->\n  @if (_isServer) {\n    <ng-content/>\n  }\n\n  @if (_isNativeHtmlTable) {\n    <thead role=\"rowgroup\">\n      <ng-container headerRowOutlet/>\n    </thead>\n    <tbody role=\"rowgroup\">\n      <ng-container rowOutlet/>\n      <ng-container noDataRowOutlet/>\n    </tbody>\n    <tfoot role=\"rowgroup\">\n      <ng-container footerRowOutlet/>\n    </tfoot>\n  } @else {\n    <ng-container headerRowOutlet/>\n    <ng-container rowOutlet/>\n    <ng-container noDataRowOutlet/>\n    <ng-container footerRowOutlet/>\n  }\n", isInline: true, styles: [".cdk-table-fixed-layout{table-layout:fixed}\n"], dependencies: [{ kind: "directive", type: HeaderRowOutlet, selector: "[headerRowOutlet]" }, { kind: "directive", type: DataRowOutlet, selector: "[rowOutlet]" }, { kind: "directive", type: NoDataRowOutlet, selector: "[noDataRowOutlet]" }, { kind: "directive", type: FooterRowOutlet, selector: "[footerRowOutlet]" }], changeDetection: i0.ChangeDetectionStrategy.Default, encapsulation: i0.ViewEncapsulation.None });
+        ], queries: [{ propertyName: "_noDataRow", first: true, predicate: CdkNoDataRow, descendants: true }, { propertyName: "_contentColumnDefs", predicate: CdkColumnDef, descendants: true }, { propertyName: "_contentRowDefs", predicate: CdkRowDef, descendants: true }, { propertyName: "_contentHeaderRowDefs", predicate: CdkHeaderRowDef, descendants: true }, { propertyName: "_contentFooterRowDefs", predicate: CdkFooterRowDef, descendants: true }], exportAs: ["cdkTable"], ngImport: i0, template: `
+    <ng-content select="caption"/>
+    <ng-content select="colgroup, col"/>
+
+    <!--
+      Unprojected content throws a hydration error so we need this to capture it.
+      It gets removed on the client so it doesn't affect the layout.
+    -->
+    @if (_isServer) {
+      <ng-content/>
+    }
+
+    @if (_isNativeHtmlTable) {
+      <thead role="rowgroup">
+        <ng-container headerRowOutlet/>
+      </thead>
+      <tbody role="rowgroup">
+        <ng-container rowOutlet/>
+        <ng-container noDataRowOutlet/>
+      </tbody>
+      <tfoot role="rowgroup">
+        <ng-container footerRowOutlet/>
+      </tfoot>
+    } @else {
+      <ng-container headerRowOutlet/>
+      <ng-container rowOutlet/>
+      <ng-container noDataRowOutlet/>
+      <ng-container footerRowOutlet/>
+    }
+  `, isInline: true, styles: [".cdk-table-fixed-layout{table-layout:fixed}\n"], dependencies: [{ kind: "directive", type: HeaderRowOutlet, selector: "[headerRowOutlet]" }, { kind: "directive", type: DataRowOutlet, selector: "[rowOutlet]" }, { kind: "directive", type: NoDataRowOutlet, selector: "[noDataRowOutlet]" }, { kind: "directive", type: FooterRowOutlet, selector: "[footerRowOutlet]" }], changeDetection: i0.ChangeDetectionStrategy.Default, encapsulation: i0.ViewEncapsulation.None });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: CdkTable, decorators: [{
             type: Component,
-            args: [{ selector: 'cdk-table, table[cdk-table]', exportAs: 'cdkTable', template: CDK_TABLE_TEMPLATE, host: {
+            args: [{ selector: 'cdk-table, table[cdk-table]', exportAs: 'cdkTable', template: `
+    <ng-content select="caption"/>
+    <ng-content select="colgroup, col"/>
+
+    <!--
+      Unprojected content throws a hydration error so we need this to capture it.
+      It gets removed on the client so it doesn't affect the layout.
+    -->
+    @if (_isServer) {
+      <ng-content/>
+    }
+
+    @if (_isNativeHtmlTable) {
+      <thead role="rowgroup">
+        <ng-container headerRowOutlet/>
+      </thead>
+      <tbody role="rowgroup">
+        <ng-container rowOutlet/>
+        <ng-container noDataRowOutlet/>
+      </tbody>
+      <tfoot role="rowgroup">
+        <ng-container footerRowOutlet/>
+      </tfoot>
+    } @else {
+      <ng-container headerRowOutlet/>
+      <ng-container rowOutlet/>
+      <ng-container noDataRowOutlet/>
+      <ng-container footerRowOutlet/>
+    }
+  `, host: {
                         'class': 'cdk-table',
                         '[class.cdk-table-fixed-layout]': 'fixedLayout',
                     }, encapsulation: ViewEncapsulation.None, changeDetection: ChangeDetectionStrategy.Default, providers: [
@@ -2559,5 +2579,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", 
                 }]
         }] });
 
-export { BaseCdkCell, BaseRowDef, CDK_ROW_TEMPLATE, CDK_TABLE, CDK_TABLE_TEMPLATE, CdkCell, CdkCellDef, CdkCellOutlet, CdkColumnDef, CdkFooterCell, CdkFooterCellDef, CdkFooterRow, CdkFooterRowDef, CdkHeaderCell, CdkHeaderCellDef, CdkHeaderRow, CdkHeaderRowDef, CdkNoDataRow, CdkRecycleRows, CdkRow, CdkRowDef, CdkTable, CdkTableModule, CdkTextColumn, DataRowOutlet, FooterRowOutlet, HeaderRowOutlet, NoDataRowOutlet, STICKY_DIRECTIONS, STICKY_POSITIONING_LISTENER, StickyStyler, TEXT_COLUMN_OPTIONS, _COALESCED_STYLE_SCHEDULER, _CoalescedStyleScheduler, _Schedule };
+export { BaseCdkCell, BaseRowDef, CDK_ROW_TEMPLATE, CDK_TABLE, CdkCell, CdkCellDef, CdkCellOutlet, CdkColumnDef, CdkFooterCell, CdkFooterCellDef, CdkFooterRow, CdkFooterRowDef, CdkHeaderCell, CdkHeaderCellDef, CdkHeaderRow, CdkHeaderRowDef, CdkNoDataRow, CdkRecycleRows, CdkRow, CdkRowDef, CdkTable, CdkTableModule, CdkTextColumn, DataRowOutlet, FooterRowOutlet, HeaderRowOutlet, NoDataRowOutlet, STICKY_POSITIONING_LISTENER, TEXT_COLUMN_OPTIONS, _COALESCED_STYLE_SCHEDULER, _CoalescedStyleScheduler, _Schedule };
 //# sourceMappingURL=table.mjs.map
