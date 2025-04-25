@@ -21,7 +21,7 @@ const core_1 = require("@angular-devkit/core");
 const schematics_1 = require("@angular-devkit/schematics");
 const schema_1 = require("@schematics/angular/component/schema");
 const change_1 = require("@schematics/angular/utility/change");
-const workspace_1 = require("@schematics/angular/utility/workspace");
+const utility_1 = require("@schematics/angular/utility");
 const find_module_1 = require("@schematics/angular/utility/find-module");
 const parse_name_1 = require("@schematics/angular/utility/parse-name");
 const validation_1 = require("@schematics/angular/utility/validation");
@@ -61,11 +61,11 @@ function addDeclarationToNgModule(options) {
         const modulePath = options.module;
         let source = readIntoSourceFile(host, modulePath);
         const componentPath = `/${options.path}/` +
-            (options.flat ? '' : core_1.strings.dasherize(options.name) + '/') +
-            core_1.strings.dasherize(options.name) +
+            (options.flat ? '' : schematics_1.strings.dasherize(options.name) + '/') +
+            schematics_1.strings.dasherize(options.name) +
             '.component';
         const relativePath = (0, find_module_1.buildRelativePath)(modulePath, componentPath);
-        const classifiedName = core_1.strings.classify(`${options.name}Component`);
+        const classifiedName = schematics_1.strings.classify(`${options.name}Component`);
         const declarationChanges = (0, ast_utils_1.addDeclarationToModule)(source, modulePath, classifiedName, relativePath);
         const declarationRecorder = host.beginUpdate(modulePath);
         for (const change of declarationChanges) {
@@ -78,7 +78,7 @@ function addDeclarationToNgModule(options) {
             // Need to refresh the AST because we overwrote the file in the host.
             source = readIntoSourceFile(host, modulePath);
             const exportRecorder = host.beginUpdate(modulePath);
-            const exportChanges = (0, ast_utils_1.addExportToModule)(source, modulePath, core_1.strings.classify(`${options.name}Component`), relativePath);
+            const exportChanges = (0, ast_utils_1.addExportToModule)(source, modulePath, schematics_1.strings.classify(`${options.name}Component`), relativePath);
             for (const change of exportChanges) {
                 if (change instanceof change_1.InsertChange) {
                     exportRecorder.insertLeft(change.pos, change.toAdd);
@@ -90,7 +90,7 @@ function addDeclarationToNgModule(options) {
     };
 }
 function buildSelector(options, projectPrefix) {
-    let selector = core_1.strings.dasherize(options.name);
+    let selector = schematics_1.strings.dasherize(options.name);
     if (options.prefix) {
         selector = `${options.prefix}-${selector}`;
     }
@@ -120,7 +120,7 @@ function indentTextContent(text, numSpaces) {
 function buildComponent(options, additionalFiles = {}) {
     return (host, ctx) => __awaiter(this, void 0, void 0, function* () {
         const context = ctx;
-        const workspace = yield (0, workspace_1.getWorkspace)(host);
+        const workspace = yield (0, utility_1.readWorkspace)(host);
         const project = (0, get_project_1.getProjectFromWorkspace)(workspace, options.project);
         const defaultComponentOptions = (0, schematic_options_1.getDefaultComponentOptions)(project);
         // TODO(devversion): Remove if we drop support for older CLI versions.
@@ -158,7 +158,7 @@ function buildComponent(options, additionalFiles = {}) {
             options.style = schema_1.Style.Css;
         }
         // Object that will be used as context for the EJS templates.
-        const baseTemplateContext = Object.assign(Object.assign(Object.assign({}, core_1.strings), { 'if-flat': (s) => (options.flat ? '' : s) }), options);
+        const baseTemplateContext = Object.assign(Object.assign(Object.assign({}, schematics_1.strings), { 'if-flat': (s) => (options.flat ? '' : s) }), options);
         // Key-value object that includes the specified additional files with their loaded content.
         // The resolved contents can be used inside EJS templates.
         const resolvedFiles = {};

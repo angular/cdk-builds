@@ -22,7 +22,7 @@ const core_1 = require("@angular-devkit/core");
 const schema_1 = require("@schematics/angular/component/schema");
 const ng_ast_utils_1 = require("@schematics/angular/utility/ng-ast-utils");
 const project_main_file_1 = require("./project-main-file");
-const workspace_1 = require("@schematics/angular/utility/workspace");
+const utility_1 = require("@schematics/angular/utility");
 const get_project_1 = require("./get-project");
 /**
  * Returns the default options for the `@schematics/angular:component` schematic which would
@@ -57,7 +57,7 @@ function isStandaloneSchematic(host, options) {
             return options.standalone;
         }
         // If the `--standalone` flag isn't passed and there isn't a default, infer based on the project.
-        const workspace = yield (0, workspace_1.getWorkspace)(host);
+        const workspace = yield (0, utility_1.readWorkspace)(host);
         const project = (0, get_project_1.getProjectFromWorkspace)(workspace, options.project);
         // Legacy projects might not have a `build` target, but they're likely
         // not on an Angular version that supports standalone either.

@@ -22,7 +22,7 @@ exports.addModuleImportToModule = addModuleImportToModule;
 exports.findModuleFromOptions = findModuleFromOptions;
 const schematics_1 = require("@angular-devkit/schematics");
 const change_1 = require("@schematics/angular/utility/change");
-const workspace_1 = require("@schematics/angular/utility/workspace");
+const utility_1 = require("@schematics/angular/utility");
 const find_module_1 = require("@schematics/angular/utility/find-module");
 const ast_utils_1 = require("@schematics/angular/utility/ast-utils");
 const ng_ast_utils_1 = require("@schematics/angular/utility/ng-ast-utils");
@@ -65,7 +65,7 @@ function addModuleImportToModule(host, modulePath, moduleName, src) {
 /** Wraps the internal find module from options with undefined path handling  */
 function findModuleFromOptions(host, options) {
     return __awaiter(this, void 0, void 0, function* () {
-        const workspace = yield (0, workspace_1.getWorkspace)(host);
+        const workspace = yield (0, utility_1.readWorkspace)(host);
         if (!options.project) {
             options.project = Array.from(workspace.projects.keys())[0];
         }

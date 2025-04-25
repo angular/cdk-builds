@@ -19,7 +19,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getTargetTsconfigPath = getTargetTsconfigPath;
 exports.getWorkspaceConfigGracefully = getWorkspaceConfigGracefully;
 const core_1 = require("@angular-devkit/core");
-const workspace_1 = require("@schematics/angular/utility/workspace");
+const utility_1 = require("@schematics/angular/utility");
 /** Name of the default Angular CLI workspace configuration files. */
 const defaultWorkspaceConfigPaths = ['/angular.json', '/.angular.json'];
 /** Gets the tsconfig path from the given target within the specified project. */
@@ -36,7 +36,7 @@ function getWorkspaceConfigGracefully(tree) {
             return null;
         }
         try {
-            return (0, workspace_1.getWorkspace)(tree, path);
+            return (0, utility_1.readWorkspace)(tree, path);
         }
         catch (_a) {
             return null;
