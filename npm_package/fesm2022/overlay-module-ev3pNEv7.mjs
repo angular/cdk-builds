@@ -2635,8 +2635,8 @@ const defaultPositionList = [
 const CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY = new InjectionToken('cdk-connected-overlay-scroll-strategy', {
     providedIn: 'root',
     factory: () => {
-        const overlay = inject(Overlay);
-        return () => overlay.scrollStrategies.reposition();
+        const injector = inject(Injector);
+        return () => createRepositionScrollStrategy(injector);
     },
 });
 /**
@@ -2661,8 +2661,8 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", 
  * Overlay using a FlexibleConnectedPositionStrategy.
  */
 class CdkConnectedOverlay {
-    _overlay = inject(Overlay);
     _dir = inject(Directionality, { optional: true });
+    _injector = inject(Injector);
     _overlayRef;
     _templatePortal;
     _backdropSubscription = Subscription.EMPTY;
@@ -2799,7 +2799,7 @@ class CdkConnectedOverlay {
         if (!this.positions || !this.positions.length) {
             this.positions = defaultPositionList;
         }
-        const overlayRef = (this._overlayRef = this._overlay.create(this._buildConfig()));
+        const overlayRef = (this._overlayRef = createOverlayRef(this._injector, this._buildConfig()));
         this._attachSubscription = overlayRef.attachments().subscribe(() => this.attach.emit());
         this._detachSubscription = overlayRef.detachments().subscribe(() => this.detach.emit());
         overlayRef.keydownEvents().subscribe((event) => {
@@ -2871,7 +2871,7 @@ class CdkConnectedOverlay {
     }
     /** Returns the position strategy of the overlay to be set on the overlay config */
     _createPositionStrategy() {
-        const strategy = this._overlay.position().flexibleConnectedTo(this._getOrigin());
+        const strategy = createFlexibleConnectedPositionStrategy(this._injector, this._getOrigin());
         this._updatePositionStrategy(strategy);
         return strategy;
     }
@@ -3031,7 +3031,8 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", 
  * @breaking-change 21.0.0
  */
 function CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY(overlay) {
-    return () => overlay.scrollStrategies.reposition();
+    const injector = inject(Injector);
+    return () => createRepositionScrollStrategy(injector);
 }
 /**
  * @docs-private
@@ -3040,7 +3041,6 @@ function CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY(overlay) {
  */
 const CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER = {
     provide: CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY,
-    deps: [Overlay],
     useFactory: CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY,
 };
 
@@ -3059,4 +3059,4 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", 
         }] });
 
 export { BlockScrollStrategy as B, CdkOverlayOrigin as C, FlexibleConnectedPositionStrategy as F, GlobalPositionStrategy as G, NoopScrollStrategy as N, OverlayContainer as O, RepositionScrollStrategy as R, STANDARD_DROPDOWN_ADJACENT_POSITIONS as S, Overlay as a, CdkConnectedOverlay as b, createOverlayRef as c, OverlayRef as d, OverlayPositionBuilder as e, createGlobalPositionStrategy as f, STANDARD_DROPDOWN_BELOW_POSITIONS as g, createFlexibleConnectedPositionStrategy as h, OverlayConfig as i, ConnectionPositionPair as j, ScrollingVisibility as k, ConnectedOverlayPositionChange as l, validateHorizontalPosition as m, ScrollStrategyOptions as n, createRepositionScrollStrategy as o, CloseScrollStrategy as p, createCloseScrollStrategy as q, createNoopScrollStrategy as r, createBlockScrollStrategy as s, OverlayModule as t, OverlayOutsideClickDispatcher as u, validateVerticalPosition as v, OverlayKeyboardDispatcher as w };
-//# sourceMappingURL=overlay-module-InkXL33u.mjs.map
+//# sourceMappingURL=overlay-module-ev3pNEv7.mjs.map

@@ -684,8 +684,8 @@ declare class CdkOverlayOrigin {
  * Overlay using a FlexibleConnectedPositionStrategy.
  */
 declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
-    private _overlay;
     private _dir;
+    private _injector;
     private _overlayRef;
     private _templatePortal;
     private _backdropSubscription;

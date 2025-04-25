@@ -10,7 +10,7 @@ import { Subject, defer } from 'rxjs';
 import { g as ESCAPE } from './keycodes-CpHkExLC.mjs';
 import { hasModifierKey } from './keycodes.mjs';
 import { startWith } from 'rxjs/operators';
-import { a as Overlay, O as OverlayContainer, i as OverlayConfig, d as OverlayRef, t as OverlayModule } from './overlay-module-InkXL33u.mjs';
+import { s as createBlockScrollStrategy, O as OverlayContainer, c as createOverlayRef, i as OverlayConfig, f as createGlobalPositionStrategy, d as OverlayRef, t as OverlayModule } from './overlay-module-ev3pNEv7.mjs';
 import { _ as _IdGenerator } from './id-generator-BwB8lolC.mjs';
 import { D as Directionality } from './directionality-Ck5Uc9Se.mjs';
 import './style-loader-BDEAZOey.mjs';
@@ -540,8 +540,8 @@ class DialogRef {
 const DIALOG_SCROLL_STRATEGY = new InjectionToken('DialogScrollStrategy', {
     providedIn: 'root',
     factory: () => {
-        const overlay = inject(Overlay);
-        return () => overlay.scrollStrategies.block();
+        const injector = inject(Injector);
+        return () => createBlockScrollStrategy(injector);
     },
 });
 /** Injection token for the Dialog's Data. */
@@ -564,7 +564,6 @@ function getDirectionality(value) {
     };
 }
 class Dialog {
-    _overlay = inject(Overlay);
     _injector = inject(Injector);
     _defaultOptions = inject(DEFAULT_DIALOG_CONFIG, { optional: true });
     _parentDialog = inject(Dialog, { optional: true, skipSelf: true });
@@ -601,7 +600,7 @@ class Dialog {
             throw Error(`Dialog with id "${config.id}" exists already. The dialog id must be unique.`);
         }
         const overlayConfig = this._getOverlayConfig(config);
-        const overlayRef = this._overlay.create(overlayConfig);
+        const overlayRef = createOverlayRef(this._injector, overlayConfig);
         const dialogRef = new DialogRef(overlayRef, config);
         const dialogContainer = this._attachContainer(overlayRef, dialogRef, config);
         dialogRef.containerInstance = dialogContainer;
@@ -654,7 +653,7 @@ class Dialog {
     _getOverlayConfig(config) {
         const state = new OverlayConfig({
             positionStrategy: config.positionStrategy ||
-                this._overlay.position().global().centerHorizontally().centerVertically(),
+                createGlobalPositionStrategy().centerHorizontally().centerVertically(),
             scrollStrategy: config.scrollStrategy || this._scrollStrategy(),
             panelClass: config.panelClass,
             hasBackdrop: config.hasBackdrop,

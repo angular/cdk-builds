@@ -4,7 +4,7 @@ import { startWith, debounceTime, distinctUntilChanged, takeUntil, mergeMap, map
 import { U as UniqueSelectionDispatcher } from './unique-selection-dispatcher-Cag6cZJ2.mjs';
 import { Subject, merge, partition } from 'rxjs';
 import { _ as _IdGenerator } from './id-generator-BwB8lolC.mjs';
-import { a as Overlay, i as OverlayConfig, g as STANDARD_DROPDOWN_BELOW_POSITIONS, S as STANDARD_DROPDOWN_ADJACENT_POSITIONS, t as OverlayModule } from './overlay-module-InkXL33u.mjs';
+import { o as createRepositionScrollStrategy, c as createOverlayRef, i as OverlayConfig, h as createFlexibleConnectedPositionStrategy, g as STANDARD_DROPDOWN_BELOW_POSITIONS, S as STANDARD_DROPDOWN_ADJACENT_POSITIONS, t as OverlayModule } from './overlay-module-ev3pNEv7.mjs';
 import { TemplatePortal } from './portal.mjs';
 import { c as ENTER, S as SPACE, U as UP_ARROW, D as DOWN_ARROW, L as LEFT_ARROW, R as RIGHT_ARROW, T as TAB, g as ESCAPE } from './keycodes-CpHkExLC.mjs';
 import { I as InputModalityDetector, F as FocusMonitor } from './focus-monitor-DKFfep8Q.mjs';
@@ -206,8 +206,8 @@ const MENU_TRIGGER = new InjectionToken('cdk-menu-trigger');
 const MENU_SCROLL_STRATEGY = new InjectionToken('cdk-menu-scroll-strategy', {
     providedIn: 'root',
     factory: () => {
-        const overlay = inject(Overlay);
-        return () => overlay.scrollStrategies.reposition();
+        const injector = inject(Injector);
+        return () => createRepositionScrollStrategy(injector);
     },
 });
 /**
@@ -562,12 +562,12 @@ function eventDispatchesNativeClick(elementRef, event) {
  */
 class CdkMenuTrigger extends CdkMenuTriggerBase {
     _elementRef = inject(ElementRef);
-    _overlay = inject(Overlay);
     _ngZone = inject(NgZone);
     _changeDetectorRef = inject(ChangeDetectorRef);
     _inputModalityDetector = inject(InputModalityDetector);
     _directionality = inject(Directionality, { optional: true });
     _renderer = inject(Renderer2);
+    _injector = inject(Injector);
     _cleanupMouseenter;
     /** The parent menu this trigger belongs to. */
     _parentMenu = inject(CDK_MENU, { optional: true });
@@ -590,7 +590,8 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
     open() {
         if (!this.isOpen() && this.menuTemplateRef != null) {
             this.opened.next();
-            this.overlayRef = this.overlayRef || this._overlay.create(this._getOverlayConfig());
+            this.overlayRef =
+                this.overlayRef || createOverlayRef(this._injector, this._getOverlayConfig());
             this.overlayRef.attach(this.getMenuContentPortal());
             this._changeDetectorRef.markForCheck();
             this._subscribeToOutsideClicks();
@@ -734,9 +735,7 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
     }
     /** Build the position strategy for the overlay which specifies where to place the menu. */
     _getOverlayPositionStrategy() {
-        return this._overlay
-            .position()
-            .flexibleConnectedTo(this._elementRef)
+        return createFlexibleConnectedPositionStrategy(this._injector, this._elementRef)
             .withLockedPosition()
             .withFlexibleDimensions(false)
             .withPositions(this._getOverlayPositions());
@@ -1746,11 +1745,8 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", 
  * It is aware of nested context menus and will trigger only the lowest level non-disabled context menu.
  */
 class CdkContextMenuTrigger extends CdkMenuTriggerBase {
-    /** The CDK overlay service. */
-    _overlay = inject(Overlay);
-    /** The directionality of the page. */
+    _injector = inject(Injector);
     _directionality = inject(Directionality, { optional: true });
-    /** The app's context menu tracking registry */
     _contextMenuTracker = inject(ContextMenuTracker);
     _changeDetectorRef = inject(ChangeDetectorRef);
     /** Whether the context menu is disabled. */
@@ -1813,9 +1809,7 @@ class CdkContextMenuTrigger extends CdkMenuTriggerBase {
      * @param coordinates the location to place the opened menu
      */
     _getOverlayPositionStrategy(coordinates) {
-        return this._overlay
-            .position()
-            .flexibleConnectedTo(coordinates)
+        return createFlexibleConnectedPositionStrategy(this._injector, coordinates)
             .withLockedPosition()
             .withGrowAfterOpen()
             .withPositions(this.menuPosition ?? CONTEXT_MENU_POSITIONS);
@@ -1883,7 +1877,7 @@ class CdkContextMenuTrigger extends CdkMenuTriggerBase {
                 this.overlayRef.updatePosition();
             }
             else {
-                this.overlayRef = this._overlay.create(this._getOverlayConfig(coordinates));
+                this.overlayRef = createOverlayRef(this._injector, this._getOverlayConfig(coordinates));
             }
             this.overlayRef.attach(this.getMenuContentPortal());
             this._subscribeToOutsideClicks(userEvent);

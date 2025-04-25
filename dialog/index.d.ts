@@ -5,7 +5,7 @@ import { F as FocusTrapFactory, A as A11yModule } from '../a11y-module.d-DBHGyKo
 import { B as BasePortalOutlet, f as CdkPortalOutlet, C as ComponentPortal, T as TemplatePortal, D as DomPortal, a as ComponentType, h as PortalModule } from '../portal-directives.d-DbeNrI5D.js';
 export { c as ɵɵCdkPortal, g as ɵɵPortalHostDirective, d as ɵɵTemplatePortalDirective } from '../portal-directives.d-DbeNrI5D.js';
 import { a as Direction } from '../bidi-module.d-IN1Vp56w.js';
-import { P as PositionStrategy, S as ScrollStrategy, O as OverlayRef, a as OverlayModule } from '../overlay-module.d-CzriBFT1.js';
+import { P as PositionStrategy, S as ScrollStrategy, O as OverlayRef, a as OverlayModule } from '../overlay-module.d-BbThAF_b.js';
 import { Observable, Subject } from 'rxjs';
 import * as _angular_cdk_portal from '@angular/cdk/portal';
 import '../observers/index.js';
@@ -300,7 +300,6 @@ declare class DialogRef<R = unknown, C = unknown> {
 }
 
 declare class Dialog implements OnDestroy {
-    private _overlay;
     private _injector;
     private _defaultOptions;
     private _parentDialog;

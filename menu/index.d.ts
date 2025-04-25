@@ -1,6 +1,6 @@
 import * as i0 from '@angular/core';
 import { ElementRef, Renderer2, QueryList, InjectionToken, Optional, OnDestroy, Injector, ViewContainerRef, EventEmitter, TemplateRef, OnChanges, SimpleChanges, NgZone, AfterContentInit } from '@angular/core';
-import { S as ScrollStrategy, g as ConnectedPosition, O as OverlayRef, a as OverlayModule } from '../overlay-module.d-CzriBFT1.js';
+import { S as ScrollStrategy, g as ConnectedPosition, O as OverlayRef, a as OverlayModule } from '../overlay-module.d-BbThAF_b.js';
 import * as rxjs from 'rxjs';
 import { Observable, Subject } from 'rxjs';
 import { F as FocusOrigin } from '../focus-monitor.d-CvvJeQRc.js';
@@ -354,12 +354,12 @@ declare abstract class CdkMenuTriggerBase implements OnDestroy {
  */
 declare class CdkMenuTrigger extends CdkMenuTriggerBase implements OnChanges, OnDestroy {
     private readonly _elementRef;
-    private readonly _overlay;
     private readonly _ngZone;
     private readonly _changeDetectorRef;
     private readonly _inputModalityDetector;
     private readonly _directionality;
     private readonly _renderer;
+    private readonly _injector;
     private _cleanupMouseenter;
     /** The parent menu this trigger belongs to. */
     private readonly _parentMenu;
@@ -759,11 +759,8 @@ type ContextMenuCoordinates = {
  * It is aware of nested context menus and will trigger only the lowest level non-disabled context menu.
  */
 declare class CdkContextMenuTrigger extends CdkMenuTriggerBase implements OnDestroy {
-    /** The CDK overlay service. */
-    private readonly _overlay;
-    /** The directionality of the page. */
+    private readonly _injector;
     private readonly _directionality;
-    /** The app's context menu tracking registry */
     private readonly _contextMenuTracker;
     private readonly _changeDetectorRef;
     /** Whether the context menu is disabled. */
