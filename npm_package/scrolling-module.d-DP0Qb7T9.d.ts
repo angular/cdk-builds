@@ -548,5 +548,5 @@ declare class ScrollingModule {
     static ɵinj: i0.ɵɵInjectorDeclaration<ScrollingModule>;
 }
 
-export { CdkScrollable as C, DEFAULT_SCROLL_TIME as D, FixedSizeVirtualScrollStrategy as F, ScrollDispatcher as S, VIRTUAL_SCROLL_STRATEGY as V, _fixedSizeVirtualScrollStrategyFactory as _, CdkScrollableModule as a, CdkFixedSizeVirtualScroll as b, CdkVirtualForOf as c, CdkVirtualScrollViewport as d, CdkVirtualScrollableWindow as e, CdkVirtualScrollableElement as f, ScrollingModule as g, VIRTUAL_SCROLLABLE as u, CdkVirtualScrollable as v };
+export { CdkScrollable as C, DEFAULT_SCROLL_TIME as D, FixedSizeVirtualScrollStrategy as F, ScrollingModule as S, VIRTUAL_SCROLL_STRATEGY as V, _fixedSizeVirtualScrollStrategyFactory as _, ScrollDispatcher as a, CdkScrollableModule as b, CdkFixedSizeVirtualScroll as c, CdkVirtualForOf as d, CdkVirtualScrollViewport as e, CdkVirtualScrollableWindow as f, CdkVirtualScrollableElement as g, VIRTUAL_SCROLLABLE as u, CdkVirtualScrollable as v };
 export type { ExtendedScrollToOptions as E, _Without as h, _XOR as i, _Top as j, _Bottom as k, _Left as l, _Right as m, _Start as n, _End as o, _XAxis as p, _YAxis as q, CdkVirtualForOfContext as r, VirtualScrollStrategy as s, CdkVirtualScrollRepeater as t };

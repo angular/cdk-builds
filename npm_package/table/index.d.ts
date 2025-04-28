@@ -1,10 +1,10 @@
 import { D as Directionality } from '../bidi-module.d-IN1Vp56w.js';
 import * as i0 from '@angular/core';
-import { TemplateRef, ElementRef, InjectionToken, OnChanges, IterableDiffers, IterableDiffer, SimpleChanges, IterableChanges, OnDestroy, ViewContainerRef, AfterContentInit, AfterContentChecked, OnInit, ChangeDetectorRef, TrackByFunction, EventEmitter, QueryList } from '@angular/core';
+import { TemplateRef, ElementRef, OnChanges, IterableDiffers, IterableDiffer, SimpleChanges, IterableChanges, OnDestroy, ViewContainerRef, InjectionToken, AfterContentInit, AfterContentChecked, OnInit, ChangeDetectorRef, TrackByFunction, EventEmitter, QueryList } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { D as DataSource, C as CollectionViewer } from '../data-source.d-Bblv7Zvh.js';
 import { a as _ViewRepeater } from '../view-repeater.d-BKljR8u8.js';
-import { g as ScrollingModule } from '../scrolling-module.d-ClCJGWb4.js';
+import { S as ScrollingModule } from '../scrolling-module.d-DP0Qb7T9.js';
 import '../number-property.d-CJVxXUcb.js';
 
 /**
@@ -145,40 +145,6 @@ declare class CdkCell extends BaseCdkCell {
     constructor(...args: unknown[]);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkCell, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkCell, "cdk-cell, td[cdk-cell]", never, {}, {}, never, never, true, never>;
-}
-
-/**
- * @docs-private
- */
-declare class _Schedule {
-    tasks: (() => unknown)[];
-    endTasks: (() => unknown)[];
-}
-/** Injection token used to provide a coalesced style scheduler. */
-declare const _COALESCED_STYLE_SCHEDULER: InjectionToken<_CoalescedStyleScheduler>;
-/**
- * Allows grouping up CSSDom mutations after the current execution context.
- * This can significantly improve performance when separate consecutive functions are
- * reading from the CSSDom and then mutating it.
- *
- * @docs-private
- */
-declare class _CoalescedStyleScheduler {
-    private _currentSchedule;
-    private _ngZone;
-    constructor(...args: unknown[]);
-    /**
-     * Schedules the specified task to run at the end of the current VM turn.
-     */
-    schedule(task: () => unknown): void;
-    /**
-     * Schedules the specified task to run after other scheduled tasks at the end of the current
-     * VM turn.
-     */
-    scheduleEnd(task: () => unknown): void;
-    private _createScheduleIfNeeded;
-    static ɵfac: i0.ɵɵFactoryDeclaration<_CoalescedStyleScheduler, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<_CoalescedStyleScheduler>;
 }
 
 /**
@@ -476,7 +442,6 @@ declare class CdkTable<T> implements AfterContentInit, AfterContentChecked, Coll
     protected readonly _dir: Directionality | null;
     private _platform;
     protected readonly _viewRepeater: _ViewRepeater<T, RenderRow<T>, RowContext<T>>;
-    protected readonly _coalescedStyleScheduler: _CoalescedStyleScheduler;
     private readonly _viewportRuler;
     protected readonly _stickyPositioningListener: StickyPositioningListener;
     private _document;
@@ -930,5 +895,5 @@ interface TextColumnOptions<T> {
 /** Injection token that can be used to specify the text column options. */
 declare const TEXT_COLUMN_OPTIONS: InjectionToken<TextColumnOptions<any>>;
 
-export { BaseCdkCell, BaseRowDef, CDK_ROW_TEMPLATE, CDK_TABLE, CdkCell, CdkCellDef, CdkCellOutlet, CdkColumnDef, CdkFooterCell, CdkFooterCellDef, CdkFooterRow, CdkFooterRowDef, CdkHeaderCell, CdkHeaderCellDef, CdkHeaderRow, CdkHeaderRowDef, CdkNoDataRow, CdkRecycleRows, CdkRow, CdkRowDef, CdkTable, CdkTableModule, CdkTextColumn, DataRowOutlet, DataSource, FooterRowOutlet, HeaderRowOutlet, NoDataRowOutlet, STICKY_POSITIONING_LISTENER, TEXT_COLUMN_OPTIONS, _COALESCED_STYLE_SCHEDULER, _CoalescedStyleScheduler, _Schedule };
+export { BaseCdkCell, BaseRowDef, CDK_ROW_TEMPLATE, CDK_TABLE, CdkCell, CdkCellDef, CdkCellOutlet, CdkColumnDef, CdkFooterCell, CdkFooterCellDef, CdkFooterRow, CdkFooterRowDef, CdkHeaderCell, CdkHeaderCellDef, CdkHeaderRow, CdkHeaderRowDef, CdkNoDataRow, CdkRecycleRows, CdkRow, CdkRowDef, CdkTable, CdkTableModule, CdkTextColumn, DataRowOutlet, DataSource, FooterRowOutlet, HeaderRowOutlet, NoDataRowOutlet, STICKY_POSITIONING_LISTENER, TEXT_COLUMN_OPTIONS };
 export type { CdkCellOutletMultiRowContext, CdkCellOutletRowContext, CdkTableDataSourceInput, CellDef, RenderRow, RowContext, RowOutlet, StickyOffset, StickyPositioningListener, StickySize, StickyUpdate, TextColumnOptions };

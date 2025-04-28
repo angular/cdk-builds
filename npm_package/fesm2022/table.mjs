@@ -1,7 +1,7 @@
 import { i as isDataSource } from './data-source-D34wiQZj.mjs';
 export { D as DataSource } from './data-source-D34wiQZj.mjs';
 import * as i0 from '@angular/core';
-import { InjectionToken, inject, TemplateRef, Directive, booleanAttribute, Input, ContentChild, ElementRef, NgZone, Injectable, IterableDiffers, ViewContainerRef, Component, ChangeDetectionStrategy, ViewEncapsulation, afterNextRender, ChangeDetectorRef, DOCUMENT, EventEmitter, Injector, HostAttributeToken, Output, ContentChildren, ViewChild, NgModule } from '@angular/core';
+import { InjectionToken, inject, TemplateRef, Directive, booleanAttribute, Input, ContentChild, ElementRef, IterableDiffers, ViewContainerRef, Component, ChangeDetectionStrategy, ViewEncapsulation, afterNextRender, ChangeDetectorRef, DOCUMENT, EventEmitter, Injector, HostAttributeToken, Output, ContentChildren, ViewChild, NgModule } from '@angular/core';
 import { Subject, BehaviorSubject, isObservable, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { b as _VIEW_REPEATER_STRATEGY, _ as _RecycleViewRepeaterStrategy, a as _ViewRepeaterOperation } from './recycle-view-repeater-strategy-DoWdPqVw.mjs';
@@ -264,73 +264,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", 
                         'class': 'cdk-cell',
                     },
                 }]
-        }], ctorParameters: () => [] });
-
-/**
- * @docs-private
- */
-class _Schedule {
-    tasks = [];
-    endTasks = [];
-}
-/** Injection token used to provide a coalesced style scheduler. */
-const _COALESCED_STYLE_SCHEDULER = new InjectionToken('_COALESCED_STYLE_SCHEDULER');
-/**
- * Allows grouping up CSSDom mutations after the current execution context.
- * This can significantly improve performance when separate consecutive functions are
- * reading from the CSSDom and then mutating it.
- *
- * @docs-private
- */
-class _CoalescedStyleScheduler {
-    _currentSchedule = null;
-    _ngZone = inject(NgZone);
-    constructor() { }
-    /**
-     * Schedules the specified task to run at the end of the current VM turn.
-     */
-    schedule(task) {
-        this._createScheduleIfNeeded();
-        this._currentSchedule.tasks.push(task);
-    }
-    /**
-     * Schedules the specified task to run after other scheduled tasks at the end of the current
-     * VM turn.
-     */
-    scheduleEnd(task) {
-        this._createScheduleIfNeeded();
-        this._currentSchedule.endTasks.push(task);
-    }
-    _createScheduleIfNeeded() {
-        if (this._currentSchedule) {
-            return;
-        }
-        this._currentSchedule = new _Schedule();
-        this._ngZone.runOutsideAngular(() => 
-        // TODO(mmalerba): Scheduling this using something that runs less frequently
-        //  (e.g. requestAnimationFrame, setTimeout, etc.) causes noticeable jank with the column
-        //  resizer. We should audit the usages of schedule / scheduleEnd in that component and see
-        //  if we can refactor it so that we don't need to flush the tasks quite so frequently.
-        queueMicrotask(() => {
-            while (this._currentSchedule.tasks.length || this._currentSchedule.endTasks.length) {
-                const schedule = this._currentSchedule;
-                // Capture new tasks scheduled by the current set of tasks.
-                this._currentSchedule = new _Schedule();
-                for (const task of schedule.tasks) {
-                    task();
-                }
-                for (const task of schedule.endTasks) {
-                    task();
-                }
-            }
-            this._currentSchedule = null;
-        }));
-    }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: _CoalescedStyleScheduler, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: _CoalescedStyleScheduler });
-}
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: _CoalescedStyleScheduler, decorators: [{
-            type: Injectable
         }], ctorParameters: () => [] });
 
 /**
@@ -645,10 +578,9 @@ const STICKY_DIRECTIONS = ['top', 'bottom', 'left', 'right'];
 class StickyStyler {
     _isNativeHtmlTable;
     _stickCellCss;
-    direction;
-    _coalescedStyleScheduler;
     _isBrowser;
     _needsPositionStickyOnElement;
+    direction;
     _positionListener;
     _tableInjector;
     _elemSizeCache = new WeakMap();
@@ -675,13 +607,12 @@ class StickyStyler {
      *     and their dimensions.
      * @param _tableInjector The table's Injector.
      */
-    constructor(_isNativeHtmlTable, _stickCellCss, direction, _coalescedStyleScheduler, _isBrowser = true, _needsPositionStickyOnElement = true, _positionListener, _tableInjector) {
+    constructor(_isNativeHtmlTable, _stickCellCss, _isBrowser = true, _needsPositionStickyOnElement = true, direction, _positionListener, _tableInjector) {
         this._isNativeHtmlTable = _isNativeHtmlTable;
         this._stickCellCss = _stickCellCss;
-        this.direction = direction;
-        this._coalescedStyleScheduler = _coalescedStyleScheduler;
         this._isBrowser = _isBrowser;
         this._needsPositionStickyOnElement = _needsPositionStickyOnElement;
+        this.direction = direction;
         this._positionListener = _positionListener;
         this._tableInjector = _tableInjector;
         this._borderCellCss = {
@@ -711,12 +642,14 @@ class StickyStyler {
             elementsToClear.push(row, ...Array.from(row.children));
         }
         // Coalesce with sticky row/column updates (and potentially other changes like column resize).
-        this._afterNextRender({
+        afterNextRender({
             write: () => {
                 for (const element of elementsToClear) {
                     this._removeStickyStyle(element, stickyDirections);
                 }
             },
+        }, {
+            injector: this._tableInjector,
         });
     }
     /**
@@ -758,7 +691,7 @@ class StickyStyler {
                 stickyEndStates: [...stickyEndStates],
             });
         }
-        this._afterNextRender({
+        afterNextRender({
             earlyRead: () => {
                 cellWidths = this._getCellWidths(firstRow, recalculateCellWidths);
                 startPositions = this._getStickyStartColumnPositions(cellWidths, stickyStartStates);
@@ -789,11 +722,13 @@ class StickyStyler {
                             ? []
                             : cellWidths
                                 .slice(firstStickyEnd)
-                                .map((width, index) => (stickyEndStates[index + firstStickyEnd] ? width : null))
+                                .map((width, index) => stickyEndStates[index + firstStickyEnd] ? width : null)
                                 .reverse(),
                     });
                 }
             },
+        }, {
+            injector: this._tableInjector,
         });
     }
     /**
@@ -823,7 +758,7 @@ class StickyStyler {
         const elementsToStick = [];
         // Coalesce with other sticky row updates (top/bottom), sticky columns updates
         // (and potentially other changes like column resize).
-        this._afterNextRender({
+        afterNextRender({
             earlyRead: () => {
                 for (let rowIndex = 0, stickyOffset = 0; rowIndex < rows.length; rowIndex++) {
                     if (!states[rowIndex]) {
@@ -866,6 +801,8 @@ class StickyStyler {
                     });
                 }
             },
+        }, {
+            injector: this._tableInjector,
         });
     }
     /**
@@ -879,7 +816,7 @@ class StickyStyler {
             return;
         }
         // Coalesce with other sticky updates (and potentially other changes like column resize).
-        this._afterNextRender({
+        afterNextRender({
             write: () => {
                 const tfoot = tableElement.querySelector('tfoot');
                 if (tfoot) {
@@ -891,6 +828,8 @@ class StickyStyler {
                     }
                 }
             },
+        }, {
+            injector: this._tableInjector,
         });
     }
     /** Triggered by the table's OnDestroy hook. */
@@ -1094,21 +1033,6 @@ class StickyStyler {
             }, 0);
         }
     }
-    /**
-     * Invoke afterNextRender with the table's injector, falling back to CoalescedStyleScheduler
-     * if the injector was not provided.
-     */
-    _afterNextRender(spec) {
-        if (this._tableInjector) {
-            afterNextRender(spec, { injector: this._tableInjector });
-        }
-        else {
-            this._coalescedStyleScheduler.schedule(() => {
-                spec.earlyRead?.();
-                spec.write();
-            });
-        }
-    }
 }
 function isCell(element) {
     return ['cdk-cell', 'cdk-header-cell', 'cdk-footer-cell'].some(klass => element.classList.contains(klass));
@@ -1290,7 +1214,6 @@ class CdkTable {
     _dir = inject(Directionality, { optional: true });
     _platform = inject(Platform);
     _viewRepeater = inject(_VIEW_REPEATER_STRATEGY);
-    _coalescedStyleScheduler = inject(_COALESCED_STYLE_SCHEDULER);
     _viewportRuler = inject(ViewportRuler);
     _stickyPositioningListener = inject(STICKY_POSITIONING_LISTENER, { optional: true, skipSelf: true });
     _document = inject(DOCUMENT);
@@ -2165,7 +2088,7 @@ class CdkTable {
      */
     _setupStickyStyler() {
         const direction = this._dir ? this._dir.value : 'ltr';
-        this._stickyStyler = new StickyStyler(this._isNativeHtmlTable, this.stickyCssClass, direction, this._coalescedStyleScheduler, this._platform.isBrowser, this.needsPositionStickyOnElement, this._stickyPositioningListener, this._injector);
+        this._stickyStyler = new StickyStyler(this._isNativeHtmlTable, this.stickyCssClass, this._platform.isBrowser, this.needsPositionStickyOnElement, direction, this._stickyPositioningListener, this._injector);
         (this._dir ? this._dir.change : of())
             .pipe(takeUntil(this._onDestroy))
             .subscribe(value => {
@@ -2208,7 +2131,6 @@ class CdkTable {
     static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "17.0.0", version: "20.0.0-next.5", type: CdkTable, isStandalone: true, selector: "cdk-table, table[cdk-table]", inputs: { trackBy: "trackBy", dataSource: "dataSource", multiTemplateDataRows: ["multiTemplateDataRows", "multiTemplateDataRows", booleanAttribute], fixedLayout: ["fixedLayout", "fixedLayout", booleanAttribute] }, outputs: { contentChanged: "contentChanged" }, host: { properties: { "class.cdk-table-fixed-layout": "fixedLayout" }, classAttribute: "cdk-table" }, providers: [
             { provide: CDK_TABLE, useExisting: CdkTable },
             { provide: _VIEW_REPEATER_STRATEGY, useClass: _DisposeViewRepeaterStrategy },
-            { provide: _COALESCED_STYLE_SCHEDULER, useClass: _CoalescedStyleScheduler },
             // Prevent nested tables from seeing this table's StickyPositioningListener.
             { provide: STICKY_POSITIONING_LISTENER, useValue: null },
         ], queries: [{ propertyName: "_noDataRow", first: true, predicate: CdkNoDataRow, descendants: true }, { propertyName: "_contentColumnDefs", predicate: CdkColumnDef, descendants: true }, { propertyName: "_contentRowDefs", predicate: CdkRowDef, descendants: true }, { propertyName: "_contentHeaderRowDefs", predicate: CdkHeaderRowDef, descendants: true }, { propertyName: "_contentFooterRowDefs", predicate: CdkFooterRowDef, descendants: true }], exportAs: ["cdkTable"], ngImport: i0, template: `
@@ -2279,7 +2201,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", 
                     }, encapsulation: ViewEncapsulation.None, changeDetection: ChangeDetectionStrategy.Default, providers: [
                         { provide: CDK_TABLE, useExisting: CdkTable },
                         { provide: _VIEW_REPEATER_STRATEGY, useClass: _DisposeViewRepeaterStrategy },
-                        { provide: _COALESCED_STYLE_SCHEDULER, useClass: _CoalescedStyleScheduler },
                         // Prevent nested tables from seeing this table's StickyPositioningListener.
                         { provide: STICKY_POSITIONING_LISTENER, useValue: null },
                     ], imports: [HeaderRowOutlet, DataRowOutlet, NoDataRowOutlet, FooterRowOutlet], styles: [".cdk-table-fixed-layout{table-layout:fixed}\n"] }]
@@ -2579,5 +2500,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", 
                 }]
         }] });
 
-export { BaseCdkCell, BaseRowDef, CDK_ROW_TEMPLATE, CDK_TABLE, CdkCell, CdkCellDef, CdkCellOutlet, CdkColumnDef, CdkFooterCell, CdkFooterCellDef, CdkFooterRow, CdkFooterRowDef, CdkHeaderCell, CdkHeaderCellDef, CdkHeaderRow, CdkHeaderRowDef, CdkNoDataRow, CdkRecycleRows, CdkRow, CdkRowDef, CdkTable, CdkTableModule, CdkTextColumn, DataRowOutlet, FooterRowOutlet, HeaderRowOutlet, NoDataRowOutlet, STICKY_POSITIONING_LISTENER, TEXT_COLUMN_OPTIONS, _COALESCED_STYLE_SCHEDULER, _CoalescedStyleScheduler, _Schedule };
+export { BaseCdkCell, BaseRowDef, CDK_ROW_TEMPLATE, CDK_TABLE, CdkCell, CdkCellDef, CdkCellOutlet, CdkColumnDef, CdkFooterCell, CdkFooterCellDef, CdkFooterRow, CdkFooterRowDef, CdkHeaderCell, CdkHeaderCellDef, CdkHeaderRow, CdkHeaderRowDef, CdkNoDataRow, CdkRecycleRows, CdkRow, CdkRowDef, CdkTable, CdkTableModule, CdkTextColumn, DataRowOutlet, FooterRowOutlet, HeaderRowOutlet, NoDataRowOutlet, STICKY_POSITIONING_LISTENER, TEXT_COLUMN_OPTIONS };
 //# sourceMappingURL=table.mjs.map
