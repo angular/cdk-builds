@@ -4,7 +4,7 @@ import { inject, ElementRef, NgZone, Renderer2, ChangeDetectorRef, Injector, aft
 import { B as BasePortalOutlet, f as CdkPortalOutlet, C as ComponentPortal, T as TemplatePortal, h as PortalModule } from './portal-directives-Bw5woq8I.mjs';
 export { d as ɵɵCdkPortal, g as ɵɵPortalHostDirective, e as ɵɵTemplatePortalDirective } from './portal-directives-Bw5woq8I.mjs';
 import { F as FocusTrapFactory, I as InteractivityChecker, A as A11yModule } from './a11y-module-BYox5gpI.mjs';
-import { c as OverlayRef, a as Overlay, O as OverlayContainer, f as OverlayConfig, m as OverlayModule } from './overlay-module-CF_hofRc.mjs';
+import { c as OverlayRef, a as Overlay, O as OverlayContainer, f as OverlayConfig, m as OverlayModule } from './overlay-module-BUj0D19H.mjs';
 import { F as FocusMonitor } from './focus-monitor-e2l_RpN3.mjs';
 import { P as Platform } from './platform-DmdVEw_C.mjs';
 import { c as _getFocusedElementPierceShadowDom } from './shadow-dom-B0oHn41l.mjs';
