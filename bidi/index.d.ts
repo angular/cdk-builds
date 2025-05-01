@@ -1,41 +1,5 @@
-import { AfterContentInit } from '@angular/core';
-import { EventEmitter } from '@angular/core';
-import * as i0 from '@angular/core';
+export { B as BidiModule, b as Dir, a as Direction, D as Directionality } from '../bidi-module.d-IN1Vp56w.js';
 import { InjectionToken } from '@angular/core';
-import { OnDestroy } from '@angular/core';
-
-export declare class BidiModule {
-    static ɵfac: i0.ɵɵFactoryDeclaration<BidiModule, never>;
-    static ɵmod: i0.ɵɵNgModuleDeclaration<BidiModule, never, [typeof i1.Dir], [typeof i1.Dir]>;
-    static ɵinj: i0.ɵɵInjectorDeclaration<BidiModule>;
-}
-
-/**
- * Directive to listen for changes of direction of part of the DOM.
- *
- * Provides itself as Directionality such that descendant directives only need to ever inject
- * Directionality to get the closest direction.
- */
-export declare class Dir implements Directionality, AfterContentInit, OnDestroy {
-    /** Normalized direction that accounts for invalid/unsupported values. */
-    private _dir;
-    /** Whether the `value` has been set to its initial value. */
-    private _isInitialized;
-    /** Direction as passed in by the consumer. */
-    _rawDir: string;
-    /** Event emitted when the direction changes. */
-    readonly change: EventEmitter<Direction>;
-    /** @docs-private */
-    get dir(): Direction;
-    set dir(value: Direction | 'auto');
-    /** Current layout direction of the element. */
-    get value(): Direction;
-    /** Initialize once default value has been set. */
-    ngAfterContentInit(): void;
-    ngOnDestroy(): void;
-    static ɵfac: i0.ɵɵFactoryDeclaration<Dir, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<Dir, "[dir]", ["dir"], { "dir": { "alias": "dir"; "required": false; }; }, { "change": "dirChange"; }, never, never, true, never>;
-}
 
 /**
  * Injection token used to inject the document into Directionality.
@@ -52,29 +16,6 @@ export declare class Dir implements Directionality, AfterContentInit, OnDestroy 
  *
  * @docs-private
  */
-export declare const DIR_DOCUMENT: InjectionToken<Document>;
+declare const DIR_DOCUMENT: InjectionToken<Document>;
 
-export declare type Direction = 'ltr' | 'rtl';
-
-/**
- * The directionality (LTR / RTL) context for the application (or a subtree of it).
- * Exposes the current direction and a stream of direction changes.
- */
-export declare class Directionality implements OnDestroy {
-    /** The current 'ltr' or 'rtl' value. */
-    readonly value: Direction;
-    /** Stream that emits whenever the 'ltr' / 'rtl' state changes. */
-    readonly change: EventEmitter<Direction>;
-    constructor(...args: unknown[]);
-    ngOnDestroy(): void;
-    static ɵfac: i0.ɵɵFactoryDeclaration<Directionality, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<Directionality>;
-}
-
-declare namespace i1 {
-    export {
-        Dir
-    }
-}
-
-export { }
+export { DIR_DOCUMENT };

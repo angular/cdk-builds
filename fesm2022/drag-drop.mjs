@@ -1,14 +1,22 @@
 import * as i0 from '@angular/core';
-import { signal, Component, ViewEncapsulation, ChangeDetectionStrategy, inject, NgZone, RendererFactory2, Injectable, InjectionToken, ElementRef, booleanAttribute, Directive, Input, ViewContainerRef, ChangeDetectorRef, EventEmitter, Injector, afterNextRender, numberAttribute, Output, TemplateRef, NgModule } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
-import { ViewportRuler, ScrollDispatcher, CdkScrollableModule } from '@angular/cdk/scrolling';
-import { isFakeTouchstartFromScreenReader, isFakeMousedownFromScreenReader, _IdGenerator } from '@angular/cdk/a11y';
-import { coerceElement, coerceNumberProperty, coerceArray } from '@angular/cdk/coercion';
-import { _getEventTarget, _bindEventWithOptions, _getShadowRoot } from '@angular/cdk/platform';
+import { signal, Component, ViewEncapsulation, ChangeDetectionStrategy, inject, NgZone, DOCUMENT, RendererFactory2, Injectable, InjectionToken, ElementRef, booleanAttribute, Directive, Input, ViewContainerRef, ChangeDetectorRef, EventEmitter, Injector, afterNextRender, numberAttribute, Output, TemplateRef, NgModule } from '@angular/core';
 import { Subject, Subscription, interval, animationFrameScheduler, Observable, merge, BehaviorSubject } from 'rxjs';
+import { _ as _getEventTarget, a as _getShadowRoot } from './shadow-dom-B0oHn41l.mjs';
+import { a as isFakeTouchstartFromScreenReader, i as isFakeMousedownFromScreenReader } from './fake-event-detection-DWOdFTFz.mjs';
+import { a as coerceElement, c as coerceNumberProperty } from './element-x4z00URv.mjs';
 import { takeUntil, map, take, tap, switchMap, startWith } from 'rxjs/operators';
-import { _CdkPrivateStyleLoader } from '@angular/cdk/private';
-import { Directionality } from '@angular/cdk/bidi';
+import { _ as _CdkPrivateStyleLoader } from './style-loader-BDEAZOey.mjs';
+import { ViewportRuler, ScrollDispatcher, CdkScrollableModule } from './scrolling.mjs';
+export { CdkScrollable as ɵɵCdkScrollable } from './scrolling.mjs';
+import { D as Directionality } from './directionality-Ck5Uc9Se.mjs';
+import { _ as _IdGenerator } from './id-generator-BwB8lolC.mjs';
+import { c as coerceArray } from './array-I1yfCXUO.mjs';
+import './platform-CPg0IbDW.mjs';
+import '@angular/common';
+import './scrolling-BkvA05C8.mjs';
+import './bidi.mjs';
+import './recycle-view-repeater-strategy-DoWdPqVw.mjs';
+import './data-source-D34wiQZj.mjs';
 
 /** Creates a deep clone of an element. */
 function deepCloneNode(node) {
@@ -95,6 +103,20 @@ function getMutableClientRect(element) {
 function isInsideClientRect(clientRect, x, y) {
     const { top, bottom, left, right } = clientRect;
     return y >= top && y <= bottom && x >= left && x <= right;
+}
+/**
+ * Checks if the child element is overflowing from its parent.
+ * @param parentRect - The bounding rect of the parent element.
+ * @param childRect - The bounding rect of the child element.
+ */
+function isOverflowingParent(parentRect, childRect) {
+    // check for horizontal overflow (left and right)
+    const isLeftOverflowing = childRect.left < parentRect.left;
+    const isRightOverflowing = childRect.left + childRect.width > parentRect.right;
+    // check for vertical overflow (top and bottom)
+    const isTopOverflowing = childRect.top < parentRect.top;
+    const isBottomOverflowing = childRect.top + childRect.height > parentRect.bottom;
+    return isLeftOverflowing || isRightOverflowing || isTopOverflowing || isBottomOverflowing;
 }
 /**
  * Updates the top/left positions of a `DOMRect`, as well as their bottom/right counterparts.
@@ -712,10 +734,11 @@ class DragRef {
         const element = coerceElement(rootElement);
         if (element !== this._rootElement) {
             this._removeRootElementListeners();
+            const renderer = this._renderer;
             this._rootElementCleanups = this._ngZone.runOutsideAngular(() => [
-                _bindEventWithOptions(this._renderer, element, 'mousedown', this._pointerDown, activeEventListenerOptions),
-                _bindEventWithOptions(this._renderer, element, 'touchstart', this._pointerDown, passiveEventListenerOptions),
-                _bindEventWithOptions(this._renderer, element, 'dragstart', this._nativeDragStart, activeEventListenerOptions),
+                renderer.listen(element, 'mousedown', this._pointerDown, activeEventListenerOptions),
+                renderer.listen(element, 'touchstart', this._pointerDown, passiveEventListenerOptions),
+                renderer.listen(element, 'dragstart', this._nativeDragStart, activeEventListenerOptions),
             ]);
             this._initialTransform = undefined;
             this._rootElement = element;
@@ -789,6 +812,40 @@ class DragRef {
         this._rootElement.style.transform = this._initialTransform || '';
         this._activeTransform = { x: 0, y: 0 };
         this._passiveTransform = { x: 0, y: 0 };
+    }
+    /** Resets drag item to end of boundary element. */
+    resetToBoundary() {
+        if (
+        // can be null if the drag item was never dragged.
+        this._boundaryElement &&
+            this._rootElement &&
+            // check if we are overflowing off our boundary element
+            isOverflowingParent(this._boundaryElement.getBoundingClientRect(), this._rootElement.getBoundingClientRect())) {
+            const parentRect = this._boundaryElement.getBoundingClientRect();
+            const childRect = this._rootElement.getBoundingClientRect();
+            let offsetX = 0;
+            let offsetY = 0;
+            // check if we are overflowing from left or right
+            if (childRect.left < parentRect.left) {
+                offsetX = parentRect.left - childRect.left;
+            }
+            else if (childRect.right > parentRect.right) {
+                offsetX = parentRect.right - childRect.right;
+            }
+            // check if we are overflowing from top or bottom
+            if (childRect.top < parentRect.top) {
+                offsetY = parentRect.top - childRect.top;
+            }
+            else if (childRect.bottom > parentRect.bottom) {
+                offsetY = parentRect.bottom - childRect.bottom;
+            }
+            const currentLeft = this._activeTransform.x;
+            const currentTop = this._activeTransform.y;
+            let x = currentLeft + offsetX, y = currentTop + offsetY;
+            this._rootElement.style.transform = getTransform(x, y);
+            this._activeTransform = { x, y };
+            this._passiveTransform = { x, y };
+        }
     }
     /**
      * Sets a handle as disabled. While a handle is disabled, it'll capture and interrupt dragging.
@@ -1025,7 +1082,7 @@ class DragRef {
             // In some browsers the global `selectstart` that we maintain in the `DragDropRegistry`
             // doesn't cross the shadow boundary so we have to prevent it at the shadow root (see #28792).
             this._ngZone.runOutsideAngular(() => {
-                this._cleanupShadowRootSelectStart = _bindEventWithOptions(this._renderer, shadowRoot, 'selectstart', shadowDomSelectStart, activeCapturingEventOptions$1);
+                this._cleanupShadowRootSelectStart = this._renderer.listen(shadowRoot, 'selectstart', shadowDomSelectStart, activeCapturingEventOptions$1);
             });
         }
         if (dropContainer) {
@@ -2963,14 +3020,13 @@ const activeCapturingEventOptions = {
  * @docs-private
  */
 class _ResetsLoader {
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: _ResetsLoader, deps: [], target: i0.ɵɵFactoryTarget.Component });
-    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "19.2.0", type: _ResetsLoader, isStandalone: true, selector: "ng-component", host: { attributes: { "cdk-drag-resets-container": "" } }, ngImport: i0, template: '', isInline: true, styles: ["@layer cdk-resets{.cdk-drag-preview{background:none;border:none;padding:0;color:inherit;inset:auto}}.cdk-drag-placeholder *,.cdk-drag-preview *{pointer-events:none !important}"], changeDetection: i0.ChangeDetectionStrategy.OnPush, encapsulation: i0.ViewEncapsulation.None });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: _ResetsLoader, deps: [], target: i0.ɵɵFactoryTarget.Component });
+    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "20.0.0-next.5", type: _ResetsLoader, isStandalone: true, selector: "ng-component", host: { attributes: { "cdk-drag-resets-container": "" } }, ngImport: i0, template: '', isInline: true, styles: ["@layer cdk-resets{.cdk-drag-preview{background:none;border:none;padding:0;color:inherit;inset:auto}}.cdk-drag-placeholder *,.cdk-drag-preview *{pointer-events:none !important}\n"], changeDetection: i0.ChangeDetectionStrategy.OnPush, encapsulation: i0.ViewEncapsulation.None });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: _ResetsLoader, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: _ResetsLoader, decorators: [{
             type: Component,
-            args: [{ encapsulation: ViewEncapsulation.None, template: '', changeDetection: ChangeDetectionStrategy.OnPush, host: { 'cdk-drag-resets-container': '' }, styles: ["@layer cdk-resets{.cdk-drag-preview{background:none;border:none;padding:0;color:inherit;inset:auto}}.cdk-drag-placeholder *,.cdk-drag-preview *{pointer-events:none !important}"] }]
+            args: [{ encapsulation: ViewEncapsulation.None, template: '', changeDetection: ChangeDetectionStrategy.OnPush, host: { 'cdk-drag-resets-container': '' }, styles: ["@layer cdk-resets{.cdk-drag-preview{background:none;border:none;padding:0;color:inherit;inset:auto}}.cdk-drag-placeholder *,.cdk-drag-preview *{pointer-events:none !important}\n"] }]
         }] });
-// TODO(crisbeto): remove generics when making breaking changes.
 /**
  * Service that keeps track of all the drag item and drop container
  * instances, and manages global event listeners on the `document`.
@@ -2982,6 +3038,7 @@ class DragDropRegistry {
     _styleLoader = inject(_CdkPrivateStyleLoader);
     _renderer = inject(RendererFactory2).createRenderer(null, null);
     _cleanupDocumentTouchmove;
+    _scroll = new Subject();
     /** Registered drop container instances. */
     _dropInstances = new Set();
     /** Registered drag item instances. */
@@ -3011,12 +3068,6 @@ class DragDropRegistry {
      * while the user is dragging a drag item instance.
      */
     pointerUp = new Subject();
-    /**
-     * Emits when the viewport has been scrolled while the user is dragging an item.
-     * @deprecated To be turned into a private member. Use the `scrolled` method instead.
-     * @breaking-change 13.0.0
-     */
-    scroll = new Subject();
     constructor() { }
     /** Adds a drop container to the registry. */
     registerDropContainer(drop) {
@@ -3035,7 +3086,7 @@ class DragDropRegistry {
                 // The event handler has to be explicitly active,
                 // because newer browsers make it passive by default.
                 this._cleanupDocumentTouchmove?.();
-                this._cleanupDocumentTouchmove = _bindEventWithOptions(this._renderer, this._document, 'touchmove', this._persistentTouchmoveListener, activeCapturingEventOptions);
+                this._cleanupDocumentTouchmove = this._renderer.listen(this._document, 'touchmove', this._persistentTouchmoveListener, activeCapturingEventOptions);
             });
         }
     }
@@ -3072,7 +3123,7 @@ class DragDropRegistry {
             const toBind = [
                 // Use capturing so that we pick up scroll changes in any scrollable nodes that aren't
                 // the document. See https://github.com/angular/components/issues/17144.
-                ['scroll', (e) => this.scroll.next(e), capturingEventOptions],
+                ['scroll', (e) => this._scroll.next(e), capturingEventOptions],
                 // Preventing the default action on `mousemove` isn't enough to disable text selection
                 // on Safari so we need to prevent the selection event as well. Alternatively this can
                 // be done by setting `user-select: none` on the `body`, however it has causes a style
@@ -3095,7 +3146,7 @@ class DragDropRegistry {
                 ]);
             }
             this._ngZone.runOutsideAngular(() => {
-                this._globalListeners = toBind.map(([name, handler, options]) => _bindEventWithOptions(this._renderer, this._document, name, handler, options));
+                this._globalListeners = toBind.map(([name, handler, options]) => this._renderer.listen(this._document, name, handler, options));
             });
         }
     }
@@ -3125,14 +3176,14 @@ class DragDropRegistry {
      *   be used to include an additional top-level listener at the shadow root level.
      */
     scrolled(shadowRoot) {
-        const streams = [this.scroll];
+        const streams = [this._scroll];
         if (shadowRoot && shadowRoot !== this._document) {
             // Note that this is basically the same as `fromEvent` from rxjs, but we do it ourselves,
             // because we want to guarantee that the event is bound outside of the `NgZone`. With
             // `fromEvent` it'll only happen if the subscription is outside the `NgZone`.
             streams.push(new Observable((observer) => {
                 return this._ngZone.runOutsideAngular(() => {
-                    const cleanup = _bindEventWithOptions(this._renderer, shadowRoot, 'scroll', (event) => {
+                    const cleanup = this._renderer.listen(shadowRoot, 'scroll', (event) => {
                         if (this._activeDragInstances().length) {
                             observer.next(event);
                         }
@@ -3202,10 +3253,10 @@ class DragDropRegistry {
         this._globalListeners?.forEach(cleanup => cleanup());
         this._globalListeners = undefined;
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: DragDropRegistry, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: DragDropRegistry, providedIn: 'root' });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: DragDropRegistry, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: DragDropRegistry, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: DragDropRegistry, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: DragDropRegistry, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: () => [] });
@@ -3240,10 +3291,10 @@ class DragDrop {
     createDropList(element) {
         return new DropListRef(element, this._dragDropRegistry, this._document, this._ngZone, this._viewportRuler);
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: DragDrop, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: DragDrop, providedIn: 'root' });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: DragDrop, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: DragDrop, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: DragDrop, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: DragDrop, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: () => [] });
@@ -3313,10 +3364,10 @@ class CdkDragHandle {
         this._parentDrag?._removeHandle(this);
         this._stateChanges.complete();
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: CdkDragHandle, deps: [], target: i0.ɵɵFactoryTarget.Directive });
-    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "19.2.0", type: CdkDragHandle, isStandalone: true, selector: "[cdkDragHandle]", inputs: { disabled: ["cdkDragHandleDisabled", "disabled", booleanAttribute] }, host: { classAttribute: "cdk-drag-handle" }, providers: [{ provide: CDK_DRAG_HANDLE, useExisting: CdkDragHandle }], ngImport: i0 });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: CdkDragHandle, deps: [], target: i0.ɵɵFactoryTarget.Directive });
+    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "20.0.0-next.5", type: CdkDragHandle, isStandalone: true, selector: "[cdkDragHandle]", inputs: { disabled: ["cdkDragHandleDisabled", "disabled", booleanAttribute] }, host: { classAttribute: "cdk-drag-handle" }, providers: [{ provide: CDK_DRAG_HANDLE, useExisting: CdkDragHandle }], ngImport: i0 });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: CdkDragHandle, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: CdkDragHandle, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkDragHandle]',
@@ -3502,6 +3553,10 @@ class CdkDrag {
     /** Resets a standalone drag item to its initial position. */
     reset() {
         this._dragRef.reset();
+    }
+    /** Resets drag item to end of boundary element. */
+    resetToBoundary() {
+        this._dragRef.resetToBoundary();
     }
     /**
      * Gets the pixel coordinates of the draggable outside of a drop container.
@@ -3775,10 +3830,10 @@ class CdkDrag {
             handleInstance.disabled ? dragRef.disableHandle(handle) : dragRef.enableHandle(handle);
         });
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: CdkDrag, deps: [], target: i0.ɵɵFactoryTarget.Directive });
-    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "19.2.0", type: CdkDrag, isStandalone: true, selector: "[cdkDrag]", inputs: { data: ["cdkDragData", "data"], lockAxis: ["cdkDragLockAxis", "lockAxis"], rootElementSelector: ["cdkDragRootElement", "rootElementSelector"], boundaryElement: ["cdkDragBoundary", "boundaryElement"], dragStartDelay: ["cdkDragStartDelay", "dragStartDelay"], freeDragPosition: ["cdkDragFreeDragPosition", "freeDragPosition"], disabled: ["cdkDragDisabled", "disabled", booleanAttribute], constrainPosition: ["cdkDragConstrainPosition", "constrainPosition"], previewClass: ["cdkDragPreviewClass", "previewClass"], previewContainer: ["cdkDragPreviewContainer", "previewContainer"], scale: ["cdkDragScale", "scale", numberAttribute] }, outputs: { started: "cdkDragStarted", released: "cdkDragReleased", ended: "cdkDragEnded", entered: "cdkDragEntered", exited: "cdkDragExited", dropped: "cdkDragDropped", moved: "cdkDragMoved" }, host: { properties: { "class.cdk-drag-disabled": "disabled", "class.cdk-drag-dragging": "_dragRef.isDragging()" }, classAttribute: "cdk-drag" }, providers: [{ provide: CDK_DRAG_PARENT, useExisting: CdkDrag }], exportAs: ["cdkDrag"], usesOnChanges: true, ngImport: i0 });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: CdkDrag, deps: [], target: i0.ɵɵFactoryTarget.Directive });
+    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "20.0.0-next.5", type: CdkDrag, isStandalone: true, selector: "[cdkDrag]", inputs: { data: ["cdkDragData", "data"], lockAxis: ["cdkDragLockAxis", "lockAxis"], rootElementSelector: ["cdkDragRootElement", "rootElementSelector"], boundaryElement: ["cdkDragBoundary", "boundaryElement"], dragStartDelay: ["cdkDragStartDelay", "dragStartDelay"], freeDragPosition: ["cdkDragFreeDragPosition", "freeDragPosition"], disabled: ["cdkDragDisabled", "disabled", booleanAttribute], constrainPosition: ["cdkDragConstrainPosition", "constrainPosition"], previewClass: ["cdkDragPreviewClass", "previewClass"], previewContainer: ["cdkDragPreviewContainer", "previewContainer"], scale: ["cdkDragScale", "scale", numberAttribute] }, outputs: { started: "cdkDragStarted", released: "cdkDragReleased", ended: "cdkDragEnded", entered: "cdkDragEntered", exited: "cdkDragExited", dropped: "cdkDragDropped", moved: "cdkDragMoved" }, host: { properties: { "class.cdk-drag-disabled": "disabled", "class.cdk-drag-dragging": "_dragRef.isDragging()" }, classAttribute: "cdk-drag" }, providers: [{ provide: CDK_DRAG_PARENT, useExisting: CdkDrag }], exportAs: ["cdkDrag"], usesOnChanges: true, ngImport: i0 });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: CdkDrag, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: CdkDrag, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkDrag]',
@@ -3866,10 +3921,10 @@ class CdkDropListGroup {
     ngOnDestroy() {
         this._items.clear();
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: CdkDropListGroup, deps: [], target: i0.ɵɵFactoryTarget.Directive });
-    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "19.2.0", type: CdkDropListGroup, isStandalone: true, selector: "[cdkDropListGroup]", inputs: { disabled: ["cdkDropListGroupDisabled", "disabled", booleanAttribute] }, providers: [{ provide: CDK_DROP_LIST_GROUP, useExisting: CdkDropListGroup }], exportAs: ["cdkDropListGroup"], ngImport: i0 });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: CdkDropListGroup, deps: [], target: i0.ɵɵFactoryTarget.Directive });
+    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "20.0.0-next.5", type: CdkDropListGroup, isStandalone: true, selector: "[cdkDropListGroup]", inputs: { disabled: ["cdkDropListGroupDisabled", "disabled", booleanAttribute] }, providers: [{ provide: CDK_DROP_LIST_GROUP, useExisting: CdkDropListGroup }], exportAs: ["cdkDropListGroup"], ngImport: i0 });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: CdkDropListGroup, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: CdkDropListGroup, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkDropListGroup]',
@@ -3891,6 +3946,8 @@ class CdkDropList {
         optional: true,
         skipSelf: true,
     });
+    /** Refs that have been synced with the drop ref most recently. */
+    _latestSortedRefs;
     /** Emits when the list has been destroyed. */
     _destroyed = new Subject();
     /** Whether the element's scrollable parents have been resolved. */
@@ -4007,14 +4064,22 @@ class CdkDropList {
         // Only sync the items while dragging since this method is
         // called when items are being initialized one-by-one.
         if (this._dropListRef.isDragging()) {
-            this._syncItemsWithRef();
+            this._syncItemsWithRef(this.getSortedItems().map(item => item._dragRef));
         }
     }
     /** Removes an item from the drop list. */
     removeItem(item) {
         this._unsortedItems.delete(item);
         // This method might be called on destroy so we always want to sync with the ref.
-        this._syncItemsWithRef();
+        // Note that we reuse the last set of synced items, rather than re-sorting the whole
+        // list, because it can slow down re-renders of large lists (see #30737).
+        if (this._latestSortedRefs) {
+            const index = this._latestSortedRefs.indexOf(item._dragRef);
+            if (index > -1) {
+                this._latestSortedRefs.splice(index, 1);
+                this._syncItemsWithRef(this._latestSortedRefs);
+            }
+        }
     }
     /** Gets the registered items in the list, sorted by their position in the DOM. */
     getSortedItems() {
@@ -4036,6 +4101,7 @@ class CdkDropList {
         if (this._group) {
             this._group._items.delete(this);
         }
+        this._latestSortedRefs = undefined;
         this._unsortedItems.clear();
         this._dropListRef.dispose();
         this._destroyed.next();
@@ -4097,7 +4163,7 @@ class CdkDropList {
     /** Handles events from the underlying DropListRef. */
     _handleEvents(ref) {
         ref.beforeStarted.subscribe(() => {
-            this._syncItemsWithRef();
+            this._syncItemsWithRef(this.getSortedItems().map(item => item._dragRef));
             this._changeDetectorRef.markForCheck();
         });
         ref.entered.subscribe(event => {
@@ -4152,17 +4218,18 @@ class CdkDropList {
         }
     }
     /** Syncs up the registered drag items with underlying drop list ref. */
-    _syncItemsWithRef() {
-        this._dropListRef.withItems(this.getSortedItems().map(item => item._dragRef));
+    _syncItemsWithRef(items) {
+        this._latestSortedRefs = items;
+        this._dropListRef.withItems(items);
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: CdkDropList, deps: [], target: i0.ɵɵFactoryTarget.Directive });
-    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "19.2.0", type: CdkDropList, isStandalone: true, selector: "[cdkDropList], cdk-drop-list", inputs: { connectedTo: ["cdkDropListConnectedTo", "connectedTo"], data: ["cdkDropListData", "data"], orientation: ["cdkDropListOrientation", "orientation"], id: "id", lockAxis: ["cdkDropListLockAxis", "lockAxis"], disabled: ["cdkDropListDisabled", "disabled", booleanAttribute], sortingDisabled: ["cdkDropListSortingDisabled", "sortingDisabled", booleanAttribute], enterPredicate: ["cdkDropListEnterPredicate", "enterPredicate"], sortPredicate: ["cdkDropListSortPredicate", "sortPredicate"], autoScrollDisabled: ["cdkDropListAutoScrollDisabled", "autoScrollDisabled", booleanAttribute], autoScrollStep: ["cdkDropListAutoScrollStep", "autoScrollStep"], elementContainerSelector: ["cdkDropListElementContainer", "elementContainerSelector"] }, outputs: { dropped: "cdkDropListDropped", entered: "cdkDropListEntered", exited: "cdkDropListExited", sorted: "cdkDropListSorted" }, host: { properties: { "attr.id": "id", "class.cdk-drop-list-disabled": "disabled", "class.cdk-drop-list-dragging": "_dropListRef.isDragging()", "class.cdk-drop-list-receiving": "_dropListRef.isReceiving()" }, classAttribute: "cdk-drop-list" }, providers: [
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: CdkDropList, deps: [], target: i0.ɵɵFactoryTarget.Directive });
+    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "20.0.0-next.5", type: CdkDropList, isStandalone: true, selector: "[cdkDropList], cdk-drop-list", inputs: { connectedTo: ["cdkDropListConnectedTo", "connectedTo"], data: ["cdkDropListData", "data"], orientation: ["cdkDropListOrientation", "orientation"], id: "id", lockAxis: ["cdkDropListLockAxis", "lockAxis"], disabled: ["cdkDropListDisabled", "disabled", booleanAttribute], sortingDisabled: ["cdkDropListSortingDisabled", "sortingDisabled", booleanAttribute], enterPredicate: ["cdkDropListEnterPredicate", "enterPredicate"], sortPredicate: ["cdkDropListSortPredicate", "sortPredicate"], autoScrollDisabled: ["cdkDropListAutoScrollDisabled", "autoScrollDisabled", booleanAttribute], autoScrollStep: ["cdkDropListAutoScrollStep", "autoScrollStep"], elementContainerSelector: ["cdkDropListElementContainer", "elementContainerSelector"] }, outputs: { dropped: "cdkDropListDropped", entered: "cdkDropListEntered", exited: "cdkDropListExited", sorted: "cdkDropListSorted" }, host: { properties: { "attr.id": "id", "class.cdk-drop-list-disabled": "disabled", "class.cdk-drop-list-dragging": "_dropListRef.isDragging()", "class.cdk-drop-list-receiving": "_dropListRef.isReceiving()" }, classAttribute: "cdk-drop-list" }, providers: [
             // Prevent child drop lists from picking up the same group as their parent.
             { provide: CDK_DROP_LIST_GROUP, useValue: undefined },
             { provide: CDK_DROP_LIST, useExisting: CdkDropList },
         ], exportAs: ["cdkDropList"], ngImport: i0 });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: CdkDropList, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: CdkDropList, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkDropList], cdk-drop-list',
@@ -4252,10 +4319,10 @@ class CdkDragPreview {
     ngOnDestroy() {
         this._drag?._resetPreviewTemplate(this);
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: CdkDragPreview, deps: [], target: i0.ɵɵFactoryTarget.Directive });
-    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "19.2.0", type: CdkDragPreview, isStandalone: true, selector: "ng-template[cdkDragPreview]", inputs: { data: "data", matchSize: ["matchSize", "matchSize", booleanAttribute] }, providers: [{ provide: CDK_DRAG_PREVIEW, useExisting: CdkDragPreview }], ngImport: i0 });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: CdkDragPreview, deps: [], target: i0.ɵɵFactoryTarget.Directive });
+    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "20.0.0-next.5", type: CdkDragPreview, isStandalone: true, selector: "ng-template[cdkDragPreview]", inputs: { data: "data", matchSize: ["matchSize", "matchSize", booleanAttribute] }, providers: [{ provide: CDK_DRAG_PREVIEW, useExisting: CdkDragPreview }], ngImport: i0 });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: CdkDragPreview, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: CdkDragPreview, decorators: [{
             type: Directive,
             args: [{
                     selector: 'ng-template[cdkDragPreview]',
@@ -4289,10 +4356,10 @@ class CdkDragPlaceholder {
     ngOnDestroy() {
         this._drag?._resetPlaceholderTemplate(this);
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: CdkDragPlaceholder, deps: [], target: i0.ɵɵFactoryTarget.Directive });
-    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.2.0", type: CdkDragPlaceholder, isStandalone: true, selector: "ng-template[cdkDragPlaceholder]", inputs: { data: "data" }, providers: [{ provide: CDK_DRAG_PLACEHOLDER, useExisting: CdkDragPlaceholder }], ngImport: i0 });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: CdkDragPlaceholder, deps: [], target: i0.ɵɵFactoryTarget.Directive });
+    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "20.0.0-next.5", type: CdkDragPlaceholder, isStandalone: true, selector: "ng-template[cdkDragPlaceholder]", inputs: { data: "data" }, providers: [{ provide: CDK_DRAG_PLACEHOLDER, useExisting: CdkDragPlaceholder }], ngImport: i0 });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: CdkDragPlaceholder, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: CdkDragPlaceholder, decorators: [{
             type: Directive,
             args: [{
                     selector: 'ng-template[cdkDragPlaceholder]',
@@ -4311,8 +4378,8 @@ const DRAG_DROP_DIRECTIVES = [
     CdkDragPlaceholder,
 ];
 class DragDropModule {
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: DragDropModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-    static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "19.2.0", ngImport: i0, type: DragDropModule, imports: [CdkDropList,
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: DragDropModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+    static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "20.0.0-next.5", ngImport: i0, type: DragDropModule, imports: [CdkDropList,
             CdkDropListGroup,
             CdkDrag,
             CdkDragHandle,
@@ -4323,9 +4390,9 @@ class DragDropModule {
             CdkDragHandle,
             CdkDragPreview,
             CdkDragPlaceholder] });
-    static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: DragDropModule, providers: [DragDrop], imports: [CdkScrollableModule] });
+    static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: DragDropModule, providers: [DragDrop], imports: [CdkScrollableModule] });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: DragDropModule, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: DragDropModule, decorators: [{
             type: NgModule,
             args: [{
                     imports: DRAG_DROP_DIRECTIVES,
@@ -4333,10 +4400,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.0", ngImpor
                     providers: [DragDrop],
                 }]
         }] });
-
-/**
- * Generated bundle index. Do not edit.
- */
 
 export { CDK_DRAG_CONFIG, CDK_DRAG_HANDLE, CDK_DRAG_PARENT, CDK_DRAG_PLACEHOLDER, CDK_DRAG_PREVIEW, CDK_DROP_LIST, CDK_DROP_LIST_GROUP, CdkDrag, CdkDragHandle, CdkDragPlaceholder, CdkDragPreview, CdkDropList, CdkDropListGroup, DragDrop, DragDropModule, DragDropRegistry, DragRef, DropListRef, copyArrayItem, moveItemInArray, transferArrayItem };
 //# sourceMappingURL=drag-drop.mjs.map

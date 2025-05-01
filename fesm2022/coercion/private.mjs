@@ -11,9 +11,5 @@ function coerceObservable(data) {
     return data;
 }
 
-/**
- * Generated bundle index. Do not edit.
- */
-
 export { coerceObservable };
 //# sourceMappingURL=private.mjs.map

@@ -1,9 +1,8 @@
-import { getNoKeysSpecifiedError, TestKey, _getTextWithExcludedElements, handleAutoChangeDetectionStatus, stopHandlingAutoChangeDetectionStatus, HarnessEnvironment } from '@angular/cdk/testing';
 import { flush } from '@angular/core/testing';
 import { takeWhile } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
-import * as keyCodes from '@angular/cdk/keycodes';
-import { PERIOD } from '@angular/cdk/keycodes';
+import { getNoKeysSpecifiedError, _getTextWithExcludedElements, TestKey, HarnessEnvironment, handleAutoChangeDetectionStatus, stopHandlingAutoChangeDetectionStatus } from '../testing.mjs';
+import { h as PERIOD, B as BACKSPACE, T as TAB, c as ENTER, f as SHIFT, C as CONTROL, d as ALT, g as ESCAPE, a as PAGE_UP, P as PAGE_DOWN, E as END, H as HOME, L as LEFT_ARROW, U as UP_ARROW, R as RIGHT_ARROW, D as DOWN_ARROW, I as INSERT, i as DELETE, F as F1, j as F2, k as F3, l as F4, m as F5, n as F6, o as F7, p as F8, q as F9, r as F10, s as F11, t as F12, e as META, u as COMMA } from '../keycodes-CpHkExLC.mjs';
 
 /** Unique symbol that is used to patch a property to a proxy zone. */
 const stateObservableSymbol = Symbol('ProxyZone_PATCHED#stateObservable');
@@ -81,7 +80,6 @@ class TaskStateZoneInterceptor {
 }
 
 /** Used to generate unique IDs for events. */
-let uniqueIds = 0;
 /**
  * Creates a browser MouseEvent with the specified options.
  * @docs-private
@@ -147,24 +145,6 @@ function createPointerEvent(type, clientX = 0, clientY = 0, offsetX, offsetY, op
     if (offsetY != null) {
         defineReadonlyEventProperty(event, 'offsetY', offsetY);
     }
-    return event;
-}
-/**
- * Creates a browser TouchEvent with the specified pointer coordinates.
- * @docs-private
- */
-function createTouchEvent(type, pageX = 0, pageY = 0, clientX = 0, clientY = 0) {
-    // We cannot use the `TouchEvent` or `Touch` because Firefox and Safari lack support.
-    // TODO: Switch to the constructor API when it is available for Firefox and Safari.
-    const event = document.createEvent('UIEvent');
-    const touchDetails = { pageX, pageY, clientX, clientY, identifier: uniqueIds++ };
-    // TS3.6 removes the initUIEvent method and suggests porting to "new UIEvent()".
-    event.initUIEvent(type, true, true, window, 0);
-    // Most of the browsers don't have a "initTouchEvent" method that can be used to define
-    // the touch details.
-    defineReadonlyEventProperty(event, 'touches', [touchDetails]);
-    defineReadonlyEventProperty(event, 'targetTouches', [touchDetails]);
-    defineReadonlyEventProperty(event, 'changedTouches', [touchDetails]);
     return event;
 }
 /**
@@ -238,13 +218,6 @@ function dispatchMouseEvent(node, type, clientX = 0, clientY = 0, offsetX, offse
 function dispatchPointerEvent(node, type, clientX = 0, clientY = 0, offsetX, offsetY, options) {
     return dispatchEvent(node, createPointerEvent(type, clientX, clientY, offsetX, offsetY, options));
 }
-/**
- * Shorthand to dispatch a touch event on the specified coordinates.
- * @docs-private
- */
-function dispatchTouchEvent(node, type, pageX = 0, pageY = 0, clientX = 0, clientY = 0) {
-    return dispatchEvent(node, createTouchEvent(type, pageX, pageY, clientX, clientY));
-}
 
 function triggerFocusChange(element, event) {
     let eventFired = false;
@@ -255,18 +228,6 @@ function triggerFocusChange(element, event) {
     if (!eventFired) {
         dispatchFakeEvent(element, event);
     }
-}
-/**
- * Patches an elements focus and blur methods to emit events consistently and predictably.
- * This is necessary, because some browsers can call the focus handlers asynchronously,
- * while others won't fire them at all if the browser window is not focused.
- * @docs-private
- */
-// TODO: Check if this element focus patching is still needed for local testing,
-// where browser is not necessarily focused.
-function patchElementFocus(element) {
-    element.focus = () => dispatchFakeEvent(element, 'focus');
-    element.blur = () => dispatchFakeEvent(element, 'blur');
 }
 /** @docs-private */
 function triggerFocus(element) {
@@ -405,41 +366,39 @@ function clearElement(element) {
     dispatchFakeEvent(element, 'input');
 }
 
-// These are private APIs that are used both by the public APIs inside of this package, as well
-
 /** Maps `TestKey` constants to the `keyCode` and `key` values used by native browser events. */
 const keyMap = {
-    [TestKey.BACKSPACE]: { keyCode: keyCodes.BACKSPACE, key: 'Backspace', code: 'Backspace' },
-    [TestKey.TAB]: { keyCode: keyCodes.TAB, key: 'Tab', code: 'Tab' },
-    [TestKey.ENTER]: { keyCode: keyCodes.ENTER, key: 'Enter', code: 'Enter' },
-    [TestKey.SHIFT]: { keyCode: keyCodes.SHIFT, key: 'Shift', code: 'ShiftLeft' },
-    [TestKey.CONTROL]: { keyCode: keyCodes.CONTROL, key: 'Control', code: 'ControlLeft' },
-    [TestKey.ALT]: { keyCode: keyCodes.ALT, key: 'Alt', code: 'AltLeft' },
-    [TestKey.ESCAPE]: { keyCode: keyCodes.ESCAPE, key: 'Escape', code: 'Escape' },
-    [TestKey.PAGE_UP]: { keyCode: keyCodes.PAGE_UP, key: 'PageUp', code: 'PageUp' },
-    [TestKey.PAGE_DOWN]: { keyCode: keyCodes.PAGE_DOWN, key: 'PageDown', code: 'PageDown' },
-    [TestKey.END]: { keyCode: keyCodes.END, key: 'End', code: 'End' },
-    [TestKey.HOME]: { keyCode: keyCodes.HOME, key: 'Home', code: 'Home' },
-    [TestKey.LEFT_ARROW]: { keyCode: keyCodes.LEFT_ARROW, key: 'ArrowLeft', code: 'ArrowLeft' },
-    [TestKey.UP_ARROW]: { keyCode: keyCodes.UP_ARROW, key: 'ArrowUp', code: 'ArrowUp' },
-    [TestKey.RIGHT_ARROW]: { keyCode: keyCodes.RIGHT_ARROW, key: 'ArrowRight', code: 'ArrowRight' },
-    [TestKey.DOWN_ARROW]: { keyCode: keyCodes.DOWN_ARROW, key: 'ArrowDown', code: 'ArrowDown' },
-    [TestKey.INSERT]: { keyCode: keyCodes.INSERT, key: 'Insert', code: 'Insert' },
-    [TestKey.DELETE]: { keyCode: keyCodes.DELETE, key: 'Delete', code: 'Delete' },
-    [TestKey.F1]: { keyCode: keyCodes.F1, key: 'F1', code: 'F1' },
-    [TestKey.F2]: { keyCode: keyCodes.F2, key: 'F2', code: 'F2' },
-    [TestKey.F3]: { keyCode: keyCodes.F3, key: 'F3', code: 'F3' },
-    [TestKey.F4]: { keyCode: keyCodes.F4, key: 'F4', code: 'F4' },
-    [TestKey.F5]: { keyCode: keyCodes.F5, key: 'F5', code: 'F5' },
-    [TestKey.F6]: { keyCode: keyCodes.F6, key: 'F6', code: 'F6' },
-    [TestKey.F7]: { keyCode: keyCodes.F7, key: 'F7', code: 'F7' },
-    [TestKey.F8]: { keyCode: keyCodes.F8, key: 'F8', code: 'F8' },
-    [TestKey.F9]: { keyCode: keyCodes.F9, key: 'F9', code: 'F9' },
-    [TestKey.F10]: { keyCode: keyCodes.F10, key: 'F10', code: 'F10' },
-    [TestKey.F11]: { keyCode: keyCodes.F11, key: 'F11', code: 'F11' },
-    [TestKey.F12]: { keyCode: keyCodes.F12, key: 'F12', code: 'F12' },
-    [TestKey.META]: { keyCode: keyCodes.META, key: 'Meta', code: 'MetaLeft' },
-    [TestKey.COMMA]: { keyCode: keyCodes.COMMA, key: ',', code: 'Comma' },
+    [TestKey.BACKSPACE]: { keyCode: BACKSPACE, key: 'Backspace', code: 'Backspace' },
+    [TestKey.TAB]: { keyCode: TAB, key: 'Tab', code: 'Tab' },
+    [TestKey.ENTER]: { keyCode: ENTER, key: 'Enter', code: 'Enter' },
+    [TestKey.SHIFT]: { keyCode: SHIFT, key: 'Shift', code: 'ShiftLeft' },
+    [TestKey.CONTROL]: { keyCode: CONTROL, key: 'Control', code: 'ControlLeft' },
+    [TestKey.ALT]: { keyCode: ALT, key: 'Alt', code: 'AltLeft' },
+    [TestKey.ESCAPE]: { keyCode: ESCAPE, key: 'Escape', code: 'Escape' },
+    [TestKey.PAGE_UP]: { keyCode: PAGE_UP, key: 'PageUp', code: 'PageUp' },
+    [TestKey.PAGE_DOWN]: { keyCode: PAGE_DOWN, key: 'PageDown', code: 'PageDown' },
+    [TestKey.END]: { keyCode: END, key: 'End', code: 'End' },
+    [TestKey.HOME]: { keyCode: HOME, key: 'Home', code: 'Home' },
+    [TestKey.LEFT_ARROW]: { keyCode: LEFT_ARROW, key: 'ArrowLeft', code: 'ArrowLeft' },
+    [TestKey.UP_ARROW]: { keyCode: UP_ARROW, key: 'ArrowUp', code: 'ArrowUp' },
+    [TestKey.RIGHT_ARROW]: { keyCode: RIGHT_ARROW, key: 'ArrowRight', code: 'ArrowRight' },
+    [TestKey.DOWN_ARROW]: { keyCode: DOWN_ARROW, key: 'ArrowDown', code: 'ArrowDown' },
+    [TestKey.INSERT]: { keyCode: INSERT, key: 'Insert', code: 'Insert' },
+    [TestKey.DELETE]: { keyCode: DELETE, key: 'Delete', code: 'Delete' },
+    [TestKey.F1]: { keyCode: F1, key: 'F1', code: 'F1' },
+    [TestKey.F2]: { keyCode: F2, key: 'F2', code: 'F2' },
+    [TestKey.F3]: { keyCode: F3, key: 'F3', code: 'F3' },
+    [TestKey.F4]: { keyCode: F4, key: 'F4', code: 'F4' },
+    [TestKey.F5]: { keyCode: F5, key: 'F5', code: 'F5' },
+    [TestKey.F6]: { keyCode: F6, key: 'F6', code: 'F6' },
+    [TestKey.F7]: { keyCode: F7, key: 'F7', code: 'F7' },
+    [TestKey.F8]: { keyCode: F8, key: 'F8', code: 'F8' },
+    [TestKey.F9]: { keyCode: F9, key: 'F9', code: 'F9' },
+    [TestKey.F10]: { keyCode: F10, key: 'F10', code: 'F10' },
+    [TestKey.F11]: { keyCode: F11, key: 'F11', code: 'F11' },
+    [TestKey.F12]: { keyCode: F12, key: 'F12', code: 'F12' },
+    [TestKey.META]: { keyCode: META, key: 'Meta', code: 'MetaLeft' },
+    [TestKey.COMMA]: { keyCode: COMMA, key: ',', code: 'Comma' },
 };
 /** A `TestElement` implementation for unit tests. */
 class UnitTestElement {

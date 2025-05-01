@@ -1,14 +1,34 @@
-import { FocusTrapFactory, InteractivityChecker, FocusMonitor, _IdGenerator, A11yModule } from '@angular/cdk/a11y';
-import { OverlayRef, Overlay, OverlayContainer, OverlayConfig, OverlayModule } from '@angular/cdk/overlay';
-import { Platform, _getFocusedElementPierceShadowDom } from '@angular/cdk/platform';
-import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, TemplatePortal, PortalModule } from '@angular/cdk/portal';
-import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { inject, ElementRef, NgZone, Renderer2, ChangeDetectorRef, Injector, afterNextRender, Component, ViewEncapsulation, ChangeDetectionStrategy, ViewChild, InjectionToken, TemplateRef, Injectable, NgModule } from '@angular/core';
-import { ESCAPE, hasModifierKey } from '@angular/cdk/keycodes';
-import { Subject, defer, of } from 'rxjs';
-import { Directionality } from '@angular/cdk/bidi';
+import { inject, ElementRef, NgZone, Renderer2, DOCUMENT, ChangeDetectorRef, Injector, afterNextRender, Component, ViewEncapsulation, ChangeDetectionStrategy, ViewChild, InjectionToken, TemplateRef, Injectable, signal, EventEmitter, NgModule } from '@angular/core';
+import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, TemplatePortal, PortalModule } from './portal.mjs';
+export { CdkPortal as ɵɵCdkPortal, PortalHostDirective as ɵɵPortalHostDirective, TemplatePortalDirective as ɵɵTemplatePortalDirective } from './portal.mjs';
+import { F as FocusTrapFactory, I as InteractivityChecker, A as A11yModule } from './a11y-module-DpEjWNCj.mjs';
+import { F as FocusMonitor } from './focus-monitor-DKFfep8Q.mjs';
+import { P as Platform } from './platform-CPg0IbDW.mjs';
+import { c as _getFocusedElementPierceShadowDom } from './shadow-dom-B0oHn41l.mjs';
+import { Subject, defer } from 'rxjs';
+import { g as ESCAPE } from './keycodes-CpHkExLC.mjs';
+import { hasModifierKey } from './keycodes.mjs';
 import { startWith } from 'rxjs/operators';
+import { s as createBlockScrollStrategy, O as OverlayContainer, c as createOverlayRef, i as OverlayConfig, f as createGlobalPositionStrategy, d as OverlayRef, t as OverlayModule } from './overlay-module-BaGhSGqO.mjs';
+import { _ as _IdGenerator } from './id-generator-BwB8lolC.mjs';
+import { D as Directionality } from './directionality-Ck5Uc9Se.mjs';
+import './style-loader-BDEAZOey.mjs';
+import './private.mjs';
+import './breakpoints-observer-DpQzdtrE.mjs';
+import './array-I1yfCXUO.mjs';
+import './observers.mjs';
+import './element-x4z00URv.mjs';
+import './fake-event-detection-DWOdFTFz.mjs';
+import './passive-listeners-esHZRgIN.mjs';
+import '@angular/common';
+import './test-environment-CT0XxPyp.mjs';
+import './css-pixel-value-C_HEqLhI.mjs';
+import './scrolling.mjs';
+import './scrolling-BkvA05C8.mjs';
+import './bidi.mjs';
+import './recycle-view-repeater-strategy-DoWdPqVw.mjs';
+import './data-source-D34wiQZj.mjs';
 
 /** Configuration for opening a modal dialog. */
 class DialogConfig {
@@ -36,6 +56,8 @@ class DialogConfig {
     backdropClass = '';
     /** Whether the dialog closes with the escape key or pointer events outside the panel element. */
     disableClose = false;
+    /** Function used to determine whether the dialog is allowed to close. */
+    closePredicate;
     /** Width of the dialog. */
     width = '';
     /** Height of the dialog. */
@@ -105,6 +127,10 @@ class DialogConfig {
      */
     closeOnOverlayDetachments = true;
     /**
+     * Whether the built-in overlay animations should be disabled.
+     */
+    disableAnimations = false;
+    /**
      * Providers that will be exposed to the contents of the dialog. Can also
      * be provided as a function in order to generate the providers lazily.
      */
@@ -135,7 +161,6 @@ class CdkDialogContainer extends BasePortalOutlet {
     _config;
     _interactivityChecker = inject(InteractivityChecker);
     _ngZone = inject(NgZone);
-    _overlayRef = inject(OverlayRef);
     _focusMonitor = inject(FocusMonitor);
     _renderer = inject(Renderer2);
     _platform = inject(Platform);
@@ -184,7 +209,6 @@ class CdkDialogContainer extends BasePortalOutlet {
     }
     _contentAttached() {
         this._initializeFocusTrap();
-        this._handleBackdropClicks();
         this._captureInitialFocus();
     }
     /**
@@ -278,7 +302,7 @@ class CdkDialogContainer extends BasePortalOutlet {
      * Moves the focus inside the focus trap. When autoFocus is not set to 'dialog', if focus
      * cannot be moved then focus will go to the dialog container.
      */
-    _trapFocus() {
+    _trapFocus(options) {
         if (this._isDestroyed) {
             return;
         }
@@ -296,23 +320,23 @@ class CdkDialogContainer extends BasePortalOutlet {
                     // if the focus isn't inside the dialog already, because it's possible that the consumer
                     // turned off `autoFocus` in order to move focus themselves.
                     if (!this._containsFocus()) {
-                        element.focus();
+                        element.focus(options);
                     }
                     break;
                 case true:
                 case 'first-tabbable':
-                    const focusedSuccessfully = this._focusTrap?.focusInitialElement();
+                    const focusedSuccessfully = this._focusTrap?.focusInitialElement(options);
                     // If we weren't able to find a focusable element in the dialog, then focus the dialog
                     // container instead.
                     if (!focusedSuccessfully) {
-                        this._focusDialogContainer();
+                        this._focusDialogContainer(options);
                     }
                     break;
                 case 'first-heading':
-                    this._focusByCssSelector('h1, h2, h3, h4, h5, h6, [role="heading"]');
+                    this._focusByCssSelector('h1, h2, h3, h4, h5, h6, [role="heading"]', options);
                     break;
                 default:
-                    this._focusByCssSelector(this._config.autoFocus);
+                    this._focusByCssSelector(this._config.autoFocus, options);
                     break;
             }
         }, { injector: this._injector });
@@ -358,11 +382,9 @@ class CdkDialogContainer extends BasePortalOutlet {
         }
     }
     /** Focuses the dialog container. */
-    _focusDialogContainer() {
+    _focusDialogContainer(options) {
         // Note that there is no focus method when rendering on the server.
-        if (this._elementRef.nativeElement.focus) {
-            this._elementRef.nativeElement.focus();
-        }
+        this._elementRef.nativeElement.focus?.(options);
     }
     /** Returns whether focus is inside the dialog. */
     _containsFocus() {
@@ -381,20 +403,10 @@ class CdkDialogContainer extends BasePortalOutlet {
             }
         }
     }
-    /** Sets up the listener that handles clicks on the dialog backdrop. */
-    _handleBackdropClicks() {
-        // Clicking on the backdrop will move focus out of dialog.
-        // Recapture it if closing via the backdrop is disabled.
-        this._overlayRef.backdropClick().subscribe(() => {
-            if (this._config.disableClose) {
-                this._recaptureFocus();
-            }
-        });
-    }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: CdkDialogContainer, deps: [], target: i0.ɵɵFactoryTarget.Component });
-    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "19.2.0", type: CdkDialogContainer, isStandalone: true, selector: "cdk-dialog-container", host: { attributes: { "tabindex": "-1" }, properties: { "attr.id": "_config.id || null", "attr.role": "_config.role", "attr.aria-modal": "_config.ariaModal", "attr.aria-labelledby": "_config.ariaLabel ? null : _ariaLabelledByQueue[0]", "attr.aria-label": "_config.ariaLabel", "attr.aria-describedby": "_config.ariaDescribedBy || null" }, classAttribute: "cdk-dialog-container" }, viewQueries: [{ propertyName: "_portalOutlet", first: true, predicate: CdkPortalOutlet, descendants: true, static: true }], usesInheritance: true, ngImport: i0, template: "<ng-template cdkPortalOutlet />\n", styles: [".cdk-dialog-container{display:block;width:100%;height:100%;min-height:inherit;max-height:inherit}"], dependencies: [{ kind: "directive", type: CdkPortalOutlet, selector: "[cdkPortalOutlet]", inputs: ["cdkPortalOutlet"], outputs: ["attached"], exportAs: ["cdkPortalOutlet"] }], changeDetection: i0.ChangeDetectionStrategy.Default, encapsulation: i0.ViewEncapsulation.None });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: CdkDialogContainer, deps: [], target: i0.ɵɵFactoryTarget.Component });
+    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "20.0.0-next.5", type: CdkDialogContainer, isStandalone: true, selector: "cdk-dialog-container", host: { attributes: { "tabindex": "-1" }, properties: { "attr.id": "_config.id || null", "attr.role": "_config.role", "attr.aria-modal": "_config.ariaModal", "attr.aria-labelledby": "_config.ariaLabel ? null : _ariaLabelledByQueue[0]", "attr.aria-label": "_config.ariaLabel", "attr.aria-describedby": "_config.ariaDescribedBy || null" }, classAttribute: "cdk-dialog-container" }, viewQueries: [{ propertyName: "_portalOutlet", first: true, predicate: CdkPortalOutlet, descendants: true, static: true }], usesInheritance: true, ngImport: i0, template: "<ng-template cdkPortalOutlet />\n", styles: [".cdk-dialog-container{display:block;width:100%;height:100%;min-height:inherit;max-height:inherit}\n"], dependencies: [{ kind: "directive", type: CdkPortalOutlet, selector: "[cdkPortalOutlet]", inputs: ["cdkPortalOutlet"], outputs: ["attached"], exportAs: ["cdkPortalOutlet"] }], changeDetection: i0.ChangeDetectionStrategy.Default, encapsulation: i0.ViewEncapsulation.None });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: CdkDialogContainer, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: CdkDialogContainer, decorators: [{
             type: Component,
             args: [{ selector: 'cdk-dialog-container', encapsulation: ViewEncapsulation.None, changeDetection: ChangeDetectionStrategy.Default, imports: [CdkPortalOutlet], host: {
                         'class': 'cdk-dialog-container',
@@ -405,7 +417,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.0", ngImpor
                         '[attr.aria-labelledby]': '_config.ariaLabel ? null : _ariaLabelledByQueue[0]',
                         '[attr.aria-label]': '_config.ariaLabel',
                         '[attr.aria-describedby]': '_config.ariaDescribedBy || null',
-                    }, template: "<ng-template cdkPortalOutlet />\n", styles: [".cdk-dialog-container{display:block;width:100%;height:100%;min-height:inherit;max-height:inherit}"] }]
+                    }, template: "<ng-template cdkPortalOutlet />\n", styles: [".cdk-dialog-container{display:block;width:100%;height:100%;min-height:inherit;max-height:inherit}\n"] }]
         }], ctorParameters: () => [], propDecorators: { _portalOutlet: [{
                 type: ViewChild,
                 args: [CdkPortalOutlet, { static: true }]
@@ -458,8 +470,13 @@ class DialogRef {
             }
         });
         this.backdropClick.subscribe(() => {
-            if (!this.disableClose) {
+            if (!this.disableClose && this._canClose()) {
                 this.close(undefined, { focusOrigin: 'mouse' });
+            }
+            else {
+                // Clicking on the backdrop will move focus out of dialog.
+                // Recapture it if closing via the backdrop is disabled.
+                this.containerInstance._recaptureFocus?.();
             }
         });
         this._detachSubscription = overlayRef.detachments().subscribe(() => {
@@ -475,7 +492,7 @@ class DialogRef {
      * @param options Additional options to customize the closing behavior.
      */
     close(result, options) {
-        if (this.containerInstance) {
+        if (this._canClose(result)) {
             const closedSubject = this.closed;
             this.containerInstance._closeInteractionType = options?.focusOrigin || 'program';
             // Drop the detach subscription first since it can be triggered by the
@@ -511,41 +528,42 @@ class DialogRef {
         this.overlayRef.removePanelClass(classes);
         return this;
     }
+    /** Whether the dialog is allowed to close. */
+    _canClose(result) {
+        const config = this.config;
+        return (!!this.containerInstance &&
+            (!config.closePredicate || config.closePredicate(result, config, this.componentInstance)));
+    }
 }
 
 /** Injection token for the Dialog's ScrollStrategy. */
 const DIALOG_SCROLL_STRATEGY = new InjectionToken('DialogScrollStrategy', {
     providedIn: 'root',
     factory: () => {
-        const overlay = inject(Overlay);
-        return () => overlay.scrollStrategies.block();
+        const injector = inject(Injector);
+        return () => createBlockScrollStrategy(injector);
     },
 });
 /** Injection token for the Dialog's Data. */
 const DIALOG_DATA = new InjectionToken('DialogData');
 /** Injection token that can be used to provide default options for the dialog module. */
 const DEFAULT_DIALOG_CONFIG = new InjectionToken('DefaultDialogConfig');
-/**
- * @docs-private
- * @deprecated No longer used. To be removed.
- * @breaking-change 19.0.0
- */
-function DIALOG_SCROLL_STRATEGY_PROVIDER_FACTORY(overlay) {
-    return () => overlay.scrollStrategies.block();
-}
-/**
- * @docs-private
- * @deprecated No longer used. To be removed.
- * @breaking-change 19.0.0
- */
-const DIALOG_SCROLL_STRATEGY_PROVIDER = {
-    provide: DIALOG_SCROLL_STRATEGY,
-    deps: [Overlay],
-    useFactory: DIALOG_SCROLL_STRATEGY_PROVIDER_FACTORY,
-};
 
+function getDirectionality(value) {
+    const valueSignal = signal(value);
+    const change = new EventEmitter();
+    return {
+        valueSignal,
+        get value() {
+            return valueSignal();
+        },
+        change,
+        ngOnDestroy() {
+            change.complete();
+        },
+    };
+}
 class Dialog {
-    _overlay = inject(Overlay);
     _injector = inject(Injector);
     _defaultOptions = inject(DEFAULT_DIALOG_CONFIG, { optional: true });
     _parentDialog = inject(Dialog, { optional: true, skipSelf: true });
@@ -582,7 +600,7 @@ class Dialog {
             throw Error(`Dialog with id "${config.id}" exists already. The dialog id must be unique.`);
         }
         const overlayConfig = this._getOverlayConfig(config);
-        const overlayRef = this._overlay.create(overlayConfig);
+        const overlayRef = createOverlayRef(this._injector, overlayConfig);
         const dialogRef = new DialogRef(overlayRef, config);
         const dialogContainer = this._attachContainer(overlayRef, dialogRef, config);
         dialogRef.containerInstance = dialogContainer;
@@ -635,7 +653,7 @@ class Dialog {
     _getOverlayConfig(config) {
         const state = new OverlayConfig({
             positionStrategy: config.positionStrategy ||
-                this._overlay.position().global().centerHorizontally().centerVertically(),
+                createGlobalPositionStrategy().centerHorizontally().centerVertically(),
             scrollStrategy: config.scrollStrategy || this._scrollStrategy(),
             panelClass: config.panelClass,
             hasBackdrop: config.hasBackdrop,
@@ -647,6 +665,7 @@ class Dialog {
             width: config.width,
             height: config.height,
             disposeOnNavigation: config.closeOnNavigation,
+            disableAnimations: config.disableAnimations,
         });
         if (config.backdropClass) {
             state.backdropClass = config.backdropClass;
@@ -741,7 +760,7 @@ class Dialog {
                 !userInjector.get(Directionality, null, { optional: true }))) {
             providers.push({
                 provide: Directionality,
-                useValue: { value: config.direction, change: of() },
+                useValue: getDirectionality(config.direction),
             });
         }
         return Injector.create({ parent: userInjector || fallbackInjector, providers });
@@ -795,10 +814,10 @@ class Dialog {
         const parent = this._parentDialog;
         return parent ? parent._getAfterAllClosed() : this._afterAllClosedAtThisLevel;
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: Dialog, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: Dialog, providedIn: 'root' });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: Dialog, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: Dialog, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: Dialog, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: Dialog, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: () => [] });
@@ -814,18 +833,18 @@ function reverseForEach(items, callback) {
 }
 
 class DialogModule {
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: DialogModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-    static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "19.2.0", ngImport: i0, type: DialogModule, imports: [OverlayModule, PortalModule, A11yModule, CdkDialogContainer], exports: [
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: DialogModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+    static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "20.0.0-next.5", ngImport: i0, type: DialogModule, imports: [OverlayModule, PortalModule, A11yModule, CdkDialogContainer], exports: [
             // Re-export the PortalModule so that people extending the `CdkDialogContainer`
             // don't have to remember to import it or be faced with an unhelpful error.
             PortalModule,
             CdkDialogContainer] });
-    static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: DialogModule, providers: [Dialog], imports: [OverlayModule, PortalModule, A11yModule, 
+    static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: DialogModule, providers: [Dialog], imports: [OverlayModule, PortalModule, A11yModule, 
             // Re-export the PortalModule so that people extending the `CdkDialogContainer`
             // don't have to remember to import it or be faced with an unhelpful error.
             PortalModule] });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.0", ngImport: i0, type: DialogModule, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-next.5", ngImport: i0, type: DialogModule, decorators: [{
             type: NgModule,
             args: [{
                     imports: [OverlayModule, PortalModule, A11yModule, CdkDialogContainer],
@@ -839,9 +858,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.2.0", ngImpor
                 }]
         }] });
 
-/**
- * Generated bundle index. Do not edit.
- */
-
-export { CdkDialogContainer, DEFAULT_DIALOG_CONFIG, DIALOG_DATA, DIALOG_SCROLL_STRATEGY, DIALOG_SCROLL_STRATEGY_PROVIDER, DIALOG_SCROLL_STRATEGY_PROVIDER_FACTORY, Dialog, DialogConfig, DialogModule, DialogRef, throwDialogContentAlreadyAttachedError };
+export { CdkDialogContainer, DEFAULT_DIALOG_CONFIG, DIALOG_DATA, DIALOG_SCROLL_STRATEGY, Dialog, DialogConfig, DialogModule, DialogRef, throwDialogContentAlreadyAttachedError, CdkPortalOutlet as ɵɵCdkPortalOutlet };
 //# sourceMappingURL=dialog.mjs.map

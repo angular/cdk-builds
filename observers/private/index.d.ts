@@ -1,6 +1,6 @@
 import * as i0 from '@angular/core';
-import { Observable } from 'rxjs';
 import { OnDestroy } from '@angular/core';
+import { Observable } from 'rxjs';
 
 /**
  * Allows observing resize events on multiple elements using a shared set of ResizeObserver.
@@ -12,7 +12,7 @@ import { OnDestroy } from '@angular/core';
  * later calls to `observe` with a different box type from influencing the events dispatched to
  * earlier calls.
  */
-export declare class SharedResizeObserver implements OnDestroy {
+declare class SharedResizeObserver implements OnDestroy {
     private _cleanupErrorListener;
     /** Map of box type to shared resize observer. */
     private _observers;
@@ -31,4 +31,4 @@ export declare class SharedResizeObserver implements OnDestroy {
     static ɵprov: i0.ɵɵInjectableDeclaration<SharedResizeObserver>;
 }
 
-export { }
+export { SharedResizeObserver };

@@ -1,5 +1,6 @@
-import { TestKey, getNoKeysSpecifiedError, _getTextWithExcludedElements, HarnessEnvironment } from '@angular/cdk/testing';
 import * as webdriver from 'selenium-webdriver';
+import { TestKey, getNoKeysSpecifiedError, _getTextWithExcludedElements, HarnessEnvironment } from '../testing.mjs';
+import 'rxjs';
 
 /**
  * Maps the `TestKey` constants to WebDriver's `webdriver.Key` constants.
