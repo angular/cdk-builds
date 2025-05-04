@@ -65,7 +65,7 @@ class DialogConfig {
     minWidth;
     /** Min-height of the dialog. If a number is provided, assumes pixel units. */
     minHeight;
-    /** Max-width of the dialog. If a number is provided, assumes pixel units. Defaults to 80vw. */
+    /** Max-width of the dialog. If a number is provided, assumes pixel units. */
     maxWidth;
     /** Max-height of the dialog. If a number is provided, assumes pixel units. */
     maxHeight;
