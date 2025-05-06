@@ -1,12 +1,12 @@
 import * as i0 from '@angular/core';
 import { ViewContainerRef, Injector, StaticProvider, Type, OnDestroy, ElementRef, NgZone, ChangeDetectorRef, ComponentRef, EmbeddedViewRef, TemplateRef, InjectionToken } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
 import { F as FocusOrigin } from '../focus-monitor.d-CvvJeQRc.js';
 import { F as FocusTrapFactory, A as A11yModule } from '../a11y-module.d-DBHGyKoh.js';
 import { B as BasePortalOutlet, h as CdkPortalOutlet, a as ComponentPortal, T as TemplatePortal, D as DomPortal, C as ComponentType, j as PortalModule } from '../portal-directives.d-BoG39gYN.js';
 export { e as ɵɵCdkPortal, i as ɵɵPortalHostDirective, f as ɵɵTemplatePortalDirective } from '../portal-directives.d-BoG39gYN.js';
 import { a as Direction } from '../bidi-module.d-D-fEBKdS.js';
 import { P as PositionStrategy, n as ScrollStrategy, b as OverlayRef, o as OverlayModule } from '../overlay-module.d-B3qEQtts.js';
-import { Observable, Subject } from 'rxjs';
 import * as _angular_cdk_portal from '@angular/cdk/portal';
 import { O as Overlay } from '../overlay.d-BdoMy0hX.js';
 import '../observers/index.js';
@@ -22,8 +22,14 @@ import '../style-loader.d-BXZfQZTF.js';
 type AutoFocusTarget = 'dialog' | 'first-tabbable' | 'first-heading';
 /** Valid ARIA roles for a dialog. */
 type DialogRole = 'dialog' | 'alertdialog';
+/** Component that can be used as the container for the dialog. */
+type DialogContainer = BasePortalOutlet & {
+    _focusTrapped?: Observable<void>;
+    _closeInteractionType?: FocusOrigin;
+    _recaptureFocus?: () => void;
+};
 /** Configuration for opening a modal dialog. */
-declare class DialogConfig<D = unknown, R = unknown, C extends BasePortalOutlet = BasePortalOutlet> {
+declare class DialogConfig<D = unknown, R = unknown, C extends DialogContainer = BasePortalOutlet> {
     /**
      * Where the attached component should live in Angular's *logical* component tree.
      * This affects what is available for injection and the change detection order for the
@@ -148,7 +154,7 @@ declare function throwDialogContentAlreadyAttachedError(): void;
  * Internal component that wraps user-provided dialog content.
  * @docs-private
  */
-declare class CdkDialogContainer<C extends DialogConfig = DialogConfig> extends BasePortalOutlet implements OnDestroy {
+declare class CdkDialogContainer<C extends DialogConfig = DialogConfig> extends BasePortalOutlet implements DialogContainer, OnDestroy {
     protected _elementRef: ElementRef<HTMLElement>;
     protected _focusTrapFactory: FocusTrapFactory;
     readonly _config: C;
@@ -157,10 +163,13 @@ declare class CdkDialogContainer<C extends DialogConfig = DialogConfig> extends 
     private _overlayRef;
     private _focusMonitor;
     private _renderer;
+    protected readonly _changeDetectorRef: ChangeDetectorRef;
+    private _injector;
     private _platform;
     protected _document: Document;
     /** The portal outlet inside of this container into which the dialog content will be loaded. */
     _portalOutlet: CdkPortalOutlet;
+    _focusTrapped: Observable<void>;
     /** The class that traps and manages focus within the dialog. */
     private _focusTrap;
     /** Element that was focused before the dialog was opened. Save this to restore upon close. */
@@ -178,8 +187,6 @@ declare class CdkDialogContainer<C extends DialogConfig = DialogConfig> extends 
      * the rest are present.
      */
     _ariaLabelledByQueue: string[];
-    protected readonly _changeDetectorRef: ChangeDetectorRef;
-    private _injector;
     private _isDestroyed;
     constructor(...args: unknown[]);
     _addAriaLabelledBy(id: string): void;
@@ -250,7 +257,7 @@ interface DialogCloseOptions {
  */
 declare class DialogRef<R = unknown, C = unknown> {
     readonly overlayRef: OverlayRef;
-    readonly config: DialogConfig<any, DialogRef<R, C>, BasePortalOutlet>;
+    readonly config: DialogConfig<any, DialogRef<R, C>, DialogContainer>;
     /**
      * Instance of component opened into the dialog. Will be
      * null when the dialog is opened using a `TemplateRef`.
@@ -262,9 +269,7 @@ declare class DialogRef<R = unknown, C = unknown> {
      */
     readonly componentRef: ComponentRef<C> | null;
     /** Instance of the container that is rendering out the dialog content. */
-    readonly containerInstance: BasePortalOutlet & {
-        _closeInteractionType?: FocusOrigin;
-    };
+    readonly containerInstance: DialogContainer;
     /** Whether the user is allowed to close the dialog. */
     disableClose: boolean | undefined;
     /** Emits when the dialog has been closed. */
@@ -279,7 +284,7 @@ declare class DialogRef<R = unknown, C = unknown> {
     readonly id: string;
     /** Subscription to external detachments of the dialog. */
     private _detachSubscription;
-    constructor(overlayRef: OverlayRef, config: DialogConfig<any, DialogRef<R, C>, BasePortalOutlet>);
+    constructor(overlayRef: OverlayRef, config: DialogConfig<any, DialogRef<R, C>, DialogContainer>);
     /**
      * Close the dialog.
      * @param result Optional result to return to the dialog opener.
@@ -423,4 +428,4 @@ declare const DIALOG_SCROLL_STRATEGY_PROVIDER: {
 };
 
 export { CdkDialogContainer, DEFAULT_DIALOG_CONFIG, DIALOG_DATA, DIALOG_SCROLL_STRATEGY, DIALOG_SCROLL_STRATEGY_PROVIDER, DIALOG_SCROLL_STRATEGY_PROVIDER_FACTORY, Dialog, DialogConfig, DialogModule, DialogRef, throwDialogContentAlreadyAttachedError, CdkPortalOutlet as ɵɵCdkPortalOutlet };
-export type { AutoFocusTarget, DialogCloseOptions, DialogRole };
+export type { AutoFocusTarget, DialogCloseOptions, DialogContainer, DialogRole };

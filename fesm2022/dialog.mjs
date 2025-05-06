@@ -1,6 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
 import { inject, ElementRef, NgZone, Renderer2, ChangeDetectorRef, Injector, afterNextRender, Component, ViewEncapsulation, ChangeDetectionStrategy, ViewChild, InjectionToken, TemplateRef, Injectable, NgModule } from '@angular/core';
+import { Subject, defer, of } from 'rxjs';
 import { B as BasePortalOutlet, f as CdkPortalOutlet, C as ComponentPortal, T as TemplatePortal, h as PortalModule } from './portal-directives-Bw5woq8I.mjs';
 export { d as ɵɵCdkPortal, g as ɵɵPortalHostDirective, e as ɵɵTemplatePortalDirective } from './portal-directives-Bw5woq8I.mjs';
 import { F as FocusTrapFactory, I as InteractivityChecker, A as A11yModule } from './a11y-module-BYox5gpI.mjs';
@@ -8,10 +9,9 @@ import { c as OverlayRef, a as Overlay, O as OverlayContainer, f as OverlayConfi
 import { F as FocusMonitor } from './focus-monitor-e2l_RpN3.mjs';
 import { P as Platform } from './platform-DmdVEw_C.mjs';
 import { c as _getFocusedElementPierceShadowDom } from './shadow-dom-B0oHn41l.mjs';
-import { Subject, defer, of } from 'rxjs';
 import { g as ESCAPE } from './keycodes-CpHkExLC.mjs';
 import { hasModifierKey } from './keycodes.mjs';
-import { startWith } from 'rxjs/operators';
+import { startWith, take } from 'rxjs/operators';
 import { _ as _IdGenerator } from './id-generator-Dw_9dSDu.mjs';
 import { D as Directionality } from './directionality-CBXD4hga.mjs';
 import './style-loader-Cu9AvjH9.mjs';
@@ -165,10 +165,13 @@ class CdkDialogContainer extends BasePortalOutlet {
     _overlayRef = inject(OverlayRef);
     _focusMonitor = inject(FocusMonitor);
     _renderer = inject(Renderer2);
+    _changeDetectorRef = inject(ChangeDetectorRef);
+    _injector = inject(Injector);
     _platform = inject(Platform);
     _document = inject(DOCUMENT, { optional: true });
     /** The portal outlet inside of this container into which the dialog content will be loaded. */
     _portalOutlet;
+    _focusTrapped = new Subject();
     /** The class that traps and manages focus within the dialog. */
     _focusTrap = null;
     /** Element that was focused before the dialog was opened. Save this to restore upon close. */
@@ -186,8 +189,6 @@ class CdkDialogContainer extends BasePortalOutlet {
      * the rest are present.
      */
     _ariaLabelledByQueue = [];
-    _changeDetectorRef = inject(ChangeDetectorRef);
-    _injector = inject(Injector);
     _isDestroyed = false;
     constructor() {
         super();
@@ -222,6 +223,7 @@ class CdkDialogContainer extends BasePortalOutlet {
         this._trapFocus();
     }
     ngOnDestroy() {
+        this._focusTrapped.complete();
         this._isDestroyed = true;
         this._restoreFocus();
     }
@@ -342,6 +344,7 @@ class CdkDialogContainer extends BasePortalOutlet {
                     this._focusByCssSelector(this._config.autoFocus, options);
                     break;
             }
+            this._focusTrapped.next();
         }, { injector: this._injector });
     }
     /** Restores focus to the element that was focused before the dialog opened. */
@@ -613,11 +616,21 @@ class Dialog {
         const dialogRef = new DialogRef(overlayRef, config);
         const dialogContainer = this._attachContainer(overlayRef, dialogRef, config);
         dialogRef.containerInstance = dialogContainer;
-        this._attachDialogContent(componentOrTemplateRef, dialogRef, dialogContainer, config);
         // If this is the first dialog that we're opening, hide all the non-overlay content.
         if (!this.openDialogs.length) {
-            this._hideNonDialogContentFromAssistiveTechnology();
+            // Resolve this ahead of time, because some internal apps
+            // mock it out and depend on it being synchronous.
+            const overlayContainer = this._overlayContainer.getContainerElement();
+            if (dialogContainer._focusTrapped) {
+                dialogContainer._focusTrapped.pipe(take(1)).subscribe(() => {
+                    this._hideNonDialogContentFromAssistiveTechnology(overlayContainer);
+                });
+            }
+            else {
+                this._hideNonDialogContentFromAssistiveTechnology(overlayContainer);
+            }
         }
+        this._attachDialogContent(componentOrTemplateRef, dialogRef, dialogContainer, config);
         this.openDialogs.push(dialogRef);
         dialogRef.closed.subscribe(() => this._removeOpenDialog(dialogRef, true));
         this.afterOpened.next(dialogRef);
@@ -801,8 +814,7 @@ class Dialog {
         }
     }
     /** Hides all of the content that isn't an overlay from assistive technology. */
-    _hideNonDialogContentFromAssistiveTechnology() {
-        const overlayContainer = this._overlayContainer.getContainerElement();
+    _hideNonDialogContentFromAssistiveTechnology(overlayContainer) {
         // Ensure that the overlay container is attached to the DOM.
         if (overlayContainer.parentElement) {
             const siblings = overlayContainer.parentElement.children;
