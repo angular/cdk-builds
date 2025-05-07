@@ -1,5 +1,5 @@
 import * as webdriver from 'selenium-webdriver';
-import { T as TestElement, M as ModifierKeys, a as TestKey, b as TextOptions, E as ElementDimensions, c as EventData, H as HarnessEnvironment, d as HarnessLoader } from '../../harness-environment.d-BatBdODN.js';
+import { T as TestElement, M as ModifierKeys, a as TestKey, b as TextOptions, E as ElementDimensions, c as EventData, H as HarnessEnvironment, d as HarnessLoader } from '../../harness-environment.d-BbFzIFDE.js';
 
 /** A `TestElement` implementation for WebDriver. */
 declare class SeleniumWebDriverElement implements TestElement {

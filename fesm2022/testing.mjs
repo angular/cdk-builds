@@ -95,9 +95,8 @@ async function parallel(values) {
 }
 
 /**
- * Base class for component harnesses that all component harness authors should extend. This base
- * component harness provides the basic ability to locate element and sub-component harness. It
- * should be inherited when defining user's own harness.
+ * Base class for component test harnesses that all component harness authors should extend. This
+ * base component harness provides the basic ability to locate element and sub-component harnesses.
  */
 class ComponentHarness {
     locatorFactory;
@@ -119,6 +118,21 @@ class ComponentHarness {
     /**
      * Creates an asynchronous locator function that can be used to find a `ComponentHarness` instance
      * or element under the host element of this `ComponentHarness`.
+     *
+     * For example, given the following DOM and assuming `DivHarness.hostSelector` is `'div'`
+     *
+     * ```html
+     * <div id="d1"></div><div id="d2"></div>
+     * ```
+     *
+     * then we expect:
+     *
+     * ```ts
+     * await ch.locatorFor(DivHarness, 'div')() // Gets a `DivHarness` instance for #d1
+     * await ch.locatorFor('div', DivHarness)() // Gets a `TestElement` instance for #d1
+     * await ch.locatorFor('span')()            // Throws because the `Promise` rejects
+     * ```
+     *
      * @param queries A list of queries specifying which harnesses and elements to search for:
      *   - A `string` searches for elements matching the CSS selector specified by the string.
      *   - A `ComponentHarness` constructor searches for `ComponentHarness` instances matching the
@@ -130,12 +144,6 @@ class ComponentHarness {
      *   order in the DOM, and second by order in the queries list. If no matches are found, the
      *   `Promise` rejects. The type that the `Promise` resolves to is a union of all result types for
      *   each query.
-     *
-     * e.g. Given the following DOM: `<div id="d1" /><div id="d2" />`, and assuming
-     * `DivHarness.hostSelector === 'div'`:
-     * - `await ch.locatorFor(DivHarness, 'div')()` gets a `DivHarness` instance for `#d1`
-     * - `await ch.locatorFor('div', DivHarness)()` gets a `TestElement` instance for `#d1`
-     * - `await ch.locatorFor('span')()` throws because the `Promise` rejects.
      */
     locatorFor(...queries) {
         return this.locatorFactory.locatorFor(...queries);
@@ -143,6 +151,21 @@ class ComponentHarness {
     /**
      * Creates an asynchronous locator function that can be used to find a `ComponentHarness` instance
      * or element under the host element of this `ComponentHarness`.
+     *
+     * For example, given the following DOM and assuming `DivHarness.hostSelector` is `'div'`
+     *
+     * ```html
+     * <div id="d1"></div><div id="d2"></div>
+     * ```
+     *
+     * then we expect:
+     *
+     * ```ts
+     * await ch.locatorForOptional(DivHarness, 'div')() // Gets a `DivHarness` instance for #d1
+     * await ch.locatorForOptional('div', DivHarness)() // Gets a `TestElement` instance for #d1
+     * await ch.locatorForOptional('span')()            // Gets `null`
+     * ```
+     *
      * @param queries A list of queries specifying which harnesses and elements to search for:
      *   - A `string` searches for elements matching the CSS selector specified by the string.
      *   - A `ComponentHarness` constructor searches for `ComponentHarness` instances matching the
@@ -154,12 +177,6 @@ class ComponentHarness {
      *   order in the DOM, and second by order in the queries list. If no matches are found, the
      *   `Promise` is resolved with `null`. The type that the `Promise` resolves to is a union of all
      *   result types for each query or null.
-     *
-     * e.g. Given the following DOM: `<div id="d1" /><div id="d2" />`, and assuming
-     * `DivHarness.hostSelector === 'div'`:
-     * - `await ch.locatorForOptional(DivHarness, 'div')()` gets a `DivHarness` instance for `#d1`
-     * - `await ch.locatorForOptional('div', DivHarness)()` gets a `TestElement` instance for `#d1`
-     * - `await ch.locatorForOptional('span')()` gets `null`.
      */
     locatorForOptional(...queries) {
         return this.locatorFactory.locatorForOptional(...queries);
@@ -167,6 +184,27 @@ class ComponentHarness {
     /**
      * Creates an asynchronous locator function that can be used to find `ComponentHarness` instances
      * or elements under the host element of this `ComponentHarness`.
+     *
+     * For example, given the following DOM and assuming `DivHarness.hostSelector` is `'div'` and
+     * `IdIsD1Harness.hostSelector` is `'#d1'`
+     *
+     * ```html
+     * <div id="d1"></div><div id="d2"></div>
+     * ```
+     *
+     * then we expect:
+     *
+     * ```ts
+     * // Gets [DivHarness for #d1, TestElement for #d1, DivHarness for #d2, TestElement for #d2]
+     * await ch.locatorForAll(DivHarness, 'div')()
+     * // Gets [TestElement for #d1, TestElement for #d2]
+     * await ch.locatorForAll('div', '#d1')()
+     * // Gets [DivHarness for #d1, IdIsD1Harness for #d1, DivHarness for #d2]
+     * await ch.locatorForAll(DivHarness, IdIsD1Harness)()
+     * // Gets []
+     * await ch.locatorForAll('span')()
+     * ```
+     *
      * @param queries A list of queries specifying which harnesses and elements to search for:
      *   - A `string` searches for elements matching the CSS selector specified by the string.
      *   - A `ComponentHarness` constructor searches for `ComponentHarness` instances matching the
@@ -180,25 +218,6 @@ class ComponentHarness {
      *   an element matches multiple `string` selectors, only one `TestElement` instance is returned
      *   for that element. The type that the `Promise` resolves to is an array where each element is
      *   the union of all result types for each query.
-     *
-     * e.g. Given the following DOM: `<div id="d1" /><div id="d2" />`, and assuming
-     * `DivHarness.hostSelector === 'div'` and `IdIsD1Harness.hostSelector === '#d1'`:
-     * - `await ch.locatorForAll(DivHarness, 'div')()` gets `[
-     *     DivHarness, // for #d1
-     *     TestElement, // for #d1
-     *     DivHarness, // for #d2
-     *     TestElement // for #d2
-     *   ]`
-     * - `await ch.locatorForAll('div', '#d1')()` gets `[
-     *     TestElement, // for #d1
-     *     TestElement // for #d2
-     *   ]`
-     * - `await ch.locatorForAll(DivHarness, IdIsD1Harness)()` gets `[
-     *     DivHarness, // for #d1
-     *     IdIsD1Harness, // for #d1
-     *     DivHarness // for #d2
-     *   ]`
-     * - `await ch.locatorForAll('span')()` gets `[]`.
      */
     locatorForAll(...queries) {
         return this.locatorFactory.locatorForAll(...queries);
@@ -224,21 +243,56 @@ class ComponentHarness {
  * of the harness may want to access other harnesses within the `<ng-content>` of the component.
  */
 class ContentContainerComponentHarness extends ComponentHarness {
+    /**
+     * Gets a `HarnessLoader` that searches for harnesses under the first element matching the given
+     * selector within the current harness's content.
+     * @param selector The selector for an element in the component's content.
+     * @returns A `HarnessLoader` that searches for harnesses under the given selector.
+     */
     async getChildLoader(selector) {
         return (await this.getRootHarnessLoader()).getChildLoader(selector);
     }
+    /**
+     * Gets a list of `HarnessLoader` for each element matching the given selector under the current
+     * harness's cotnent that searches for harnesses under that element.
+     * @param selector The selector for elements in the component's content.
+     * @returns A list of `HarnessLoader` for each element matching the given selector.
+     */
     async getAllChildLoaders(selector) {
         return (await this.getRootHarnessLoader()).getAllChildLoaders(selector);
     }
+    /**
+     * Gets the first matching harness for the given query within the current harness's content.
+     * @param query The harness query to search for.
+     * @returns The first harness matching the given query.
+     * @throws If no matching harness is found.
+     */
     async getHarness(query) {
         return (await this.getRootHarnessLoader()).getHarness(query);
     }
+    /**
+     * Gets the first matching harness for the given query within the current harness's content.
+     * @param query The harness query to search for.
+     * @returns The first harness matching the given query, or null if none is found.
+     */
     async getHarnessOrNull(query) {
         return (await this.getRootHarnessLoader()).getHarnessOrNull(query);
     }
+    /**
+     * Gets all matching harnesses for the given query within the current harness's content.
+     * @param query The harness query to search for.
+     * @returns The list of harness matching the given query.
+     */
     async getAllHarnesses(query) {
         return (await this.getRootHarnessLoader()).getAllHarnesses(query);
     }
+    /**
+     * Checks whether there is a matching harnesses for the given query within the current harness's
+     * content.
+     *
+     * @param query The harness query to search for.
+     * @returns Whetehr there is matching harnesses for the given query.
+     */
     async hasHarness(query) {
         return (await this.getRootHarnessLoader()).hasHarness(query);
     }
@@ -251,8 +305,8 @@ class ContentContainerComponentHarness extends ComponentHarness {
     }
 }
 /**
- * A class used to associate a ComponentHarness class with predicates functions that can be used to
- * filter instances of the class.
+ * A class used to associate a ComponentHarness class with predicate functions that can be used to
+ * filter instances of the class to be matched.
  */
 class HarnessPredicate {
     harnessType;
@@ -425,7 +479,7 @@ function _restoreSelector(selector, placeholders) {
  */
 class HarnessEnvironment {
     rawRootElement;
-    // Implemented as part of the `LocatorFactory` interface.
+    /** The root element of this `HarnessEnvironment` as a `TestElement`. */
     get rootElement() {
         this._rootElement = this._rootElement || this.createTestElement(this.rawRootElement);
         return this._rootElement;
@@ -434,68 +488,217 @@ class HarnessEnvironment {
         this._rootElement = element;
     }
     _rootElement;
-    constructor(rawRootElement) {
+    constructor(
+    /** The native root element of this `HarnessEnvironment`. */
+    rawRootElement) {
         this.rawRootElement = rawRootElement;
     }
-    // Implemented as part of the `LocatorFactory` interface.
+    /** Gets a locator factory rooted at the document root. */
     documentRootLocatorFactory() {
         return this.createEnvironment(this.getDocumentRoot());
     }
-    // Implemented as part of the `LocatorFactory` interface.
+    /**
+     * Creates an asynchronous locator function that can be used to find a `ComponentHarness` instance
+     * or element under the root element of this `HarnessEnvironment`.
+     *
+     * For example, given the following DOM and assuming `DivHarness.hostSelector` is `'div'`
+     *
+     * ```html
+     * <div id="d1"></div><div id="d2"></div>
+     * ```
+     *
+     * then we expect:
+     *
+     * ```ts
+     * await lf.locatorFor(DivHarness, 'div')() // Gets a `DivHarness` instance for #d1
+     * await lf.locatorFor('div', DivHarness)() // Gets a `TestElement` instance for #d1
+     * await lf.locatorFor('span')()            // Throws because the `Promise` rejects
+     * ```
+     *
+     * @param queries A list of queries specifying which harnesses and elements to search for:
+     *   - A `string` searches for elements matching the CSS selector specified by the string.
+     *   - A `ComponentHarness` constructor searches for `ComponentHarness` instances matching the
+     *     given class.
+     *   - A `HarnessPredicate` searches for `ComponentHarness` instances matching the given
+     *     predicate.
+     * @return An asynchronous locator function that searches for and returns a `Promise` for the
+     *   first element or harness matching the given search criteria. Matches are ordered first by
+     *   order in the DOM, and second by order in the queries list. If no matches are found, the
+     *   `Promise` rejects. The type that the `Promise` resolves to is a union of all result types for
+     *   each query.
+     */
     locatorFor(...queries) {
         return () => _assertResultFound(this._getAllHarnessesAndTestElements(queries), _getDescriptionForLocatorForQueries(queries));
     }
-    // Implemented as part of the `LocatorFactory` interface.
+    /**
+     * Creates an asynchronous locator function that can be used to find a `ComponentHarness` instance
+     * or element under the root element of this `HarnessEnvironmnet`.
+     *
+     * For example, given the following DOM and assuming `DivHarness.hostSelector` is `'div'`
+     *
+     * ```html
+     * <div id="d1"></div><div id="d2"></div>
+     * ```
+     *
+     * then we expect:
+     *
+     * ```ts
+     * await lf.locatorForOptional(DivHarness, 'div')() // Gets a `DivHarness` instance for #d1
+     * await lf.locatorForOptional('div', DivHarness)() // Gets a `TestElement` instance for #d1
+     * await lf.locatorForOptional('span')()            // Gets `null`
+     * ```
+     *
+     * @param queries A list of queries specifying which harnesses and elements to search for:
+     *   - A `string` searches for elements matching the CSS selector specified by the string.
+     *   - A `ComponentHarness` constructor searches for `ComponentHarness` instances matching the
+     *     given class.
+     *   - A `HarnessPredicate` searches for `ComponentHarness` instances matching the given
+     *     predicate.
+     * @return An asynchronous locator function that searches for and returns a `Promise` for the
+     *   first element or harness matching the given search criteria. Matches are ordered first by
+     *   order in the DOM, and second by order in the queries list. If no matches are found, the
+     *   `Promise` is resolved with `null`. The type that the `Promise` resolves to is a union of all
+     *   result types for each query or null.
+     */
     locatorForOptional(...queries) {
         return async () => (await this._getAllHarnessesAndTestElements(queries))[0] || null;
     }
-    // Implemented as part of the `LocatorFactory` interface.
+    /**
+     * Creates an asynchronous locator function that can be used to find `ComponentHarness` instances
+     * or elements under the root element of this `HarnessEnvironment`.
+     *
+     * For example, given the following DOM and assuming `DivHarness.hostSelector` is `'div'` and
+     * `IdIsD1Harness.hostSelector` is `'#d1'`
+     *
+     * ```html
+     * <div id="d1"></div><div id="d2"></div>
+     * ```
+     *
+     * then we expect:
+     *
+     * ```ts
+     * // Gets [DivHarness for #d1, TestElement for #d1, DivHarness for #d2, TestElement for #d2]
+     * await lf.locatorForAll(DivHarness, 'div')()
+     * // Gets [TestElement for #d1, TestElement for #d2]
+     * await lf.locatorForAll('div', '#d1')()
+     * // Gets [DivHarness for #d1, IdIsD1Harness for #d1, DivHarness for #d2]
+     * await lf.locatorForAll(DivHarness, IdIsD1Harness)()
+     * // Gets []
+     * await lf.locatorForAll('span')()
+     * ```
+     *
+     * @param queries A list of queries specifying which harnesses and elements to search for:
+     *   - A `string` searches for elements matching the CSS selector specified by the string.
+     *   - A `ComponentHarness` constructor searches for `ComponentHarness` instances matching the
+     *     given class.
+     *   - A `HarnessPredicate` searches for `ComponentHarness` instances matching the given
+     *     predicate.
+     * @return An asynchronous locator function that searches for and returns a `Promise` for all
+     *   elements and harnesses matching the given search criteria. Matches are ordered first by
+     *   order in the DOM, and second by order in the queries list. If an element matches more than
+     *   one `ComponentHarness` class, the locator gets an instance of each for the same element. If
+     *   an element matches multiple `string` selectors, only one `TestElement` instance is returned
+     *   for that element. The type that the `Promise` resolves to is an array where each element is
+     *   the union of all result types for each query.
+     */
     locatorForAll(...queries) {
         return () => this._getAllHarnessesAndTestElements(queries);
     }
-    // Implemented as part of the `LocatorFactory` interface.
+    /** @return A `HarnessLoader` rooted at the root element of this `HarnessEnvironment`. */
     async rootHarnessLoader() {
         return this;
     }
-    // Implemented as part of the `LocatorFactory` interface.
+    /**
+     * Gets a `HarnessLoader` instance for an element under the root of this `HarnessEnvironment`.
+     * @param selector The selector for the root element.
+     * @return A `HarnessLoader` rooted at the first element matching the given selector.
+     * @throws If no matching element is found for the given selector.
+     */
     async harnessLoaderFor(selector) {
         return this.createEnvironment(await _assertResultFound(this.getAllRawElements(selector), [
             _getDescriptionForHarnessLoaderQuery(selector),
         ]));
     }
-    // Implemented as part of the `LocatorFactory` interface.
+    /**
+     * Gets a `HarnessLoader` instance for an element under the root of this `HarnessEnvironment`.
+     * @param selector The selector for the root element.
+     * @return A `HarnessLoader` rooted at the first element matching the given selector, or null if
+     *     no matching element is found.
+     */
     async harnessLoaderForOptional(selector) {
         const elements = await this.getAllRawElements(selector);
         return elements[0] ? this.createEnvironment(elements[0]) : null;
     }
-    // Implemented as part of the `LocatorFactory` interface.
+    /**
+     * Gets a list of `HarnessLoader` instances, one for each matching element.
+     * @param selector The selector for the root element.
+     * @return A list of `HarnessLoader`, one rooted at each element matching the given selector.
+     */
     async harnessLoaderForAll(selector) {
         const elements = await this.getAllRawElements(selector);
         return elements.map(element => this.createEnvironment(element));
     }
-    // Implemented as part of the `HarnessLoader` interface.
+    /**
+     * Searches for an instance of the component corresponding to the given harness type under the
+     * `HarnessEnvironment`'s root element, and returns a `ComponentHarness` for that instance. If
+     * multiple matching components are found, a harness for the first one is returned. If no matching
+     * component is found, an error is thrown.
+     * @param query A query for a harness to create
+     * @return An instance of the given harness type
+     * @throws If a matching component instance can't be found.
+     */
     getHarness(query) {
         return this.locatorFor(query)();
     }
-    // Implemented as part of the `HarnessLoader` interface.
+    /**
+     * Searches for an instance of the component corresponding to the given harness type under the
+     * `HarnessEnvironment`'s root element, and returns a `ComponentHarness` for that instance. If
+     * multiple matching components are found, a harness for the first one is returned. If no matching
+     * component is found, null is returned.
+     * @param query A query for a harness to create
+     * @return An instance of the given harness type (or null if not found).
+     */
     getHarnessOrNull(query) {
         return this.locatorForOptional(query)();
     }
-    // Implemented as part of the `HarnessLoader` interface.
+    /**
+     * Searches for all instances of the component corresponding to the given harness type under the
+     * `HarnessEnvironment`'s root element, and returns a list `ComponentHarness` for each instance.
+     * @param query A query for a harness to create
+     * @return A list instances of the given harness type.
+     */
     getAllHarnesses(query) {
         return this.locatorForAll(query)();
     }
-    // Implemented as part of the `HarnessLoader` interface.
+    /**
+     * Searches for an instance of the component corresponding to the given harness type under the
+     * `HarnessEnvironment`'s root element, and returns a boolean indicating if any were found.
+     * @param query A query for a harness to create
+     * @return A boolean indicating if an instance was found.
+     */
     async hasHarness(query) {
         return (await this.locatorForOptional(query)()) !== null;
     }
-    // Implemented as part of the `HarnessLoader` interface.
+    /**
+     * Searches for an element with the given selector under the evironment's root element,
+     * and returns a `HarnessLoader` rooted at the matching element. If multiple elements match the
+     * selector, the first is used. If no elements match, an error is thrown.
+     * @param selector The selector for the root element of the new `HarnessLoader`
+     * @return A `HarnessLoader` rooted at the element matching the given selector.
+     * @throws If a matching element can't be found.
+     */
     async getChildLoader(selector) {
         return this.createEnvironment(await _assertResultFound(this.getAllRawElements(selector), [
             _getDescriptionForHarnessLoaderQuery(selector),
         ]));
     }
-    // Implemented as part of the `HarnessLoader` interface.
+    /**
+     * Searches for all elements with the given selector under the environment's root element,
+     * and returns an array of `HarnessLoader`s, one for each matching element, rooted at that
+     * element.
+     * @param selector The selector for the root element of the new `HarnessLoader`
+     * @return A list of `HarnessLoader`s, one for each matching element, rooted at that element.
+     */
     async getAllChildLoaders(selector) {
         return (await this.getAllRawElements(selector)).map(e => this.createEnvironment(e));
     }
