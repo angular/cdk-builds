@@ -1,4 +1,4 @@
-export { A as AsyncFactoryFn, g as AsyncOptionPredicate, f as AsyncPredicate, B as BaseHarnessFilters, C as ComponentHarness, e as ComponentHarnessConstructor, j as ContentContainerComponentHarness, E as ElementDimensions, c as EventData, H as HarnessEnvironment, d as HarnessLoader, k as HarnessPredicate, h as HarnessQuery, i as LocatorFactory, L as LocatorFnResult, M as ModifierKeys, T as TestElement, a as TestKey, b as TextOptions } from '../harness-environment.d-BatBdODN.js';
+export { A as AsyncFactoryFn, g as AsyncOptionPredicate, f as AsyncPredicate, B as BaseHarnessFilters, C as ComponentHarness, e as ComponentHarnessConstructor, j as ContentContainerComponentHarness, E as ElementDimensions, c as EventData, H as HarnessEnvironment, d as HarnessLoader, k as HarnessPredicate, h as HarnessQuery, i as LocatorFactory, L as LocatorFnResult, M as ModifierKeys, T as TestElement, a as TestKey, b as TextOptions } from '../harness-environment.d-BbFzIFDE.js';
 
 /**
  * Returns an error which reports that no keys have been specified.
@@ -13,7 +13,11 @@ declare function getNoKeysSpecifiedError(): Error;
  */
 declare function _getTextWithExcludedElements(element: Element, excludeSelector: string): string;
 
-/** Represents the status of auto change detection. */
+/**
+ * The status of the test harness auto change detection. If not diabled test harnesses will
+ * automatically trigger change detection after every action (such as a click) and before every read
+ * (such as getting the text of an element).
+ */
 interface AutoChangeDetectionStatus {
     /** Whether auto change detection is disabled. */
     isDisabled: boolean;
