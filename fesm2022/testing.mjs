@@ -279,6 +279,16 @@ class ContentContainerComponentHarness extends ComponentHarness {
         return (await this.getRootHarnessLoader()).getHarnessOrNull(query);
     }
     /**
+     * Gets a matching harness for the given query and index within the current harness's content.
+     * @param query The harness query to search for.
+     * @param index The zero-indexed offset of the component to find.
+     * @returns The first harness matching the given query.
+     * @throws If no matching harness is found.
+     */
+    async getHarnessAtIndex(query, index) {
+        return (await this.getRootHarnessLoader()).getHarnessAtIndex(query, index);
+    }
+    /**
      * Gets all matching harnesses for the given query within the current harness's content.
      * @param query The harness query to search for.
      * @returns The list of harness matching the given query.
@@ -287,11 +297,21 @@ class ContentContainerComponentHarness extends ComponentHarness {
         return (await this.getRootHarnessLoader()).getAllHarnesses(query);
     }
     /**
+     * Returns the number of matching harnesses for the given query within the current harness's
+     * content.
+     *
+     * @param query The harness query to search for.
+     * @returns The number of matching harnesses for the given query.
+     */
+    async countHarnesses(query) {
+        return (await this.getRootHarnessLoader()).countHarnesses(query);
+    }
+    /**
      * Checks whether there is a matching harnesses for the given query within the current harness's
      * content.
      *
      * @param query The harness query to search for.
-     * @returns Whetehr there is matching harnesses for the given query.
+     * @returns Whether there is matching harnesses for the given query.
      */
     async hasHarness(query) {
         return (await this.getRootHarnessLoader()).hasHarness(query);
@@ -662,6 +682,26 @@ class HarnessEnvironment {
         return this.locatorForOptional(query)();
     }
     /**
+     * Searches for an instance of the component corresponding to the given harness type and index
+     * under the `HarnessEnvironment`'s root element, and returns a `ComponentHarness` for that
+     * instance. The index specifies the offset of the component to find. If no matching
+     * component is found at that index, an error is thrown.
+     * @param query A query for a harness to create
+     * @param index The zero-indexed offset of the component to find
+     * @return An instance of the given harness type
+     * @throws If a matching component instance can't be found.
+     */
+    async getHarnessAtIndex(query, offset) {
+        if (offset < 0) {
+            throw Error('Index must not be negative');
+        }
+        const harnesses = await this.locatorForAll(query)();
+        if (offset >= harnesses.length) {
+            throw Error(`No harness was located at index ${offset}`);
+        }
+        return harnesses[offset];
+    }
+    /**
      * Searches for all instances of the component corresponding to the given harness type under the
      * `HarnessEnvironment`'s root element, and returns a list `ComponentHarness` for each instance.
      * @param query A query for a harness to create
@@ -669,6 +709,15 @@ class HarnessEnvironment {
      */
     getAllHarnesses(query) {
         return this.locatorForAll(query)();
+    }
+    /**
+     * Searches for all instance of the component corresponding to the given harness type under the
+     * `HarnessEnvironment`'s root element, and returns the number that were found.
+     * @param query A query for a harness to create
+     * @return The number of instances that were found.
+     */
+    async countHarnesses(query) {
+        return (await this.locatorForAll(query)()).length;
     }
     /**
      * Searches for an instance of the component corresponding to the given harness type under the
