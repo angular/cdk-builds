@@ -1,11 +1,11 @@
-export { C as CdkMonitorFocus, d as FOCUS_MONITOR_DEFAULT_OPTIONS, F as FocusMonitor, c as FocusMonitorDetectionMode, a as INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS, b as INPUT_MODALITY_DETECTOR_OPTIONS, I as InputModalityDetector } from './focus-monitor-T5ZlFpu4.mjs';
-import { a as FocusTrap, I as InteractivityChecker } from './a11y-module-CbrGzbQN.mjs';
-export { A as A11yModule, d as CdkAriaLive, C as CdkTrapFocus, F as FocusTrapFactory, b as HighContrastMode, H as HighContrastModeDetector, c as IsFocusableConfig, g as LIVE_ANNOUNCER_DEFAULT_OPTIONS, e as LIVE_ANNOUNCER_ELEMENT_TOKEN, f as LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, L as LiveAnnouncer } from './a11y-module-CbrGzbQN.mjs';
-export { _ as _IdGenerator } from './id-generator-C27MsMu2.mjs';
+export { C as CdkMonitorFocus, d as FOCUS_MONITOR_DEFAULT_OPTIONS, F as FocusMonitor, c as FocusMonitorDetectionMode, a as INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS, b as INPUT_MODALITY_DETECTOR_OPTIONS, I as InputModalityDetector } from './focus-monitor-B7II9-mT.mjs';
+import { a as FocusTrap, I as InteractivityChecker } from './a11y-module-D8XVc0lA.mjs';
+export { A as A11yModule, d as CdkAriaLive, C as CdkTrapFocus, F as FocusTrapFactory, b as HighContrastMode, H as HighContrastModeDetector, c as IsFocusableConfig, g as LIVE_ANNOUNCER_DEFAULT_OPTIONS, e as LIVE_ANNOUNCER_ELEMENT_TOKEN, f as LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, L as LiveAnnouncer } from './a11y-module-D8XVc0lA.mjs';
+export { _ as _IdGenerator } from './id-generator-CGk_WAHZ.mjs';
 import * as i0 from '@angular/core';
 import { inject, DOCUMENT, APP_ID, Injectable, InjectionToken, NgZone, Injector } from '@angular/core';
-import { P as Platform } from './platform-gLq1JIgc.mjs';
-import { _ as _CdkPrivateStyleLoader } from './style-loader-i2d7TEeo.mjs';
+import { P as Platform } from './platform-CwM6AZ0b.mjs';
+import { _ as _CdkPrivateStyleLoader } from './style-loader-Dwx3yBB7.mjs';
 import { _VisuallyHiddenLoader } from './private.mjs';
 export { A as ActiveDescendantKeyManager } from './activedescendant-key-manager-DC3-fwQI.mjs';
 export { F as FocusKeyManager } from './focus-key-manager-C1rAQJ5z.mjs';
@@ -19,7 +19,7 @@ import './keycodes-CpHkExLC.mjs';
 import './shadow-dom-B0oHn41l.mjs';
 import './passive-listeners-esHZRgIN.mjs';
 import './element-x4z00URv.mjs';
-import './breakpoints-observer-CNqHxU7z.mjs';
+import './breakpoints-observer-Bf1rpjsP.mjs';
 import './array-I1yfCXUO.mjs';
 import './observers.mjs';
 import '@angular/common';
@@ -260,10 +260,10 @@ class AriaDescriber {
     _isElementNode(element) {
         return element.nodeType === this._document.ELEMENT_NODE;
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-rc.0", ngImport: i0, type: AriaDescriber, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.0.0-rc.0", ngImport: i0, type: AriaDescriber, providedIn: 'root' });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-rc.1", ngImport: i0, type: AriaDescriber, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.0.0-rc.1", ngImport: i0, type: AriaDescriber, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-rc.0", ngImport: i0, type: AriaDescriber, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-rc.1", ngImport: i0, type: AriaDescriber, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: () => [] });
@@ -495,10 +495,10 @@ class FocusTrapManager {
             }
         }
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-rc.0", ngImport: i0, type: FocusTrapManager, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.0.0-rc.0", ngImport: i0, type: FocusTrapManager, providedIn: 'root' });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-rc.1", ngImport: i0, type: FocusTrapManager, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.0.0-rc.1", ngImport: i0, type: FocusTrapManager, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-rc.0", ngImport: i0, type: FocusTrapManager, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-rc.1", ngImport: i0, type: FocusTrapManager, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });
@@ -526,10 +526,10 @@ class ConfigurableFocusTrapFactory {
         }
         return new ConfigurableFocusTrap(element, this._checker, this._ngZone, this._document, this._focusTrapManager, this._inertStrategy, configObject, this._injector);
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-rc.0", ngImport: i0, type: ConfigurableFocusTrapFactory, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.0.0-rc.0", ngImport: i0, type: ConfigurableFocusTrapFactory, providedIn: 'root' });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-rc.1", ngImport: i0, type: ConfigurableFocusTrapFactory, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.0.0-rc.1", ngImport: i0, type: ConfigurableFocusTrapFactory, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-rc.0", ngImport: i0, type: ConfigurableFocusTrapFactory, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-rc.1", ngImport: i0, type: ConfigurableFocusTrapFactory, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: () => [] });
