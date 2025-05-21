@@ -202,9 +202,9 @@ declare class CdkVirtualScrollViewport extends CdkVirtualScrollable implements O
      */
     private _totalContentSize;
     /** A string representing the `style.width` property value to be used for the spacer element. */
-    _totalContentWidth: string;
+    _totalContentWidth: i0.WritableSignal<string>;
     /** A string representing the `style.height` property value to be used for the spacer element. */
-    _totalContentHeight: string;
+    _totalContentHeight: i0.WritableSignal<string>;
     /**
      * The CSS transform applied to the rendered subset of items so that they appear within the bounds
      * of the visible viewport.
