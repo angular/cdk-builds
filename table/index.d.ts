@@ -4,7 +4,7 @@ import { TemplateRef, ElementRef, OnChanges, IterableDiffers, IterableDiffer, Si
 import { Observable, BehaviorSubject } from 'rxjs';
 import { D as DataSource, C as CollectionViewer } from '../data-source.d-Bblv7Zvh.js';
 import { a as _ViewRepeater } from '../view-repeater.d-BKljR8u8.js';
-import { S as ScrollingModule } from '../scrolling-module.d-DP0Qb7T9.js';
+import { S as ScrollingModule } from '../scrolling-module.d-BvCGMKMo.js';
 import '../number-property.d-CJVxXUcb.js';
 
 /**
