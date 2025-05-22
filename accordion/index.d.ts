@@ -61,7 +61,9 @@ declare class CdkAccordionItem implements OnInit, OnDestroy {
     set expanded(expanded: boolean);
     private _expanded;
     /** Whether the AccordionItem is disabled. */
-    disabled: boolean;
+    get disabled(): boolean;
+    set disabled(value: boolean);
+    private _disabled;
     /** Unregister function for _expansionDispatcher. */
     private _removeUniqueSelectionListener;
     constructor(...args: unknown[]);

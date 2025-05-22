@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { InjectionToken, inject, booleanAttribute, Directive, Input, ChangeDetectorRef, EventEmitter, Output, NgModule } from '@angular/core';
+import { InjectionToken, inject, booleanAttribute, Directive, Input, ChangeDetectorRef, EventEmitter, signal, Output, NgModule } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 import { _ as _IdGenerator } from './id-generator-DPTImU1g.mjs';
 import { U as UniqueSelectionDispatcher } from './unique-selection-dispatcher-BM0R90Td.mjs';
@@ -106,7 +106,13 @@ class CdkAccordionItem {
     }
     _expanded = false;
     /** Whether the AccordionItem is disabled. */
-    disabled = false;
+    get disabled() {
+        return this._disabled();
+    }
+    set disabled(value) {
+        this._disabled.set(value);
+    }
+    _disabled = signal(false);
     /** Unregister function for _expansionDispatcher. */
     _removeUniqueSelectionListener = () => { };
     constructor() { }
