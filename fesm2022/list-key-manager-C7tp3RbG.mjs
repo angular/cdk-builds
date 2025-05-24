@@ -10,7 +10,7 @@ import { P as PAGE_DOWN, a as PAGE_UP, E as END, H as HOME, L as LEFT_ARROW, R a
  */
 class ListKeyManager {
     _items;
-    _activeItemIndex = -1;
+    _activeItemIndex = signal(-1);
     _activeItem = signal(null);
     _wrap = false;
     _typeaheadSubscription = Subscription.EMPTY;
@@ -142,7 +142,7 @@ class ListKeyManager {
         const previousActiveItem = this._activeItem();
         this.updateActiveItem(item);
         if (this._activeItem() !== previousActiveItem) {
-            this.change.next(this._activeItemIndex);
+            this.change.next(this._activeItemIndex());
         }
     }
     /**
@@ -209,7 +209,7 @@ class ListKeyManager {
                 }
             case PAGE_UP:
                 if (this._pageUpAndDown.enabled && isModifierAllowed) {
-                    const targetIndex = this._activeItemIndex - this._pageUpAndDown.delta;
+                    const targetIndex = this._activeItemIndex() - this._pageUpAndDown.delta;
                     this._setActiveItemByIndex(targetIndex > 0 ? targetIndex : 0, 1);
                     break;
                 }
@@ -218,7 +218,7 @@ class ListKeyManager {
                 }
             case PAGE_DOWN:
                 if (this._pageUpAndDown.enabled && isModifierAllowed) {
-                    const targetIndex = this._activeItemIndex + this._pageUpAndDown.delta;
+                    const targetIndex = this._activeItemIndex() + this._pageUpAndDown.delta;
                     const itemsLength = this._getItemsArray().length;
                     this._setActiveItemByIndex(targetIndex < itemsLength ? targetIndex : itemsLength - 1, -1);
                     break;
@@ -239,7 +239,7 @@ class ListKeyManager {
     }
     /** Index of the currently active item. */
     get activeItemIndex() {
-        return this._activeItemIndex;
+        return this._activeItemIndex();
     }
     /** The active item. */
     get activeItem() {
@@ -259,11 +259,11 @@ class ListKeyManager {
     }
     /** Sets the active item to the next enabled item in the list. */
     setNextItemActive() {
-        this._activeItemIndex < 0 ? this.setFirstItemActive() : this._setActiveItemByDelta(1);
+        this._activeItemIndex() < 0 ? this.setFirstItemActive() : this._setActiveItemByDelta(1);
     }
     /** Sets the active item to a previous enabled item in the list. */
     setPreviousItemActive() {
-        this._activeItemIndex < 0 && this._wrap
+        this._activeItemIndex() < 0 && this._wrap
             ? this.setLastItemActive()
             : this._setActiveItemByDelta(-1);
     }
@@ -273,7 +273,7 @@ class ListKeyManager {
         const activeItem = itemArray[index];
         // Explicitly check for `null` and `undefined` because other falsy values are valid.
         this._activeItem.set(activeItem == null ? null : activeItem);
-        this._activeItemIndex = index;
+        this._activeItemIndex.set(index);
         this._typeahead?.setCurrentSelectedItemIndex(index);
     }
     /** Cleans up the key manager. */
@@ -301,7 +301,7 @@ class ListKeyManager {
     _setActiveInWrapMode(delta) {
         const items = this._getItemsArray();
         for (let i = 1; i <= items.length; i++) {
-            const index = (this._activeItemIndex + delta * i + items.length) % items.length;
+            const index = (this._activeItemIndex() + delta * i + items.length) % items.length;
             const item = items[index];
             if (!this._skipPredicateFn(item)) {
                 this.setActiveItem(index);
@@ -315,7 +315,7 @@ class ListKeyManager {
      * it encounters either end of the list, it will stop and not wrap.
      */
     _setActiveInDefaultMode(delta) {
-        this._setActiveItemByIndex(this._activeItemIndex + delta, delta);
+        this._setActiveItemByIndex(this._activeItemIndex() + delta, delta);
     }
     /**
      * Sets the active item to the first enabled item starting at the index specified. If the
@@ -348,8 +348,8 @@ class ListKeyManager {
         const activeItem = this._activeItem();
         if (activeItem) {
             const newIndex = newItems.indexOf(activeItem);
-            if (newIndex > -1 && newIndex !== this._activeItemIndex) {
-                this._activeItemIndex = newIndex;
+            if (newIndex > -1 && newIndex !== this._activeItemIndex()) {
+                this._activeItemIndex.set(newIndex);
                 this._typeahead?.setCurrentSelectedItemIndex(newIndex);
             }
         }
@@ -357,4 +357,4 @@ class ListKeyManager {
 }
 
 export { ListKeyManager as L };
-//# sourceMappingURL=list-key-manager-CyOIXo8P.mjs.map
+//# sourceMappingURL=list-key-manager-C7tp3RbG.mjs.map
