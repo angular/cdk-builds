@@ -79,7 +79,9 @@ declare class CdkStep implements OnChanges {
     /** The top level abstract control of the step. */
     stepControl: AbstractControl;
     /** Whether user has attempted to move away from the step. */
-    interacted: boolean;
+    get interacted(): boolean;
+    set interacted(value: boolean);
+    private _interacted;
     /** Emits when the user has attempted to move away from the step. */
     readonly interactedStream: EventEmitter<CdkStep>;
     /** Plain text label of the step. */
@@ -94,16 +96,27 @@ declare class CdkStep implements OnChanges {
      */
     ariaLabelledby: string;
     /** State of the step. */
-    state: StepState;
+    get state(): StepState;
+    set state(value: StepState);
+    private _state;
     /** Whether the user can return to this step once it has been marked as completed. */
-    editable: boolean;
+    get editable(): boolean;
+    set editable(value: boolean);
+    private _editable;
     /** Whether the completion of step is optional. */
     optional: boolean;
     /** Whether step is marked as completed. */
     get completed(): boolean;
     set completed(value: boolean);
-    _completedOverride: boolean | null;
-    private _getDefaultCompleted;
+    _completedOverride: i0.WritableSignal<boolean | null>;
+    /** Current index of the step within the stepper. */
+    readonly index: i0.WritableSignal<number>;
+    /** Whether the step is selected. */
+    readonly isSelected: i0.Signal<boolean>;
+    /** Type of indicator that should be shown for the step. */
+    readonly indicatorType: i0.Signal<string>;
+    /** Whether the user can navigate to the step. */
+    readonly isNavigable: i0.Signal<boolean>;
     /** Whether step has an error. */
     get hasError(): boolean;
     set hasError(value: boolean);
@@ -178,11 +191,6 @@ declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDestroy {
     _stateChanged(): void;
     /** Returns position state of the step with the given index. */
     _getAnimationDirection(index: number): StepContentPositionState;
-    /** Returns the type of icon to be displayed. */
-    _getIndicatorType(index: number, state?: StepState): StepState;
-    private _getDefaultIndicatorLogic;
-    private _getGuidelineLogic;
-    private _isCurrentStep;
     /** Returns the index of the currently-focused step header. */
     _getFocusIndex(): number | null;
     private _updateSelectedItemIndex;
