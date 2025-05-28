@@ -37,13 +37,13 @@ class UniqueSelectionDispatcher {
     ngOnDestroy() {
         this._listeners = [];
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-rc.2", ngImport: i0, type: UniqueSelectionDispatcher, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.0.0-rc.2", ngImport: i0, type: UniqueSelectionDispatcher, providedIn: 'root' });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0", ngImport: i0, type: UniqueSelectionDispatcher, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.0.0", ngImport: i0, type: UniqueSelectionDispatcher, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-rc.2", ngImport: i0, type: UniqueSelectionDispatcher, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0", ngImport: i0, type: UniqueSelectionDispatcher, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });
 
 export { UniqueSelectionDispatcher as U };
-//# sourceMappingURL=unique-selection-dispatcher-BM0R90Td.mjs.map
+//# sourceMappingURL=unique-selection-dispatcher-Cewa_Eg3.mjs.map

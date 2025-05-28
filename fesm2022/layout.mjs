@@ -1,18 +1,18 @@
 import * as i0 from '@angular/core';
 import { NgModule } from '@angular/core';
-export { B as BreakpointObserver, M as MediaMatcher } from './breakpoints-observer-CJTZn9F9.mjs';
+export { B as BreakpointObserver, M as MediaMatcher } from './breakpoints-observer-QutrMj4x.mjs';
 import 'rxjs';
 import 'rxjs/operators';
-import './platform-BlK8-EAM.mjs';
+import './platform-DNDzkVcI.mjs';
 import '@angular/common';
 import './array-I1yfCXUO.mjs';
 
 class LayoutModule {
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-rc.2", ngImport: i0, type: LayoutModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-    static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "20.0.0-rc.2", ngImport: i0, type: LayoutModule });
-    static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "20.0.0-rc.2", ngImport: i0, type: LayoutModule });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0", ngImport: i0, type: LayoutModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+    static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "20.0.0", ngImport: i0, type: LayoutModule });
+    static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "20.0.0", ngImport: i0, type: LayoutModule });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-rc.2", ngImport: i0, type: LayoutModule, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0", ngImport: i0, type: LayoutModule, decorators: [{
             type: NgModule,
             args: [{}]
         }] });

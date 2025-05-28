@@ -25,13 +25,13 @@ class _IdGenerator {
         }
         return `${prefix}${counters[prefix]++}`;
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0-rc.2", ngImport: i0, type: _IdGenerator, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.0.0-rc.2", ngImport: i0, type: _IdGenerator, providedIn: 'root' });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0", ngImport: i0, type: _IdGenerator, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.0.0", ngImport: i0, type: _IdGenerator, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0-rc.2", ngImport: i0, type: _IdGenerator, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0", ngImport: i0, type: _IdGenerator, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });
 
 export { _IdGenerator as _ };
-//# sourceMappingURL=id-generator-DPTImU1g.mjs.map
+//# sourceMappingURL=id-generator-LuoRZSid.mjs.map
