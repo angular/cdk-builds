@@ -64,6 +64,10 @@ declare class DropListRef<T = any> {
     /** Number of pixels to scroll for each frame when auto-scrolling an element. */
     autoScrollStep: number;
     /**
+     * Whether the items in the list should leave an anchor node when leaving the initial container.
+     */
+    hasAnchor: boolean;
+    /**
      * Function that is used to determine whether an item
      * is allowed to be moved into a drop container.
      */
@@ -230,6 +234,11 @@ declare class DropListRef<T = any> {
      */
     getItemIndex(item: DragRef): number;
     /**
+     * Gets the item at a specific index.
+     * @param index Index at which to retrieve the item.
+     */
+    getItemAtIndex(index: number): DragRef | null;
+    /**
      * Whether the list is able to receive the item that
      * is currently being dragged inside a connected drop list.
      */
@@ -375,6 +384,18 @@ declare class CdkDropList<T = any> implements OnDestroy {
      * ```
      */
     elementContainerSelector: string | null;
+    /**
+     * By default when an item leaves its initial container, its placeholder will be transferred
+     * to the new container. If that's not desirable for your use case, you can enable this option
+     * which will clone the placeholder and leave it inside the original container. If the item is
+     * returned to the initial container, the anchor element will be removed automatically.
+     *
+     * The cloned placeholder can be styled by targeting the `cdk-drag-anchor` class.
+     *
+     * This option is useful in combination with `cdkDropListSortingDisabled` to implement copying
+     * behavior in a drop list.
+     */
+    hasAnchor: boolean;
     /** Emits when the user drops an item inside the container. */
     readonly dropped: EventEmitter<CdkDragDrop<T, any>>;
     /**
@@ -413,10 +434,11 @@ declare class CdkDropList<T = any> implements OnDestroy {
     /** Syncs up the registered drag items with underlying drop list ref. */
     private _syncItemsWithRef;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkDropList<any>, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDropList<any>, "[cdkDropList], cdk-drop-list", ["cdkDropList"], { "connectedTo": { "alias": "cdkDropListConnectedTo"; "required": false; }; "data": { "alias": "cdkDropListData"; "required": false; }; "orientation": { "alias": "cdkDropListOrientation"; "required": false; }; "id": { "alias": "id"; "required": false; }; "lockAxis": { "alias": "cdkDropListLockAxis"; "required": false; }; "disabled": { "alias": "cdkDropListDisabled"; "required": false; }; "sortingDisabled": { "alias": "cdkDropListSortingDisabled"; "required": false; }; "enterPredicate": { "alias": "cdkDropListEnterPredicate"; "required": false; }; "sortPredicate": { "alias": "cdkDropListSortPredicate"; "required": false; }; "autoScrollDisabled": { "alias": "cdkDropListAutoScrollDisabled"; "required": false; }; "autoScrollStep": { "alias": "cdkDropListAutoScrollStep"; "required": false; }; "elementContainerSelector": { "alias": "cdkDropListElementContainer"; "required": false; }; }, { "dropped": "cdkDropListDropped"; "entered": "cdkDropListEntered"; "exited": "cdkDropListExited"; "sorted": "cdkDropListSorted"; }, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDropList<any>, "[cdkDropList], cdk-drop-list", ["cdkDropList"], { "connectedTo": { "alias": "cdkDropListConnectedTo"; "required": false; }; "data": { "alias": "cdkDropListData"; "required": false; }; "orientation": { "alias": "cdkDropListOrientation"; "required": false; }; "id": { "alias": "id"; "required": false; }; "lockAxis": { "alias": "cdkDropListLockAxis"; "required": false; }; "disabled": { "alias": "cdkDropListDisabled"; "required": false; }; "sortingDisabled": { "alias": "cdkDropListSortingDisabled"; "required": false; }; "enterPredicate": { "alias": "cdkDropListEnterPredicate"; "required": false; }; "sortPredicate": { "alias": "cdkDropListSortPredicate"; "required": false; }; "autoScrollDisabled": { "alias": "cdkDropListAutoScrollDisabled"; "required": false; }; "autoScrollStep": { "alias": "cdkDropListAutoScrollStep"; "required": false; }; "elementContainerSelector": { "alias": "cdkDropListElementContainer"; "required": false; }; "hasAnchor": { "alias": "cdkDropListHasAnchor"; "required": false; }; }, { "dropped": "cdkDropListDropped"; "entered": "cdkDropListEntered"; "exited": "cdkDropListExited"; "sorted": "cdkDropListSorted"; }, never, never, true, never>;
     static ngAcceptInputType_disabled: unknown;
     static ngAcceptInputType_sortingDisabled: unknown;
     static ngAcceptInputType_autoScrollDisabled: unknown;
+    static ngAcceptInputType_hasAnchor: unknown;
 }
 
 /** Event emitted when the user starts dragging a draggable. */
@@ -927,8 +949,12 @@ declare class DragRef<T = any> {
     /** Coordinates on the page at which the user picked up the element. */
     private _pickupPositionOnPage;
     /**
-     * Anchor node used to save the place in the DOM where the element was
+     * Marker node used to save the place in the DOM where the element was
      * picked up so that it can be restored at the end of the drag sequence.
+     */
+    private _marker;
+    /**
+     * Element indicating the position from which the item was picked up initially.
      */
     private _anchor;
     /**
@@ -1288,6 +1314,8 @@ declare class DragRef<T = any> {
     private _nativeDragStart;
     /** Gets a handle that is the target of an event. */
     private _getTargetHandle;
+    /** Inserts the anchor element, if it's valid. */
+    private _conditionallyInsertAnchor;
 }
 
 /**
