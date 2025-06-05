@@ -143,7 +143,8 @@ function buildComponent(options, additionalFiles = {}) {
         }
         options.standalone = yield (0, schematic_options_1.isStandaloneSchematic)(host, options);
         if (!options.standalone) {
-            options.module = (0, find_module_1.findModuleFromOptions)(host, options);
+            // TODO: Remove ext option when the Angular CLI looks for both candidate locations.
+            options.module = (0, find_module_1.findModuleFromOptions)(host, Object.assign(Object.assign({}, options), { moduleExt: 'module.ts' }));
         }
         const parsedPath = (0, parse_name_1.parseName)(options.path, options.name);
         options.name = parsedPath.name;
