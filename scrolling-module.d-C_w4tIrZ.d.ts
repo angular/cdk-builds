@@ -151,7 +151,7 @@ declare class CdkScrollable implements OnInit, OnDestroy {
 
 declare const VIRTUAL_SCROLLABLE: InjectionToken<CdkVirtualScrollable>;
 /**
- * Extending the {@link CdkScrollable} to be used as scrolling container for virtual scrolling.
+ * Extending the `CdkScrollable` to be used as scrolling container for virtual scrolling.
  */
 declare abstract class CdkVirtualScrollable extends CdkScrollable {
     constructor(...args: unknown[]);

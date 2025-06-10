@@ -15,7 +15,7 @@ class ArrayDataSource extends DataSource {
     disconnect() { }
 }
 
-/** Indicates how a view was changed by a {@link _ViewRepeater}. */
+/** Indicates how a view was changed by a `_ViewRepeater`. */
 var _ViewRepeaterOperation;
 (function (_ViewRepeaterOperation) {
     /** The content of an existing view was replaced with another item. */
@@ -28,14 +28,14 @@ var _ViewRepeaterOperation;
     _ViewRepeaterOperation[_ViewRepeaterOperation["REMOVED"] = 3] = "REMOVED";
 })(_ViewRepeaterOperation || (_ViewRepeaterOperation = {}));
 /**
- * Injection token for {@link _ViewRepeater}. This token is for use by Angular Material only.
+ * Injection token for `_ViewRepeater`. This token is for use by Angular Material only.
  * @docs-private
  */
 const _VIEW_REPEATER_STRATEGY = new InjectionToken('_ViewRepeater');
 
 /**
  * A repeater that caches views when they are removed from a
- * {@link ViewContainerRef}. When new items are inserted into the container,
+ * `ViewContainerRef`. When new items are inserted into the container,
  * the repeater will reuse one of the cached views instead of creating a new
  * embedded view. Recycling cached views reduces the quantity of expensive DOM
  * inserts.
@@ -153,4 +153,4 @@ class _RecycleViewRepeaterStrategy {
 }
 
 export { ArrayDataSource as A, _RecycleViewRepeaterStrategy as _, _ViewRepeaterOperation as a, _VIEW_REPEATER_STRATEGY as b };
-//# sourceMappingURL=recycle-view-repeater-strategy-DoWdPqVw.mjs.map
+//# sourceMappingURL=recycle-view-repeater-strategy-SfuyU210.mjs.map

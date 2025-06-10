@@ -8,7 +8,7 @@ import { D as Directionality } from './directionality-CChdj3az.mjs';
 import { g as getRtlScrollAxisType, R as RtlScrollAxisType, s as supportsScrollBehavior } from './scrolling-BkvA05C8.mjs';
 import { BidiModule } from './bidi.mjs';
 export { Dir as ɵɵDir } from './bidi.mjs';
-import { b as _VIEW_REPEATER_STRATEGY, A as ArrayDataSource, _ as _RecycleViewRepeaterStrategy } from './recycle-view-repeater-strategy-DoWdPqVw.mjs';
+import { b as _VIEW_REPEATER_STRATEGY, A as ArrayDataSource, _ as _RecycleViewRepeaterStrategy } from './recycle-view-repeater-strategy-SfuyU210.mjs';
 import { i as isDataSource } from './data-source-D34wiQZj.mjs';
 import '@angular/common';
 
@@ -634,7 +634,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0", ngImpor
 
 const VIRTUAL_SCROLLABLE = new InjectionToken('VIRTUAL_SCROLLABLE');
 /**
- * Extending the {@link CdkScrollable} to be used as scrolling container for virtual scrolling.
+ * Extending the `CdkScrollable` to be used as scrolling container for virtual scrolling.
  */
 class CdkVirtualScrollable extends CdkScrollable {
     constructor() {

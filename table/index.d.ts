@@ -3,8 +3,8 @@ import * as i0 from '@angular/core';
 import { TemplateRef, ElementRef, OnChanges, IterableDiffers, IterableDiffer, SimpleChanges, IterableChanges, OnDestroy, ViewContainerRef, InjectionToken, AfterContentInit, AfterContentChecked, OnInit, ChangeDetectorRef, TrackByFunction, EventEmitter, QueryList } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { D as DataSource, C as CollectionViewer } from '../data-source.d-Bblv7Zvh.js';
-import { a as _ViewRepeater } from '../view-repeater.d-BKljR8u8.js';
-import { S as ScrollingModule } from '../scrolling-module.d-BvCGMKMo.js';
+import { a as _ViewRepeater } from '../view-repeater.d-DUdkOYhk.js';
+import { S as ScrollingModule } from '../scrolling-module.d-C_w4tIrZ.js';
 import '../number-property.d-CJVxXUcb.js';
 
 /**
@@ -524,7 +524,7 @@ declare class CdkTable<T> implements AfterContentInit, AfterContentChecked, Coll
     /**
      * Whether the sticky styler should recalculate cell widths when applying sticky styles. If
      * `false`, cached values will be used instead. This is only applicable to tables with
-     * {@link fixedLayout} enabled. For other tables, cell widths will always be recalculated.
+     * `_fixedLayout` enabled. For other tables, cell widths will always be recalculated.
      */
     private _forceRecalculateCellWidths;
     /**

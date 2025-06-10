@@ -27,7 +27,7 @@ import './css-pixel-value-C_HEqLhI.mjs';
 import './scrolling.mjs';
 import './scrolling-BkvA05C8.mjs';
 import './bidi.mjs';
-import './recycle-view-repeater-strategy-DoWdPqVw.mjs';
+import './recycle-view-repeater-strategy-SfuyU210.mjs';
 import './data-source-D34wiQZj.mjs';
 
 /** Configuration for opening a modal dialog. */

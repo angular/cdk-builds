@@ -4,8 +4,8 @@ import * as i0 from '@angular/core';
 import { InjectionToken, inject, TemplateRef, Directive, booleanAttribute, Input, ContentChild, ElementRef, IterableDiffers, ViewContainerRef, Component, ChangeDetectionStrategy, ViewEncapsulation, afterNextRender, ChangeDetectorRef, DOCUMENT, EventEmitter, Injector, HostAttributeToken, Output, ContentChildren, ViewChild, NgModule } from '@angular/core';
 import { Subject, BehaviorSubject, isObservable, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { b as _VIEW_REPEATER_STRATEGY, _ as _RecycleViewRepeaterStrategy, a as _ViewRepeaterOperation } from './recycle-view-repeater-strategy-DoWdPqVw.mjs';
-import { _ as _DisposeViewRepeaterStrategy } from './dispose-view-repeater-strategy-D_JReLI1.mjs';
+import { b as _VIEW_REPEATER_STRATEGY, _ as _RecycleViewRepeaterStrategy, a as _ViewRepeaterOperation } from './recycle-view-repeater-strategy-SfuyU210.mjs';
+import { _ as _DisposeViewRepeaterStrategy } from './dispose-view-repeater-strategy-Cvpav0PR.mjs';
 import { D as Directionality } from './directionality-CChdj3az.mjs';
 import { P as Platform } from './platform-DNDzkVcI.mjs';
 import { ViewportRuler, ScrollingModule } from './scrolling.mjs';
@@ -1296,7 +1296,7 @@ class CdkTable {
     /**
      * Whether the sticky styler should recalculate cell widths when applying sticky styles. If
      * `false`, cached values will be used instead. This is only applicable to tables with
-     * {@link fixedLayout} enabled. For other tables, cell widths will always be recalculated.
+     * `_fixedLayout` enabled. For other tables, cell widths will always be recalculated.
      */
     _forceRecalculateCellWidths = true;
     /**
