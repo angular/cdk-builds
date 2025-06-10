@@ -1,8 +1,8 @@
-import { a as _ViewRepeaterOperation } from './recycle-view-repeater-strategy-DoWdPqVw.mjs';
+import { a as _ViewRepeaterOperation } from './recycle-view-repeater-strategy-SfuyU210.mjs';
 
 /**
  * A repeater that destroys views when they are removed from a
- * {@link ViewContainerRef}. When new items are inserted into the container,
+ * `ViewContainerRef`. When new items are inserted into the container,
  * the repeater will always construct a new embedded view for each item.
  *
  * @template T The type for the embedded view's $implicit property.
@@ -41,4 +41,4 @@ class _DisposeViewRepeaterStrategy {
 }
 
 export { _DisposeViewRepeaterStrategy as _ };
-//# sourceMappingURL=dispose-view-repeater-strategy-D_JReLI1.mjs.map
+//# sourceMappingURL=dispose-view-repeater-strategy-Cvpav0PR.mjs.map

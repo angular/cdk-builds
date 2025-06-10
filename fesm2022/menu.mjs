@@ -22,7 +22,7 @@ import './scrolling.mjs';
 import './element-x4z00URv.mjs';
 import './scrolling-BkvA05C8.mjs';
 import './bidi.mjs';
-import './recycle-view-repeater-strategy-DoWdPqVw.mjs';
+import './recycle-view-repeater-strategy-SfuyU210.mjs';
 import './data-source-D34wiQZj.mjs';
 import './fake-event-detection-DWOdFTFz.mjs';
 import './passive-listeners-esHZRgIN.mjs';

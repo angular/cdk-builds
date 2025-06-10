@@ -20,7 +20,7 @@ import './directionality-CChdj3az.mjs';
 import './keycodes-CpHkExLC.mjs';
 import './keycodes.mjs';
 import './element-x4z00URv.mjs';
-import './recycle-view-repeater-strategy-DoWdPqVw.mjs';
+import './recycle-view-repeater-strategy-SfuyU210.mjs';
 import './data-source-D34wiQZj.mjs';
 
 /**

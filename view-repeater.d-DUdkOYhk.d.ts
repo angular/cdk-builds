@@ -29,13 +29,13 @@ interface _ViewRepeaterItemInsertArgs<C> {
  */
 type _ViewRepeaterItemContextFactory<T, R, C extends _ViewRepeaterItemContext<T>> = (record: IterableChangeRecord<R>, adjustedPreviousIndex: number | null, currentIndex: number | null) => _ViewRepeaterItemInsertArgs<C>;
 /**
- * Extracts the value of an item from an {@link IterableChangeRecord}.
+ * Extracts the value of an item from an `IterableChangeRecord`.
  *
  * @template T The type for the embedded view's $implicit property.
  * @template R The type for the item in each IterableDiffer change record.
  */
 type _ViewRepeaterItemValueResolver<T, R> = (record: IterableChangeRecord<R>) => T;
-/** Indicates how a view was changed by a {@link _ViewRepeater}. */
+/** Indicates how a view was changed by a `_ViewRepeater`. */
 declare enum _ViewRepeaterOperation {
     /** The content of an existing view was replaced with another item. */
     REPLACED = 0,
@@ -47,8 +47,7 @@ declare enum _ViewRepeaterOperation {
     REMOVED = 3
 }
 /**
- * Meta data describing the state of a view after it was updated by a
- * {@link _ViewRepeater}.
+ * Meta data describing the state of a view after it was updated by a `_ViewRepeater`.
  *
  * @template R The type for the item in each IterableDiffer change record.
  * @template C The type for the context passed to each embedded view.
@@ -69,7 +68,7 @@ interface _ViewRepeaterItemChange<R, C> {
  */
 type _ViewRepeaterItemChanged<R, C> = (change: _ViewRepeaterItemChange<R, C>) => void;
 /**
- * Describes a strategy for rendering items in a {@link ViewContainerRef}.
+ * Describes a strategy for rendering items in a `ViewContainerRef`.
  *
  * @template T The type for the embedded view's $implicit property.
  * @template R The type for the item in each IterableDiffer change record.
@@ -80,7 +79,7 @@ interface _ViewRepeater<T, R, C extends _ViewRepeaterItemContext<T>> {
     detach(): void;
 }
 /**
- * Injection token for {@link _ViewRepeater}. This token is for use by Angular Material only.
+ * Injection token for `_ViewRepeater`. This token is for use by Angular Material only.
  * @docs-private
  */
 declare const _VIEW_REPEATER_STRATEGY: InjectionToken<_ViewRepeater<unknown, unknown, _ViewRepeaterItemContext<unknown>>>;

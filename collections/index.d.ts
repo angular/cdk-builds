@@ -2,8 +2,8 @@ import { Observable } from 'rxjs';
 import { D as DataSource } from '../data-source.d-Bblv7Zvh.js';
 export { C as CollectionViewer, L as ListRange, i as isDataSource } from '../data-source.d-Bblv7Zvh.js';
 import { IterableChanges, ViewContainerRef } from '@angular/core';
-import { _ as _ViewRepeaterItemContext, a as _ViewRepeater, b as _ViewRepeaterItemContextFactory, c as _ViewRepeaterItemValueResolver, d as _ViewRepeaterItemChanged } from '../view-repeater.d-BKljR8u8.js';
-export { h as _VIEW_REPEATER_STRATEGY, g as _ViewRepeaterItemChange, e as _ViewRepeaterItemInsertArgs, f as _ViewRepeaterOperation } from '../view-repeater.d-BKljR8u8.js';
+import { _ as _ViewRepeaterItemContext, a as _ViewRepeater, b as _ViewRepeaterItemContextFactory, c as _ViewRepeaterItemValueResolver, d as _ViewRepeaterItemChanged } from '../view-repeater.d-DUdkOYhk.js';
+export { h as _VIEW_REPEATER_STRATEGY, g as _ViewRepeaterItemChange, e as _ViewRepeaterItemInsertArgs, f as _ViewRepeaterOperation } from '../view-repeater.d-DUdkOYhk.js';
 import { S as SelectionModel } from '../selection-model.d-DNgOONDg.js';
 export { a as SelectionChange, g as getMultipleValuesInSingleSelectionError } from '../selection-model.d-DNgOONDg.js';
 export { U as UniqueSelectionDispatcher, a as UniqueSelectionDispatcherListener } from '../unique-selection-dispatcher.d-DSFqf1MM.js';
@@ -18,7 +18,7 @@ declare class ArrayDataSource<T> extends DataSource<T> {
 
 /**
  * A repeater that destroys views when they are removed from a
- * {@link ViewContainerRef}. When new items are inserted into the container,
+ * `ViewContainerRef`. When new items are inserted into the container,
  * the repeater will always construct a new embedded view for each item.
  *
  * @template T The type for the embedded view's $implicit property.
@@ -32,7 +32,7 @@ declare class _DisposeViewRepeaterStrategy<T, R, C extends _ViewRepeaterItemCont
 
 /**
  * A repeater that caches views when they are removed from a
- * {@link ViewContainerRef}. When new items are inserted into the container,
+ * `ViewContainerRef`. When new items are inserted into the container,
  * the repeater will reuse one of the cached views instead of creating a new
  * embedded view. Recycling cached views reduces the quantity of expensive DOM
  * inserts.
