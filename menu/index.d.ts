@@ -585,6 +585,11 @@ declare abstract class CdkMenuBase extends CdkMenuGroup implements Menu, AfterCo
      * @param focusOrigin The origin input mode of the focus event.
      */
     focusLastItem(focusOrigin?: FocusOrigin): void;
+    /**
+     * Sets the active item to the item at the specified index and focuses the newly active item.
+     * @param item The index of the item to be set as active, or the CdkMenuItem instance.
+     */
+    setActiveMenuItem(item: number | CdkMenuItem): void;
     /** Gets the tabindex for this menu. */
     _getTabIndex(): 0 | -1 | null;
     /**
