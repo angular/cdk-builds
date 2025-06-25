@@ -210,6 +210,27 @@ const MENU_SCROLL_STRATEGY = new InjectionToken('cdk-menu-scroll-strategy', {
         return () => createRepositionScrollStrategy(injector);
     },
 });
+/** Tracks the last open menu trigger across the entire application. */
+class MenuTracker {
+    /** The last open menu trigger. */
+    static _openMenuTrigger;
+    /**
+     * Close the previous open menu and set the given one as being open.
+     * @param trigger The trigger for the currently open Menu.
+     */
+    update(trigger) {
+        if (MenuTracker._openMenuTrigger !== trigger) {
+            MenuTracker._openMenuTrigger?.close();
+            MenuTracker._openMenuTrigger = trigger;
+        }
+    }
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0", ngImport: i0, type: MenuTracker, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.0.0", ngImport: i0, type: MenuTracker, providedIn: 'root' });
+}
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0", ngImport: i0, type: MenuTracker, decorators: [{
+            type: Injectable,
+            args: [{ providedIn: 'root' }]
+        }] });
 /**
  * Abstract directive that implements shared logic common to all menu triggers.
  * This class can be extended to create custom menu trigger types.
@@ -569,6 +590,8 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
     _renderer = inject(Renderer2);
     _injector = inject(Injector);
     _cleanupMouseenter;
+    /** The app's menu tracking registry */
+    _menuTracker = inject(MenuTracker);
     /** The parent menu this trigger belongs to. */
     _parentMenu = inject(CDK_MENU, { optional: true });
     /** The menu aim service used by this menu. */
@@ -588,6 +611,9 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
     }
     /** Open the attached menu. */
     open() {
+        if (!this._parentMenu) {
+            this._menuTracker.update(this);
+        }
         if (!this.isOpen() && this.menuTemplateRef != null) {
             this.opened.next();
             this.overlayRef =
@@ -1719,27 +1745,6 @@ const CONTEXT_MENU_POSITIONS = STANDARD_DROPDOWN_BELOW_POSITIONS.map(position =>
     const offsetY = position.overlayY === 'top' ? 2 : -2;
     return { ...position, offsetX, offsetY };
 });
-/** Tracks the last open context menu trigger across the entire application. */
-class ContextMenuTracker {
-    /** The last open context menu trigger. */
-    static _openContextMenuTrigger;
-    /**
-     * Close the previous open context menu and set the given one as being open.
-     * @param trigger The trigger for the currently open Context Menu.
-     */
-    update(trigger) {
-        if (ContextMenuTracker._openContextMenuTrigger !== trigger) {
-            ContextMenuTracker._openContextMenuTrigger?.close();
-            ContextMenuTracker._openContextMenuTrigger = trigger;
-        }
-    }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0", ngImport: i0, type: ContextMenuTracker, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.0.0", ngImport: i0, type: ContextMenuTracker, providedIn: 'root' });
-}
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0", ngImport: i0, type: ContextMenuTracker, decorators: [{
-            type: Injectable,
-            args: [{ providedIn: 'root' }]
-        }] });
 /**
  * A directive that opens a menu when a user right-clicks within its host element.
  * It is aware of nested context menus and will trigger only the lowest level non-disabled context menu.
@@ -1747,7 +1752,8 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0", ngImpor
 class CdkContextMenuTrigger extends CdkMenuTriggerBase {
     _injector = inject(Injector);
     _directionality = inject(Directionality, { optional: true });
-    _contextMenuTracker = inject(ContextMenuTracker);
+    /** The app's menu tracking registry */
+    _menuTracker = inject(MenuTracker);
     _changeDetectorRef = inject(ChangeDetectorRef);
     /** Whether the context menu is disabled. */
     disabled = false;
@@ -1779,7 +1785,7 @@ class CdkContextMenuTrigger extends CdkMenuTriggerBase {
             // Otherwise, any context menus attached to containing elements would *also* open,
             // resulting in multiple stacked context menus being displayed.
             event.stopPropagation();
-            this._contextMenuTracker.update(this);
+            this._menuTracker.update(this);
             this._open(event, { x: event.clientX, y: event.clientY });
             // A context menu can be triggered via a mouse right click or a keyboard shortcut.
             if (event.button === 2) {
@@ -1955,5 +1961,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0", ngImpor
                 }]
         }] });
 
-export { CDK_MENU, CdkContextMenuTrigger, CdkMenu, CdkMenuBar, CdkMenuBase, CdkMenuGroup, CdkMenuItem, CdkMenuItemCheckbox, CdkMenuItemRadio, CdkMenuItemSelectable, CdkMenuModule, CdkMenuTrigger, CdkMenuTriggerBase, CdkTargetMenuAim, ContextMenuTracker, FocusNext, MENU_AIM, MENU_SCROLL_STRATEGY, MENU_STACK, MENU_TRIGGER, MenuStack, PARENT_OR_NEW_INLINE_MENU_STACK_PROVIDER, PARENT_OR_NEW_MENU_STACK_PROVIDER, PointerFocusTracker, TargetMenuAim };
+export { CDK_MENU, CdkContextMenuTrigger, CdkMenu, CdkMenuBar, CdkMenuBase, CdkMenuGroup, CdkMenuItem, CdkMenuItemCheckbox, CdkMenuItemRadio, CdkMenuItemSelectable, CdkMenuModule, CdkMenuTrigger, CdkMenuTriggerBase, CdkTargetMenuAim, MenuTracker as ContextMenuTracker, FocusNext, MENU_AIM, MENU_SCROLL_STRATEGY, MENU_STACK, MENU_TRIGGER, MenuStack, MenuTracker, PARENT_OR_NEW_INLINE_MENU_STACK_PROVIDER, PARENT_OR_NEW_MENU_STACK_PROVIDER, PointerFocusTracker, TargetMenuAim };
 //# sourceMappingURL=menu.mjs.map

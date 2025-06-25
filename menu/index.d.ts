@@ -283,6 +283,18 @@ declare class CdkMenuGroup {
 declare const MENU_TRIGGER: InjectionToken<CdkMenuTriggerBase>;
 /** Injection token used to configure the behavior of the menu when the page is scrolled. */
 declare const MENU_SCROLL_STRATEGY: InjectionToken<() => ScrollStrategy>;
+/** Tracks the last open menu trigger across the entire application. */
+declare class MenuTracker {
+    /** The last open menu trigger. */
+    private static _openMenuTrigger?;
+    /**
+     * Close the previous open menu and set the given one as being open.
+     * @param trigger The trigger for the currently open Menu.
+     */
+    update(trigger: CdkMenuTriggerBase): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<MenuTracker, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<MenuTracker>;
+}
 /**
  * Abstract directive that implements shared logic common to all menu triggers.
  * This class can be extended to create custom menu trigger types.
@@ -309,6 +321,8 @@ declare abstract class CdkMenuTriggerBase implements OnDestroy {
     menuTemplateRef: TemplateRef<unknown> | null;
     /** Context data to be passed along to the menu template */
     menuData: unknown;
+    /** Close the opened menu. */
+    abstract close(): void;
     /** A reference to the overlay which manages the triggered menu */
     protected overlayRef: OverlayRef | null;
     /** Emits when this trigger is destroyed. */
@@ -361,6 +375,8 @@ declare class CdkMenuTrigger extends CdkMenuTriggerBase implements OnChanges, On
     private readonly _renderer;
     private readonly _injector;
     private _cleanupMouseenter;
+    /** The app's menu tracking registry */
+    private readonly _menuTracker;
     /** The parent menu this trigger belongs to. */
     private readonly _parentMenu;
     /** The menu aim service used by this menu. */
@@ -737,18 +753,6 @@ declare class CdkMenuItemCheckbox extends CdkMenuItemSelectable {
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuItemCheckbox, "[cdkMenuItemCheckbox]", ["cdkMenuItemCheckbox"], {}, {}, never, never, true, never>;
 }
 
-/** Tracks the last open context menu trigger across the entire application. */
-declare class ContextMenuTracker {
-    /** The last open context menu trigger. */
-    private static _openContextMenuTrigger?;
-    /**
-     * Close the previous open context menu and set the given one as being open.
-     * @param trigger The trigger for the currently open Context Menu.
-     */
-    update(trigger: CdkContextMenuTrigger): void;
-    static ɵfac: i0.ɵɵFactoryDeclaration<ContextMenuTracker, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<ContextMenuTracker>;
-}
 /** The coordinates where the context menu should open. */
 type ContextMenuCoordinates = {
     x: number;
@@ -761,7 +765,8 @@ type ContextMenuCoordinates = {
 declare class CdkContextMenuTrigger extends CdkMenuTriggerBase implements OnDestroy {
     private readonly _injector;
     private readonly _directionality;
-    private readonly _contextMenuTracker;
+    /** The app's menu tracking registry */
+    private readonly _menuTracker;
     private readonly _changeDetectorRef;
     /** Whether the context menu is disabled. */
     disabled: boolean;
@@ -814,5 +819,5 @@ declare class CdkMenuModule {
     static ɵinj: i0.ɵɵInjectorDeclaration<CdkMenuModule>;
 }
 
-export { CDK_MENU, CdkContextMenuTrigger, CdkMenu, CdkMenuBar, CdkMenuBase, CdkMenuGroup, CdkMenuItem, CdkMenuItemCheckbox, CdkMenuItemRadio, CdkMenuItemSelectable, CdkMenuModule, CdkMenuTrigger, CdkMenuTriggerBase, CdkTargetMenuAim, ContextMenuTracker, FocusNext, MENU_AIM, MENU_SCROLL_STRATEGY, MENU_STACK, MENU_TRIGGER, MenuStack, PARENT_OR_NEW_INLINE_MENU_STACK_PROVIDER, PARENT_OR_NEW_MENU_STACK_PROVIDER, PointerFocusTracker, TargetMenuAim };
+export { CDK_MENU, CdkContextMenuTrigger, CdkMenu, CdkMenuBar, CdkMenuBase, CdkMenuGroup, CdkMenuItem, CdkMenuItemCheckbox, CdkMenuItemRadio, CdkMenuItemSelectable, CdkMenuModule, CdkMenuTrigger, CdkMenuTriggerBase, CdkTargetMenuAim, MenuTracker as ContextMenuTracker, FocusNext, MENU_AIM, MENU_SCROLL_STRATEGY, MENU_STACK, MENU_TRIGGER, MenuStack, MenuTracker, PARENT_OR_NEW_INLINE_MENU_STACK_PROVIDER, PARENT_OR_NEW_MENU_STACK_PROVIDER, PointerFocusTracker, TargetMenuAim };
 export type { CloseOptions, ContextMenuCoordinates, FocusableElement, Menu, MenuAim, MenuStackCloseEvent, MenuStackItem, Toggler };
