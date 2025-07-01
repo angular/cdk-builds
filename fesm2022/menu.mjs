@@ -7,7 +7,7 @@ import { _ as _IdGenerator } from './id-generator-LuoRZSid.mjs';
 import { o as createRepositionScrollStrategy, c as createOverlayRef, i as OverlayConfig, h as createFlexibleConnectedPositionStrategy, g as STANDARD_DROPDOWN_BELOW_POSITIONS, S as STANDARD_DROPDOWN_ADJACENT_POSITIONS, t as OverlayModule } from './overlay-module-Bd2UplUU.mjs';
 import { TemplatePortal } from './portal.mjs';
 import { c as ENTER, S as SPACE, U as UP_ARROW, D as DOWN_ARROW, L as LEFT_ARROW, R as RIGHT_ARROW, T as TAB, g as ESCAPE } from './keycodes-CpHkExLC.mjs';
-import { I as InputModalityDetector, F as FocusMonitor } from './focus-monitor-DLjkiju1.mjs';
+import { I as InputModalityDetector, F as FocusMonitor } from './focus-monitor-DUe99AIS.mjs';
 import { D as Directionality } from './directionality-CChdj3az.mjs';
 import { hasModifierKey } from './keycodes.mjs';
 import { _ as _getEventTarget } from './shadow-dom-B0oHn41l.mjs';
@@ -1274,14 +1274,7 @@ class CdkMenuBase extends CdkMenuGroup {
      * @param item The index of the item to be set as active, or the CdkMenuItem instance.
      */
     setActiveMenuItem(item) {
-        if (this.keyManager) {
-            if (typeof item === 'number') {
-                this.keyManager.setActiveItem(item);
-            }
-            else {
-                this.keyManager.setActiveItem(item);
-            }
-        }
+        this.keyManager?.setActiveItem(item);
     }
     /** Gets the tabindex for this menu. */
     _getTabIndex() {

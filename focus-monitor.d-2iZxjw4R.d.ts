@@ -73,7 +73,7 @@ declare class FocusMonitor implements OnDestroy {
      */
     private _windowFocusListener;
     /** Used to reference correct document/window */
-    protected _document?: Document | null | undefined;
+    protected _document: Document;
     /** Subject for stopping our InputModalityDetector subscription. */
     private readonly _stopInputModalityDetector;
     constructor(...args: unknown[]);
@@ -123,8 +123,6 @@ declare class FocusMonitor implements OnDestroy {
      */
     focusVia(element: ElementRef<HTMLElement>, origin: FocusOrigin, options?: FocusOptions): void;
     ngOnDestroy(): void;
-    /** Access injected document if available or fallback to global document reference */
-    private _getDocument;
     /** Use defaultView of injected document if available or fallback to global window reference */
     private _getWindow;
     private _getFocusOrigin;

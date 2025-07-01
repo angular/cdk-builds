@@ -101,6 +101,11 @@ declare class ListKeyManager<T extends ListKeyManagerOption> {
      */
     setActiveItem(item: T): void;
     /**
+     * Sets the active item to the specified item.
+     * @param item The item to be set as active.
+     */
+    setActiveItem(item: T | number): void;
+    /**
      * Sets the active item depending on the key event passed in.
      * @param event Keyboard event to be used for determining which element should be active.
      */

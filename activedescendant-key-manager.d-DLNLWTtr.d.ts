@@ -1,4 +1,4 @@
-import { L as ListKeyManagerOption, a as ListKeyManager } from './list-key-manager.d-BlK3jyRn.js';
+import { L as ListKeyManagerOption, a as ListKeyManager } from './list-key-manager.d-CkFcwXee.js';
 
 /**
  * This is the interface for highlightable items (used by the ActiveDescendantKeyManager).
@@ -26,6 +26,13 @@ declare class ActiveDescendantKeyManager<T> extends ListKeyManager<Highlightable
      * @param item Item to be set as active.
      */
     setActiveItem(item: T): void;
+    /**
+     * Sets the active item to the item to the specified one and adds the
+     * active styles to the it. Also removes active styles from the
+     * previously active item.
+     * @param item Item to be set as active.
+     */
+    setActiveItem(item: T | number): void;
 }
 
 export { ActiveDescendantKeyManager as A };

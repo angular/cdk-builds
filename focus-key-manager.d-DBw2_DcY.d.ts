@@ -1,5 +1,5 @@
-import { L as ListKeyManagerOption, a as ListKeyManager } from './list-key-manager.d-BlK3jyRn.js';
-import { F as FocusOrigin } from './focus-monitor.d-CvvJeQRc.js';
+import { L as ListKeyManagerOption, a as ListKeyManager } from './list-key-manager.d-CkFcwXee.js';
+import { F as FocusOrigin } from './focus-monitor.d-2iZxjw4R.js';
 
 /**
  * This is the interface for focusable items (used by the FocusKeyManager).
@@ -28,6 +28,11 @@ declare class FocusKeyManager<T> extends ListKeyManager<FocusableOption & T> {
      * @param item Item to be set as active.
      */
     setActiveItem(item: T): void;
+    /**
+     * Sets the active item to the item that is specified and focuses it.
+     * @param item Item to be set as active.
+     */
+    setActiveItem(item: T | number): void;
 }
 
 export { FocusKeyManager as a };
