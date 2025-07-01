@@ -2,8 +2,8 @@ import * as i0 from '@angular/core';
 import { inject, ElementRef, NgZone, Renderer2, DOCUMENT, ChangeDetectorRef, Injector, afterNextRender, Component, ViewEncapsulation, ChangeDetectionStrategy, ViewChild, InjectionToken, TemplateRef, Injectable, signal, EventEmitter, NgModule } from '@angular/core';
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, TemplatePortal, PortalModule } from './portal.mjs';
 export { CdkPortal as ɵɵCdkPortal, PortalHostDirective as ɵɵPortalHostDirective, TemplatePortalDirective as ɵɵTemplatePortalDirective } from './portal.mjs';
-import { F as FocusTrapFactory, I as InteractivityChecker, A as A11yModule } from './a11y-module-DHa4AVFz.mjs';
-import { F as FocusMonitor } from './focus-monitor-DLjkiju1.mjs';
+import { F as FocusTrapFactory, I as InteractivityChecker, A as A11yModule } from './a11y-module-BPzgKr79.mjs';
+import { F as FocusMonitor } from './focus-monitor-DUe99AIS.mjs';
 import { P as Platform } from './platform-DNDzkVcI.mjs';
 import { c as _getFocusedElementPierceShadowDom } from './shadow-dom-B0oHn41l.mjs';
 import { Subject, defer } from 'rxjs';
@@ -164,7 +164,7 @@ class CdkDialogContainer extends BasePortalOutlet {
     _focusMonitor = inject(FocusMonitor);
     _renderer = inject(Renderer2);
     _platform = inject(Platform);
-    _document = inject(DOCUMENT, { optional: true });
+    _document = inject(DOCUMENT);
     /** The portal outlet inside of this container into which the dialog content will be loaded. */
     _portalOutlet;
     /** The class that traps and manages focus within the dialog. */

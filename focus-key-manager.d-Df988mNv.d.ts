@@ -1,5 +1,5 @@
 import { L as ListKeyManagerOption, a as ListKeyManager } from './list-key-manager.d-BlK3jyRn.js';
-import { F as FocusOrigin } from './focus-monitor.d-CvvJeQRc.js';
+import { F as FocusOrigin } from './focus-monitor.d-2iZxjw4R.js';
 
 /**
  * This is the interface for focusable items (used by the FocusKeyManager).

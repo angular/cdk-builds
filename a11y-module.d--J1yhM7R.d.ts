@@ -1,7 +1,7 @@
 import * as i0 from '@angular/core';
 import { NgZone, Injector, OnDestroy, AfterContentInit, OnChanges, DoCheck, SimpleChanges, InjectionToken } from '@angular/core';
 import { ObserversModule } from './observers/index.js';
-import { C as CdkMonitorFocus } from './focus-monitor.d-CvvJeQRc.js';
+import { C as CdkMonitorFocus } from './focus-monitor.d-2iZxjw4R.js';
 
 /**
  * Configuration for the isFocusable method.

@@ -521,7 +521,7 @@ class ViewportRuler {
     /** Stream of viewport change events. */
     _change = new Subject();
     /** Used to reference correct document/window */
-    _document = inject(DOCUMENT, { optional: true });
+    _document = inject(DOCUMENT);
     constructor() {
         const ngZone = inject(NgZone);
         const renderer = inject(RendererFactory2).createRenderer(null, null);

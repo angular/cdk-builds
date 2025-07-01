@@ -101,7 +101,7 @@ declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDestroy {
     /** Cached scroll top of a textarea */
     private _cachedScrollTop;
     /** Used to reference correct document/window */
-    protected _document?: Document | null | undefined;
+    protected _document: Document;
     private _hasFocus;
     private _isViewInited;
     constructor(...args: unknown[]);

@@ -182,7 +182,7 @@ class CdkTextareaAutosize {
     /** Cached scroll top of a textarea */
     _cachedScrollTop;
     /** Used to reference correct document/window */
-    _document = inject(DOCUMENT, { optional: true });
+    _document = inject(DOCUMENT);
     _hasFocus;
     _isViewInited = false;
     constructor() {

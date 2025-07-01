@@ -1377,7 +1377,7 @@ class CdkTreeNode {
         this._parentNodeAriaLevel = getParentNodeAriaLevel(this._elementRef.nativeElement);
         this._tree
             ._getExpansionModel()
-            .changed.pipe(map(() => this.isExpanded), distinctUntilChanged())
+            .changed.pipe(map(() => this.isExpanded), distinctUntilChanged(), takeUntil(this._destroyed))
             .subscribe(() => this._changeDetectorRef.markForCheck());
         this._tree._setNodeTypeIfUnset(this._type);
         this._tree._registerNode(this);

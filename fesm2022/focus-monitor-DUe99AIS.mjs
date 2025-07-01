@@ -242,7 +242,7 @@ class FocusMonitor {
         this._windowFocusTimeoutId = setTimeout(() => (this._windowFocused = false));
     };
     /** Used to reference correct document/window */
-    _document = inject(DOCUMENT, { optional: true });
+    _document = inject(DOCUMENT);
     /** Subject for stopping our InputModalityDetector subscription. */
     _stopInputModalityDetector = new Subject();
     constructor() {
@@ -277,7 +277,7 @@ class FocusMonitor {
         // If the element is inside the shadow DOM, we need to bind our focus/blur listeners to
         // the shadow root, rather than the `document`, because the browser won't emit focus events
         // to the `document`, if focus is moving within the same shadow root.
-        const rootNode = _getShadowRoot(nativeElement) || this._getDocument();
+        const rootNode = _getShadowRoot(nativeElement) || this._document;
         const cachedInfo = this._elementInfo.get(nativeElement);
         // Check if we're already monitoring this element.
         if (cachedInfo) {
@@ -311,7 +311,7 @@ class FocusMonitor {
     }
     focusVia(element, origin, options) {
         const nativeElement = coerceElement(element);
-        const focusedElement = this._getDocument().activeElement;
+        const focusedElement = this._document.activeElement;
         // If the element is focused already, calling `focus` again won't trigger the event listener
         // which means that the focus classes won't be updated. If that's the case, update the classes
         // directly without waiting for an event.
@@ -329,14 +329,9 @@ class FocusMonitor {
     ngOnDestroy() {
         this._elementInfo.forEach((_info, element) => this.stopMonitoring(element));
     }
-    /** Access injected document if available or fallback to global document reference */
-    _getDocument() {
-        return this._document || document;
-    }
     /** Use defaultView of injected document if available or fallback to global window reference */
     _getWindow() {
-        const doc = this._getDocument();
-        return doc.defaultView || window;
+        return this._document.defaultView || window;
     }
     _getFocusOrigin(focusEventTarget) {
         if (this._origin) {
@@ -624,4 +619,4 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0", ngImpor
             }] } });
 
 export { CdkMonitorFocus as C, FocusMonitor as F, InputModalityDetector as I, INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS as a, INPUT_MODALITY_DETECTOR_OPTIONS as b, FocusMonitorDetectionMode as c, FOCUS_MONITOR_DEFAULT_OPTIONS as d };
-//# sourceMappingURL=focus-monitor-DLjkiju1.mjs.map
+//# sourceMappingURL=focus-monitor-DUe99AIS.mjs.map
