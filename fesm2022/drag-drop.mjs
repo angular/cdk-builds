@@ -3587,7 +3587,6 @@ class CdkDrag {
         // is too late since the two modes save different kinds of information. We work around it by
         // assigning the drop container both from here and the list.
         if (dropContainer) {
-            this._dragRef._withDropContainer(dropContainer._dropListRef);
             dropContainer.addItem(this);
             // The drop container reads this so we need to sync it here.
             dropContainer._dropListRef.beforeStarted.pipe(takeUntil(this._destroyed)).subscribe(() => {
@@ -4131,6 +4130,7 @@ class CdkDropList {
     /** Registers an items with the drop list. */
     addItem(item) {
         this._unsortedItems.add(item);
+        item._dragRef._withDropContainer(this._dropListRef);
         // Only sync the items while dragging since this method is
         // called when items are being initialized one-by-one.
         if (this._dropListRef.isDragging()) {
