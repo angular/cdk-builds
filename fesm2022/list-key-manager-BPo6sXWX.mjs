@@ -10,8 +10,8 @@ import { P as PAGE_DOWN, a as PAGE_UP, E as END, H as HOME, L as LEFT_ARROW, R a
  */
 class ListKeyManager {
     _items;
-    _activeItemIndex = signal(-1);
-    _activeItem = signal(null);
+    _activeItemIndex = signal(-1, ...(ngDevMode ? [{ debugName: "_activeItemIndex" }] : []));
+    _activeItem = signal(null, ...(ngDevMode ? [{ debugName: "_activeItem" }] : []));
     _wrap = false;
     _typeaheadSubscription = Subscription.EMPTY;
     _itemChangesSubscription;
@@ -39,7 +39,7 @@ class ListKeyManager {
             if (!injector && (typeof ngDevMode === 'undefined' || ngDevMode)) {
                 throw new Error('ListKeyManager constructed with a signal must receive an injector');
             }
-            this._effectRef = effect(() => this._itemsChanged(_items()), { injector });
+            this._effectRef = effect(() => this._itemsChanged(_items()), ...(ngDevMode ? [{ debugName: "_effectRef", injector }] : [{ injector }]));
         }
     }
     /**
@@ -357,4 +357,4 @@ class ListKeyManager {
 }
 
 export { ListKeyManager as L };
-//# sourceMappingURL=list-key-manager-C7tp3RbG.mjs.map
+//# sourceMappingURL=list-key-manager-BPo6sXWX.mjs.map
