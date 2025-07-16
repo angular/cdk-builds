@@ -2,7 +2,7 @@ import * as i0 from '@angular/core';
 import { inject, CSP_NONCE, Injectable, NgZone } from '@angular/core';
 import { Subject, combineLatest, concat, Observable } from 'rxjs';
 import { take, skip, debounceTime, map, startWith, takeUntil } from 'rxjs/operators';
-import { P as Platform } from './platform-BXHVP2u-.mjs';
+import { P as Platform } from './platform-CU1HnUf4.mjs';
 import { c as coerceArray } from './array-I1yfCXUO.mjs';
 
 /** Global registry for all dynamically-created, injected media queries. */
@@ -35,10 +35,10 @@ class MediaMatcher {
         }
         return this._matchMedia(query);
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.1.0", ngImport: i0, type: MediaMatcher, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.1.0", ngImport: i0, type: MediaMatcher, providedIn: 'root' });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.2.0-next.0", ngImport: i0, type: MediaMatcher, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.2.0-next.0", ngImport: i0, type: MediaMatcher, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.1.0", ngImport: i0, type: MediaMatcher, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.2.0-next.0", ngImport: i0, type: MediaMatcher, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: () => [] });
@@ -157,10 +157,10 @@ class BreakpointObserver {
         this._queries.set(query, output);
         return output;
     }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.1.0", ngImport: i0, type: BreakpointObserver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.1.0", ngImport: i0, type: BreakpointObserver, providedIn: 'root' });
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.2.0-next.0", ngImport: i0, type: BreakpointObserver, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.2.0-next.0", ngImport: i0, type: BreakpointObserver, providedIn: 'root' });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.1.0", ngImport: i0, type: BreakpointObserver, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.2.0-next.0", ngImport: i0, type: BreakpointObserver, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: () => [] });
@@ -176,4 +176,4 @@ function splitQueries(queries) {
 }
 
 export { BreakpointObserver as B, MediaMatcher as M };
-//# sourceMappingURL=breakpoints-observer-CRHJfZBr.mjs.map
+//# sourceMappingURL=breakpoints-observer-e0Y61Ni6.mjs.map
