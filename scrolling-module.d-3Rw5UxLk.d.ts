@@ -225,8 +225,7 @@ declare class CdkVirtualScrollViewport extends CdkVirtualScrollable implements O
      * be rewritten as an offset to the start of the content).
      */
     private _renderedContentOffsetNeedsRewrite;
-    /** Whether there is a pending change detection cycle. */
-    private _isChangeDetectionPending;
+    private _changeDetectionNeeded;
     /** A list of functions to run after the next change detection cycle. */
     private _runAfterChangeDetection;
     /** Subscription to changes in the viewport size. */

@@ -4,8 +4,8 @@ import { a as Direction } from '../bidi-module.d-IN1Vp56w.js';
 import { Subject, Observable } from 'rxjs';
 import { ViewportRuler } from '../scrolling/index.js';
 import { N as NumberInput } from '../number-property.d-CJVxXUcb.js';
-import { b as CdkScrollableModule } from '../scrolling-module.d-C_w4tIrZ.js';
-export { C as ɵɵCdkScrollable } from '../scrolling-module.d-C_w4tIrZ.js';
+import { b as CdkScrollableModule } from '../scrolling-module.d-3Rw5UxLk.js';
+export { C as ɵɵCdkScrollable } from '../scrolling-module.d-3Rw5UxLk.js';
 import '../data-source.d-Bblv7Zvh.js';
 
 /** Possible values that can be used to configure the drag start delay. */
