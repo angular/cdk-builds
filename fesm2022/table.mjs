@@ -1058,14 +1058,15 @@ function getTableDuplicateColumnNameError(name) {
  * @docs-private
  */
 function getTableMultipleDefaultRowDefsError() {
-    return Error(`There can only be one default row without a when predicate function.`);
+    return Error(`There can only be one default row without a when predicate function. ` +
+        'Or set `multiTemplateDataRows`.');
 }
 /**
  * Returns an error to be thrown when there are no matching row defs for a particular set of data.
  * @docs-private
  */
 function getTableMissingMatchingRowDefError(data) {
-    return Error(`Could not find a matching row definition for the` +
+    return Error(`Could not find a matching row definition for the ` +
         `provided row data: ${JSON.stringify(data)}`);
 }
 /**

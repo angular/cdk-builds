@@ -2,7 +2,7 @@ import * as i0 from '@angular/core';
 import { OnDestroy, NgZone, EnvironmentInjector, Renderer2, ComponentRef, EmbeddedViewRef, ElementRef, Injector, OnChanges, EventEmitter, SimpleChanges } from '@angular/core';
 import { a as Direction, D as Directionality, B as BidiModule } from './bidi-module.d-IN1Vp56w.js';
 import { b as PortalOutlet, C as ComponentPortal, T as TemplatePortal, h as PortalModule } from './portal-directives.d-DbeNrI5D.js';
-import { C as CdkScrollable, S as ScrollingModule } from './scrolling-module.d-C_w4tIrZ.js';
+import { C as CdkScrollable, S as ScrollingModule } from './scrolling-module.d-3Rw5UxLk.js';
 import { Location } from '@angular/common';
 import { Subject, Observable } from 'rxjs';
 import { ViewportRuler } from './scrolling/index.js';

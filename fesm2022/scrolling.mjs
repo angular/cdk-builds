@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { InjectionToken, forwardRef, Directive, Input, inject, NgZone, RendererFactory2, Injectable, ElementRef, Renderer2, DOCUMENT, ChangeDetectorRef, signal, Injector, afterNextRender, booleanAttribute, Optional, Inject, Component, ViewEncapsulation, ChangeDetectionStrategy, Output, ViewChild, ViewContainerRef, TemplateRef, IterableDiffers, NgModule } from '@angular/core';
+import { InjectionToken, forwardRef, Directive, Input, inject, NgZone, RendererFactory2, Injectable, ElementRef, Renderer2, DOCUMENT, ChangeDetectorRef, signal, Injector, effect, ApplicationRef, DestroyRef, untracked, afterNextRender, booleanAttribute, Optional, Inject, Component, ViewEncapsulation, ChangeDetectionStrategy, Output, ViewChild, ViewContainerRef, TemplateRef, IterableDiffers, NgModule } from '@angular/core';
 import { Subject, of, Observable, Subscription, animationFrameScheduler, asapScheduler, isObservable } from 'rxjs';
 import { distinctUntilChanged, auditTime, filter, startWith, takeUntil, pairwise, switchMap, shareReplay } from 'rxjs/operators';
 import { c as coerceNumberProperty, a as coerceElement } from './element-x4z00URv.mjs';
@@ -733,8 +733,7 @@ class CdkVirtualScrollViewport extends CdkVirtualScrollable {
      * be rewritten as an offset to the start of the content).
      */
     _renderedContentOffsetNeedsRewrite = false;
-    /** Whether there is a pending change detection cycle. */
-    _isChangeDetectionPending = false;
+    _changeDetectionNeeded = signal(false);
     /** A list of functions to run after the next change detection cycle. */
     _runAfterChangeDetection = [];
     /** Subscription to changes in the viewport size. */
@@ -755,6 +754,15 @@ class CdkVirtualScrollViewport extends CdkVirtualScrollable {
             this.elementRef.nativeElement.classList.add('cdk-virtual-scrollable');
             this.scrollable = this;
         }
+        const ref = effect(() => {
+            if (this._changeDetectionNeeded()) {
+                this._doChangeDetection();
+            }
+        }, 
+        // Using ApplicationRef injector is important here because we want this to be a root
+        // effect that runs before change detection of any application views (since we're depending on markForCheck marking parents dirty)
+        { injector: inject(ApplicationRef).injector });
+        inject(DestroyRef).onDestroy(() => void ref.destroy());
     }
     ngOnInit() {
         // Scrolling depends on the element dimensions which we can't get during SSR.
@@ -1004,14 +1012,16 @@ class CdkVirtualScrollViewport extends CdkVirtualScrollable {
         if (runAfter) {
             this._runAfterChangeDetection.push(runAfter);
         }
-        // Use a Promise to batch together calls to `_doChangeDetection`. This way if we set a bunch of
-        // properties sequentially we only have to run `_doChangeDetection` once at the end.
-        if (!this._isChangeDetectionPending) {
-            this._isChangeDetectionPending = true;
-            this.ngZone.runOutsideAngular(() => Promise.resolve().then(() => {
-                this._doChangeDetection();
-            }));
+        if (untracked(this._changeDetectionNeeded)) {
+            return;
         }
+        this.ngZone.runOutsideAngular(() => {
+            Promise.resolve().then(() => {
+                this.ngZone.run(() => {
+                    this._changeDetectionNeeded.set(true);
+                });
+            });
+        });
     }
     /** Run change detection. */
     _doChangeDetection() {
@@ -1029,7 +1039,7 @@ class CdkVirtualScrollViewport extends CdkVirtualScrollable {
             // the `Number` function first to coerce it to a numeric value.
             this._contentWrapper.nativeElement.style.transform = this._renderedContentTransform;
             afterNextRender(() => {
-                this._isChangeDetectionPending = false;
+                this._changeDetectionNeeded.set(false);
                 const runAfterChangeDetection = this._runAfterChangeDetection;
                 this._runAfterChangeDetection = [];
                 for (const fn of runAfterChangeDetection) {
