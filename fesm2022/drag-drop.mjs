@@ -2222,6 +2222,12 @@ class MixedSortStrategy {
      *   out automatically.
      */
     enter(item, pointerX, pointerY, index) {
+        // Remove the item from current set of items first so that it doesn't throw off the indexes
+        // further down in this method. See https://github.com/angular/components/issues/31505
+        const currentIndex = this._activeItems.indexOf(item);
+        if (currentIndex > -1) {
+            this._activeItems.splice(currentIndex, 1);
+        }
         let enterIndex = index == null || index < 0
             ? this._getItemIndexFromPointerPosition(item, pointerX, pointerY)
             : index;
@@ -2232,10 +2238,6 @@ class MixedSortStrategy {
             enterIndex = this._getClosestItemIndexToPointer(item, pointerX, pointerY);
         }
         const targetItem = this._activeItems[enterIndex];
-        const currentIndex = this._activeItems.indexOf(item);
-        if (currentIndex > -1) {
-            this._activeItems.splice(currentIndex, 1);
-        }
         if (targetItem && !this._dragDropRegistry.isDragging(targetItem)) {
             this._activeItems.splice(enterIndex, 0, item);
             targetItem.getRootElement().before(item.getPlaceholderElement());
