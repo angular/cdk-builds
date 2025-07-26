@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { inject, signal, ElementRef, booleanAttribute, Directive, Input, NgZone, ChangeDetectorRef, Renderer2, forwardRef, Output, ContentChildren, NgModule } from '@angular/core';
+import { inject, signal, ElementRef, booleanAttribute, numberAttribute, Directive, Input, NgZone, ChangeDetectorRef, Renderer2, forwardRef, Output, ContentChildren, NgModule } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Subject, defer, merge } from 'rxjs';
 import { startWith, switchMap, map, takeUntil, filter } from 'rxjs/operators';
@@ -153,7 +153,7 @@ class CdkOption {
         return this.isActive() ? this.enabledTabIndex : -1;
     }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0", ngImport: i0, type: CdkOption, deps: [], target: i0.ɵɵFactoryTarget.Directive });
-    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "20.0.0", type: CdkOption, isStandalone: true, selector: "[cdkOption]", inputs: { id: "id", value: ["cdkOption", "value"], typeaheadLabel: ["cdkOptionTypeaheadLabel", "typeaheadLabel"], disabled: ["cdkOptionDisabled", "disabled", booleanAttribute], enabledTabIndex: ["tabindex", "enabledTabIndex"] }, host: { attributes: { "role": "option" }, listeners: { "click": "_clicked.next($event)", "focus": "_handleFocus()" }, properties: { "id": "id", "attr.aria-selected": "isSelected()", "attr.tabindex": "_getTabIndex()", "attr.aria-disabled": "disabled", "class.cdk-option-active": "isActive()" }, classAttribute: "cdk-option" }, exportAs: ["cdkOption"], ngImport: i0 });
+    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "20.0.0", type: CdkOption, isStandalone: true, selector: "[cdkOption]", inputs: { id: "id", value: ["cdkOption", "value"], typeaheadLabel: ["cdkOptionTypeaheadLabel", "typeaheadLabel"], disabled: ["cdkOptionDisabled", "disabled", booleanAttribute], enabledTabIndex: ["tabindex", "enabledTabIndex", (value) => (value == null ? undefined : numberAttribute(value))] }, host: { attributes: { "role": "option" }, listeners: { "click": "_clicked.next($event)", "focus": "_handleFocus()" }, properties: { "id": "id", "attr.aria-selected": "isSelected()", "attr.tabindex": "_getTabIndex()", "attr.aria-disabled": "disabled", "class.cdk-option-active": "isActive()" }, classAttribute: "cdk-option" }, exportAs: ["cdkOption"], ngImport: i0 });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0", ngImport: i0, type: CdkOption, decorators: [{
             type: Directive,
@@ -185,7 +185,10 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0", ngImpor
                 args: [{ alias: 'cdkOptionDisabled', transform: booleanAttribute }]
             }], enabledTabIndex: [{
                 type: Input,
-                args: ['tabindex']
+                args: [{
+                        alias: 'tabindex',
+                        transform: (value) => (value == null ? undefined : numberAttribute(value)),
+                    }]
             }] } });
 class CdkListbox {
     _cleanupWindowBlur;

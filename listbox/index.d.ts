@@ -82,6 +82,7 @@ declare class CdkOption<T = unknown> implements ListKeyManagerOption, Highlighta
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkOption<any>, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkOption<any>, "[cdkOption]", ["cdkOption"], { "id": { "alias": "id"; "required": false; }; "value": { "alias": "cdkOption"; "required": false; }; "typeaheadLabel": { "alias": "cdkOptionTypeaheadLabel"; "required": false; }; "disabled": { "alias": "cdkOptionDisabled"; "required": false; }; "enabledTabIndex": { "alias": "tabindex"; "required": false; }; }, {}, never, never, true, never>;
     static ngAcceptInputType_disabled: unknown;
+    static ngAcceptInputType_enabledTabIndex: unknown;
 }
 declare class CdkListbox<T = unknown> implements AfterContentInit, OnDestroy, ControlValueAccessor {
     private _cleanupWindowBlur;
