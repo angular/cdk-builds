@@ -1,4 +1,4 @@
-export { _ as _CdkPrivateStyleLoader } from '../style-loader.d-BXZfQZTF.js';
+export { _CdkPrivateStyleLoader } from '../style-loader.d.js';
 import * as i0 from '@angular/core';
 
 /**

@@ -1,4 +1,4 @@
-import { N as NumberInput } from '../number-property.d-CJVxXUcb.js';
+import { NumberInput } from '../number-property.d.js';
 import * as i0 from '@angular/core';
 import { OnDestroy, ElementRef, AfterContentInit, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';

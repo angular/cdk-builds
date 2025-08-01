@@ -2,7 +2,7 @@ import { flush } from '@angular/core/testing';
 import { takeWhile } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 import { getNoKeysSpecifiedError, _getTextWithExcludedElements, TestKey, HarnessEnvironment, handleAutoChangeDetectionStatus, stopHandlingAutoChangeDetectionStatus } from '../testing.mjs';
-import { h as PERIOD, B as BACKSPACE, T as TAB, c as ENTER, f as SHIFT, C as CONTROL, d as ALT, g as ESCAPE, a as PAGE_UP, P as PAGE_DOWN, E as END, H as HOME, L as LEFT_ARROW, U as UP_ARROW, R as RIGHT_ARROW, D as DOWN_ARROW, I as INSERT, i as DELETE, F as F1, j as F2, k as F3, l as F4, m as F5, n as F6, o as F7, p as F8, q as F9, r as F10, s as F11, t as F12, e as META, u as COMMA } from '../keycodes-CpHkExLC.mjs';
+import { PERIOD, BACKSPACE, TAB, ENTER, SHIFT, CONTROL, ALT, ESCAPE, PAGE_UP, PAGE_DOWN, END, HOME, LEFT_ARROW, UP_ARROW, RIGHT_ARROW, DOWN_ARROW, INSERT, DELETE, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12, META, COMMA } from '../keycodes2.mjs';
 
 /** Unique symbol that is used to patch a property to a proxy zone. */
 const stateObservableSymbol = Symbol('ProxyZone_PATCHED#stateObservable');

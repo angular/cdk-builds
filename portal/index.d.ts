@@ -1,5 +1,5 @@
-import { B as BasePortalOutlet, C as ComponentPortal, T as TemplatePortal, D as DomPortal } from '../portal-directives.d-DbeNrI5D.js';
-export { c as CdkPortal, f as CdkPortalOutlet, e as CdkPortalOutletAttachedRef, a as ComponentType, P as Portal, g as PortalHostDirective, h as PortalModule, b as PortalOutlet, d as TemplatePortalDirective } from '../portal-directives.d-DbeNrI5D.js';
+import { BasePortalOutlet, ComponentPortal, TemplatePortal, DomPortal } from '../portal-directives.d.js';
+export { CdkPortal, CdkPortalOutlet, CdkPortalOutletAttachedRef, ComponentType, Portal, PortalHostDirective, PortalModule, PortalOutlet, TemplatePortalDirective } from '../portal-directives.d.js';
 import { ApplicationRef, Injector, ComponentRef, EmbeddedViewRef } from '@angular/core';
 
 /**

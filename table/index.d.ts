@@ -1,11 +1,11 @@
-import { D as Directionality } from '../bidi-module.d-IN1Vp56w.js';
+import { Directionality } from '../bidi-module.d.js';
 import * as i0 from '@angular/core';
 import { TemplateRef, ElementRef, OnChanges, IterableDiffers, IterableDiffer, SimpleChanges, IterableChanges, OnDestroy, ViewContainerRef, InjectionToken, AfterContentInit, AfterContentChecked, OnInit, ChangeDetectorRef, TrackByFunction, EventEmitter, QueryList } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { D as DataSource, C as CollectionViewer } from '../data-source.d-Bblv7Zvh.js';
-import { a as _ViewRepeater } from '../view-repeater.d-DUdkOYhk.js';
-import { S as ScrollingModule } from '../scrolling-module.d-3Rw5UxLk.js';
-import '../number-property.d-CJVxXUcb.js';
+import { DataSource, CollectionViewer } from '../data-source.d.js';
+import { _ViewRepeater } from '../view-repeater.d.js';
+import { ScrollingModule } from '../scrolling-module.d.js';
+import '../number-property.d.js';
 
 /**
  * Interface for a mixin to provide a directive with a function that checks if the sticky input has

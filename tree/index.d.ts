@@ -1,9 +1,9 @@
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
-import { S as SelectionModel } from '../selection-model.d-DNgOONDg.js';
+import { SelectionModel } from '../selection-model.d.js';
 import * as i0 from '@angular/core';
 import { InjectionToken, ViewContainerRef, TemplateRef, AfterContentChecked, AfterContentInit, AfterViewInit, OnDestroy, OnInit, TrackByFunction, QueryList, IterableDiffer, ElementRef, EventEmitter, IterableDiffers } from '@angular/core';
-import { T as TreeKeyManagerStrategy, a as TreeKeyManagerItem } from '../tree-key-manager-strategy.d-XB6M79l-.js';
-import { C as CollectionViewer, D as DataSource } from '../data-source.d-Bblv7Zvh.js';
+import { TreeKeyManagerStrategy, TreeKeyManagerItem } from '../tree-key-manager-strategy.d.js';
+import { CollectionViewer, DataSource } from '../data-source.d.js';
 
 /**
  * Tree control interface. User can implement TreeControl to expand/collapse dataNodes in the tree.

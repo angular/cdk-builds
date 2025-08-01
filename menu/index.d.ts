@@ -1,20 +1,20 @@
 import * as i0 from '@angular/core';
 import { ElementRef, Renderer2, QueryList, InjectionToken, Optional, OnDestroy, Injector, ViewContainerRef, EventEmitter, TemplateRef, OnChanges, SimpleChanges, NgZone, AfterContentInit } from '@angular/core';
-import { S as ScrollStrategy, g as ConnectedPosition, O as OverlayRef, a as OverlayModule } from '../overlay-module.d-BvvR6Y05.js';
+import { ScrollStrategy, ConnectedPosition, OverlayRef, OverlayModule } from '../overlay-module.d.js';
 import * as rxjs from 'rxjs';
 import { Observable, Subject } from 'rxjs';
-import { F as FocusOrigin } from '../focus-monitor.d-2iZxjw4R.js';
-import { F as FocusableOption, a as FocusKeyManager } from '../focus-key-manager.d-DBw2_DcY.js';
-import { D as Directionality } from '../bidi-module.d-IN1Vp56w.js';
-import { T as TemplatePortal } from '../portal-directives.d-DbeNrI5D.js';
-import '../scrolling-module.d-3Rw5UxLk.js';
-import '../data-source.d-Bblv7Zvh.js';
-import '../number-property.d-CJVxXUcb.js';
+import { FocusOrigin } from '../focus-monitor.d.js';
+import { FocusableOption, FocusKeyManager } from '../focus-key-manager.d.js';
+import { Directionality } from '../bidi-module.d.js';
+import { TemplatePortal } from '../portal-directives.d.js';
+import '../scrolling-module.d.js';
+import '../data-source.d.js';
+import '../number-property.d.js';
 import '@angular/common';
 import '../scrolling/index.js';
-import '../platform.d-B3vREl3q.js';
-import '../style-loader.d-BXZfQZTF.js';
-import '../list-key-manager.d-CkFcwXee.js';
+import '../platform.d.js';
+import '../style-loader.d.js';
+import '../list-key-manager.d.js';
 
 /** Item to track for mouse focus events. */
 interface FocusableElement {

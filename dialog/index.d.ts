@@ -1,21 +1,21 @@
 import * as i0 from '@angular/core';
 import { ViewContainerRef, Injector, StaticProvider, Type, OnDestroy, ElementRef, NgZone, ChangeDetectorRef, ComponentRef, EmbeddedViewRef, TemplateRef, InjectionToken } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { F as FocusOrigin } from '../focus-monitor.d-2iZxjw4R.js';
-import { F as FocusTrapFactory, A as A11yModule } from '../a11y-module.d--J1yhM7R.js';
-import { B as BasePortalOutlet, f as CdkPortalOutlet, C as ComponentPortal, T as TemplatePortal, D as DomPortal, a as ComponentType, h as PortalModule } from '../portal-directives.d-DbeNrI5D.js';
-export { c as ɵɵCdkPortal, g as ɵɵPortalHostDirective, d as ɵɵTemplatePortalDirective } from '../portal-directives.d-DbeNrI5D.js';
-import { a as Direction } from '../bidi-module.d-IN1Vp56w.js';
-import { P as PositionStrategy, S as ScrollStrategy, O as OverlayRef, a as OverlayModule } from '../overlay-module.d-BvvR6Y05.js';
+import { FocusOrigin } from '../focus-monitor.d.js';
+import { FocusTrapFactory, A11yModule } from '../a11y-module.d.js';
+import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, TemplatePortal, DomPortal, ComponentType, PortalModule } from '../portal-directives.d.js';
+export { CdkPortal as ɵɵCdkPortal, PortalHostDirective as ɵɵPortalHostDirective, TemplatePortalDirective as ɵɵTemplatePortalDirective } from '../portal-directives.d.js';
+import { Direction } from '../bidi-module.d.js';
+import { PositionStrategy, ScrollStrategy, OverlayRef, OverlayModule } from '../overlay-module.d.js';
 import * as _angular_cdk_portal from '@angular/cdk/portal';
 import '../observers/index.js';
-import '../number-property.d-CJVxXUcb.js';
-import '../scrolling-module.d-3Rw5UxLk.js';
-import '../data-source.d-Bblv7Zvh.js';
+import '../number-property.d.js';
+import '../scrolling-module.d.js';
+import '../data-source.d.js';
 import '@angular/common';
 import '../scrolling/index.js';
-import '../platform.d-B3vREl3q.js';
-import '../style-loader.d-BXZfQZTF.js';
+import '../platform.d.js';
+import '../style-loader.d.js';
 
 /** Options for where to set focus to automatically on dialog open */
 type AutoFocusTarget = 'dialog' | 'first-tabbable' | 'first-heading';

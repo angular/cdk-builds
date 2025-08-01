@@ -1,4 +1,4 @@
-export { N as NumberInput, _ as _isNumberValue, c as coerceNumberProperty } from '../number-property.d-CJVxXUcb.js';
+export { NumberInput, _isNumberValue, coerceNumberProperty } from '../number-property.d.js';
 import { ElementRef } from '@angular/core';
 
 /**

@@ -1,4 +1,4 @@
-export { P as Platform } from '../platform.d-B3vREl3q.js';
+export { Platform } from '../platform.d.js';
 import * as i0 from '@angular/core';
 
 declare class PlatformModule {
