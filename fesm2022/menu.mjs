@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { Directive, InjectionToken, Optional, SkipSelf, Inject, inject, Injectable, Injector, ViewContainerRef, EventEmitter, NgZone, RendererFactory2, ElementRef, ChangeDetectorRef, Renderer2, booleanAttribute, Input, Output, signal, computed, ContentChildren, NgModule } from '@angular/core';
+import { Directive, InjectionToken, Optional, SkipSelf, Inject, inject, Injectable, Injector, ViewContainerRef, EventEmitter, NgZone, RendererFactory2, ElementRef, ChangeDetectorRef, Renderer2, booleanAttribute, Input, Output, QueryList, signal, computed, ContentChildren, NgModule } from '@angular/core';
 import { startWith, debounceTime, distinctUntilChanged, takeUntil, mergeMap, mapTo, mergeAll, switchMap, skipWhile, skip } from 'rxjs/operators';
 import { U as UniqueSelectionDispatcher } from './unique-selection-dispatcher-Cewa_Eg3.mjs';
 import { Subject, merge, partition } from 'rxjs';
@@ -1210,10 +1210,12 @@ class CdkMenuBase extends CdkMenuGroup {
     menuAim = inject(MENU_AIM, { optional: true, self: true });
     /** The directionality (text direction) of the current page. */
     dir = inject(Directionality, { optional: true });
+    /** All items inside the menu, including ones that belong to other menus. */
+    _allItems;
     /** The id of the menu's host element. */
     id = inject(_IdGenerator).getId('cdk-menu-');
-    /** All child MenuItem elements nested in this Menu. */
-    items;
+    /** All child MenuItem elements belonging to this Menu. */
+    items = new QueryList();
     /** The direction items in the menu flow. */
     orientation = 'vertical';
     /**
@@ -1239,6 +1241,7 @@ class CdkMenuBase extends CdkMenuGroup {
         if (!this.isInline) {
             this.menuStack.push(this);
         }
+        this._setItems();
         this._setKeyManager();
         this._handleFocus();
         this._subscribeToMenuStackHasFocus();
@@ -1303,6 +1306,17 @@ class CdkMenuBase extends CdkMenuGroup {
                 }
             }
         }
+    }
+    /** Sets up the subscription that keeps the items list in sync. */
+    _setItems() {
+        // Since the items query has `descendants: true`, we need
+        // to filter out items belonging to a different menu.
+        this._allItems.changes
+            .pipe(startWith(this._allItems), takeUntil(this.destroyed))
+            .subscribe((items) => {
+            this.items.reset(items.filter(item => item._parentMenu === this));
+            this.items.notifyOnChanges();
+        });
     }
     /** Setup the FocusKeyManager with the correct orientation for the menu. */
     _setKeyManager() {
@@ -1369,7 +1383,7 @@ class CdkMenuBase extends CdkMenuGroup {
         });
     }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.0", ngImport: i0, type: CdkMenuBase, deps: null, target: i0.ɵɵFactoryTarget.Directive });
-    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "20.0.0", type: CdkMenuBase, isStandalone: true, inputs: { id: "id" }, host: { attributes: { "role": "menu" }, listeners: { "focusin": "menuStack.setHasFocus(true)", "focusout": "menuStack.setHasFocus(false)" }, properties: { "tabindex": "_getTabIndex()", "id": "id", "attr.aria-orientation": "orientation", "attr.data-cdk-menu-stack-id": "menuStack.id" } }, queries: [{ propertyName: "items", predicate: CdkMenuItem, descendants: true }], usesInheritance: true, ngImport: i0 });
+    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "20.0.0", type: CdkMenuBase, isStandalone: true, inputs: { id: "id" }, host: { attributes: { "role": "menu" }, listeners: { "focusin": "menuStack.setHasFocus(true)", "focusout": "menuStack.setHasFocus(false)" }, properties: { "tabindex": "_getTabIndex()", "id": "id", "attr.aria-orientation": "orientation", "attr.data-cdk-menu-stack-id": "menuStack.id" } }, queries: [{ propertyName: "_allItems", predicate: CdkMenuItem, descendants: true }], usesInheritance: true, ngImport: i0 });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0", ngImport: i0, type: CdkMenuBase, decorators: [{
             type: Directive,
@@ -1385,11 +1399,11 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.0", ngImpor
                         '(focusout)': 'menuStack.setHasFocus(false)',
                     },
                 }]
-        }], propDecorators: { id: [{
-                type: Input
-            }], items: [{
+        }], propDecorators: { _allItems: [{
                 type: ContentChildren,
                 args: [CdkMenuItem, { descendants: true }]
+            }], id: [{
+                type: Input
             }] } });
 
 /**

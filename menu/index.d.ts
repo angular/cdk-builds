@@ -458,7 +458,7 @@ declare class CdkMenuItem implements FocusableOption, FocusableElement, Toggler,
     /** The stack of menus this menu belongs to. */
     private readonly _menuStack;
     /** The parent menu in which this menuitem resides. */
-    private readonly _parentMenu;
+    readonly _parentMenu: Menu | null;
     /** Reference to the CdkMenuItemTrigger directive if one is added to the same element */
     private readonly _menuTrigger;
     /**  Whether the CdkMenuItem is disabled - defaults to false */
@@ -567,9 +567,11 @@ declare abstract class CdkMenuBase extends CdkMenuGroup implements Menu, AfterCo
     protected readonly menuAim: MenuAim | null;
     /** The directionality (text direction) of the current page. */
     protected readonly dir: Directionality | null;
+    /** All items inside the menu, including ones that belong to other menus. */
+    protected _allItems: QueryList<CdkMenuItem>;
     /** The id of the menu's host element. */
     id: string;
-    /** All child MenuItem elements nested in this Menu. */
+    /** All child MenuItem elements belonging to this Menu. */
     readonly items: QueryList<CdkMenuItem>;
     /** The direction items in the menu flow. */
     orientation: 'horizontal' | 'vertical';
@@ -617,6 +619,8 @@ declare abstract class CdkMenuBase extends CdkMenuGroup implements Menu, AfterCo
     protected closeOpenMenu(menu: MenuStackItem, options?: {
         focusParentTrigger?: boolean;
     }): void;
+    /** Sets up the subscription that keeps the items list in sync. */
+    private _setItems;
     /** Setup the FocusKeyManager with the correct orientation for the menu. */
     private _setKeyManager;
     /**
@@ -636,7 +640,7 @@ declare abstract class CdkMenuBase extends CdkMenuGroup implements Menu, AfterCo
     /** Handles focus landing on the host element of the menu. */
     private _handleFocus;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuBase, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuBase, never, never, { "id": { "alias": "id"; "required": false; }; }, {}, ["items"], never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuBase, never, never, { "id": { "alias": "id"; "required": false; }; }, {}, ["_allItems"], never, true, never>;
 }
 
 /**
