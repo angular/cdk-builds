@@ -676,6 +676,7 @@ class CdkTree {
         const key = this._getExpansionKey(nodeData);
         // Node context that will be provided to created embedded view
         const context = new CdkTreeNodeOutletContext(nodeData);
+        context.index = index;
         parentData ??= this._parents.get(key) ?? undefined;
         // If the tree is flat tree, then use the `getLevel` function in flat tree control
         // Otherwise, use the level of parent node.
