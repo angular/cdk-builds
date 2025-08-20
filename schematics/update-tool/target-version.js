@@ -13,7 +13,7 @@ exports.getAllVersionNames = getAllVersionNames;
 // tslint:disable-next-line:prefer-const-enum
 var TargetVersion;
 (function (TargetVersion) {
-    TargetVersion["V20"] = "version 20";
+    TargetVersion["V21"] = "version 21";
 })(TargetVersion || (exports.TargetVersion = TargetVersion = {}));
 /**
  * Returns all versions that are supported by "ng update". The versions are determined

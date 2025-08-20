@@ -7,4 +7,4 @@
  */
 import { Rule } from '@angular-devkit/schematics';
 /** Entry point for the migration schematics with target of Angular CDK 20.0.0 */
-export declare function updateToV20(): Rule;
+export declare function updateToV21(): Rule;

@@ -7,14 +7,14 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateToV20 = updateToV20;
+exports.updateToV21 = updateToV21;
 const target_version_1 = require("../update-tool/target-version");
 const upgrade_data_1 = require("./upgrade-data");
 const devkit_migration_rule_1 = require("./devkit-migration-rule");
 const cdkMigrations = [];
 /** Entry point for the migration schematics with target of Angular CDK 20.0.0 */
-function updateToV20() {
-    return (0, devkit_migration_rule_1.createMigrationSchematicRule)(target_version_1.TargetVersion.V20, cdkMigrations, upgrade_data_1.cdkUpgradeData, onMigrationComplete);
+function updateToV21() {
+    return (0, devkit_migration_rule_1.createMigrationSchematicRule)(target_version_1.TargetVersion.V21, cdkMigrations, upgrade_data_1.cdkUpgradeData, onMigrationComplete);
 }
 /** Function that will be called when the migration completed. */
 function onMigrationComplete(context, targetVersion, hasFailures) {
