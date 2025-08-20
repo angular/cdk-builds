@@ -515,6 +515,8 @@ declare class CdkMenuItem implements FocusableOption, FocusableElement, Toggler,
      * is not in a menu bar.
      */
     _setTabIndex(event?: MouseEvent): void;
+    /** Handles click events on the item. */
+    protected _handleClick(event: MouseEvent): void;
     /**
      * Handles keyboard events for the menu item, specifically either triggering the user defined
      * callback or opening/closing the current menu based on whether the left or right arrow key was
