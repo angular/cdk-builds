@@ -992,6 +992,16 @@ class CdkMenuItem {
             this._tabindex = 0;
         }
     }
+    /** Handles click events on the item. */
+    _handleClick(event) {
+        if (this.disabled) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        else {
+            this.trigger();
+        }
+    }
     /**
      * Handles keyboard events for the menu item, specifically either triggering the user defined
      * callback or opening/closing the current menu based on whether the left or right arrow key was
@@ -1110,7 +1120,7 @@ class CdkMenuItem {
         }
     }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.2.0-rc.1", ngImport: i0, type: CdkMenuItem, deps: [], target: i0.ɵɵFactoryTarget.Directive });
-    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "20.2.0-rc.1", type: CdkMenuItem, isStandalone: true, selector: "[cdkMenuItem]", inputs: { disabled: ["cdkMenuItemDisabled", "disabled", booleanAttribute], typeaheadLabel: ["cdkMenuitemTypeaheadLabel", "typeaheadLabel"] }, outputs: { triggered: "cdkMenuItemTriggered" }, host: { attributes: { "role": "menuitem" }, listeners: { "blur": "_resetTabIndex()", "focus": "_setTabIndex()", "click": "trigger()", "keydown": "_onKeydown($event)" }, properties: { "tabindex": "_tabindex", "attr.aria-disabled": "disabled || null" }, classAttribute: "cdk-menu-item" }, exportAs: ["cdkMenuItem"], ngImport: i0 });
+    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "20.2.0-rc.1", type: CdkMenuItem, isStandalone: true, selector: "[cdkMenuItem]", inputs: { disabled: ["cdkMenuItemDisabled", "disabled", booleanAttribute], typeaheadLabel: ["cdkMenuitemTypeaheadLabel", "typeaheadLabel"] }, outputs: { triggered: "cdkMenuItemTriggered" }, host: { attributes: { "role": "menuitem" }, listeners: { "blur": "_resetTabIndex()", "focus": "_setTabIndex()", "click": "_handleClick($event)", "keydown": "_onKeydown($event)" }, properties: { "class.cdk-menu-item-disabled": "disabled", "tabindex": "_tabindex", "attr.aria-disabled": "disabled || null" }, classAttribute: "cdk-menu-item" }, exportAs: ["cdkMenuItem"], ngImport: i0 });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.2.0-rc.1", ngImport: i0, type: CdkMenuItem, decorators: [{
             type: Directive,
@@ -1120,11 +1130,12 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.2.0-rc.1", ng
                     host: {
                         'role': 'menuitem',
                         'class': 'cdk-menu-item',
+                        '[class.cdk-menu-item-disabled]': 'disabled',
                         '[tabindex]': '_tabindex',
                         '[attr.aria-disabled]': 'disabled || null',
                         '(blur)': '_resetTabIndex()',
                         '(focus)': '_setTabIndex()',
-                        '(click)': 'trigger()',
+                        '(click)': '_handleClick($event)',
                         '(keydown)': '_onKeydown($event)',
                     },
                 }]
@@ -1320,7 +1331,11 @@ class CdkMenuBase extends CdkMenuGroup {
     }
     /** Setup the FocusKeyManager with the correct orientation for the menu. */
     _setKeyManager() {
-        this.keyManager = new FocusKeyManager(this.items).withWrap().withTypeAhead().withHomeAndEnd();
+        this.keyManager = new FocusKeyManager(this.items)
+            .withWrap()
+            .withTypeAhead()
+            .withHomeAndEnd()
+            .skipPredicate(() => false);
         if (this.orientation === 'horizontal') {
             this.keyManager.withHorizontalOrientation(this.dir?.value || 'ltr');
         }
