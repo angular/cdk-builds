@@ -416,6 +416,10 @@ class CdkTree {
     }
     ngOnDestroy() {
         this._nodeOutlet.viewContainer.clear();
+        this._nodes.complete();
+        this._keyManagerNodes.complete();
+        this._nodeType.complete();
+        this._flattenedNodes.complete();
         this.viewChange.complete();
         this._onDestroy.next();
         this._onDestroy.complete();
@@ -1379,6 +1383,7 @@ class CdkTreeNode {
         this._tree
             ._getExpansionModel()
             .changed.pipe(map(() => this.isExpanded), distinctUntilChanged(), takeUntil(this._destroyed))
+            .pipe(takeUntil(this._destroyed))
             .subscribe(() => this._changeDetectorRef.markForCheck());
         this._tree._setNodeTypeIfUnset(this._type);
         this._tree._registerNode(this);
