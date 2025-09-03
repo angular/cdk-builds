@@ -18,16 +18,8 @@ import { InjectionToken, inject, DOCUMENT, signal, EventEmitter, Injectable } fr
  */
 const DIR_DOCUMENT = new InjectionToken('cdk-dir-doc', {
     providedIn: 'root',
-    factory: DIR_DOCUMENT_FACTORY,
+    factory: () => inject(DOCUMENT),
 });
-/**
- * @docs-private
- * @deprecated No longer used, will be removed.
- * @breaking-change 21.0.0
- */
-function DIR_DOCUMENT_FACTORY() {
-    return inject(DOCUMENT);
-}
 
 /** Regex that matches locales with an RTL script. Taken from `goog.i18n.bidi.isRtlLanguage`. */
 const RTL_LOCALE_PATTERN = /^(ar|ckb|dv|he|iw|fa|nqo|ps|sd|ug|ur|yi|.*[-_](Adlm|Arab|Hebr|Nkoo|Rohg|Thaa))(?!.*[-_](Latn|Cyrl)($|-|_))($|-|_)/i;

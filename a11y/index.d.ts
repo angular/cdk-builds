@@ -4,9 +4,9 @@ export { ActiveDescendantKeyManager, Highlightable } from '../activedescendant-k
 export { FocusKeyManager, FocusableOption } from '../focus-key-manager.d.js';
 export { ListKeyManager, ListKeyManagerModifierKey, ListKeyManagerOption } from '../list-key-manager.d.js';
 import { Subject, Observable } from 'rxjs';
-import { TreeKeyManagerItem, TreeKeyManagerStrategy, TreeKeyManagerFactory, TreeKeyManagerOptions } from '../tree-key-manager-strategy.d.js';
+import { TreeKeyManagerItem, TreeKeyManagerStrategy, TreeKeyManagerOptions, TreeKeyManagerFactory } from '../tree-key-manager-strategy.d.js';
 import { FocusTrap, InteractivityChecker } from '../a11y-module.d.js';
-export { A11yModule, AriaLivePoliteness, CdkAriaLive, CdkTrapFocus, FocusTrapFactory, IsFocusableConfig, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, LiveAnnouncer, LiveAnnouncerDefaultOptions } from '../a11y-module.d.js';
+export { A11yModule, AriaLivePoliteness, CdkAriaLive, CdkTrapFocus, FocusTrapFactory, IsFocusableConfig, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LiveAnnouncer, LiveAnnouncerDefaultOptions } from '../a11y-module.d.js';
 export { CdkMonitorFocus, FOCUS_MONITOR_DEFAULT_OPTIONS, FocusMonitor, FocusMonitorDetectionMode, FocusMonitorOptions, FocusOptions, FocusOrigin } from '../focus-monitor.d.js';
 import '../observers/index.js';
 import '../number-property.d.js';
@@ -156,22 +156,6 @@ declare class NoopTreeKeyManager<T extends TreeKeyManagerItem> implements TreeKe
  *
  * @breaking-change 21.0.0
  */
-declare function NOOP_TREE_KEY_MANAGER_FACTORY<T extends TreeKeyManagerItem>(): TreeKeyManagerFactory<T>;
-/**
- * @docs-private
- *
- * Opt-out of Tree of key manager behavior.
- *
- * When provided, Tree has same focus management behavior as before TreeKeyManager was introduced.
- *  - Tree does not respond to keyboard interaction
- *  - Tree node allows tabindex to be set by Input binding
- *  - Tree node allows tabindex to be set by attribute binding
- *
- * @deprecated NoopTreeKeyManager deprecated. Use TreeKeyManager or inject a
- * TreeKeyManagerStrategy instead. To be removed in a future version.
- *
- * @breaking-change 21.0.0
- */
 declare const NOOP_TREE_KEY_MANAGER_FACTORY_PROVIDER: Provider;
 
 /**
@@ -270,23 +254,8 @@ declare class TreeKeyManager<T extends TreeKeyManagerItem> implements TreeKeyMan
     private _expandAllItemsAtCurrentItemLevel;
     private _activateCurrentItem;
 }
-/**
- * @docs-private
- * @deprecated No longer used, will be removed.
- * @breaking-change 21.0.0
- */
-declare function TREE_KEY_MANAGER_FACTORY<T extends TreeKeyManagerItem>(): TreeKeyManagerFactory<T>;
 /** Injection token that determines the key manager to use. */
 declare const TREE_KEY_MANAGER: InjectionToken<TreeKeyManagerFactory<any>>;
-/**
- * @docs-private
- * @deprecated No longer used, will be removed.
- * @breaking-change 21.0.0
- */
-declare const TREE_KEY_MANAGER_FACTORY_PROVIDER: {
-    provide: InjectionToken<TreeKeyManagerFactory<any>>;
-    useFactory: typeof TREE_KEY_MANAGER_FACTORY;
-};
 
 /**
  * Options for creating a ConfigurableFocusTrap.
@@ -546,5 +515,5 @@ declare class _IdGenerator {
     static ɵprov: i0.ɵɵInjectableDeclaration<_IdGenerator>;
 }
 
-export { AriaDescriber, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, CDK_DESCRIBEDBY_ID_PREFIX, ConfigurableFocusTrap, ConfigurableFocusTrapFactory, EventListenerFocusTrapInertStrategy, FOCUS_TRAP_INERT_STRATEGY, FocusTrap, HighContrastMode, HighContrastModeDetector, INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS, INPUT_MODALITY_DETECTOR_OPTIONS, InputModalityDetector, InteractivityChecker, MESSAGES_CONTAINER_ID, NOOP_TREE_KEY_MANAGER_FACTORY, NOOP_TREE_KEY_MANAGER_FACTORY_PROVIDER, NoopTreeKeyManager, TREE_KEY_MANAGER, TREE_KEY_MANAGER_FACTORY, TREE_KEY_MANAGER_FACTORY_PROVIDER, TreeKeyManager, TreeKeyManagerFactory, TreeKeyManagerItem, TreeKeyManagerOptions, TreeKeyManagerStrategy, _IdGenerator, addAriaReferencedId, getAriaReferenceIds, isFakeMousedownFromScreenReader, isFakeTouchstartFromScreenReader, removeAriaReferencedId };
+export { AriaDescriber, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, CDK_DESCRIBEDBY_ID_PREFIX, ConfigurableFocusTrap, ConfigurableFocusTrapFactory, EventListenerFocusTrapInertStrategy, FOCUS_TRAP_INERT_STRATEGY, FocusTrap, HighContrastMode, HighContrastModeDetector, INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS, INPUT_MODALITY_DETECTOR_OPTIONS, InputModalityDetector, InteractivityChecker, MESSAGES_CONTAINER_ID, NOOP_TREE_KEY_MANAGER_FACTORY_PROVIDER, NoopTreeKeyManager, TREE_KEY_MANAGER, TreeKeyManager, TreeKeyManagerFactory, TreeKeyManagerItem, TreeKeyManagerOptions, TreeKeyManagerStrategy, _IdGenerator, addAriaReferencedId, getAriaReferenceIds, isFakeMousedownFromScreenReader, isFakeTouchstartFromScreenReader, removeAriaReferencedId };
 export type { ConfigurableFocusTrapConfig, FocusTrapInertStrategy, InputModality, InputModalityDetectorOptions, RegisteredMessage };

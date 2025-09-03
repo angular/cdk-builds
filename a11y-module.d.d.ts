@@ -206,12 +206,6 @@ declare class CdkTrapFocus implements OnDestroy, AfterContentInit, OnChanges, Do
 /** Possible politeness levels. */
 type AriaLivePoliteness = 'off' | 'polite' | 'assertive';
 declare const LIVE_ANNOUNCER_ELEMENT_TOKEN: InjectionToken<HTMLElement | null>;
-/**
- * @docs-private
- * @deprecated No longer used, will be removed.
- * @breaking-change 21.0.0
- */
-declare function LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY(): null;
 /** Object that can be used to configure the default options for the LiveAnnouncer. */
 interface LiveAnnouncerDefaultOptions {
     /** Default politeness for the announcements. */
@@ -310,5 +304,5 @@ declare class A11yModule {
     static ɵinj: i0.ɵɵInjectorDeclaration<A11yModule>;
 }
 
-export { A11yModule, CdkAriaLive, CdkTrapFocus, FocusTrap, FocusTrapFactory, InteractivityChecker, IsFocusableConfig, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, LiveAnnouncer };
+export { A11yModule, CdkAriaLive, CdkTrapFocus, FocusTrap, FocusTrapFactory, InteractivityChecker, IsFocusableConfig, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LiveAnnouncer };
 export type { AriaLivePoliteness, LiveAnnouncerDefaultOptions };

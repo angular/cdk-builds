@@ -1,6 +1,6 @@
 export { CdkMonitorFocus, FOCUS_MONITOR_DEFAULT_OPTIONS, FocusMonitor, FocusMonitorDetectionMode, INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS, INPUT_MODALITY_DETECTOR_OPTIONS, InputModalityDetector } from './focus-monitor.mjs';
 import { FocusTrap, InteractivityChecker } from './a11y-module.mjs';
-export { A11yModule, CdkAriaLive, CdkTrapFocus, FocusTrapFactory, HighContrastMode, HighContrastModeDetector, IsFocusableConfig, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, LiveAnnouncer } from './a11y-module.mjs';
+export { A11yModule, CdkAriaLive, CdkTrapFocus, FocusTrapFactory, HighContrastMode, HighContrastModeDetector, IsFocusableConfig, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LiveAnnouncer } from './a11y-module.mjs';
 export { _IdGenerator } from './id-generator.mjs';
 import * as i0 from '@angular/core';
 import { inject, DOCUMENT, APP_ID, Injectable, InjectionToken, NgZone, Injector } from '@angular/core';
@@ -12,7 +12,7 @@ export { FocusKeyManager } from './focus-key-manager.mjs';
 export { ListKeyManager } from './list-key-manager.mjs';
 import { Subject } from 'rxjs';
 import { TREE_KEY_MANAGER } from './tree-key-manager.mjs';
-export { TREE_KEY_MANAGER_FACTORY, TREE_KEY_MANAGER_FACTORY_PROVIDER, TreeKeyManager } from './tree-key-manager.mjs';
+export { TreeKeyManager } from './tree-key-manager.mjs';
 export { isFakeMousedownFromScreenReader, isFakeTouchstartFromScreenReader } from './fake-event-detection.mjs';
 import 'rxjs/operators';
 import './keycodes2.mjs';
@@ -338,27 +338,9 @@ class NoopTreeKeyManager {
  *
  * @breaking-change 21.0.0
  */
-function NOOP_TREE_KEY_MANAGER_FACTORY() {
-    return () => new NoopTreeKeyManager();
-}
-/**
- * @docs-private
- *
- * Opt-out of Tree of key manager behavior.
- *
- * When provided, Tree has same focus management behavior as before TreeKeyManager was introduced.
- *  - Tree does not respond to keyboard interaction
- *  - Tree node allows tabindex to be set by Input binding
- *  - Tree node allows tabindex to be set by attribute binding
- *
- * @deprecated NoopTreeKeyManager deprecated. Use TreeKeyManager or inject a
- * TreeKeyManagerStrategy instead. To be removed in a future version.
- *
- * @breaking-change 21.0.0
- */
 const NOOP_TREE_KEY_MANAGER_FACTORY_PROVIDER = {
     provide: TREE_KEY_MANAGER,
-    useFactory: NOOP_TREE_KEY_MANAGER_FACTORY,
+    useFactory: () => () => new NoopTreeKeyManager(),
 };
 
 /**
@@ -534,5 +516,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.2.0-next.2", 
             args: [{ providedIn: 'root' }]
         }], ctorParameters: () => [] });
 
-export { AriaDescriber, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, CDK_DESCRIBEDBY_ID_PREFIX, ConfigurableFocusTrap, ConfigurableFocusTrapFactory, EventListenerFocusTrapInertStrategy, FOCUS_TRAP_INERT_STRATEGY, FocusTrap, InteractivityChecker, MESSAGES_CONTAINER_ID, NOOP_TREE_KEY_MANAGER_FACTORY, NOOP_TREE_KEY_MANAGER_FACTORY_PROVIDER, NoopTreeKeyManager, TREE_KEY_MANAGER, addAriaReferencedId, getAriaReferenceIds, removeAriaReferencedId };
+export { AriaDescriber, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, CDK_DESCRIBEDBY_ID_PREFIX, ConfigurableFocusTrap, ConfigurableFocusTrapFactory, EventListenerFocusTrapInertStrategy, FOCUS_TRAP_INERT_STRATEGY, FocusTrap, InteractivityChecker, MESSAGES_CONTAINER_ID, NOOP_TREE_KEY_MANAGER_FACTORY_PROVIDER, NoopTreeKeyManager, TREE_KEY_MANAGER, addAriaReferencedId, getAriaReferenceIds, removeAriaReferencedId };
 //# sourceMappingURL=a11y.mjs.map

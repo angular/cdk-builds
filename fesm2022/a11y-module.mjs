@@ -620,16 +620,8 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.2.0-next.2", 
 
 const LIVE_ANNOUNCER_ELEMENT_TOKEN = new InjectionToken('liveAnnouncerElement', {
     providedIn: 'root',
-    factory: LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY,
+    factory: () => null,
 });
-/**
- * @docs-private
- * @deprecated No longer used, will be removed.
- * @breaking-change 21.0.0
- */
-function LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY() {
-    return null;
-}
 /** Injection token that can be used to configure the default options for the LiveAnnouncer. */
 const LIVE_ANNOUNCER_DEFAULT_OPTIONS = new InjectionToken('LIVE_ANNOUNCER_DEFAULT_OPTIONS');
 
@@ -947,5 +939,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.2.0-next.2", 
                 }]
         }], ctorParameters: () => [] });
 
-export { A11yModule, CdkAriaLive, CdkTrapFocus, FocusTrap, FocusTrapFactory, HighContrastMode, HighContrastModeDetector, InteractivityChecker, IsFocusableConfig, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, LiveAnnouncer };
+export { A11yModule, CdkAriaLive, CdkTrapFocus, FocusTrap, FocusTrapFactory, HighContrastMode, HighContrastModeDetector, InteractivityChecker, IsFocusableConfig, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LiveAnnouncer };
 //# sourceMappingURL=a11y-module.mjs.map
