@@ -615,7 +615,7 @@ class DragRef {
      */
     _cachedShadowRoot;
     /** Axis along which dragging is locked. */
-    lockAxis;
+    lockAxis = null;
     /**
      * Amount of milliseconds to wait after the user has put their
      * pointer down before starting to drag the element.
@@ -2411,7 +2411,7 @@ class DropListRef {
     /** Whether sorting items within the list is disabled. */
     sortingDisabled = false;
     /** Locks the position of the draggable elements inside the container along the specified axis. */
-    lockAxis;
+    lockAxis = null;
     /**
      * Whether auto-scrolling the view when the user
      * moves their pointer close to the edges is disabled.
@@ -3473,7 +3473,7 @@ class CdkDrag {
     /** Arbitrary data to attach to this drag instance. */
     data;
     /** Locks the position of the dragged element along the specified axis. */
-    lockAxis;
+    lockAxis = null;
     /**
      * Selector that will be used to determine the root draggable element, starting from
      * the `cdkDrag` element and going up the DOM. Passing an alternate root element is useful
@@ -3843,9 +3843,7 @@ class CdkDrag {
         const { lockAxis, dragStartDelay, constrainPosition, previewClass, boundaryElement, draggingDisabled, rootElementSelector, previewContainer, } = config;
         this.disabled = draggingDisabled == null ? false : draggingDisabled;
         this.dragStartDelay = dragStartDelay || 0;
-        if (lockAxis) {
-            this.lockAxis = lockAxis;
-        }
+        this.lockAxis = lockAxis || null;
         if (constrainPosition) {
             this.constrainPosition = constrainPosition;
         }
@@ -4031,7 +4029,7 @@ class CdkDropList {
      */
     id = inject(_IdGenerator).getId('cdk-drop-list-');
     /** Locks the position of the draggable elements inside the container along the specified axis. */
-    lockAxis;
+    lockAxis = null;
     /** Whether starting a dragging sequence from this container is disabled. */
     get disabled() {
         return this._disabled || (!!this._group && this._group.disabled);
@@ -4286,9 +4284,7 @@ class CdkDropList {
         this.sortingDisabled = sortingDisabled == null ? false : sortingDisabled;
         this.autoScrollDisabled = listAutoScrollDisabled == null ? false : listAutoScrollDisabled;
         this.orientation = listOrientation || 'vertical';
-        if (lockAxis) {
-            this.lockAxis = lockAxis;
-        }
+        this.lockAxis = lockAxis || null;
     }
     /** Syncs up the registered drag items with underlying drop list ref. */
     _syncItemsWithRef(items) {
