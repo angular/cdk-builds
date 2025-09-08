@@ -27,7 +27,7 @@ declare const CDK_DRAG_CONFIG: InjectionToken<DragDropConfig>;
  * items and drop lists within a module or a component.
  */
 interface DragDropConfig extends Partial<DragRefConfig> {
-    lockAxis?: DragAxis;
+    lockAxis?: DragAxis | null;
     dragStartDelay?: DragStartDelay;
     constrainPosition?: DragConstrainPosition;
     previewClass?: string | string[];
@@ -55,7 +55,7 @@ declare class DropListRef<T = any> {
     /** Whether sorting items within the list is disabled. */
     sortingDisabled: boolean;
     /** Locks the position of the draggable elements inside the container along the specified axis. */
-    lockAxis: 'x' | 'y';
+    lockAxis: 'x' | 'y' | null;
     /**
      * Whether auto-scrolling the view when the user
      * moves their pointer close to the edges is disabled.
@@ -351,7 +351,7 @@ declare class CdkDropList<T = any> implements OnDestroy {
      */
     id: string;
     /** Locks the position of the draggable elements inside the container along the specified axis. */
-    lockAxis: DragAxis;
+    lockAxis: DragAxis | null;
     /** Whether starting a dragging sequence from this container is disabled. */
     get disabled(): boolean;
     set disabled(value: boolean);
@@ -653,7 +653,7 @@ declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDestroy {
     /** Arbitrary data to attach to this drag instance. */
     data: T;
     /** Locks the position of the dragged element along the specified axis. */
-    lockAxis: DragAxis;
+    lockAxis: DragAxis | null;
     /**
      * Selector that will be used to determine the root draggable element, starting from
      * the `cdkDrag` element and going up the DOM. Passing an alternate root element is useful
@@ -1050,7 +1050,7 @@ declare class DragRef<T = any> {
      */
     private _cachedShadowRoot;
     /** Axis along which dragging is locked. */
-    lockAxis: 'x' | 'y';
+    lockAxis: 'x' | 'y' | null;
     /**
      * Amount of milliseconds to wait after the user has put their
      * pointer down before starting to drag the element.
