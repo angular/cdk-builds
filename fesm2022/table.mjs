@@ -550,7 +550,9 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.2.0-next.2", 
 /** Row that can be used to display a message when no data is shown in the table. */
 class CdkNoDataRow {
     templateRef = inject(TemplateRef);
-    _contentClassName = 'cdk-no-data-row';
+    _contentClassNames = ['cdk-no-data-row', 'cdk-row'];
+    _cellClassNames = ['cdk-cell', 'cdk-no-data-cell'];
+    _cellSelector = 'td, cdk-cell, [cdk-cell], .cdk-cell';
     constructor() { }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.2.0-next.2", ngImport: i0, type: CdkNoDataRow, deps: [], target: i0.ɵɵFactoryTarget.Directive });
     static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "20.2.0-next.2", type: CdkNoDataRow, isStandalone: true, selector: "ng-template[cdkNoDataRow]", ngImport: i0 });
@@ -2119,7 +2121,11 @@ class CdkTable {
             // to figure out which one to add it to when there are multiple.
             if (view.rootNodes.length === 1 && rootNode?.nodeType === this._document.ELEMENT_NODE) {
                 rootNode.setAttribute('role', 'row');
-                rootNode.classList.add(noDataRow._contentClassName);
+                rootNode.classList.add(...noDataRow._contentClassNames);
+                const cells = rootNode.querySelectorAll(noDataRow._cellSelector);
+                for (let i = 0; i < cells.length; i++) {
+                    cells[i].classList.add(...noDataRow._cellClassNames);
+                }
             }
         }
         else {
