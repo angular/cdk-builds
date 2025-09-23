@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { Directive, InjectionToken, Optional, SkipSelf, Inject, inject, Injectable, Injector, ViewContainerRef, EventEmitter, NgZone, RendererFactory2, ElementRef, ChangeDetectorRef, Renderer2, booleanAttribute, Input, Output, QueryList, signal, computed, ContentChildren, NgModule } from '@angular/core';
+import { Directive, InjectionToken, inject, Injectable, Injector, ViewContainerRef, EventEmitter, NgZone, RendererFactory2, ElementRef, ChangeDetectorRef, Renderer2, booleanAttribute, Input, Output, QueryList, signal, computed, ContentChildren, NgModule } from '@angular/core';
 import { startWith, debounceTime, distinctUntilChanged, takeUntil, mergeMap, mapTo, mergeAll, switchMap, skipWhile, skip } from 'rxjs/operators';
 import { UniqueSelectionDispatcher } from './unique-selection-dispatcher.mjs';
 import { Subject, merge, partition } from 'rxjs';
@@ -64,14 +64,12 @@ const MENU_STACK = new InjectionToken('cdk-menu-stack');
 /** Provider that provides the parent menu stack, or a new menu stack if there is no parent one. */
 const PARENT_OR_NEW_MENU_STACK_PROVIDER = {
     provide: MENU_STACK,
-    deps: [[new Optional(), new SkipSelf(), new Inject(MENU_STACK)]],
-    useFactory: (parentMenuStack) => parentMenuStack || new MenuStack(),
+    useFactory: () => inject(MENU_STACK, { optional: true, skipSelf: true }) || new MenuStack(),
 };
 /** Provider that provides the parent menu stack, or a new inline menu stack if there is no parent one. */
 const PARENT_OR_NEW_INLINE_MENU_STACK_PROVIDER = (orientation) => ({
     provide: MENU_STACK,
-    deps: [[new Optional(), new SkipSelf(), new Inject(MENU_STACK)]],
-    useFactory: (parentMenuStack) => parentMenuStack || MenuStack.inline(orientation),
+    useFactory: () => inject(MENU_STACK, { optional: true, skipSelf: true }) || MenuStack.inline(orientation),
 });
 /**
  * MenuStack allows subscribers to listen for close events (when a MenuStackItem is popped off
