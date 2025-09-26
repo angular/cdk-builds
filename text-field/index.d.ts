@@ -98,8 +98,6 @@ declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDestroy {
     private _cachedLineHeight?;
     /** Cached height of a textarea with only the placeholder. */
     private _cachedPlaceholderHeight?;
-    /** Cached scroll top of a textarea */
-    private _cachedScrollTop;
     /** Used to reference correct document/window */
     protected _document: Document;
     private _hasFocus;
