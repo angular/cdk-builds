@@ -21,7 +21,7 @@
   "exports": {
     ".": {
       "sass": "./_index.scss",
-      "types": "./index.d.ts",
+      "types": "./types/cdk.d.ts",
       "default": "./fesm2022/cdk.mjs"
     },
     "./a11y-prebuilt.css": {
@@ -49,111 +49,111 @@
       "default": "./package.json"
     },
     "./a11y": {
-      "types": "./a11y/index.d.ts",
+      "types": "./types/a11y.d.ts",
       "default": "./fesm2022/a11y.mjs"
     },
     "./accordion": {
-      "types": "./accordion/index.d.ts",
+      "types": "./types/accordion.d.ts",
       "default": "./fesm2022/accordion.mjs"
     },
     "./bidi": {
-      "types": "./bidi/index.d.ts",
+      "types": "./types/bidi.d.ts",
       "default": "./fesm2022/bidi.mjs"
     },
     "./clipboard": {
-      "types": "./clipboard/index.d.ts",
+      "types": "./types/clipboard.d.ts",
       "default": "./fesm2022/clipboard.mjs"
     },
     "./coercion": {
-      "types": "./coercion/index.d.ts",
+      "types": "./types/coercion.d.ts",
       "default": "./fesm2022/coercion.mjs"
     },
     "./coercion/private": {
-      "types": "./coercion/private/index.d.ts",
+      "types": "./types/coercion/private.d.ts",
       "default": "./fesm2022/coercion/private.mjs"
     },
     "./collections": {
-      "types": "./collections/index.d.ts",
+      "types": "./types/collections.d.ts",
       "default": "./fesm2022/collections.mjs"
     },
     "./dialog": {
-      "types": "./dialog/index.d.ts",
+      "types": "./types/dialog.d.ts",
       "default": "./fesm2022/dialog.mjs"
     },
     "./drag-drop": {
-      "types": "./drag-drop/index.d.ts",
+      "types": "./types/drag-drop.d.ts",
       "default": "./fesm2022/drag-drop.mjs"
     },
     "./keycodes": {
-      "types": "./keycodes/index.d.ts",
+      "types": "./types/keycodes.d.ts",
       "default": "./fesm2022/keycodes.mjs"
     },
     "./layout": {
-      "types": "./layout/index.d.ts",
+      "types": "./types/layout.d.ts",
       "default": "./fesm2022/layout.mjs"
     },
     "./listbox": {
-      "types": "./listbox/index.d.ts",
+      "types": "./types/listbox.d.ts",
       "default": "./fesm2022/listbox.mjs"
     },
     "./menu": {
-      "types": "./menu/index.d.ts",
+      "types": "./types/menu.d.ts",
       "default": "./fesm2022/menu.mjs"
     },
     "./observers": {
-      "types": "./observers/index.d.ts",
+      "types": "./types/observers.d.ts",
       "default": "./fesm2022/observers.mjs"
     },
     "./observers/private": {
-      "types": "./observers/private/index.d.ts",
+      "types": "./types/observers/private.d.ts",
       "default": "./fesm2022/observers/private.mjs"
     },
     "./overlay": {
-      "types": "./overlay/index.d.ts",
+      "types": "./types/overlay.d.ts",
       "default": "./fesm2022/overlay.mjs"
     },
     "./platform": {
-      "types": "./platform/index.d.ts",
+      "types": "./types/platform.d.ts",
       "default": "./fesm2022/platform.mjs"
     },
     "./portal": {
-      "types": "./portal/index.d.ts",
+      "types": "./types/portal.d.ts",
       "default": "./fesm2022/portal.mjs"
     },
     "./private": {
-      "types": "./private/index.d.ts",
+      "types": "./types/private.d.ts",
       "default": "./fesm2022/private.mjs"
     },
     "./scrolling": {
-      "types": "./scrolling/index.d.ts",
+      "types": "./types/scrolling.d.ts",
       "default": "./fesm2022/scrolling.mjs"
     },
     "./stepper": {
-      "types": "./stepper/index.d.ts",
+      "types": "./types/stepper.d.ts",
       "default": "./fesm2022/stepper.mjs"
     },
     "./table": {
-      "types": "./table/index.d.ts",
+      "types": "./types/table.d.ts",
       "default": "./fesm2022/table.mjs"
     },
     "./testing": {
-      "types": "./testing/index.d.ts",
+      "types": "./types/testing.d.ts",
       "default": "./fesm2022/testing.mjs"
     },
     "./testing/selenium-webdriver": {
-      "types": "./testing/selenium-webdriver/index.d.ts",
+      "types": "./types/testing/selenium-webdriver.d.ts",
       "default": "./fesm2022/testing/selenium-webdriver.mjs"
     },
     "./testing/testbed": {
-      "types": "./testing/testbed/index.d.ts",
+      "types": "./types/testing/testbed.d.ts",
       "default": "./fesm2022/testing/testbed.mjs"
     },
     "./text-field": {
-      "types": "./text-field/index.d.ts",
+      "types": "./types/text-field.d.ts",
       "default": "./fesm2022/text-field.mjs"
     },
     "./tree": {
-      "types": "./tree/index.d.ts",
+      "types": "./types/tree.d.ts",
       "default": "./fesm2022/tree.mjs"
     }
   },
@@ -181,6 +181,6 @@
   },
   "sideEffects": false,
   "module": "./fesm2022/cdk.mjs",
-  "typings": "./index.d.ts",
+  "typings": "./types/cdk.d.ts",
   "type": "module"
 }
