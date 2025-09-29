@@ -1,5 +1,5 @@
 import * as webdriver from 'selenium-webdriver';
-import { TestKey, getNoKeysSpecifiedError, _getTextWithExcludedElements, HarnessEnvironment } from '../testing.mjs';
+import { TestKey, getNoKeysSpecifiedError, _getTextWithExcludedElements, HarnessEnvironment } from './testing.mjs';
 import 'rxjs';
 
 /**
@@ -350,4 +350,4 @@ class SeleniumWebDriverHarnessEnvironment extends HarnessEnvironment {
 }
 
 export { SeleniumWebDriverElement, SeleniumWebDriverHarnessEnvironment, waitForAngularReady };
-//# sourceMappingURL=selenium-webdriver.mjs.map
+//# sourceMappingURL=testing-selenium-webdriver.mjs.map

@@ -69,8 +69,8 @@
       "default": "./fesm2022/coercion.mjs"
     },
     "./coercion/private": {
-      "types": "./types/coercion/private.d.ts",
-      "default": "./fesm2022/coercion/private.mjs"
+      "types": "./types/coercion-private.d.ts",
+      "default": "./fesm2022/coercion-private.mjs"
     },
     "./collections": {
       "types": "./types/collections.d.ts",
@@ -105,8 +105,8 @@
       "default": "./fesm2022/observers.mjs"
     },
     "./observers/private": {
-      "types": "./types/observers/private.d.ts",
-      "default": "./fesm2022/observers/private.mjs"
+      "types": "./types/observers-private.d.ts",
+      "default": "./fesm2022/observers-private.mjs"
     },
     "./overlay": {
       "types": "./types/overlay.d.ts",
@@ -141,12 +141,12 @@
       "default": "./fesm2022/testing.mjs"
     },
     "./testing/selenium-webdriver": {
-      "types": "./types/testing/selenium-webdriver.d.ts",
-      "default": "./fesm2022/testing/selenium-webdriver.mjs"
+      "types": "./types/testing-selenium-webdriver.d.ts",
+      "default": "./fesm2022/testing-selenium-webdriver.mjs"
     },
     "./testing/testbed": {
-      "types": "./types/testing/testbed.d.ts",
-      "default": "./fesm2022/testing/testbed.mjs"
+      "types": "./types/testing-testbed.d.ts",
+      "default": "./fesm2022/testing-testbed.mjs"
     },
     "./text-field": {
       "types": "./types/text-field.d.ts",

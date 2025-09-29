@@ -11,8 +11,8 @@ export { ActiveDescendantKeyManager } from './activedescendant-key-manager-qMNVr
 export { FocusKeyManager } from './focus-key-manager-BwCcWier.mjs';
 export { ListKeyManager } from './list-key-manager-BdotFmaL.mjs';
 import { Subject } from 'rxjs';
-import { TREE_KEY_MANAGER } from './tree-key-manager-B1cunolq.mjs';
-export { TreeKeyManager } from './tree-key-manager-B1cunolq.mjs';
+import { TREE_KEY_MANAGER } from './tree-key-manager-DwSJxvI4.mjs';
+export { TreeKeyManager } from './tree-key-manager-DwSJxvI4.mjs';
 export { isFakeMousedownFromScreenReader, isFakeTouchstartFromScreenReader } from './fake-event-detection-D0_6qVp2.mjs';
 import 'rxjs/operators';
 import './keycodes-DPWmI2Ix.mjs';
@@ -25,7 +25,7 @@ import './observers.mjs';
 import '@angular/common';
 import './typeahead-BAa3HZoh.mjs';
 import './keycodes.mjs';
-import './coercion/private.mjs';
+import './coercion-private.mjs';
 
 /** IDs are delimited by an empty space, as per the spec. */
 const ID_DELIMITER = ' ';

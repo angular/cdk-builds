@@ -12,4 +12,4 @@ function coerceObservable(data) {
 }
 
 export { coerceObservable };
-//# sourceMappingURL=private.mjs.map
+//# sourceMappingURL=coercion-private.mjs.map

@@ -2,7 +2,7 @@ import { QueryList, InjectionToken } from '@angular/core';
 import { Subscription, isObservable, Subject, of } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Typeahead } from './typeahead-BAa3HZoh.mjs';
-import { coerceObservable } from './coercion/private.mjs';
+import { coerceObservable } from './coercion-private.mjs';
 
 /**
  * This class manages keyboard events for trees. If you pass it a QueryList or other list of tree
@@ -340,4 +340,4 @@ const TREE_KEY_MANAGER = new InjectionToken('tree-key-manager', {
 });
 
 export { TREE_KEY_MANAGER, TreeKeyManager };
-//# sourceMappingURL=tree-key-manager-B1cunolq.mjs.map
+//# sourceMappingURL=tree-key-manager-DwSJxvI4.mjs.map

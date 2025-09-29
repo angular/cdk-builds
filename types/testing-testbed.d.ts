@@ -1,4 +1,4 @@
-import { HarnessEnvironment, HarnessLoader, TestElement, ComponentHarness, ComponentHarnessConstructor, ModifierKeys, TestKey, TextOptions, ElementDimensions, EventData } from '../harness-environment.d-DKJkA1vf.js';
+import { HarnessEnvironment, HarnessLoader, TestElement, ComponentHarness, ComponentHarnessConstructor, ModifierKeys, TestKey, TextOptions, ElementDimensions, EventData } from './harness-environment.d-DKJkA1vf.js';
 import { ComponentFixture } from '@angular/core/testing';
 
 /** Options to configure the environment. */
