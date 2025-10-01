@@ -1,9 +1,9 @@
 import * as i0 from '@angular/core';
 import { Component, ChangeDetectionStrategy, ViewEncapsulation, inject, NgZone, RendererFactory2, Injectable, ElementRef, EventEmitter, Directive, Output, Renderer2, DOCUMENT, booleanAttribute, Input, NgModule } from '@angular/core';
 import { EMPTY, Subject } from 'rxjs';
-import { Platform } from './platform-BeOodPax.mjs';
-import { _CdkPrivateStyleLoader } from './style-loader-OiasZN8c.mjs';
-import { coerceElement, coerceNumberProperty } from './element-CpqV8p-X.mjs';
+import { Platform } from './_platform-chunk.mjs';
+import { _CdkPrivateStyleLoader } from './_style-loader-chunk.mjs';
+import { coerceElement, coerceNumberProperty } from './_element-chunk.mjs';
 import { auditTime } from 'rxjs/operators';
 import '@angular/common';
 

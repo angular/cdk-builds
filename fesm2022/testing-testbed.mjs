@@ -2,7 +2,7 @@ import { flush } from '@angular/core/testing';
 import { takeWhile } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 import { getNoKeysSpecifiedError, _getTextWithExcludedElements, TestKey, HarnessEnvironment, handleAutoChangeDetectionStatus, stopHandlingAutoChangeDetectionStatus } from './testing.mjs';
-import { PERIOD, BACKSPACE, TAB, ENTER, SHIFT, CONTROL, ALT, ESCAPE, PAGE_UP, PAGE_DOWN, END, HOME, LEFT_ARROW, UP_ARROW, RIGHT_ARROW, DOWN_ARROW, INSERT, DELETE, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12, META, COMMA } from './keycodes-DPWmI2Ix.mjs';
+import { PERIOD, BACKSPACE, TAB, ENTER, SHIFT, CONTROL, ALT, ESCAPE, PAGE_UP, PAGE_DOWN, END, HOME, LEFT_ARROW, UP_ARROW, RIGHT_ARROW, DOWN_ARROW, INSERT, DELETE, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12, META, COMMA } from './_keycodes-chunk.mjs';
 
 /** Unique symbol that is used to patch a property to a proxy zone. */
 const stateObservableSymbol = Symbol('ProxyZone_PATCHED#stateObservable');

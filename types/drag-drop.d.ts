@@ -1,12 +1,12 @@
 import * as i0 from '@angular/core';
 import { InjectionToken, ElementRef, NgZone, OnDestroy, EventEmitter, AfterViewInit, TemplateRef, OnChanges, SimpleChanges, ViewContainerRef, Renderer2 } from '@angular/core';
-import { Direction } from './bidi-module.d-bsVYOt0R.js';
+import { Direction } from './_bidi-module-chunk.js';
 import { Subject, Observable } from 'rxjs';
 import { ViewportRuler } from './scrolling.js';
-import { NumberInput } from './number-property.d-BzBQchZ2.js';
-import { CdkScrollableModule } from './scrolling-module.d-CMdStHyF.js';
-export { CdkScrollable as ɵɵCdkScrollable } from './scrolling-module.d-CMdStHyF.js';
-import './data-source.d-DAIyaEMO.js';
+import { NumberInput } from './_number-property-chunk.js';
+import { CdkScrollableModule } from './_scrolling-module-chunk.js';
+export { CdkScrollable as ɵɵCdkScrollable } from './_scrolling-module-chunk.js';
+import './_data-source-chunk.js';
 
 /** Possible values that can be used to configure the drag start delay. */
 type DragStartDelay = number | {

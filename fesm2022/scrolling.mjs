@@ -2,14 +2,14 @@ import * as i0 from '@angular/core';
 import { InjectionToken, forwardRef, Directive, Input, inject, NgZone, RendererFactory2, Injectable, ElementRef, Renderer2, DOCUMENT, ChangeDetectorRef, signal, Injector, effect, ApplicationRef, DestroyRef, untracked, afterNextRender, booleanAttribute, Component, ViewEncapsulation, ChangeDetectionStrategy, Output, ViewChild, ViewContainerRef, TemplateRef, IterableDiffers, NgModule } from '@angular/core';
 import { Subject, of, Observable, Subscription, animationFrameScheduler, asapScheduler, isObservable } from 'rxjs';
 import { distinctUntilChanged, auditTime, filter, startWith, takeUntil, pairwise, switchMap, shareReplay } from 'rxjs/operators';
-import { coerceNumberProperty, coerceElement } from './element-CpqV8p-X.mjs';
-import { Platform } from './platform-BeOodPax.mjs';
-import { Directionality } from './directionality-yF42_aLK.mjs';
-import { getRtlScrollAxisType, RtlScrollAxisType, supportsScrollBehavior } from './scrolling-CI3c_jlJ.mjs';
+import { coerceNumberProperty, coerceElement } from './_element-chunk.mjs';
+import { Platform } from './_platform-chunk.mjs';
+import { Directionality } from './_directionality-chunk.mjs';
+import { getRtlScrollAxisType, RtlScrollAxisType, supportsScrollBehavior } from './_scrolling-chunk.mjs';
 import { BidiModule } from './bidi.mjs';
 export { Dir as ɵɵDir } from './bidi.mjs';
-import { _VIEW_REPEATER_STRATEGY, ArrayDataSource, _RecycleViewRepeaterStrategy } from './recycle-view-repeater-strategy-DM_J1f6_.mjs';
-import { isDataSource } from './data-source-CL6Fasig.mjs';
+import { _VIEW_REPEATER_STRATEGY, ArrayDataSource, _RecycleViewRepeaterStrategy } from './_recycle-view-repeater-strategy-chunk.mjs';
+import { isDataSource } from './_data-source-chunk.mjs';
 import '@angular/common';
 
 /** The injection token used to specify the virtual scrolling strategy. */

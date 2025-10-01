@@ -1,20 +1,20 @@
 import * as i0 from '@angular/core';
 import { ElementRef, Renderer2, QueryList, InjectionToken, OnDestroy, Injector, ViewContainerRef, EventEmitter, TemplateRef, OnChanges, SimpleChanges, NgZone, AfterContentInit } from '@angular/core';
-import { ScrollStrategy, ConnectedPosition, OverlayRef, OverlayModule } from './overlay-module.d-CKHfE1bL.js';
+import { ScrollStrategy, ConnectedPosition, OverlayRef, OverlayModule } from './_overlay-module-chunk.js';
 import * as rxjs from 'rxjs';
 import { Observable, Subject } from 'rxjs';
-import { FocusOrigin } from './focus-monitor.d-C7n_hGto.js';
-import { FocusableOption, FocusKeyManager } from './focus-key-manager.d-r0-pAAmS.js';
-import { Directionality } from './bidi-module.d-bsVYOt0R.js';
-import { TemplatePortal } from './portal-directives.d-D9c4J36c.js';
-import './scrolling-module.d-CMdStHyF.js';
-import './data-source.d-DAIyaEMO.js';
-import './number-property.d-BzBQchZ2.js';
+import { FocusOrigin } from './_focus-monitor-chunk.js';
+import { FocusableOption, FocusKeyManager } from './_focus-key-manager-chunk.js';
+import { Directionality } from './_bidi-module-chunk.js';
+import { TemplatePortal } from './_portal-directives-chunk.js';
+import './_scrolling-module-chunk.js';
+import './_data-source-chunk.js';
+import './_number-property-chunk.js';
 import '@angular/common';
 import './scrolling.js';
-import './platform.d-cnFZCLss.js';
-import './style-loader.d-DbvWk0ty.js';
-import './list-key-manager.d-Bm-MZVts.js';
+import './_platform-chunk.js';
+import './_style-loader-chunk.js';
+import './_list-key-manager-chunk.js';
 
 /** Item to track for mouse focus events. */
 interface FocusableElement {

@@ -1,6 +1,6 @@
 import * as i0 from '@angular/core';
 import { InjectionToken, OnDestroy, OnChanges, SimpleChanges, OnInit, EventEmitter } from '@angular/core';
-import { UniqueSelectionDispatcher } from './unique-selection-dispatcher.d-BgWACqWn.js';
+import { UniqueSelectionDispatcher } from './_unique-selection-dispatcher-chunk.js';
 import { Subject } from 'rxjs';
 
 /**

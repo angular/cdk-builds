@@ -1,22 +1,22 @@
 import * as i0 from '@angular/core';
 import { signal, Component, ViewEncapsulation, ChangeDetectionStrategy, inject, NgZone, DOCUMENT, RendererFactory2, Injectable, InjectionToken, ElementRef, booleanAttribute, Directive, Input, ViewContainerRef, ChangeDetectorRef, EventEmitter, Injector, afterNextRender, numberAttribute, Output, TemplateRef, NgModule } from '@angular/core';
 import { Subject, Subscription, interval, animationFrameScheduler, Observable, merge, BehaviorSubject } from 'rxjs';
-import { _getEventTarget, _getShadowRoot } from './shadow-dom-DFvX9W95.mjs';
-import { isFakeTouchstartFromScreenReader, isFakeMousedownFromScreenReader } from './fake-event-detection-D0_6qVp2.mjs';
-import { coerceElement, coerceNumberProperty } from './element-CpqV8p-X.mjs';
+import { _getEventTarget, _getShadowRoot } from './_shadow-dom-chunk.mjs';
+import { isFakeTouchstartFromScreenReader, isFakeMousedownFromScreenReader } from './_fake-event-detection-chunk.mjs';
+import { coerceElement, coerceNumberProperty } from './_element-chunk.mjs';
 import { takeUntil, map, take, tap, switchMap, startWith } from 'rxjs/operators';
-import { _CdkPrivateStyleLoader } from './style-loader-OiasZN8c.mjs';
+import { _CdkPrivateStyleLoader } from './_style-loader-chunk.mjs';
 import { ViewportRuler, ScrollDispatcher, CdkScrollableModule } from './scrolling.mjs';
 export { CdkScrollable as ɵɵCdkScrollable } from './scrolling.mjs';
-import { Directionality } from './directionality-yF42_aLK.mjs';
-import { _IdGenerator } from './id-generator-50QyHbQ8.mjs';
-import { coerceArray } from './array-Hg8isvLj.mjs';
-import './platform-BeOodPax.mjs';
+import { Directionality } from './_directionality-chunk.mjs';
+import { _IdGenerator } from './_id-generator-chunk.mjs';
+import { coerceArray } from './_array-chunk.mjs';
+import './_platform-chunk.mjs';
 import '@angular/common';
-import './scrolling-CI3c_jlJ.mjs';
+import './_scrolling-chunk.mjs';
 import './bidi.mjs';
-import './recycle-view-repeater-strategy-DM_J1f6_.mjs';
-import './data-source-CL6Fasig.mjs';
+import './_recycle-view-repeater-strategy-chunk.mjs';
+import './_data-source-chunk.mjs';
 
 /** Creates a deep clone of an element. */
 function deepCloneNode(node) {

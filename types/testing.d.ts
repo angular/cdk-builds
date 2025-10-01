@@ -1,4 +1,4 @@
-export { AsyncFactoryFn, AsyncOptionPredicate, AsyncPredicate, BaseHarnessFilters, ComponentHarness, ComponentHarnessConstructor, ContentContainerComponentHarness, ElementDimensions, EventData, HarnessEnvironment, HarnessLoader, HarnessPredicate, HarnessQuery, LocatorFactory, LocatorFnResult, ModifierKeys, TestElement, TestKey, TextOptions } from './harness-environment.d-DKJkA1vf.js';
+export { AsyncFactoryFn, AsyncOptionPredicate, AsyncPredicate, BaseHarnessFilters, ComponentHarness, ComponentHarnessConstructor, ContentContainerComponentHarness, ElementDimensions, EventData, HarnessEnvironment, HarnessLoader, HarnessPredicate, HarnessQuery, LocatorFactory, LocatorFnResult, ModifierKeys, TestElement, TestKey, TextOptions } from './_harness-environment-chunk.js';
 
 /**
  * Returns an error which reports that no keys have been specified.

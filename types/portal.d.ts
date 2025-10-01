@@ -1,5 +1,5 @@
-import { BasePortalOutlet, ComponentPortal, TemplatePortal, DomPortal } from './portal-directives.d-D9c4J36c.js';
-export { CdkPortal, CdkPortalOutlet, CdkPortalOutletAttachedRef, ComponentType, Portal, PortalHostDirective, PortalModule, PortalOutlet, TemplatePortalDirective } from './portal-directives.d-D9c4J36c.js';
+import { BasePortalOutlet, ComponentPortal, TemplatePortal, DomPortal } from './_portal-directives-chunk.js';
+export { CdkPortal, CdkPortalOutlet, CdkPortalOutletAttachedRef, ComponentType, Portal, PortalHostDirective, PortalModule, PortalOutlet, TemplatePortalDirective } from './_portal-directives-chunk.js';
 import { ApplicationRef, Injector, ComponentRef, EmbeddedViewRef } from '@angular/core';
 
 /**

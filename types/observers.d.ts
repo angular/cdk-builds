@@ -1,4 +1,4 @@
-import { NumberInput } from './number-property.d-BzBQchZ2.js';
+import { NumberInput } from './_number-property-chunk.js';
 import * as i0 from '@angular/core';
 import { OnDestroy, ElementRef, AfterContentInit, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';

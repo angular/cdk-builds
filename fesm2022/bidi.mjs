@@ -1,5 +1,5 @@
-import { _resolveDirectionality, Directionality } from './directionality-yF42_aLK.mjs';
-export { DIR_DOCUMENT } from './directionality-yF42_aLK.mjs';
+import { _resolveDirectionality, Directionality } from './_directionality-chunk.mjs';
+export { DIR_DOCUMENT } from './_directionality-chunk.mjs';
 import * as i0 from '@angular/core';
 import { EventEmitter, signal, Directive, Output, Input, NgModule } from '@angular/core';
 

@@ -1,21 +1,21 @@
 import * as i0 from '@angular/core';
 import { ViewContainerRef, Injector, StaticProvider, Type, OnDestroy, ElementRef, NgZone, ChangeDetectorRef, ComponentRef, EmbeddedViewRef, TemplateRef, InjectionToken } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { FocusOrigin } from './focus-monitor.d-C7n_hGto.js';
-import { FocusTrapFactory, A11yModule } from './a11y-module.d-CTi-8tdW.js';
-import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, TemplatePortal, DomPortal, ComponentType, PortalModule } from './portal-directives.d-D9c4J36c.js';
-export { CdkPortal as ɵɵCdkPortal, PortalHostDirective as ɵɵPortalHostDirective, TemplatePortalDirective as ɵɵTemplatePortalDirective } from './portal-directives.d-D9c4J36c.js';
-import { Direction } from './bidi-module.d-bsVYOt0R.js';
-import { PositionStrategy, ScrollStrategy, OverlayRef, OverlayModule } from './overlay-module.d-CKHfE1bL.js';
+import { FocusOrigin } from './_focus-monitor-chunk.js';
+import { FocusTrapFactory, A11yModule } from './_a11y-module-chunk.js';
+import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, TemplatePortal, DomPortal, ComponentType, PortalModule } from './_portal-directives-chunk.js';
+export { CdkPortal as ɵɵCdkPortal, PortalHostDirective as ɵɵPortalHostDirective, TemplatePortalDirective as ɵɵTemplatePortalDirective } from './_portal-directives-chunk.js';
+import { Direction } from './_bidi-module-chunk.js';
+import { PositionStrategy, ScrollStrategy, OverlayRef, OverlayModule } from './_overlay-module-chunk.js';
 import * as _angular_cdk_portal from '@angular/cdk/portal';
 import './observers.js';
-import './number-property.d-BzBQchZ2.js';
-import './scrolling-module.d-CMdStHyF.js';
-import './data-source.d-DAIyaEMO.js';
+import './_number-property-chunk.js';
+import './_scrolling-module-chunk.js';
+import './_data-source-chunk.js';
 import '@angular/common';
 import './scrolling.js';
-import './platform.d-cnFZCLss.js';
-import './style-loader.d-DbvWk0ty.js';
+import './_platform-chunk.js';
+import './_style-loader-chunk.js';
 
 /** Options for where to set focus to automatically on dialog open */
 type AutoFocusTarget = 'dialog' | 'first-tabbable' | 'first-heading';

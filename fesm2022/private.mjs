@@ -1,4 +1,4 @@
-export { _CdkPrivateStyleLoader } from './style-loader-OiasZN8c.mjs';
+export { _CdkPrivateStyleLoader } from './_style-loader-chunk.mjs';
 import * as i0 from '@angular/core';
 import { Component, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 

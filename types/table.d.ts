@@ -1,11 +1,11 @@
-import { Directionality } from './bidi-module.d-bsVYOt0R.js';
+import { Directionality } from './_bidi-module-chunk.js';
 import * as i0 from '@angular/core';
 import { TemplateRef, ElementRef, OnChanges, IterableDiffers, IterableDiffer, SimpleChanges, IterableChanges, OnDestroy, ViewContainerRef, InjectionToken, AfterContentInit, AfterContentChecked, OnInit, ChangeDetectorRef, TrackByFunction, EventEmitter, QueryList } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { DataSource, CollectionViewer } from './data-source.d-DAIyaEMO.js';
-import { _ViewRepeater } from './view-repeater.d-AedIMsb6.js';
-import { ScrollingModule } from './scrolling-module.d-CMdStHyF.js';
-import './number-property.d-BzBQchZ2.js';
+import { DataSource, CollectionViewer } from './_data-source-chunk.js';
+import { _ViewRepeater } from './_view-repeater-chunk.js';
+import { ScrollingModule } from './_scrolling-module-chunk.js';
+import './_number-property-chunk.js';
 
 /**
  * Interface for a mixin to provide a directive with a function that checks if the sticky input has

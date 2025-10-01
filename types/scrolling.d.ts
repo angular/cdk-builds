@@ -1,10 +1,10 @@
-export { CdkFixedSizeVirtualScroll, CdkScrollable, CdkScrollableModule, CdkVirtualForOf, CdkVirtualForOfContext, CdkVirtualScrollRepeater, CdkVirtualScrollViewport, CdkVirtualScrollable, CdkVirtualScrollableElement, CdkVirtualScrollableWindow, DEFAULT_SCROLL_TIME, ExtendedScrollToOptions, FixedSizeVirtualScrollStrategy, ScrollDispatcher, ScrollingModule, VIRTUAL_SCROLLABLE, VIRTUAL_SCROLL_STRATEGY, VirtualScrollStrategy, _Bottom, _End, _Left, _Right, _Start, _Top, _Without, _XAxis, _XOR, _YAxis, _fixedSizeVirtualScrollStrategyFactory } from './scrolling-module.d-CMdStHyF.js';
+export { CdkFixedSizeVirtualScroll, CdkScrollable, CdkScrollableModule, CdkVirtualForOf, CdkVirtualForOfContext, CdkVirtualScrollRepeater, CdkVirtualScrollViewport, CdkVirtualScrollable, CdkVirtualScrollableElement, CdkVirtualScrollableWindow, DEFAULT_SCROLL_TIME, ExtendedScrollToOptions, FixedSizeVirtualScrollStrategy, ScrollDispatcher, ScrollingModule, VIRTUAL_SCROLLABLE, VIRTUAL_SCROLL_STRATEGY, VirtualScrollStrategy, _Bottom, _End, _Left, _Right, _Start, _Top, _Without, _XAxis, _XOR, _YAxis, _fixedSizeVirtualScrollStrategyFactory } from './_scrolling-module-chunk.js';
 import * as i0 from '@angular/core';
 import { OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs';
-export { Dir as ɵɵDir } from './bidi-module.d-bsVYOt0R.js';
-import './data-source.d-DAIyaEMO.js';
-import './number-property.d-BzBQchZ2.js';
+export { Dir as ɵɵDir } from './_bidi-module-chunk.js';
+import './_data-source-chunk.js';
+import './_number-property-chunk.js';
 
 /** Time in ms to throttle the resize events by default. */
 declare const DEFAULT_RESIZE_TIME = 20;

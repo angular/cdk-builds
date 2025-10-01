@@ -1,10 +1,10 @@
-export { Platform } from './platform-BeOodPax.mjs';
+export { Platform } from './_platform-chunk.mjs';
 import * as i0 from '@angular/core';
 import { NgModule } from '@angular/core';
-export { normalizePassiveListenerOptions, supportsPassiveEventListeners } from './passive-listeners-ZmZRMx8D.mjs';
-export { RtlScrollAxisType, getRtlScrollAxisType, supportsScrollBehavior } from './scrolling-CI3c_jlJ.mjs';
-export { _getEventTarget, _getFocusedElementPierceShadowDom, _getShadowRoot, _supportsShadowDom } from './shadow-dom-DFvX9W95.mjs';
-export { _isTestEnvironment } from './test-environment-BgaaXvCA.mjs';
+export { normalizePassiveListenerOptions, supportsPassiveEventListeners } from './_passive-listeners-chunk.mjs';
+export { RtlScrollAxisType, getRtlScrollAxisType, supportsScrollBehavior } from './_scrolling-chunk.mjs';
+export { _getEventTarget, _getFocusedElementPierceShadowDom, _getShadowRoot, _supportsShadowDom } from './_shadow-dom-chunk.mjs';
+export { _isTestEnvironment } from './_test-environment-chunk.mjs';
 import '@angular/common';
 
 class PlatformModule {

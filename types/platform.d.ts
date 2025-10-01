@@ -1,4 +1,4 @@
-export { Platform } from './platform.d-cnFZCLss.js';
+export { Platform } from './_platform-chunk.js';
 import * as i0 from '@angular/core';
 
 declare class PlatformModule {
