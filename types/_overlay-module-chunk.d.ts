@@ -276,6 +276,13 @@ declare class OverlayConfig {
 type HorizontalConnectionPos = 'start' | 'center' | 'end';
 /** Vertical dimension of a connection point on the perimeter of the origin or overlay element. */
 type VerticalConnectionPos = 'top' | 'center' | 'bottom';
+/** The distance between the overlay element and the viewport. */
+type ViewportMargin = number | {
+    top?: number;
+    bottom?: number;
+    start?: number;
+    end?: number;
+};
 /** A connection point on the origin element. */
 interface OriginConnectionPosition {
     originX: HorizontalConnectionPos;
@@ -441,7 +448,7 @@ declare class FlexibleConnectedPositionStrategy implements PositionStrategy {
     private _viewportRect;
     /** Cached container dimensions */
     private _containerRect;
-    /** Amount of space that must be maintained between the overlay and the edge of the viewport. */
+    /** Amount of space that must be maintained between the overlay and the right edge of the viewport. */
     private _viewportMargin;
     /** The Scrollable containers used to check scrollable view properties on position change. */
     private _scrollables;
@@ -519,10 +526,11 @@ declare class FlexibleConnectedPositionStrategy implements PositionStrategy {
      */
     withPositions(positions: ConnectedPosition[]): this;
     /**
-     * Sets a minimum distance the overlay may be positioned to the edge of the viewport.
-     * @param margin Required margin between the overlay and the viewport edge in pixels.
+     * Sets a minimum distance the overlay may be positioned from the bottom edge of the viewport.
+     * @param margin Required margin between the overlay and the viewport.
+     * It can be a number to be applied to all directions, or an object to supply different values for each direction.
      */
-    withViewportMargin(margin: number): this;
+    withViewportMargin(margin: ViewportMargin): this;
     /** Sets whether the overlay's width and height can be constrained to fit within the viewport. */
     withFlexibleDimensions(flexibleDimensions?: boolean): this;
     /** Sets whether the overlay can grow after the initial open via flexible width/height. */
@@ -647,6 +655,26 @@ declare class FlexibleConnectedPositionStrategy implements PositionStrategy {
     private _addPanelClasses;
     /** Clears the classes that the position strategy has applied from the overlay panel. */
     private _clearPanelClasses;
+    /**
+     * Returns either the _viewportMargin directly (if it is a number) or its 'start' value.
+     * @private
+     */
+    private _getViewportMarginStart;
+    /**
+     * Returns either the _viewportMargin directly (if it is a number) or its 'end' value.
+     * @private
+     */
+    private _getViewportMarginEnd;
+    /**
+     * Returns either the _viewportMargin directly (if it is a number) or its 'top' value.
+     * @private
+     */
+    private _getViewportMarginTop;
+    /**
+     * Returns either the _viewportMargin directly (if it is a number) or its 'bottom' value.
+     * @private
+     */
+    private _getViewportMarginBottom;
     /** Returns the DOMRect of the current origin. */
     private _getOriginRect;
 }
@@ -726,7 +754,7 @@ declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     /** The custom class to add to the overlay pane element. */
     panelClass: string | string[];
     /** Margin between the overlay and the viewport edges. */
-    viewportMargin: number;
+    viewportMargin: ViewportMargin;
     /** Strategy to be used when handling scroll events while the overlay is open. */
     scrollStrategy: ScrollStrategy;
     /** Whether the overlay is open. */
@@ -798,4 +826,4 @@ declare class OverlayModule {
 }
 
 export { CdkConnectedOverlay, CdkOverlayOrigin, ConnectedOverlayPositionChange, ConnectionPositionPair, FlexibleConnectedPositionStrategy, OverlayConfig, OverlayContainer, OverlayKeyboardDispatcher, OverlayModule, OverlayOutsideClickDispatcher, OverlayRef, STANDARD_DROPDOWN_ADJACENT_POSITIONS, STANDARD_DROPDOWN_BELOW_POSITIONS, ScrollingVisibility, createFlexibleConnectedPositionStrategy, validateHorizontalPosition, validateVerticalPosition };
-export type { ConnectedPosition, FlexibleConnectedPositionStrategyOrigin, HorizontalConnectionPos, OriginConnectionPosition, OverlayConnectionPosition, OverlaySizeConfig, PositionStrategy, ScrollStrategy, VerticalConnectionPos };
+export type { ConnectedPosition, FlexibleConnectedPositionStrategyOrigin, HorizontalConnectionPos, OriginConnectionPosition, OverlayConnectionPosition, OverlaySizeConfig, PositionStrategy, ScrollStrategy, VerticalConnectionPos, ViewportMargin };

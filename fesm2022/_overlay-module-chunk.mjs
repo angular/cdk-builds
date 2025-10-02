@@ -1291,7 +1291,7 @@ class FlexibleConnectedPositionStrategy {
     _viewportRect;
     /** Cached container dimensions */
     _containerRect;
-    /** Amount of space that must be maintained between the overlay and the edge of the viewport. */
+    /** Amount of space that must be maintained between the overlay and the right edge of the viewport. */
     _viewportMargin = 0;
     /** The Scrollable containers used to check scrollable view properties on position change. */
     _scrollables = [];
@@ -1554,8 +1554,9 @@ class FlexibleConnectedPositionStrategy {
         return this;
     }
     /**
-     * Sets a minimum distance the overlay may be positioned to the edge of the viewport.
-     * @param margin Required margin between the overlay and the viewport edge in pixels.
+     * Sets a minimum distance the overlay may be positioned from the bottom edge of the viewport.
+     * @param margin Required margin between the overlay and the viewport.
+     * It can be a number to be applied to all directions, or an object to supply different values for each direction.
      */
     withViewportMargin(margin) {
         this._viewportMargin = margin;
@@ -1782,13 +1783,17 @@ class FlexibleConnectedPositionStrategy {
             pushX = overflowLeft || -overflowRight;
         }
         else {
-            pushX = start.x < this._viewportMargin ? viewport.left - scrollPosition.left - start.x : 0;
+            pushX =
+                start.x < this._getViewportMarginStart()
+                    ? viewport.left - scrollPosition.left - start.x
+                    : 0;
         }
         if (overlay.height <= viewport.height) {
             pushY = overflowTop || -overflowBottom;
         }
         else {
-            pushY = start.y < this._viewportMargin ? viewport.top - scrollPosition.top - start.y : 0;
+            pushY =
+                start.y < this._getViewportMarginTop() ? viewport.top - scrollPosition.top - start.y : 0;
         }
         this._previousPushAmount = { x: pushX, y: pushY };
         return {
@@ -1861,14 +1866,15 @@ class FlexibleConnectedPositionStrategy {
         if (position.overlayY === 'top') {
             // Overlay is opening "downward" and thus is bound by the bottom viewport edge.
             top = origin.y;
-            height = viewport.height - top + this._viewportMargin;
+            height = viewport.height - top + this._getViewportMarginBottom();
         }
         else if (position.overlayY === 'bottom') {
             // Overlay is opening "upward" and thus is bound by the top viewport edge. We need to add
             // the viewport margin back in, because the viewport rect is narrowed down to remove the
             // margin, whereas the `origin` position is calculated based on its `DOMRect`.
-            bottom = viewport.height - origin.y + this._viewportMargin * 2;
-            height = viewport.height - bottom + this._viewportMargin;
+            bottom =
+                viewport.height - origin.y + this._getViewportMarginTop() + this._getViewportMarginBottom();
+            height = viewport.height - bottom + this._getViewportMarginTop();
         }
         else {
             // If neither top nor bottom, it means that the overlay is vertically centered on the
@@ -1889,12 +1895,13 @@ class FlexibleConnectedPositionStrategy {
         const isBoundedByLeftViewportEdge = (position.overlayX === 'end' && !isRtl) || (position.overlayX === 'start' && isRtl);
         let width, left, right;
         if (isBoundedByLeftViewportEdge) {
-            right = viewport.width - origin.x + this._viewportMargin * 2;
-            width = origin.x - this._viewportMargin;
+            right =
+                viewport.width - origin.x + this._getViewportMarginStart() + this._getViewportMarginEnd();
+            width = origin.x - this._getViewportMarginStart();
         }
         else if (isBoundedByRightViewportEdge) {
             left = origin.x;
-            width = viewport.right - origin.x;
+            width = viewport.right - origin.x - this._getViewportMarginEnd();
         }
         else {
             // If neither start nor end, it means that the overlay is horizontally centered on the
@@ -2131,12 +2138,12 @@ class FlexibleConnectedPositionStrategy {
         const height = this._document.documentElement.clientHeight;
         const scrollPosition = this._viewportRuler.getViewportScrollPosition();
         return {
-            top: scrollPosition.top + this._viewportMargin,
-            left: scrollPosition.left + this._viewportMargin,
-            right: scrollPosition.left + width - this._viewportMargin,
-            bottom: scrollPosition.top + height - this._viewportMargin,
-            width: width - 2 * this._viewportMargin,
-            height: height - 2 * this._viewportMargin,
+            top: scrollPosition.top + this._getViewportMarginTop(),
+            left: scrollPosition.left + this._getViewportMarginStart(),
+            right: scrollPosition.left + width - this._getViewportMarginEnd(),
+            bottom: scrollPosition.top + height - this._getViewportMarginBottom(),
+            width: width - this._getViewportMarginStart() - this._getViewportMarginEnd(),
+            height: height - this._getViewportMarginTop() - this._getViewportMarginBottom(),
         };
     }
     /** Whether the we're dealing with an RTL context */
@@ -2191,6 +2198,42 @@ class FlexibleConnectedPositionStrategy {
             });
             this._appliedPanelClasses = [];
         }
+    }
+    /**
+     * Returns either the _viewportMargin directly (if it is a number) or its 'start' value.
+     * @private
+     */
+    _getViewportMarginStart() {
+        if (typeof this._viewportMargin === 'number')
+            return this._viewportMargin;
+        return this._viewportMargin?.start ?? 0;
+    }
+    /**
+     * Returns either the _viewportMargin directly (if it is a number) or its 'end' value.
+     * @private
+     */
+    _getViewportMarginEnd() {
+        if (typeof this._viewportMargin === 'number')
+            return this._viewportMargin;
+        return this._viewportMargin?.end ?? 0;
+    }
+    /**
+     * Returns either the _viewportMargin directly (if it is a number) or its 'top' value.
+     * @private
+     */
+    _getViewportMarginTop() {
+        if (typeof this._viewportMargin === 'number')
+            return this._viewportMargin;
+        return this._viewportMargin?.top ?? 0;
+    }
+    /**
+     * Returns either the _viewportMargin directly (if it is a number) or its 'bottom' value.
+     * @private
+     */
+    _getViewportMarginBottom() {
+        if (typeof this._viewportMargin === 'number')
+            return this._viewportMargin;
+        return this._viewportMargin?.bottom ?? 0;
     }
     /** Returns the DOMRect of the current origin. */
     _getOriginRect() {
