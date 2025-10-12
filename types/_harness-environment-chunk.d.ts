@@ -117,9 +117,8 @@ interface TestElement {
     /**
      * Sets the value of a `contenteditable` element.
      * @param value Value to be set on the element.
-     * @breaking-change 16.0.0 Will become a required method.
      */
-    setContenteditableValue?(value: string): Promise<void>;
+    setContenteditableValue(value: string): Promise<void>;
     /** Gets the value for the given attribute from the element. */
     getAttribute(name: string): Promise<string | null>;
     /** Checks whether the element has the given class. */
