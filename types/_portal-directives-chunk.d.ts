@@ -132,14 +132,6 @@ declare class CdkPortal extends TemplatePortal {
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkPortal, "[cdkPortal]", ["cdkPortal"], {}, {}, never, never, true, never>;
 }
 /**
- * @deprecated Use `CdkPortal` instead.
- * @breaking-change 9.0.0
- */
-declare class TemplatePortalDirective extends CdkPortal {
-    static ɵfac: i0.ɵɵFactoryDeclaration<TemplatePortalDirective, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<TemplatePortalDirective, "[cdk-portal], [portal]", ["cdkPortal"], {}, {}, never, never, true, never>;
-}
-/**
  * Possible attached references to the CdkPortalOutlet.
  */
 type CdkPortalOutletAttachedRef = ComponentRef<any> | EmbeddedViewRef<any> | null;
@@ -193,19 +185,11 @@ declare class CdkPortalOutlet extends BasePortalOutlet implements OnInit, OnDest
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkPortalOutlet, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkPortalOutlet, "[cdkPortalOutlet]", ["cdkPortalOutlet"], { "portal": { "alias": "cdkPortalOutlet"; "required": false; }; }, { "attached": "attached"; }, never, never, true, never>;
 }
-/**
- * @deprecated Use `CdkPortalOutlet` instead.
- * @breaking-change 9.0.0
- */
-declare class PortalHostDirective extends CdkPortalOutlet {
-    static ɵfac: i0.ɵɵFactoryDeclaration<PortalHostDirective, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<PortalHostDirective, "[cdkPortalHost], [portalHost]", ["cdkPortalHost"], { "portal": { "alias": "cdkPortalHost"; "required": false; }; }, {}, never, never, true, never>;
-}
 declare class PortalModule {
     static ɵfac: i0.ɵɵFactoryDeclaration<PortalModule, never>;
-    static ɵmod: i0.ɵɵNgModuleDeclaration<PortalModule, never, [typeof CdkPortal, typeof CdkPortalOutlet, typeof TemplatePortalDirective, typeof PortalHostDirective], [typeof CdkPortal, typeof CdkPortalOutlet, typeof TemplatePortalDirective, typeof PortalHostDirective]>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<PortalModule, never, [typeof CdkPortal, typeof CdkPortalOutlet], [typeof CdkPortal, typeof CdkPortalOutlet]>;
     static ɵinj: i0.ɵɵInjectorDeclaration<PortalModule>;
 }
 
-export { BasePortalOutlet, CdkPortal, CdkPortalOutlet, ComponentPortal, DomPortal, Portal, PortalHostDirective, PortalModule, TemplatePortal, TemplatePortalDirective };
+export { BasePortalOutlet, CdkPortal, CdkPortalOutlet, ComponentPortal, DomPortal, Portal, PortalModule, TemplatePortal };
 export type { CdkPortalOutletAttachedRef, ComponentType, PortalOutlet };

@@ -4,7 +4,7 @@ import { Observable, Subject } from 'rxjs';
 import { FocusOrigin } from './_focus-monitor-chunk.js';
 import { FocusTrapFactory, A11yModule } from './_a11y-module-chunk.js';
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, TemplatePortal, DomPortal, ComponentType, PortalModule } from './_portal-directives-chunk.js';
-export { CdkPortal as ɵɵCdkPortal, PortalHostDirective as ɵɵPortalHostDirective, TemplatePortalDirective as ɵɵTemplatePortalDirective } from './_portal-directives-chunk.js';
+export { CdkPortal as ɵɵCdkPortal } from './_portal-directives-chunk.js';
 import { Direction } from './_bidi-module-chunk.js';
 import { PositionStrategy, ScrollStrategy, OverlayRef, OverlayModule } from './_overlay-module-chunk.js';
 import * as _angular_cdk_portal from '@angular/cdk/portal';

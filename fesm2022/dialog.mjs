@@ -2,7 +2,7 @@ import * as i0 from '@angular/core';
 import { inject, ElementRef, NgZone, Renderer2, ChangeDetectorRef, Injector, DOCUMENT, afterNextRender, Component, ViewEncapsulation, ChangeDetectionStrategy, ViewChild, InjectionToken, TemplateRef, Injectable, signal, EventEmitter, NgModule } from '@angular/core';
 import { Subject, defer } from 'rxjs';
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, TemplatePortal, PortalModule } from './portal.mjs';
-export { CdkPortal as ɵɵCdkPortal, PortalHostDirective as ɵɵPortalHostDirective, TemplatePortalDirective as ɵɵTemplatePortalDirective } from './portal.mjs';
+export { CdkPortal as ɵɵCdkPortal } from './portal.mjs';
 import { FocusTrapFactory, InteractivityChecker, A11yModule } from './_a11y-module-chunk.mjs';
 import { FocusMonitor } from './_focus-monitor-chunk.mjs';
 import { Platform } from './_platform-chunk.mjs';

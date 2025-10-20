@@ -401,32 +401,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.2.0-next.2", 
                 }]
         }], ctorParameters: () => [] });
 /**
- * @deprecated Use `CdkPortal` instead.
- * @breaking-change 9.0.0
- */
-class TemplatePortalDirective extends CdkPortal {
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.2.0-next.2", ngImport: i0, type: TemplatePortalDirective, deps: null, target: i0.ɵɵFactoryTarget.Directive });
-    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "20.2.0-next.2", type: TemplatePortalDirective, isStandalone: true, selector: "[cdk-portal], [portal]", providers: [
-            {
-                provide: CdkPortal,
-                useExisting: TemplatePortalDirective,
-            },
-        ], exportAs: ["cdkPortal"], usesInheritance: true, ngImport: i0 });
-}
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.2.0-next.2", ngImport: i0, type: TemplatePortalDirective, decorators: [{
-            type: Directive,
-            args: [{
-                    selector: '[cdk-portal], [portal]',
-                    exportAs: 'cdkPortal',
-                    providers: [
-                        {
-                            provide: CdkPortal,
-                            useExisting: TemplatePortalDirective,
-                        },
-                    ],
-                }]
-        }] });
-/**
  * Directive version of a PortalOutlet. Because the directive *is* a PortalOutlet, portals can be
  * directly attached to it, enabling declarative use.
  *
@@ -570,45 +544,18 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.2.0-next.2", 
             }], attached: [{
                 type: Output
             }] } });
-/**
- * @deprecated Use `CdkPortalOutlet` instead.
- * @breaking-change 9.0.0
- */
-class PortalHostDirective extends CdkPortalOutlet {
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.2.0-next.2", ngImport: i0, type: PortalHostDirective, deps: null, target: i0.ɵɵFactoryTarget.Directive });
-    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "20.2.0-next.2", type: PortalHostDirective, isStandalone: true, selector: "[cdkPortalHost], [portalHost]", inputs: { portal: ["cdkPortalHost", "portal"] }, providers: [
-            {
-                provide: CdkPortalOutlet,
-                useExisting: PortalHostDirective,
-            },
-        ], exportAs: ["cdkPortalHost"], usesInheritance: true, ngImport: i0 });
-}
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.2.0-next.2", ngImport: i0, type: PortalHostDirective, decorators: [{
-            type: Directive,
-            args: [{
-                    selector: '[cdkPortalHost], [portalHost]',
-                    exportAs: 'cdkPortalHost',
-                    inputs: [{ name: 'portal', alias: 'cdkPortalHost' }],
-                    providers: [
-                        {
-                            provide: CdkPortalOutlet,
-                            useExisting: PortalHostDirective,
-                        },
-                    ],
-                }]
-        }] });
 class PortalModule {
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.2.0-next.2", ngImport: i0, type: PortalModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-    static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "20.2.0-next.2", ngImport: i0, type: PortalModule, imports: [CdkPortal, CdkPortalOutlet, TemplatePortalDirective, PortalHostDirective], exports: [CdkPortal, CdkPortalOutlet, TemplatePortalDirective, PortalHostDirective] });
+    static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "20.2.0-next.2", ngImport: i0, type: PortalModule, imports: [CdkPortal, CdkPortalOutlet], exports: [CdkPortal, CdkPortalOutlet] });
     static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "20.2.0-next.2", ngImport: i0, type: PortalModule });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.2.0-next.2", ngImport: i0, type: PortalModule, decorators: [{
             type: NgModule,
             args: [{
-                    imports: [CdkPortal, CdkPortalOutlet, TemplatePortalDirective, PortalHostDirective],
-                    exports: [CdkPortal, CdkPortalOutlet, TemplatePortalDirective, PortalHostDirective],
+                    imports: [CdkPortal, CdkPortalOutlet],
+                    exports: [CdkPortal, CdkPortalOutlet],
                 }]
         }] });
 
-export { BasePortalOutlet, CdkPortal, CdkPortalOutlet, ComponentPortal, DomPortal, DomPortalOutlet, Portal, PortalHostDirective, PortalModule, TemplatePortal, TemplatePortalDirective };
+export { BasePortalOutlet, CdkPortal, CdkPortalOutlet, ComponentPortal, DomPortal, DomPortalOutlet, Portal, PortalModule, TemplatePortal };
 //# sourceMappingURL=portal.mjs.map
