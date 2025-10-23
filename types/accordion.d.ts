@@ -14,7 +14,9 @@ declare const CDK_ACCORDION: InjectionToken<CdkAccordion>;
  */
 declare class CdkAccordion implements OnDestroy, OnChanges {
     /** Emits when the state of the accordion changes */
-    readonly _stateChanges: Subject<SimpleChanges>;
+    readonly _stateChanges: Subject<{
+        [propName: string]: i0.SimpleChange<any>;
+    }>;
     /** Stream that emits true/false when openAll/closeAll is triggered. */
     readonly _openCloseAllActions: Subject<boolean>;
     /** A readonly id value to use for unique selection coordination. */
