@@ -23,79 +23,83 @@ import './_element-chunk.mjs';
 import './_recycle-view-repeater-strategy-chunk.mjs';
 import './_data-source-chunk.mjs';
 
-/**
- * Alternative to OverlayContainer that supports correct displaying of overlay elements in
- * Fullscreen mode
- * https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen
- *
- * Should be provided in the root component.
- */
 class FullscreenOverlayContainer extends OverlayContainer {
-    _renderer = inject(RendererFactory2).createRenderer(null, null);
-    _fullScreenEventName;
-    _cleanupFullScreenListener;
-    constructor() {
-        super();
-    }
-    ngOnDestroy() {
-        super.ngOnDestroy();
-        this._cleanupFullScreenListener?.();
-    }
-    _createContainer() {
-        const eventName = this._getEventName();
-        super._createContainer();
+  _renderer = inject(RendererFactory2).createRenderer(null, null);
+  _fullScreenEventName;
+  _cleanupFullScreenListener;
+  constructor() {
+    super();
+  }
+  ngOnDestroy() {
+    super.ngOnDestroy();
+    this._cleanupFullScreenListener?.();
+  }
+  _createContainer() {
+    const eventName = this._getEventName();
+    super._createContainer();
+    this._adjustParentForFullscreenChange();
+    if (eventName) {
+      this._cleanupFullScreenListener?.();
+      this._cleanupFullScreenListener = this._renderer.listen('document', eventName, () => {
         this._adjustParentForFullscreenChange();
-        if (eventName) {
-            this._cleanupFullScreenListener?.();
-            this._cleanupFullScreenListener = this._renderer.listen('document', eventName, () => {
-                this._adjustParentForFullscreenChange();
-            });
-        }
+      });
     }
-    _adjustParentForFullscreenChange() {
-        if (this._containerElement) {
-            const fullscreenElement = this.getFullscreenElement();
-            const parent = fullscreenElement || this._document.body;
-            parent.appendChild(this._containerElement);
-        }
+  }
+  _adjustParentForFullscreenChange() {
+    if (this._containerElement) {
+      const fullscreenElement = this.getFullscreenElement();
+      const parent = fullscreenElement || this._document.body;
+      parent.appendChild(this._containerElement);
     }
-    _getEventName() {
-        if (!this._fullScreenEventName) {
-            const _document = this._document;
-            if (_document.fullscreenEnabled) {
-                this._fullScreenEventName = 'fullscreenchange';
-            }
-            else if (_document.webkitFullscreenEnabled) {
-                this._fullScreenEventName = 'webkitfullscreenchange';
-            }
-            else if (_document.mozFullScreenEnabled) {
-                this._fullScreenEventName = 'mozfullscreenchange';
-            }
-            else if (_document.msFullscreenEnabled) {
-                this._fullScreenEventName = 'MSFullscreenChange';
-            }
-        }
-        return this._fullScreenEventName;
+  }
+  _getEventName() {
+    if (!this._fullScreenEventName) {
+      const _document = this._document;
+      if (_document.fullscreenEnabled) {
+        this._fullScreenEventName = 'fullscreenchange';
+      } else if (_document.webkitFullscreenEnabled) {
+        this._fullScreenEventName = 'webkitfullscreenchange';
+      } else if (_document.mozFullScreenEnabled) {
+        this._fullScreenEventName = 'mozfullscreenchange';
+      } else if (_document.msFullscreenEnabled) {
+        this._fullScreenEventName = 'MSFullscreenChange';
+      }
     }
-    /**
-     * When the page is put into fullscreen mode, a specific element is specified.
-     * Only that element and its children are visible when in fullscreen mode.
-     */
-    getFullscreenElement() {
-        const _document = this._document;
-        return (_document.fullscreenElement ||
-            _document.webkitFullscreenElement ||
-            _document.mozFullScreenElement ||
-            _document.msFullscreenElement ||
-            null);
-    }
-    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.2.0-next.2", ngImport: i0, type: FullscreenOverlayContainer, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-    static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.2.0-next.2", ngImport: i0, type: FullscreenOverlayContainer, providedIn: 'root' });
+    return this._fullScreenEventName;
+  }
+  getFullscreenElement() {
+    const _document = this._document;
+    return _document.fullscreenElement || _document.webkitFullscreenElement || _document.mozFullScreenElement || _document.msFullscreenElement || null;
+  }
+  static ɵfac = i0.ɵɵngDeclareFactory({
+    minVersion: "12.0.0",
+    version: "20.2.0-next.2",
+    ngImport: i0,
+    type: FullscreenOverlayContainer,
+    deps: [],
+    target: i0.ɵɵFactoryTarget.Injectable
+  });
+  static ɵprov = i0.ɵɵngDeclareInjectable({
+    minVersion: "12.0.0",
+    version: "20.2.0-next.2",
+    ngImport: i0,
+    type: FullscreenOverlayContainer,
+    providedIn: 'root'
+  });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.2.0-next.2", ngImport: i0, type: FullscreenOverlayContainer, decorators: [{
-            type: Injectable,
-            args: [{ providedIn: 'root' }]
-        }], ctorParameters: () => [] });
+i0.ɵɵngDeclareClassMetadata({
+  minVersion: "12.0.0",
+  version: "20.2.0-next.2",
+  ngImport: i0,
+  type: FullscreenOverlayContainer,
+  decorators: [{
+    type: Injectable,
+    args: [{
+      providedIn: 'root'
+    }]
+  }],
+  ctorParameters: () => []
+});
 
 export { FullscreenOverlayContainer, OverlayContainer };
 //# sourceMappingURL=overlay.mjs.map
