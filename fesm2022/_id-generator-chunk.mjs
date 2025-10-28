@@ -10,11 +10,13 @@ const counters = {};
 /** Service that generates unique IDs for DOM nodes. */
 class _IdGenerator {
     _appId = inject(APP_ID);
+    static _infix = `a${Math.floor(Math.random() * 100000).toString()}`;
     /**
      * Generates a unique ID with a specific prefix.
      * @param prefix Prefix to add to the ID.
+     * @param randomize Add a randomized infix string.
      */
-    getId(prefix) {
+    getId(prefix, randomize = false) {
         // Omit the app ID if it's the default `ng`. Since the vast majority of pages have one
         // Angular app on them, we can reduce the amount of breakages by not adding it.
         if (this._appId !== 'ng') {
@@ -23,7 +25,7 @@ class _IdGenerator {
         if (!counters.hasOwnProperty(prefix)) {
             counters[prefix] = 0;
         }
-        return `${prefix}${counters[prefix]++}`;
+        return `${prefix}${randomize ? _IdGenerator._infix + '-' : ''}${counters[prefix]++}`;
     }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.2.0-next.2", ngImport: i0, type: _IdGenerator, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
     static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "20.2.0-next.2", ngImport: i0, type: _IdGenerator, providedIn: 'root' });

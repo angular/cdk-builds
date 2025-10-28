@@ -506,11 +506,13 @@ declare class HighContrastModeDetector implements OnDestroy {
 /** Service that generates unique IDs for DOM nodes. */
 declare class _IdGenerator {
     private _appId;
+    private static _infix;
     /**
      * Generates a unique ID with a specific prefix.
      * @param prefix Prefix to add to the ID.
+     * @param randomize Add a randomized infix string.
      */
-    getId(prefix: string): string;
+    getId(prefix: string, randomize?: boolean): string;
     static ɵfac: i0.ɵɵFactoryDeclaration<_IdGenerator, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<_IdGenerator>;
 }
