@@ -700,11 +700,11 @@ function containsPierceShadowDom(parent, child) {
 
 class _CdkOverlayStyleLoader {
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.2.0-next.2", ngImport: i0, type: _CdkOverlayStyleLoader, deps: [], target: i0.ɵɵFactoryTarget.Component });
-    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "20.2.0-next.2", type: _CdkOverlayStyleLoader, isStandalone: true, selector: "ng-component", host: { attributes: { "cdk-overlay-style-loader": "" } }, ngImport: i0, template: '', isInline: true, styles: [".cdk-overlay-container,.cdk-global-overlay-wrapper{pointer-events:none;top:0;left:0;height:100%;width:100%}.cdk-overlay-container{position:fixed}@layer cdk-overlay{.cdk-overlay-container{z-index:1000}}.cdk-overlay-container:empty{display:none}.cdk-global-overlay-wrapper{display:flex;position:absolute}@layer cdk-overlay{.cdk-global-overlay-wrapper{z-index:1000}}.cdk-overlay-pane{position:absolute;pointer-events:auto;box-sizing:border-box;display:flex;max-width:100%;max-height:100%}@layer cdk-overlay{.cdk-overlay-pane{z-index:1000}}.cdk-overlay-backdrop{position:absolute;top:0;bottom:0;left:0;right:0;pointer-events:auto;-webkit-tap-highlight-color:rgba(0,0,0,0);opacity:0;touch-action:manipulation}@layer cdk-overlay{.cdk-overlay-backdrop{z-index:1000;transition:opacity 400ms cubic-bezier(0.25, 0.8, 0.25, 1)}}@media(prefers-reduced-motion){.cdk-overlay-backdrop{transition-duration:1ms}}.cdk-overlay-backdrop-showing{opacity:1}@media(forced-colors: active){.cdk-overlay-backdrop-showing{opacity:.6}}@layer cdk-overlay{.cdk-overlay-dark-backdrop{background:rgba(0,0,0,.32)}}.cdk-overlay-transparent-backdrop{transition:visibility 1ms linear,opacity 1ms linear;visibility:hidden;opacity:1}.cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing,.cdk-high-contrast-active .cdk-overlay-transparent-backdrop{opacity:0;visibility:visible}.cdk-overlay-backdrop-noop-animation{transition:none}.cdk-overlay-connected-position-bounding-box{position:absolute;display:flex;flex-direction:column;min-width:1px;min-height:1px}@layer cdk-overlay{.cdk-overlay-connected-position-bounding-box{z-index:1000}}.cdk-global-scrollblock{position:fixed;width:100%;overflow-y:scroll}\n"], changeDetection: i0.ChangeDetectionStrategy.OnPush, encapsulation: i0.ViewEncapsulation.None });
+    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "20.2.0-next.2", type: _CdkOverlayStyleLoader, isStandalone: true, selector: "ng-component", host: { attributes: { "cdk-overlay-style-loader": "" } }, ngImport: i0, template: '', isInline: true, styles: [".cdk-overlay-container,.cdk-global-overlay-wrapper{pointer-events:none;top:0;left:0;height:100%;width:100%}.cdk-overlay-container{position:fixed}@layer cdk-overlay{.cdk-overlay-container{z-index:1000}}.cdk-overlay-container:empty{display:none}.cdk-global-overlay-wrapper{display:flex;position:absolute}@layer cdk-overlay{.cdk-global-overlay-wrapper{z-index:1000}}.cdk-overlay-pane{position:absolute;pointer-events:auto;box-sizing:border-box;display:flex;max-width:100%;max-height:100%}@layer cdk-overlay{.cdk-overlay-pane{z-index:1000}}.cdk-overlay-backdrop{position:absolute;top:0;bottom:0;left:0;right:0;pointer-events:auto;-webkit-tap-highlight-color:rgba(0,0,0,0);opacity:0;touch-action:manipulation}@layer cdk-overlay{.cdk-overlay-backdrop{z-index:1000;transition:opacity 400ms cubic-bezier(0.25, 0.8, 0.25, 1)}}@media(prefers-reduced-motion){.cdk-overlay-backdrop{transition-duration:1ms}}.cdk-overlay-backdrop-showing{opacity:1}@media(forced-colors: active){.cdk-overlay-backdrop-showing{opacity:.6}}@layer cdk-overlay{.cdk-overlay-dark-backdrop{background:rgba(0,0,0,.32)}}.cdk-overlay-transparent-backdrop{transition:visibility 1ms linear,opacity 1ms linear;visibility:hidden;opacity:1}.cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing,.cdk-high-contrast-active .cdk-overlay-transparent-backdrop{opacity:0;visibility:visible}.cdk-overlay-backdrop-noop-animation{transition:none}.cdk-overlay-connected-position-bounding-box{position:absolute;display:flex;flex-direction:column;min-width:1px;min-height:1px}@layer cdk-overlay{.cdk-overlay-connected-position-bounding-box{z-index:1000}}.cdk-global-scrollblock{position:fixed;width:100%;overflow-y:scroll}.cdk-overlay-popover{background:none;border:none;padding:0;color:inherit;outline:0;overflow:visible;position:fixed;pointer-events:none;width:100%;height:100%;inset:auto}.cdk-overlay-popover .cdk-overlay-backdrop{position:fixed}\n"], changeDetection: i0.ChangeDetectionStrategy.OnPush, encapsulation: i0.ViewEncapsulation.None });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.2.0-next.2", ngImport: i0, type: _CdkOverlayStyleLoader, decorators: [{
             type: Component,
-            args: [{ template: '', changeDetection: ChangeDetectionStrategy.OnPush, encapsulation: ViewEncapsulation.None, host: { 'cdk-overlay-style-loader': '' }, styles: [".cdk-overlay-container,.cdk-global-overlay-wrapper{pointer-events:none;top:0;left:0;height:100%;width:100%}.cdk-overlay-container{position:fixed}@layer cdk-overlay{.cdk-overlay-container{z-index:1000}}.cdk-overlay-container:empty{display:none}.cdk-global-overlay-wrapper{display:flex;position:absolute}@layer cdk-overlay{.cdk-global-overlay-wrapper{z-index:1000}}.cdk-overlay-pane{position:absolute;pointer-events:auto;box-sizing:border-box;display:flex;max-width:100%;max-height:100%}@layer cdk-overlay{.cdk-overlay-pane{z-index:1000}}.cdk-overlay-backdrop{position:absolute;top:0;bottom:0;left:0;right:0;pointer-events:auto;-webkit-tap-highlight-color:rgba(0,0,0,0);opacity:0;touch-action:manipulation}@layer cdk-overlay{.cdk-overlay-backdrop{z-index:1000;transition:opacity 400ms cubic-bezier(0.25, 0.8, 0.25, 1)}}@media(prefers-reduced-motion){.cdk-overlay-backdrop{transition-duration:1ms}}.cdk-overlay-backdrop-showing{opacity:1}@media(forced-colors: active){.cdk-overlay-backdrop-showing{opacity:.6}}@layer cdk-overlay{.cdk-overlay-dark-backdrop{background:rgba(0,0,0,.32)}}.cdk-overlay-transparent-backdrop{transition:visibility 1ms linear,opacity 1ms linear;visibility:hidden;opacity:1}.cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing,.cdk-high-contrast-active .cdk-overlay-transparent-backdrop{opacity:0;visibility:visible}.cdk-overlay-backdrop-noop-animation{transition:none}.cdk-overlay-connected-position-bounding-box{position:absolute;display:flex;flex-direction:column;min-width:1px;min-height:1px}@layer cdk-overlay{.cdk-overlay-connected-position-bounding-box{z-index:1000}}.cdk-global-scrollblock{position:fixed;width:100%;overflow-y:scroll}\n"] }]
+            args: [{ template: '', changeDetection: ChangeDetectionStrategy.OnPush, encapsulation: ViewEncapsulation.None, host: { 'cdk-overlay-style-loader': '' }, styles: [".cdk-overlay-container,.cdk-global-overlay-wrapper{pointer-events:none;top:0;left:0;height:100%;width:100%}.cdk-overlay-container{position:fixed}@layer cdk-overlay{.cdk-overlay-container{z-index:1000}}.cdk-overlay-container:empty{display:none}.cdk-global-overlay-wrapper{display:flex;position:absolute}@layer cdk-overlay{.cdk-global-overlay-wrapper{z-index:1000}}.cdk-overlay-pane{position:absolute;pointer-events:auto;box-sizing:border-box;display:flex;max-width:100%;max-height:100%}@layer cdk-overlay{.cdk-overlay-pane{z-index:1000}}.cdk-overlay-backdrop{position:absolute;top:0;bottom:0;left:0;right:0;pointer-events:auto;-webkit-tap-highlight-color:rgba(0,0,0,0);opacity:0;touch-action:manipulation}@layer cdk-overlay{.cdk-overlay-backdrop{z-index:1000;transition:opacity 400ms cubic-bezier(0.25, 0.8, 0.25, 1)}}@media(prefers-reduced-motion){.cdk-overlay-backdrop{transition-duration:1ms}}.cdk-overlay-backdrop-showing{opacity:1}@media(forced-colors: active){.cdk-overlay-backdrop-showing{opacity:.6}}@layer cdk-overlay{.cdk-overlay-dark-backdrop{background:rgba(0,0,0,.32)}}.cdk-overlay-transparent-backdrop{transition:visibility 1ms linear,opacity 1ms linear;visibility:hidden;opacity:1}.cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing,.cdk-high-contrast-active .cdk-overlay-transparent-backdrop{opacity:0;visibility:visible}.cdk-overlay-backdrop-noop-animation{transition:none}.cdk-overlay-connected-position-bounding-box{position:absolute;display:flex;flex-direction:column;min-width:1px;min-height:1px}@layer cdk-overlay{.cdk-overlay-connected-position-bounding-box{z-index:1000}}.cdk-global-scrollblock{position:fixed;width:100%;overflow-y:scroll}.cdk-overlay-popover{background:none;border:none;padding:0;color:inherit;outline:0;overflow:visible;position:fixed;pointer-events:none;width:100%;height:100%;inset:auto}.cdk-overlay-popover .cdk-overlay-backdrop{position:fixed}\n"] }]
         }] });
 /** Container inside which all overlays will render. */
 class OverlayContainer {
@@ -897,14 +897,18 @@ class OverlayRef {
     attach(portal) {
         // Insert the host into the DOM before attaching the portal, otherwise
         // the animations module will skip animations on repeat attachments.
-        if (!this._host.parentElement && this._previousHostParent) {
-            this._previousHostParent.appendChild(this._host);
+        if (!this._host.parentElement) {
+            const hasAttachedHost = this._positionStrategy?.attachHost?.(this._host);
+            if (!hasAttachedHost && this._previousHostParent) {
+                this._previousHostParent.appendChild(this._host);
+            }
         }
         const attachResult = this._portalOutlet.attach(portal);
-        if (this._positionStrategy) {
-            this._positionStrategy.attach(this);
+        this._positionStrategy?.attach(this);
+        const hasUpdatedStackingOrder = this._positionStrategy?.updateStackingOrder?.(this._host);
+        if (!hasUpdatedStackingOrder) {
+            this._updateStackingOrder();
         }
-        this._updateStackingOrder();
         this._updateElementSize();
         this._updateElementDirection();
         if (this._scrollStrategy) {
@@ -1142,9 +1146,12 @@ class OverlayRef {
         if (this._config.backdropClass) {
             this._toggleClasses(this._backdropRef.element, this._config.backdropClass, true);
         }
-        // Insert the backdrop before the pane in the DOM order,
-        // in order to handle stacked overlays properly.
-        this._host.parentElement.insertBefore(this._backdropRef.element, this._host);
+        const strategyAttached = this._positionStrategy?.attachBackdrop?.(this._backdropRef.element, this._host);
+        if (!strategyAttached) {
+            // Insert the backdrop before the pane in the DOM order,
+            // in order to handle stacked overlays properly.
+            this._host.parentElement.insertBefore(this._backdropRef.element, this._host);
+        }
         // Add class to fade-in the backdrop after one frame.
         if (!this._animationsDisabled && typeof requestAnimationFrame !== 'undefined') {
             this._ngZone.runOutsideAngular(() => {
@@ -1283,6 +1290,8 @@ class FlexibleConnectedPositionStrategy {
     _hasFlexibleDimensions = true;
     /** Whether the overlay position is locked. */
     _positionLocked = false;
+    /** Whether the overlay is using popovers for positioning. */
+    _popoverEnabled = false;
     /** Cached origin dimensions */
     _originRect;
     /** Cached overlay dimensions */
@@ -1625,6 +1634,66 @@ class FlexibleConnectedPositionStrategy {
     withTransformOriginOn(selector) {
         this._transformOriginSelector = selector;
         return this;
+    }
+    /**
+     * Configures that the overlay should be rendered inside a native popover. This has the benefit
+     * if co-locating the overlay with the trigger and being better for accessibility.
+     * @param isPopover Whether the overlay should be a popover.
+     */
+    asPopover(isPopover) {
+        this._popoverEnabled = isPopover && 'showPopover' in this._document.body;
+        return this;
+    }
+    /** @docs-private */
+    createStructure() {
+        if (!this._popoverEnabled) {
+            return null;
+        }
+        const pane = this._document.createElement('div');
+        const host = this._document.createElement('div');
+        host.setAttribute('popover', 'manual');
+        host.classList.add('cdk-overlay-popover');
+        host.appendChild(pane);
+        this.attachHost(host);
+        return { pane, host };
+    }
+    /** @docs-private */
+    attachHost(host) {
+        if (!this._popoverEnabled) {
+            return false;
+        }
+        if (!host.parentNode) {
+            let originEl;
+            if (this._origin instanceof ElementRef) {
+                originEl = this._origin.nativeElement;
+            }
+            else if (typeof Element !== 'undefined' && this._origin instanceof Element) {
+                originEl = this._origin;
+            }
+            else {
+                originEl = null;
+            }
+            if (originEl) {
+                originEl.after(host);
+            }
+            else {
+                document.body.appendChild(host);
+            }
+        }
+        host.showPopover();
+        return true;
+    }
+    /** @docs-private */
+    attachBackdrop(backdrop, host) {
+        if (this._popoverEnabled) {
+            host.prepend(backdrop);
+        }
+        return this._popoverEnabled;
+    }
+    /** @docs-private */
+    updateStackingOrder() {
+        // We don't need to update the stacking order since popovers handle it for us.
+        return this._popoverEnabled;
     }
     /**
      * Gets the (x, y) coordinate of a connection point on the origin based on a relative position.
@@ -2596,14 +2665,23 @@ function createOverlayRef(injector, config) {
     const idGenerator = injector.get(_IdGenerator);
     const appRef = injector.get(ApplicationRef);
     const directionality = injector.get(Directionality);
-    const host = doc.createElement('div');
-    const pane = doc.createElement('div');
+    const overlayConfig = new OverlayConfig(config);
+    const customStructure = overlayConfig.positionStrategy?.createStructure?.();
+    let pane;
+    let host;
+    if (customStructure) {
+        pane = customStructure.pane;
+        host = customStructure.host;
+    }
+    else {
+        host = doc.createElement('div');
+        pane = doc.createElement('div');
+        host.appendChild(pane);
+        overlayContainer.getContainerElement().appendChild(host);
+    }
     pane.id = idGenerator.getId('cdk-overlay-');
     pane.classList.add('cdk-overlay-pane');
-    host.appendChild(pane);
-    overlayContainer.getContainerElement().appendChild(host);
     const portalOutlet = new DomPortalOutlet(pane, appRef, injector);
-    const overlayConfig = new OverlayConfig(config);
     const renderer = injector.get(Renderer2, null, { optional: true }) ||
         injector.get(RendererFactory2).createRenderer(null, null);
     overlayConfig.direction = overlayConfig.direction || directionality.value;
@@ -2786,6 +2864,8 @@ class CdkConnectedOverlay {
     set disposeOnNavigation(value) {
         this._disposeOnNavigation = value;
     }
+    /** Whether the connected overlay should be rendered inside a popover element or the overlay container. */
+    asPopover = false;
     /** Event emitted when the backdrop is clicked. */
     backdropClick = new EventEmitter();
     /** Event emitted when the position has changed. */
@@ -2910,7 +2990,8 @@ class CdkConnectedOverlay {
             .withGrowAfterOpen(this.growAfterOpen)
             .withViewportMargin(this.viewportMargin)
             .withLockedPosition(this.lockPosition)
-            .withTransformOriginOn(this.transformOriginSelector);
+            .withTransformOriginOn(this.transformOriginSelector)
+            .asPopover(this.asPopover);
     }
     /** Returns the position strategy of the overlay to be set on the overlay config */
     _createPositionStrategy() {
@@ -2981,7 +3062,7 @@ class CdkConnectedOverlay {
         this.open = false;
     }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.2.0-next.2", ngImport: i0, type: CdkConnectedOverlay, deps: [], target: i0.ɵɵFactoryTarget.Directive });
-    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "20.2.0-next.2", type: CdkConnectedOverlay, isStandalone: true, selector: "[cdk-connected-overlay], [connected-overlay], [cdkConnectedOverlay]", inputs: { origin: ["cdkConnectedOverlayOrigin", "origin"], positions: ["cdkConnectedOverlayPositions", "positions"], positionStrategy: ["cdkConnectedOverlayPositionStrategy", "positionStrategy"], offsetX: ["cdkConnectedOverlayOffsetX", "offsetX"], offsetY: ["cdkConnectedOverlayOffsetY", "offsetY"], width: ["cdkConnectedOverlayWidth", "width"], height: ["cdkConnectedOverlayHeight", "height"], minWidth: ["cdkConnectedOverlayMinWidth", "minWidth"], minHeight: ["cdkConnectedOverlayMinHeight", "minHeight"], backdropClass: ["cdkConnectedOverlayBackdropClass", "backdropClass"], panelClass: ["cdkConnectedOverlayPanelClass", "panelClass"], viewportMargin: ["cdkConnectedOverlayViewportMargin", "viewportMargin"], scrollStrategy: ["cdkConnectedOverlayScrollStrategy", "scrollStrategy"], open: ["cdkConnectedOverlayOpen", "open"], disableClose: ["cdkConnectedOverlayDisableClose", "disableClose"], transformOriginSelector: ["cdkConnectedOverlayTransformOriginOn", "transformOriginSelector"], hasBackdrop: ["cdkConnectedOverlayHasBackdrop", "hasBackdrop", booleanAttribute], lockPosition: ["cdkConnectedOverlayLockPosition", "lockPosition", booleanAttribute], flexibleDimensions: ["cdkConnectedOverlayFlexibleDimensions", "flexibleDimensions", booleanAttribute], growAfterOpen: ["cdkConnectedOverlayGrowAfterOpen", "growAfterOpen", booleanAttribute], push: ["cdkConnectedOverlayPush", "push", booleanAttribute], disposeOnNavigation: ["cdkConnectedOverlayDisposeOnNavigation", "disposeOnNavigation", booleanAttribute] }, outputs: { backdropClick: "backdropClick", positionChange: "positionChange", attach: "attach", detach: "detach", overlayKeydown: "overlayKeydown", overlayOutsideClick: "overlayOutsideClick" }, exportAs: ["cdkConnectedOverlay"], usesOnChanges: true, ngImport: i0 });
+    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "20.2.0-next.2", type: CdkConnectedOverlay, isStandalone: true, selector: "[cdk-connected-overlay], [connected-overlay], [cdkConnectedOverlay]", inputs: { origin: ["cdkConnectedOverlayOrigin", "origin"], positions: ["cdkConnectedOverlayPositions", "positions"], positionStrategy: ["cdkConnectedOverlayPositionStrategy", "positionStrategy"], offsetX: ["cdkConnectedOverlayOffsetX", "offsetX"], offsetY: ["cdkConnectedOverlayOffsetY", "offsetY"], width: ["cdkConnectedOverlayWidth", "width"], height: ["cdkConnectedOverlayHeight", "height"], minWidth: ["cdkConnectedOverlayMinWidth", "minWidth"], minHeight: ["cdkConnectedOverlayMinHeight", "minHeight"], backdropClass: ["cdkConnectedOverlayBackdropClass", "backdropClass"], panelClass: ["cdkConnectedOverlayPanelClass", "panelClass"], viewportMargin: ["cdkConnectedOverlayViewportMargin", "viewportMargin"], scrollStrategy: ["cdkConnectedOverlayScrollStrategy", "scrollStrategy"], open: ["cdkConnectedOverlayOpen", "open"], disableClose: ["cdkConnectedOverlayDisableClose", "disableClose"], transformOriginSelector: ["cdkConnectedOverlayTransformOriginOn", "transformOriginSelector"], hasBackdrop: ["cdkConnectedOverlayHasBackdrop", "hasBackdrop", booleanAttribute], lockPosition: ["cdkConnectedOverlayLockPosition", "lockPosition", booleanAttribute], flexibleDimensions: ["cdkConnectedOverlayFlexibleDimensions", "flexibleDimensions", booleanAttribute], growAfterOpen: ["cdkConnectedOverlayGrowAfterOpen", "growAfterOpen", booleanAttribute], push: ["cdkConnectedOverlayPush", "push", booleanAttribute], disposeOnNavigation: ["cdkConnectedOverlayDisposeOnNavigation", "disposeOnNavigation", booleanAttribute], asPopover: ["cdkConnectedOverlayAsPopover", "asPopover", booleanAttribute] }, outputs: { backdropClick: "backdropClick", positionChange: "positionChange", attach: "attach", detach: "detach", overlayKeydown: "overlayKeydown", overlayOutsideClick: "overlayOutsideClick" }, exportAs: ["cdkConnectedOverlay"], usesOnChanges: true, ngImport: i0 });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.2.0-next.2", ngImport: i0, type: CdkConnectedOverlay, decorators: [{
             type: Directive,
@@ -3055,6 +3136,9 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.2.0-next.2", 
             }], disposeOnNavigation: [{
                 type: Input,
                 args: [{ alias: 'cdkConnectedOverlayDisposeOnNavigation', transform: booleanAttribute }]
+            }], asPopover: [{
+                type: Input,
+                args: [{ alias: 'cdkConnectedOverlayAsPopover', transform: booleanAttribute }]
             }], backdropClick: [{
                 type: Output
             }], positionChange: [{
