@@ -230,6 +230,32 @@ interface PositionStrategy {
     detach?(): void;
     /** Cleans up any DOM modifications made by the position strategy, if necessary. */
     dispose(): void;
+    /**
+     * Creates the structure of the overlay. If not provided or if it returns null,
+     * structure will be created inside the overlay container.
+     */
+    createStructure?(): {
+        pane: HTMLElement;
+        host: HTMLElement;
+    } | null;
+    /**
+     * Attaches the host element to the DOM. The return value indicates whether the
+     * position strategy ended up attaching the host. If it didn't, it will fall back
+     * to the default behavior.
+     */
+    attachHost?(host: HTMLElement): boolean;
+    /**
+     * Attaches the backdrop element to the host. The return value indicates whether the
+     * position strategy ended up attaching the backdrop. If it didn't, it will fall back
+     * to the default behavior.
+     */
+    attachBackdrop?(backdrop: HTMLElement, host: HTMLElement): boolean;
+    /**
+     * Updates the stacking order of the overlay. The return value indicates whether the
+     * position strategy ended up updating the stacking order. If it hasn't, the overlay
+     * will fall back to the default stacking update logic.
+     */
+    updateStackingOrder?(host: HTMLElement): boolean;
 }
 
 /** Initial configuration used when creating an overlay. */
@@ -440,6 +466,8 @@ declare class FlexibleConnectedPositionStrategy implements PositionStrategy {
     private _hasFlexibleDimensions;
     /** Whether the overlay position is locked. */
     private _positionLocked;
+    /** Whether the overlay is using popovers for positioning. */
+    private _popoverEnabled;
     /** Cached origin dimensions */
     private _originRect;
     /** Cached overlay dimensions */
@@ -571,6 +599,23 @@ declare class FlexibleConnectedPositionStrategy implements PositionStrategy {
      *    elements onto which to set the transform origin.
      */
     withTransformOriginOn(selector: string): this;
+    /**
+     * Configures that the overlay should be rendered inside a native popover. This has the benefit
+     * if co-locating the overlay with the trigger and being better for accessibility.
+     * @param isPopover Whether the overlay should be a popover.
+     */
+    asPopover(isPopover: boolean): this;
+    /** @docs-private */
+    createStructure(): {
+        pane: HTMLDivElement;
+        host: HTMLDivElement;
+    } | null;
+    /** @docs-private */
+    attachHost(host: HTMLElement): boolean;
+    /** @docs-private */
+    attachBackdrop(backdrop: HTMLElement, host: HTMLElement): boolean;
+    /** @docs-private */
+    updateStackingOrder(): boolean;
     /**
      * Gets the (x, y) coordinate of a connection point on the origin based on a relative position.
      */
@@ -776,6 +821,8 @@ declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     /** Whether the overlay should be disposed of when the user goes backwards/forwards in history. */
     get disposeOnNavigation(): boolean;
     set disposeOnNavigation(value: boolean);
+    /** Whether the connected overlay should be rendered inside a popover element or the overlay container. */
+    asPopover: boolean;
     /** Event emitted when the backdrop is clicked. */
     readonly backdropClick: EventEmitter<MouseEvent>;
     /** Event emitted when the position has changed. */
@@ -810,13 +857,14 @@ declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     /** Detaches the overlay. */
     detachOverlay(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkConnectedOverlay, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkConnectedOverlay, "[cdk-connected-overlay], [connected-overlay], [cdkConnectedOverlay]", ["cdkConnectedOverlay"], { "origin": { "alias": "cdkConnectedOverlayOrigin"; "required": false; }; "positions": { "alias": "cdkConnectedOverlayPositions"; "required": false; }; "positionStrategy": { "alias": "cdkConnectedOverlayPositionStrategy"; "required": false; }; "offsetX": { "alias": "cdkConnectedOverlayOffsetX"; "required": false; }; "offsetY": { "alias": "cdkConnectedOverlayOffsetY"; "required": false; }; "width": { "alias": "cdkConnectedOverlayWidth"; "required": false; }; "height": { "alias": "cdkConnectedOverlayHeight"; "required": false; }; "minWidth": { "alias": "cdkConnectedOverlayMinWidth"; "required": false; }; "minHeight": { "alias": "cdkConnectedOverlayMinHeight"; "required": false; }; "backdropClass": { "alias": "cdkConnectedOverlayBackdropClass"; "required": false; }; "panelClass": { "alias": "cdkConnectedOverlayPanelClass"; "required": false; }; "viewportMargin": { "alias": "cdkConnectedOverlayViewportMargin"; "required": false; }; "scrollStrategy": { "alias": "cdkConnectedOverlayScrollStrategy"; "required": false; }; "open": { "alias": "cdkConnectedOverlayOpen"; "required": false; }; "disableClose": { "alias": "cdkConnectedOverlayDisableClose"; "required": false; }; "transformOriginSelector": { "alias": "cdkConnectedOverlayTransformOriginOn"; "required": false; }; "hasBackdrop": { "alias": "cdkConnectedOverlayHasBackdrop"; "required": false; }; "lockPosition": { "alias": "cdkConnectedOverlayLockPosition"; "required": false; }; "flexibleDimensions": { "alias": "cdkConnectedOverlayFlexibleDimensions"; "required": false; }; "growAfterOpen": { "alias": "cdkConnectedOverlayGrowAfterOpen"; "required": false; }; "push": { "alias": "cdkConnectedOverlayPush"; "required": false; }; "disposeOnNavigation": { "alias": "cdkConnectedOverlayDisposeOnNavigation"; "required": false; }; }, { "backdropClick": "backdropClick"; "positionChange": "positionChange"; "attach": "attach"; "detach": "detach"; "overlayKeydown": "overlayKeydown"; "overlayOutsideClick": "overlayOutsideClick"; }, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkConnectedOverlay, "[cdk-connected-overlay], [connected-overlay], [cdkConnectedOverlay]", ["cdkConnectedOverlay"], { "origin": { "alias": "cdkConnectedOverlayOrigin"; "required": false; }; "positions": { "alias": "cdkConnectedOverlayPositions"; "required": false; }; "positionStrategy": { "alias": "cdkConnectedOverlayPositionStrategy"; "required": false; }; "offsetX": { "alias": "cdkConnectedOverlayOffsetX"; "required": false; }; "offsetY": { "alias": "cdkConnectedOverlayOffsetY"; "required": false; }; "width": { "alias": "cdkConnectedOverlayWidth"; "required": false; }; "height": { "alias": "cdkConnectedOverlayHeight"; "required": false; }; "minWidth": { "alias": "cdkConnectedOverlayMinWidth"; "required": false; }; "minHeight": { "alias": "cdkConnectedOverlayMinHeight"; "required": false; }; "backdropClass": { "alias": "cdkConnectedOverlayBackdropClass"; "required": false; }; "panelClass": { "alias": "cdkConnectedOverlayPanelClass"; "required": false; }; "viewportMargin": { "alias": "cdkConnectedOverlayViewportMargin"; "required": false; }; "scrollStrategy": { "alias": "cdkConnectedOverlayScrollStrategy"; "required": false; }; "open": { "alias": "cdkConnectedOverlayOpen"; "required": false; }; "disableClose": { "alias": "cdkConnectedOverlayDisableClose"; "required": false; }; "transformOriginSelector": { "alias": "cdkConnectedOverlayTransformOriginOn"; "required": false; }; "hasBackdrop": { "alias": "cdkConnectedOverlayHasBackdrop"; "required": false; }; "lockPosition": { "alias": "cdkConnectedOverlayLockPosition"; "required": false; }; "flexibleDimensions": { "alias": "cdkConnectedOverlayFlexibleDimensions"; "required": false; }; "growAfterOpen": { "alias": "cdkConnectedOverlayGrowAfterOpen"; "required": false; }; "push": { "alias": "cdkConnectedOverlayPush"; "required": false; }; "disposeOnNavigation": { "alias": "cdkConnectedOverlayDisposeOnNavigation"; "required": false; }; "asPopover": { "alias": "cdkConnectedOverlayAsPopover"; "required": false; }; }, { "backdropClick": "backdropClick"; "positionChange": "positionChange"; "attach": "attach"; "detach": "detach"; "overlayKeydown": "overlayKeydown"; "overlayOutsideClick": "overlayOutsideClick"; }, never, never, true, never>;
     static ngAcceptInputType_hasBackdrop: unknown;
     static ngAcceptInputType_lockPosition: unknown;
     static ngAcceptInputType_flexibleDimensions: unknown;
     static ngAcceptInputType_growAfterOpen: unknown;
     static ngAcceptInputType_push: unknown;
     static ngAcceptInputType_disposeOnNavigation: unknown;
+    static ngAcceptInputType_asPopover: unknown;
 }
 
 declare class OverlayModule {
