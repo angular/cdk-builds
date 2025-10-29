@@ -1,6 +1,5 @@
 import { Version } from '@angular/core';
 
-/** Current version of the Angular Component Development Kit. */
 const VERSION = new Version('21.0.0-next.10');
 
 export { VERSION };
