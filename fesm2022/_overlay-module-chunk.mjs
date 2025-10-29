@@ -288,6 +288,7 @@ class OverlayConfig {
   maxHeight;
   direction;
   disposeOnNavigation = false;
+  usePopover = false;
   constructor(config) {
     if (config) {
       const configKeys = Object.keys(config);
@@ -753,18 +754,10 @@ class OverlayRef {
     return this._host;
   }
   attach(portal) {
-    if (!this._host.parentElement) {
-      const hasAttachedHost = this._positionStrategy?.attachHost?.(this._host);
-      if (!hasAttachedHost && this._previousHostParent) {
-        this._previousHostParent.appendChild(this._host);
-      }
-    }
+    this._attachHost();
     const attachResult = this._portalOutlet.attach(portal);
     this._positionStrategy?.attach(this);
-    const hasUpdatedStackingOrder = this._positionStrategy?.updateStackingOrder?.(this._host);
-    if (!hasUpdatedStackingOrder) {
-      this._updateStackingOrder();
-    }
+    this._updateStackingOrder();
     this._updateElementSize();
     this._updateElementDirection();
     if (this._scrollStrategy) {
@@ -945,6 +938,18 @@ class OverlayRef {
   _togglePointerEvents(enablePointer) {
     this._pane.style.pointerEvents = enablePointer ? '' : 'none';
   }
+  _attachHost() {
+    if (!this._host.parentElement) {
+      if (this._config.usePopover && this._positionStrategy?.getPopoverInsertionPoint) {
+        this._positionStrategy.getPopoverInsertionPoint().after(this._host);
+      } else {
+        this._previousHostParent?.appendChild(this._host);
+      }
+    }
+    if (this._config.usePopover) {
+      this._host.showPopover();
+    }
+  }
   _attachBackdrop() {
     const showingClass = 'cdk-overlay-backdrop-showing';
     this._backdropRef?.dispose();
@@ -957,8 +962,9 @@ class OverlayRef {
     if (this._config.backdropClass) {
       this._toggleClasses(this._backdropRef.element, this._config.backdropClass, true);
     }
-    const strategyAttached = this._positionStrategy?.attachBackdrop?.(this._backdropRef.element, this._host);
-    if (!strategyAttached) {
+    if (this._config.usePopover) {
+      this._host.prepend(this._backdropRef.element);
+    } else {
       this._host.parentElement.insertBefore(this._backdropRef.element, this._host);
     }
     if (!this._animationsDisabled && typeof requestAnimationFrame !== 'undefined') {
@@ -970,7 +976,7 @@ class OverlayRef {
     }
   }
   _updateStackingOrder() {
-    if (this._host.nextSibling) {
+    if (!this._config.usePopover && this._host.nextSibling) {
       this._host.parentNode.appendChild(this._host);
     }
   }
@@ -1057,7 +1063,6 @@ class FlexibleConnectedPositionStrategy {
   _growAfterOpen = false;
   _hasFlexibleDimensions = true;
   _positionLocked = false;
-  _popoverEnabled = false;
   _originRect;
   _overlayRect;
   _viewportRect;
@@ -1274,55 +1279,14 @@ class FlexibleConnectedPositionStrategy {
     this._transformOriginSelector = selector;
     return this;
   }
-  asPopover(isPopover) {
-    this._popoverEnabled = isPopover && 'showPopover' in this._document.body;
-    return this;
-  }
-  createStructure() {
-    if (!this._popoverEnabled) {
-      return null;
+  getPopoverInsertionPoint() {
+    const origin = this._origin;
+    if (origin instanceof ElementRef) {
+      return origin.nativeElement;
+    } else if (origin instanceof Element) {
+      return origin;
     }
-    const pane = this._document.createElement('div');
-    const host = this._document.createElement('div');
-    host.setAttribute('popover', 'manual');
-    host.classList.add('cdk-overlay-popover');
-    host.appendChild(pane);
-    this.attachHost(host);
-    return {
-      pane,
-      host
-    };
-  }
-  attachHost(host) {
-    if (!this._popoverEnabled) {
-      return false;
-    }
-    if (!host.parentNode) {
-      let originEl;
-      if (this._origin instanceof ElementRef) {
-        originEl = this._origin.nativeElement;
-      } else if (typeof Element !== 'undefined' && this._origin instanceof Element) {
-        originEl = this._origin;
-      } else {
-        originEl = null;
-      }
-      if (originEl) {
-        originEl.after(host);
-      } else {
-        document.body.appendChild(host);
-      }
-    }
-    host.showPopover();
-    return true;
-  }
-  attachBackdrop(backdrop, host) {
-    if (this._popoverEnabled) {
-      host.prepend(backdrop);
-    }
-    return this._popoverEnabled;
-  }
-  updateStackingOrder() {
-    return this._popoverEnabled;
+    return document.body.lastChild;
   }
   _getOriginPoint(originRect, containerRect, pos) {
     let x;
@@ -1851,8 +1815,8 @@ const STANDARD_DROPDOWN_ADJACENT_POSITIONS = [{
 }];
 
 const wrapperClass = 'cdk-global-overlay-wrapper';
-function createGlobalPositionStrategy(_injector) {
-  return new GlobalPositionStrategy();
+function createGlobalPositionStrategy(injector) {
+  return new GlobalPositionStrategy(injector);
 }
 class GlobalPositionStrategy {
   _overlayRef;
@@ -1865,6 +1829,10 @@ class GlobalPositionStrategy {
   _width = '';
   _height = '';
   _isDisposed = false;
+  _document;
+  constructor(injector) {
+    this._document = injector?.get(DOCUMENT) || document;
+  }
   attach(overlayRef) {
     const config = overlayRef.getConfig();
     this._overlayRef = overlayRef;
@@ -2008,13 +1976,16 @@ class GlobalPositionStrategy {
     this._overlayRef = null;
     this._isDisposed = true;
   }
+  getPopoverInsertionPoint() {
+    return this._document.body.lastChild;
+  }
 }
 
 class OverlayPositionBuilder {
   _injector = inject(Injector);
   constructor() {}
   global() {
-    return createGlobalPositionStrategy();
+    return createGlobalPositionStrategy(this._injector);
   }
   flexibleConnectedTo(origin) {
     return createFlexibleConnectedPositionStrategy(this._injector, origin);
@@ -2056,27 +2027,27 @@ function createOverlayRef(injector, config) {
   const idGenerator = injector.get(_IdGenerator);
   const appRef = injector.get(ApplicationRef);
   const directionality = injector.get(Directionality);
-  const overlayConfig = new OverlayConfig(config);
-  const customStructure = overlayConfig.positionStrategy?.createStructure?.();
-  let pane;
-  let host;
-  if (customStructure) {
-    pane = customStructure.pane;
-    host = customStructure.host;
-  } else {
-    host = doc.createElement('div');
-    pane = doc.createElement('div');
-    host.appendChild(pane);
-    overlayContainer.getContainerElement().appendChild(host);
-  }
-  pane.id = idGenerator.getId('cdk-overlay-');
-  pane.classList.add('cdk-overlay-pane');
-  const portalOutlet = new DomPortalOutlet(pane, appRef, injector);
   const renderer = injector.get(Renderer2, null, {
     optional: true
   }) || injector.get(RendererFactory2).createRenderer(null, null);
+  const overlayConfig = new OverlayConfig(config);
   overlayConfig.direction = overlayConfig.direction || directionality.value;
-  return new OverlayRef(portalOutlet, host, pane, overlayConfig, injector.get(NgZone), injector.get(OverlayKeyboardDispatcher), doc, injector.get(Location), injector.get(OverlayOutsideClickDispatcher), config?.disableAnimations ?? injector.get(ANIMATION_MODULE_TYPE, null, {
+  overlayConfig.usePopover = !!overlayConfig?.usePopover && 'showPopover' in doc.body;
+  const pane = doc.createElement('div');
+  const host = doc.createElement('div');
+  pane.id = idGenerator.getId('cdk-overlay-');
+  pane.classList.add('cdk-overlay-pane');
+  host.appendChild(pane);
+  if (overlayConfig.usePopover) {
+    host.setAttribute('popover', 'manual');
+    host.classList.add('cdk-overlay-popover');
+  }
+  if (overlayConfig.usePopover && overlayConfig.positionStrategy?.getPopoverInsertionPoint) {
+    overlayConfig.positionStrategy.getPopoverInsertionPoint().after(host);
+  } else {
+    overlayContainer.getContainerElement().appendChild(host);
+  }
+  return new OverlayRef(new DomPortalOutlet(pane, appRef, injector), host, pane, overlayConfig, injector.get(NgZone), injector.get(OverlayKeyboardDispatcher), doc, injector.get(Location), injector.get(OverlayOutsideClickDispatcher), config?.disableAnimations ?? injector.get(ANIMATION_MODULE_TYPE, null, {
     optional: true
   }) === 'NoopAnimations', injector.get(EnvironmentInjector), renderer);
 }
@@ -2244,7 +2215,7 @@ class CdkConnectedOverlay {
   set disposeOnNavigation(value) {
     this._disposeOnNavigation = value;
   }
-  asPopover = false;
+  usePopover = false;
   backdropClick = new EventEmitter();
   positionChange = new EventEmitter();
   attach = new EventEmitter();
@@ -2316,7 +2287,8 @@ class CdkConnectedOverlay {
       positionStrategy,
       scrollStrategy: this.scrollStrategy,
       hasBackdrop: this.hasBackdrop,
-      disposeOnNavigation: this.disposeOnNavigation
+      disposeOnNavigation: this.disposeOnNavigation,
+      usePopover: this.usePopover
     });
     if (this.width || this.width === 0) {
       overlayConfig.width = this.width;
@@ -2348,7 +2320,7 @@ class CdkConnectedOverlay {
       offsetY: currentPosition.offsetY || this.offsetY,
       panelClass: currentPosition.panelClass || undefined
     }));
-    return positionStrategy.setOrigin(this._getOrigin()).withPositions(positions).withFlexibleDimensions(this.flexibleDimensions).withPush(this.push).withGrowAfterOpen(this.growAfterOpen).withViewportMargin(this.viewportMargin).withLockedPosition(this.lockPosition).withTransformOriginOn(this.transformOriginSelector).asPopover(this.asPopover);
+    return positionStrategy.setOrigin(this._getOrigin()).withPositions(positions).withFlexibleDimensions(this.flexibleDimensions).withPush(this.push).withGrowAfterOpen(this.growAfterOpen).withViewportMargin(this.viewportMargin).withLockedPosition(this.lockPosition).withTransformOriginOn(this.transformOriginSelector);
   }
   _createPositionStrategy() {
     const strategy = createFlexibleConnectedPositionStrategy(this._injector, this._getOrigin());
@@ -2444,7 +2416,7 @@ class CdkConnectedOverlay {
       growAfterOpen: ["cdkConnectedOverlayGrowAfterOpen", "growAfterOpen", booleanAttribute],
       push: ["cdkConnectedOverlayPush", "push", booleanAttribute],
       disposeOnNavigation: ["cdkConnectedOverlayDisposeOnNavigation", "disposeOnNavigation", booleanAttribute],
-      asPopover: ["cdkConnectedOverlayAsPopover", "asPopover", booleanAttribute]
+      usePopover: ["cdkConnectedOverlayUsePopover", "usePopover", booleanAttribute]
     },
     outputs: {
       backdropClick: "backdropClick",
@@ -2579,10 +2551,10 @@ i0.ɵɵngDeclareClassMetadata({
         transform: booleanAttribute
       }]
     }],
-    asPopover: [{
+    usePopover: [{
       type: Input,
       args: [{
-        alias: 'cdkConnectedOverlayAsPopover',
+        alias: 'cdkConnectedOverlayUsePopover',
         transform: booleanAttribute
       }]
     }],
