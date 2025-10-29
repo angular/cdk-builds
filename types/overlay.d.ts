@@ -154,7 +154,7 @@ declare class ScrollStrategyOptions {
  * Creates a global position strategy.
  * @param injector Injector used to resolve dependencies for the strategy.
  */
-declare function createGlobalPositionStrategy(_injector: Injector): GlobalPositionStrategy;
+declare function createGlobalPositionStrategy(injector: Injector): GlobalPositionStrategy;
 /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
  * explicit position relative to the browser's viewport. We use flexbox, instead of
@@ -173,6 +173,8 @@ declare class GlobalPositionStrategy implements PositionStrategy {
     private _width;
     private _height;
     private _isDisposed;
+    private _document;
+    constructor(injector?: Injector);
     attach(overlayRef: OverlayRef): void;
     /**
      * Sets the top position of the overlay. Clears any previously set vertical position.
@@ -244,6 +246,8 @@ declare class GlobalPositionStrategy implements PositionStrategy {
      * @docs-private
      */
     dispose(): void;
+    /** @docs-private */
+    getPopoverInsertionPoint(): Element;
 }
 
 /** Builder for overlay position strategy. */

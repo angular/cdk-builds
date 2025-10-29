@@ -666,7 +666,7 @@ class Dialog {
     _getOverlayConfig(config) {
         const state = new OverlayConfig({
             positionStrategy: config.positionStrategy ||
-                createGlobalPositionStrategy().centerHorizontally().centerVertically(),
+                createGlobalPositionStrategy(this._injector).centerHorizontally().centerVertically(),
             scrollStrategy: config.scrollStrategy || this._scrollStrategy(),
             panelClass: config.panelClass,
             hasBackdrop: config.hasBackdrop,
@@ -815,7 +815,8 @@ class Dialog {
                 if (sibling !== overlayContainer &&
                     sibling.nodeName !== 'SCRIPT' &&
                     sibling.nodeName !== 'STYLE' &&
-                    !sibling.hasAttribute('aria-live')) {
+                    !sibling.hasAttribute('aria-live') &&
+                    !sibling.hasAttribute('popover')) {
                     this._ariaHiddenElements.set(sibling, sibling.getAttribute('aria-hidden'));
                     sibling.setAttribute('aria-hidden', 'true');
                 }
