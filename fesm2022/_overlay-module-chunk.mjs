@@ -575,7 +575,7 @@ class _CdkOverlayStyleLoader {
     ngImport: i0,
     template: '',
     isInline: true,
-    styles: [".cdk-overlay-container,.cdk-global-overlay-wrapper{pointer-events:none;top:0;left:0;height:100%;width:100%}.cdk-overlay-container{position:fixed}@layer cdk-overlay{.cdk-overlay-container{z-index:1000}}.cdk-overlay-container:empty{display:none}.cdk-global-overlay-wrapper{display:flex;position:absolute}@layer cdk-overlay{.cdk-global-overlay-wrapper{z-index:1000}}.cdk-overlay-pane{position:absolute;pointer-events:auto;box-sizing:border-box;display:flex;max-width:100%;max-height:100%}@layer cdk-overlay{.cdk-overlay-pane{z-index:1000}}.cdk-overlay-backdrop{position:absolute;top:0;bottom:0;left:0;right:0;pointer-events:auto;-webkit-tap-highlight-color:rgba(0,0,0,0);opacity:0;touch-action:manipulation}@layer cdk-overlay{.cdk-overlay-backdrop{z-index:1000;transition:opacity 400ms cubic-bezier(0.25, 0.8, 0.25, 1)}}@media(prefers-reduced-motion){.cdk-overlay-backdrop{transition-duration:1ms}}.cdk-overlay-backdrop-showing{opacity:1}@media(forced-colors: active){.cdk-overlay-backdrop-showing{opacity:.6}}@layer cdk-overlay{.cdk-overlay-dark-backdrop{background:rgba(0,0,0,.32)}}.cdk-overlay-transparent-backdrop{transition:visibility 1ms linear,opacity 1ms linear;visibility:hidden;opacity:1}.cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing,.cdk-high-contrast-active .cdk-overlay-transparent-backdrop{opacity:0;visibility:visible}.cdk-overlay-backdrop-noop-animation{transition:none}.cdk-overlay-connected-position-bounding-box{position:absolute;display:flex;flex-direction:column;min-width:1px;min-height:1px}@layer cdk-overlay{.cdk-overlay-connected-position-bounding-box{z-index:1000}}.cdk-global-scrollblock{position:fixed;width:100%;overflow-y:scroll}.cdk-overlay-popover{background:none;border:none;padding:0;color:inherit;outline:0;overflow:visible;position:fixed;pointer-events:none;width:100%;height:100%;inset:auto}.cdk-overlay-popover .cdk-overlay-backdrop{position:fixed}\n"],
+    styles: [".cdk-overlay-container,.cdk-global-overlay-wrapper{pointer-events:none;top:0;left:0;height:100%;width:100%}.cdk-overlay-container{position:fixed}@layer cdk-overlay{.cdk-overlay-container{z-index:1000}}.cdk-overlay-container:empty{display:none}.cdk-global-overlay-wrapper{display:flex;position:absolute}@layer cdk-overlay{.cdk-global-overlay-wrapper{z-index:1000}}.cdk-overlay-pane{position:absolute;pointer-events:auto;box-sizing:border-box;display:flex;max-width:100%;max-height:100%}@layer cdk-overlay{.cdk-overlay-pane{z-index:1000}}.cdk-overlay-backdrop{position:absolute;top:0;bottom:0;left:0;right:0;pointer-events:auto;-webkit-tap-highlight-color:rgba(0,0,0,0);opacity:0;touch-action:manipulation}@layer cdk-overlay{.cdk-overlay-backdrop{z-index:1000;transition:opacity 400ms cubic-bezier(0.25, 0.8, 0.25, 1)}}@media(prefers-reduced-motion){.cdk-overlay-backdrop{transition-duration:1ms}}.cdk-overlay-backdrop-showing{opacity:1}@media(forced-colors: active){.cdk-overlay-backdrop-showing{opacity:.6}}@layer cdk-overlay{.cdk-overlay-dark-backdrop{background:rgba(0,0,0,.32)}}.cdk-overlay-transparent-backdrop{transition:visibility 1ms linear,opacity 1ms linear;visibility:hidden;opacity:1}.cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing,.cdk-high-contrast-active .cdk-overlay-transparent-backdrop{opacity:0;visibility:visible}.cdk-overlay-backdrop-noop-animation{transition:none}.cdk-overlay-connected-position-bounding-box{position:absolute;display:flex;flex-direction:column;min-width:1px;min-height:1px}@layer cdk-overlay{.cdk-overlay-connected-position-bounding-box{z-index:1000}}.cdk-global-scrollblock{position:fixed;width:100%;overflow-y:scroll}.cdk-overlay-popover{background:none;border:none;padding:0;color:inherit;outline:0;overflow:visible;position:fixed;pointer-events:none;width:100%;height:100%;inset:auto}.cdk-overlay-popover::backdrop{display:none}.cdk-overlay-popover .cdk-overlay-backdrop{position:fixed}\n"],
     changeDetection: i0.ChangeDetectionStrategy.OnPush,
     encapsulation: i0.ViewEncapsulation.None
   });
@@ -594,7 +594,7 @@ i0.ɵɵngDeclareClassMetadata({
       host: {
         'cdk-overlay-style-loader': ''
       },
-      styles: [".cdk-overlay-container,.cdk-global-overlay-wrapper{pointer-events:none;top:0;left:0;height:100%;width:100%}.cdk-overlay-container{position:fixed}@layer cdk-overlay{.cdk-overlay-container{z-index:1000}}.cdk-overlay-container:empty{display:none}.cdk-global-overlay-wrapper{display:flex;position:absolute}@layer cdk-overlay{.cdk-global-overlay-wrapper{z-index:1000}}.cdk-overlay-pane{position:absolute;pointer-events:auto;box-sizing:border-box;display:flex;max-width:100%;max-height:100%}@layer cdk-overlay{.cdk-overlay-pane{z-index:1000}}.cdk-overlay-backdrop{position:absolute;top:0;bottom:0;left:0;right:0;pointer-events:auto;-webkit-tap-highlight-color:rgba(0,0,0,0);opacity:0;touch-action:manipulation}@layer cdk-overlay{.cdk-overlay-backdrop{z-index:1000;transition:opacity 400ms cubic-bezier(0.25, 0.8, 0.25, 1)}}@media(prefers-reduced-motion){.cdk-overlay-backdrop{transition-duration:1ms}}.cdk-overlay-backdrop-showing{opacity:1}@media(forced-colors: active){.cdk-overlay-backdrop-showing{opacity:.6}}@layer cdk-overlay{.cdk-overlay-dark-backdrop{background:rgba(0,0,0,.32)}}.cdk-overlay-transparent-backdrop{transition:visibility 1ms linear,opacity 1ms linear;visibility:hidden;opacity:1}.cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing,.cdk-high-contrast-active .cdk-overlay-transparent-backdrop{opacity:0;visibility:visible}.cdk-overlay-backdrop-noop-animation{transition:none}.cdk-overlay-connected-position-bounding-box{position:absolute;display:flex;flex-direction:column;min-width:1px;min-height:1px}@layer cdk-overlay{.cdk-overlay-connected-position-bounding-box{z-index:1000}}.cdk-global-scrollblock{position:fixed;width:100%;overflow-y:scroll}.cdk-overlay-popover{background:none;border:none;padding:0;color:inherit;outline:0;overflow:visible;position:fixed;pointer-events:none;width:100%;height:100%;inset:auto}.cdk-overlay-popover .cdk-overlay-backdrop{position:fixed}\n"]
+      styles: [".cdk-overlay-container,.cdk-global-overlay-wrapper{pointer-events:none;top:0;left:0;height:100%;width:100%}.cdk-overlay-container{position:fixed}@layer cdk-overlay{.cdk-overlay-container{z-index:1000}}.cdk-overlay-container:empty{display:none}.cdk-global-overlay-wrapper{display:flex;position:absolute}@layer cdk-overlay{.cdk-global-overlay-wrapper{z-index:1000}}.cdk-overlay-pane{position:absolute;pointer-events:auto;box-sizing:border-box;display:flex;max-width:100%;max-height:100%}@layer cdk-overlay{.cdk-overlay-pane{z-index:1000}}.cdk-overlay-backdrop{position:absolute;top:0;bottom:0;left:0;right:0;pointer-events:auto;-webkit-tap-highlight-color:rgba(0,0,0,0);opacity:0;touch-action:manipulation}@layer cdk-overlay{.cdk-overlay-backdrop{z-index:1000;transition:opacity 400ms cubic-bezier(0.25, 0.8, 0.25, 1)}}@media(prefers-reduced-motion){.cdk-overlay-backdrop{transition-duration:1ms}}.cdk-overlay-backdrop-showing{opacity:1}@media(forced-colors: active){.cdk-overlay-backdrop-showing{opacity:.6}}@layer cdk-overlay{.cdk-overlay-dark-backdrop{background:rgba(0,0,0,.32)}}.cdk-overlay-transparent-backdrop{transition:visibility 1ms linear,opacity 1ms linear;visibility:hidden;opacity:1}.cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing,.cdk-high-contrast-active .cdk-overlay-transparent-backdrop{opacity:0;visibility:visible}.cdk-overlay-backdrop-noop-animation{transition:none}.cdk-overlay-connected-position-bounding-box{position:absolute;display:flex;flex-direction:column;min-width:1px;min-height:1px}@layer cdk-overlay{.cdk-overlay-connected-position-bounding-box{z-index:1000}}.cdk-global-scrollblock{position:fixed;width:100%;overflow-y:scroll}.cdk-overlay-popover{background:none;border:none;padding:0;color:inherit;outline:0;overflow:visible;position:fixed;pointer-events:none;width:100%;height:100%;inset:auto}.cdk-overlay-popover::backdrop{display:none}.cdk-overlay-popover .cdk-overlay-backdrop{position:fixed}\n"]
     }]
   }]
 });
@@ -2155,6 +2155,7 @@ i0.ɵɵngDeclareClassMetadata({
   }],
   ctorParameters: () => []
 });
+const CDK_CONNECTED_OVERLAY_DEFAULT_CONFIG = new InjectionToken('cdk-connected-overlay-default-config');
 class CdkConnectedOverlay {
   _dir = inject(Directionality, {
     optional: true
@@ -2170,7 +2171,6 @@ class CdkConnectedOverlay {
   _offsetY;
   _position;
   _scrollStrategyFactory = inject(CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY);
-  _disposeOnNavigation = false;
   _ngZone = inject(NgZone);
   origin;
   positions;
@@ -2209,13 +2209,14 @@ class CdkConnectedOverlay {
   flexibleDimensions = false;
   growAfterOpen = false;
   push = false;
-  get disposeOnNavigation() {
-    return this._disposeOnNavigation;
-  }
-  set disposeOnNavigation(value) {
-    this._disposeOnNavigation = value;
-  }
+  disposeOnNavigation = false;
   usePopover = false;
+  matchWidth = false;
+  set _config(value) {
+    if (typeof value !== 'string') {
+      this._assignConfig(value);
+    }
+  }
   backdropClick = new EventEmitter();
   positionChange = new EventEmitter();
   attach = new EventEmitter();
@@ -2225,8 +2226,14 @@ class CdkConnectedOverlay {
   constructor() {
     const templateRef = inject(TemplateRef);
     const viewContainerRef = inject(ViewContainerRef);
+    const defaultConfig = inject(CDK_CONNECTED_OVERLAY_DEFAULT_CONFIG, {
+      optional: true
+    });
     this._templatePortal = new TemplatePortal(templateRef, viewContainerRef);
     this.scrollStrategy = this._scrollStrategyFactory();
+    if (defaultConfig) {
+      this._assignConfig(defaultConfig);
+    }
   }
   get overlayRef() {
     return this._overlayRef;
@@ -2245,7 +2252,7 @@ class CdkConnectedOverlay {
     if (this._position) {
       this._updatePositionStrategy(this._position);
       this._overlayRef?.updateSize({
-        width: this.width,
+        width: this._getWidth(),
         minWidth: this.minWidth,
         height: this.height,
         minHeight: this.minHeight
@@ -2290,9 +2297,6 @@ class CdkConnectedOverlay {
       disposeOnNavigation: this.disposeOnNavigation,
       usePopover: this.usePopover
     });
-    if (this.width || this.width === 0) {
-      overlayConfig.width = this.width;
-    }
     if (this.height || this.height === 0) {
       overlayConfig.height = this.height;
     }
@@ -2346,19 +2350,26 @@ class CdkConnectedOverlay {
     }
     return null;
   }
+  _getWidth() {
+    if (this.width) {
+      return this.width;
+    }
+    return this.matchWidth ? this._getOriginElement()?.getBoundingClientRect?.().width : undefined;
+  }
   attachOverlay() {
     if (!this._overlayRef) {
       this._createOverlay();
-    } else {
-      this._overlayRef.getConfig().hasBackdrop = this.hasBackdrop;
     }
-    if (!this._overlayRef.hasAttached()) {
-      this._overlayRef.attach(this._templatePortal);
+    const ref = this._overlayRef;
+    ref.getConfig().hasBackdrop = this.hasBackdrop;
+    ref.updateSize({
+      width: this._getWidth()
+    });
+    if (!ref.hasAttached()) {
+      ref.attach(this._templatePortal);
     }
     if (this.hasBackdrop) {
-      this._backdropSubscription = this._overlayRef.backdropClick().subscribe(event => {
-        this.backdropClick.emit(event);
-      });
+      this._backdropSubscription = ref.backdropClick().subscribe(event => this.backdropClick.emit(event));
     } else {
       this._backdropSubscription.unsubscribe();
     }
@@ -2378,6 +2389,31 @@ class CdkConnectedOverlay {
     this._backdropSubscription.unsubscribe();
     this._positionSubscription.unsubscribe();
     this.open = false;
+  }
+  _assignConfig(config) {
+    this.origin = config.origin ?? this.origin;
+    this.positions = config.positions ?? this.positions;
+    this.positionStrategy = config.positionStrategy ?? this.positionStrategy;
+    this.offsetX = config.offsetX ?? this.offsetX;
+    this.offsetY = config.offsetY ?? this.offsetY;
+    this.width = config.width ?? this.width;
+    this.height = config.height ?? this.height;
+    this.minWidth = config.minWidth ?? this.minWidth;
+    this.minHeight = config.minHeight ?? this.minHeight;
+    this.backdropClass = config.backdropClass ?? this.backdropClass;
+    this.panelClass = config.panelClass ?? this.panelClass;
+    this.viewportMargin = config.viewportMargin ?? this.viewportMargin;
+    this.scrollStrategy = config.scrollStrategy ?? this.scrollStrategy;
+    this.disableClose = config.disableClose ?? this.disableClose;
+    this.transformOriginSelector = config.transformOriginSelector ?? this.transformOriginSelector;
+    this.hasBackdrop = config.hasBackdrop ?? this.hasBackdrop;
+    this.lockPosition = config.lockPosition ?? this.lockPosition;
+    this.flexibleDimensions = config.flexibleDimensions ?? this.flexibleDimensions;
+    this.growAfterOpen = config.growAfterOpen ?? this.growAfterOpen;
+    this.push = config.push ?? this.push;
+    this.disposeOnNavigation = config.disposeOnNavigation ?? this.disposeOnNavigation;
+    this.usePopover = config.usePopover ?? this.usePopover;
+    this.matchWidth = config.matchWidth ?? this.matchWidth;
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
@@ -2416,7 +2452,9 @@ class CdkConnectedOverlay {
       growAfterOpen: ["cdkConnectedOverlayGrowAfterOpen", "growAfterOpen", booleanAttribute],
       push: ["cdkConnectedOverlayPush", "push", booleanAttribute],
       disposeOnNavigation: ["cdkConnectedOverlayDisposeOnNavigation", "disposeOnNavigation", booleanAttribute],
-      usePopover: ["cdkConnectedOverlayUsePopover", "usePopover", booleanAttribute]
+      usePopover: ["cdkConnectedOverlayUsePopover", "usePopover", booleanAttribute],
+      matchWidth: ["cdkConnectedOverlayMatchWidth", "matchWidth", booleanAttribute],
+      _config: ["cdkConnectedOverlay", "_config"]
     },
     outputs: {
       backdropClick: "backdropClick",
@@ -2558,6 +2596,17 @@ i0.ɵɵngDeclareClassMetadata({
         transform: booleanAttribute
       }]
     }],
+    matchWidth: [{
+      type: Input,
+      args: [{
+        alias: 'cdkConnectedOverlayMatchWidth',
+        transform: booleanAttribute
+      }]
+    }],
+    _config: [{
+      type: Input,
+      args: ['cdkConnectedOverlay']
+    }],
     backdropClick: [{
       type: Output
     }],
@@ -2620,5 +2669,5 @@ i0.ɵɵngDeclareClassMetadata({
   }]
 });
 
-export { BlockScrollStrategy, CdkConnectedOverlay, CdkOverlayOrigin, CloseScrollStrategy, ConnectedOverlayPositionChange, ConnectionPositionPair, FlexibleConnectedPositionStrategy, GlobalPositionStrategy, NoopScrollStrategy, Overlay, OverlayConfig, OverlayContainer, OverlayKeyboardDispatcher, OverlayModule, OverlayOutsideClickDispatcher, OverlayPositionBuilder, OverlayRef, RepositionScrollStrategy, STANDARD_DROPDOWN_ADJACENT_POSITIONS, STANDARD_DROPDOWN_BELOW_POSITIONS, ScrollStrategyOptions, ScrollingVisibility, createBlockScrollStrategy, createCloseScrollStrategy, createFlexibleConnectedPositionStrategy, createGlobalPositionStrategy, createNoopScrollStrategy, createOverlayRef, createRepositionScrollStrategy, validateHorizontalPosition, validateVerticalPosition };
+export { BlockScrollStrategy, CDK_CONNECTED_OVERLAY_DEFAULT_CONFIG, CdkConnectedOverlay, CdkOverlayOrigin, CloseScrollStrategy, ConnectedOverlayPositionChange, ConnectionPositionPair, FlexibleConnectedPositionStrategy, GlobalPositionStrategy, NoopScrollStrategy, Overlay, OverlayConfig, OverlayContainer, OverlayKeyboardDispatcher, OverlayModule, OverlayOutsideClickDispatcher, OverlayPositionBuilder, OverlayRef, RepositionScrollStrategy, STANDARD_DROPDOWN_ADJACENT_POSITIONS, STANDARD_DROPDOWN_BELOW_POSITIONS, ScrollStrategyOptions, ScrollingVisibility, createBlockScrollStrategy, createCloseScrollStrategy, createFlexibleConnectedPositionStrategy, createGlobalPositionStrategy, createNoopScrollStrategy, createOverlayRef, createRepositionScrollStrategy, validateHorizontalPosition, validateVerticalPosition };
 //# sourceMappingURL=_overlay-module-chunk.mjs.map
