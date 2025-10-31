@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { OnDestroy, NgZone, EnvironmentInjector, Renderer2, ComponentRef, EmbeddedViewRef, ElementRef, Injector, OnChanges, EventEmitter, SimpleChanges } from '@angular/core';
+import { OnDestroy, NgZone, EnvironmentInjector, Renderer2, ComponentRef, EmbeddedViewRef, ElementRef, Injector, InjectionToken, OnChanges, EventEmitter, SimpleChanges } from '@angular/core';
 import { Direction, Directionality, BidiModule } from './_bidi-module-chunk.js';
 import { PortalOutlet, ComponentPortal, TemplatePortal, PortalModule } from './_portal-directives-chunk.js';
 import { CdkScrollable, ScrollingModule } from './_scrolling-module-chunk.js';
@@ -721,6 +721,37 @@ declare class CdkOverlayOrigin {
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkOverlayOrigin, "[cdk-overlay-origin], [overlay-origin], [cdkOverlayOrigin]", ["cdkOverlayOrigin"], {}, {}, never, never, true, never>;
 }
 /**
+ * Injection token that can be used to configure the
+ * default options for the `CdkConnectedOverlay` directive.
+ */
+declare const CDK_CONNECTED_OVERLAY_DEFAULT_CONFIG: InjectionToken<CdkConnectedOverlayConfig>;
+/** Object used to configure the `CdkConnectedOverlay` directive. */
+interface CdkConnectedOverlayConfig {
+    origin?: CdkOverlayOrigin | FlexibleConnectedPositionStrategyOrigin;
+    positions?: ConnectedPosition[];
+    positionStrategy?: FlexibleConnectedPositionStrategy;
+    offsetX?: number;
+    offsetY?: number;
+    width?: number | string;
+    height?: number | string;
+    minWidth?: number | string;
+    minHeight?: number | string;
+    backdropClass?: string | string[];
+    panelClass?: string | string[];
+    viewportMargin?: ViewportMargin;
+    scrollStrategy?: ScrollStrategy;
+    disableClose?: boolean;
+    transformOriginSelector?: string;
+    hasBackdrop?: boolean;
+    lockPosition?: boolean;
+    flexibleDimensions?: boolean;
+    growAfterOpen?: boolean;
+    push?: boolean;
+    disposeOnNavigation?: boolean;
+    usePopover?: boolean;
+    matchWidth?: boolean;
+}
+/**
  * Directive to facilitate declarative creation of an
  * Overlay using a FlexibleConnectedPositionStrategy.
  */
@@ -737,7 +768,6 @@ declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     private _offsetY;
     private _position;
     private _scrollStrategyFactory;
-    private _disposeOnNavigation;
     private _ngZone;
     /** Origin for the connected overlay. */
     origin: CdkOverlayOrigin | FlexibleConnectedPositionStrategyOrigin;
@@ -787,10 +817,13 @@ declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     /** Whether the overlay can be pushed on-screen if none of the provided positions fit. */
     push: boolean;
     /** Whether the overlay should be disposed of when the user goes backwards/forwards in history. */
-    get disposeOnNavigation(): boolean;
-    set disposeOnNavigation(value: boolean);
+    disposeOnNavigation: boolean;
     /** Whether the connected overlay should be rendered inside a popover element or the overlay container. */
     usePopover: boolean;
+    /** Whether the overlay should match the trigger's width. */
+    matchWidth: boolean;
+    /** Shorthand for setting multiple overlay options at once. */
+    set _config(value: string | CdkConnectedOverlayConfig);
     /** Event emitted when the backdrop is clicked. */
     readonly backdropClick: EventEmitter<MouseEvent>;
     /** Event emitted when the position has changed. */
@@ -820,12 +853,14 @@ declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     private _createPositionStrategy;
     private _getOrigin;
     private _getOriginElement;
+    private _getWidth;
     /** Attaches the overlay. */
     attachOverlay(): void;
     /** Detaches the overlay. */
     detachOverlay(): void;
+    private _assignConfig;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkConnectedOverlay, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkConnectedOverlay, "[cdk-connected-overlay], [connected-overlay], [cdkConnectedOverlay]", ["cdkConnectedOverlay"], { "origin": { "alias": "cdkConnectedOverlayOrigin"; "required": false; }; "positions": { "alias": "cdkConnectedOverlayPositions"; "required": false; }; "positionStrategy": { "alias": "cdkConnectedOverlayPositionStrategy"; "required": false; }; "offsetX": { "alias": "cdkConnectedOverlayOffsetX"; "required": false; }; "offsetY": { "alias": "cdkConnectedOverlayOffsetY"; "required": false; }; "width": { "alias": "cdkConnectedOverlayWidth"; "required": false; }; "height": { "alias": "cdkConnectedOverlayHeight"; "required": false; }; "minWidth": { "alias": "cdkConnectedOverlayMinWidth"; "required": false; }; "minHeight": { "alias": "cdkConnectedOverlayMinHeight"; "required": false; }; "backdropClass": { "alias": "cdkConnectedOverlayBackdropClass"; "required": false; }; "panelClass": { "alias": "cdkConnectedOverlayPanelClass"; "required": false; }; "viewportMargin": { "alias": "cdkConnectedOverlayViewportMargin"; "required": false; }; "scrollStrategy": { "alias": "cdkConnectedOverlayScrollStrategy"; "required": false; }; "open": { "alias": "cdkConnectedOverlayOpen"; "required": false; }; "disableClose": { "alias": "cdkConnectedOverlayDisableClose"; "required": false; }; "transformOriginSelector": { "alias": "cdkConnectedOverlayTransformOriginOn"; "required": false; }; "hasBackdrop": { "alias": "cdkConnectedOverlayHasBackdrop"; "required": false; }; "lockPosition": { "alias": "cdkConnectedOverlayLockPosition"; "required": false; }; "flexibleDimensions": { "alias": "cdkConnectedOverlayFlexibleDimensions"; "required": false; }; "growAfterOpen": { "alias": "cdkConnectedOverlayGrowAfterOpen"; "required": false; }; "push": { "alias": "cdkConnectedOverlayPush"; "required": false; }; "disposeOnNavigation": { "alias": "cdkConnectedOverlayDisposeOnNavigation"; "required": false; }; "usePopover": { "alias": "cdkConnectedOverlayUsePopover"; "required": false; }; }, { "backdropClick": "backdropClick"; "positionChange": "positionChange"; "attach": "attach"; "detach": "detach"; "overlayKeydown": "overlayKeydown"; "overlayOutsideClick": "overlayOutsideClick"; }, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkConnectedOverlay, "[cdk-connected-overlay], [connected-overlay], [cdkConnectedOverlay]", ["cdkConnectedOverlay"], { "origin": { "alias": "cdkConnectedOverlayOrigin"; "required": false; }; "positions": { "alias": "cdkConnectedOverlayPositions"; "required": false; }; "positionStrategy": { "alias": "cdkConnectedOverlayPositionStrategy"; "required": false; }; "offsetX": { "alias": "cdkConnectedOverlayOffsetX"; "required": false; }; "offsetY": { "alias": "cdkConnectedOverlayOffsetY"; "required": false; }; "width": { "alias": "cdkConnectedOverlayWidth"; "required": false; }; "height": { "alias": "cdkConnectedOverlayHeight"; "required": false; }; "minWidth": { "alias": "cdkConnectedOverlayMinWidth"; "required": false; }; "minHeight": { "alias": "cdkConnectedOverlayMinHeight"; "required": false; }; "backdropClass": { "alias": "cdkConnectedOverlayBackdropClass"; "required": false; }; "panelClass": { "alias": "cdkConnectedOverlayPanelClass"; "required": false; }; "viewportMargin": { "alias": "cdkConnectedOverlayViewportMargin"; "required": false; }; "scrollStrategy": { "alias": "cdkConnectedOverlayScrollStrategy"; "required": false; }; "open": { "alias": "cdkConnectedOverlayOpen"; "required": false; }; "disableClose": { "alias": "cdkConnectedOverlayDisableClose"; "required": false; }; "transformOriginSelector": { "alias": "cdkConnectedOverlayTransformOriginOn"; "required": false; }; "hasBackdrop": { "alias": "cdkConnectedOverlayHasBackdrop"; "required": false; }; "lockPosition": { "alias": "cdkConnectedOverlayLockPosition"; "required": false; }; "flexibleDimensions": { "alias": "cdkConnectedOverlayFlexibleDimensions"; "required": false; }; "growAfterOpen": { "alias": "cdkConnectedOverlayGrowAfterOpen"; "required": false; }; "push": { "alias": "cdkConnectedOverlayPush"; "required": false; }; "disposeOnNavigation": { "alias": "cdkConnectedOverlayDisposeOnNavigation"; "required": false; }; "usePopover": { "alias": "cdkConnectedOverlayUsePopover"; "required": false; }; "matchWidth": { "alias": "cdkConnectedOverlayMatchWidth"; "required": false; }; "_config": { "alias": "cdkConnectedOverlay"; "required": false; }; }, { "backdropClick": "backdropClick"; "positionChange": "positionChange"; "attach": "attach"; "detach": "detach"; "overlayKeydown": "overlayKeydown"; "overlayOutsideClick": "overlayOutsideClick"; }, never, never, true, never>;
     static ngAcceptInputType_hasBackdrop: unknown;
     static ngAcceptInputType_lockPosition: unknown;
     static ngAcceptInputType_flexibleDimensions: unknown;
@@ -833,6 +868,7 @@ declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     static ngAcceptInputType_push: unknown;
     static ngAcceptInputType_disposeOnNavigation: unknown;
     static ngAcceptInputType_usePopover: unknown;
+    static ngAcceptInputType_matchWidth: unknown;
 }
 
 declare class OverlayModule {
@@ -841,5 +877,5 @@ declare class OverlayModule {
     static ɵinj: i0.ɵɵInjectorDeclaration<OverlayModule>;
 }
 
-export { CdkConnectedOverlay, CdkOverlayOrigin, ConnectedOverlayPositionChange, ConnectionPositionPair, FlexibleConnectedPositionStrategy, OverlayConfig, OverlayContainer, OverlayKeyboardDispatcher, OverlayModule, OverlayOutsideClickDispatcher, OverlayRef, STANDARD_DROPDOWN_ADJACENT_POSITIONS, STANDARD_DROPDOWN_BELOW_POSITIONS, ScrollingVisibility, createFlexibleConnectedPositionStrategy, validateHorizontalPosition, validateVerticalPosition };
-export type { ConnectedPosition, FlexibleConnectedPositionStrategyOrigin, HorizontalConnectionPos, OriginConnectionPosition, OverlayConnectionPosition, OverlaySizeConfig, PositionStrategy, ScrollStrategy, VerticalConnectionPos, ViewportMargin };
+export { CDK_CONNECTED_OVERLAY_DEFAULT_CONFIG, CdkConnectedOverlay, CdkOverlayOrigin, ConnectedOverlayPositionChange, ConnectionPositionPair, FlexibleConnectedPositionStrategy, OverlayConfig, OverlayContainer, OverlayKeyboardDispatcher, OverlayModule, OverlayOutsideClickDispatcher, OverlayRef, STANDARD_DROPDOWN_ADJACENT_POSITIONS, STANDARD_DROPDOWN_BELOW_POSITIONS, ScrollingVisibility, createFlexibleConnectedPositionStrategy, validateHorizontalPosition, validateVerticalPosition };
+export type { CdkConnectedOverlayConfig, ConnectedPosition, FlexibleConnectedPositionStrategyOrigin, HorizontalConnectionPos, OriginConnectionPosition, OverlayConnectionPosition, OverlaySizeConfig, PositionStrategy, ScrollStrategy, VerticalConnectionPos, ViewportMargin };
