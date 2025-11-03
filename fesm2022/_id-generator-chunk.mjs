@@ -4,14 +4,15 @@ import { inject, APP_ID, Injectable } from '@angular/core';
 const counters = {};
 class _IdGenerator {
   _appId = inject(APP_ID);
-  getId(prefix) {
+  static _infix = `a${Math.floor(Math.random() * 100000).toString()}`;
+  getId(prefix, randomize = false) {
     if (this._appId !== 'ng') {
       prefix += this._appId;
     }
     if (!counters.hasOwnProperty(prefix)) {
       counters[prefix] = 0;
     }
-    return `${prefix}${counters[prefix]++}`;
+    return `${prefix}${randomize ? _IdGenerator._infix + '-' : ''}${counters[prefix]++}`;
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
