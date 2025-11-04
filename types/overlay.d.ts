@@ -1,5 +1,5 @@
 import { ScrollStrategy, OverlayRef, PositionStrategy, FlexibleConnectedPositionStrategyOrigin, FlexibleConnectedPositionStrategy, OverlayConfig, OverlayContainer } from './_overlay-module-chunk.js';
-export { CDK_CONNECTED_OVERLAY_DEFAULT_CONFIG, CdkConnectedOverlay, CdkConnectedOverlayConfig, CdkOverlayOrigin, ConnectedOverlayPositionChange, ConnectedPosition, ConnectionPositionPair, HorizontalConnectionPos, OriginConnectionPosition, OverlayConnectionPosition, OverlayKeyboardDispatcher, OverlayModule, OverlayOutsideClickDispatcher, OverlaySizeConfig, STANDARD_DROPDOWN_ADJACENT_POSITIONS, STANDARD_DROPDOWN_BELOW_POSITIONS, ScrollingVisibility, VerticalConnectionPos, ViewportMargin, createFlexibleConnectedPositionStrategy, validateHorizontalPosition, validateVerticalPosition } from './_overlay-module-chunk.js';
+export { CDK_CONNECTED_OVERLAY_DEFAULT_CONFIG, CdkConnectedOverlay, CdkConnectedOverlayConfig, CdkOverlayOrigin, ConnectedOverlayPositionChange, ConnectedPosition, ConnectionPositionPair, FlexibleOverlayPopoverLocation, HorizontalConnectionPos, OriginConnectionPosition, OverlayConnectionPosition, OverlayKeyboardDispatcher, OverlayModule, OverlayOutsideClickDispatcher, OverlaySizeConfig, STANDARD_DROPDOWN_ADJACENT_POSITIONS, STANDARD_DROPDOWN_BELOW_POSITIONS, ScrollingVisibility, VerticalConnectionPos, ViewportMargin, createFlexibleConnectedPositionStrategy, validateHorizontalPosition, validateVerticalPosition } from './_overlay-module-chunk.js';
 import { ScrollDispatcher } from './_scrolling-module-chunk.js';
 export { CdkScrollable, CdkFixedSizeVirtualScroll as ɵɵCdkFixedSizeVirtualScroll, CdkScrollableModule as ɵɵCdkScrollableModule, CdkVirtualForOf as ɵɵCdkVirtualForOf, CdkVirtualScrollViewport as ɵɵCdkVirtualScrollViewport, CdkVirtualScrollableElement as ɵɵCdkVirtualScrollableElement, CdkVirtualScrollableWindow as ɵɵCdkVirtualScrollableWindow } from './_scrolling-module-chunk.js';
 import { ViewportRuler } from './scrolling.js';
@@ -154,7 +154,7 @@ declare class ScrollStrategyOptions {
  * Creates a global position strategy.
  * @param injector Injector used to resolve dependencies for the strategy.
  */
-declare function createGlobalPositionStrategy(injector: Injector): GlobalPositionStrategy;
+declare function createGlobalPositionStrategy(_injector: Injector): GlobalPositionStrategy;
 /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
  * explicit position relative to the browser's viewport. We use flexbox, instead of
@@ -173,8 +173,6 @@ declare class GlobalPositionStrategy implements PositionStrategy {
     private _width;
     private _height;
     private _isDisposed;
-    private _document;
-    constructor(injector?: Injector);
     attach(overlayRef: OverlayRef): void;
     /**
      * Sets the top position of the overlay. Clears any previously set vertical position.
@@ -246,8 +244,6 @@ declare class GlobalPositionStrategy implements PositionStrategy {
      * @docs-private
      */
     dispose(): void;
-    /** @docs-private */
-    getPopoverInsertionPoint(): Element;
 }
 
 /** Builder for overlay position strategy. */

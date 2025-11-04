@@ -575,7 +575,7 @@ class _CdkOverlayStyleLoader {
     ngImport: i0,
     template: '',
     isInline: true,
-    styles: [".cdk-overlay-container,.cdk-global-overlay-wrapper{pointer-events:none;top:0;left:0;height:100%;width:100%}.cdk-overlay-container{position:fixed}@layer cdk-overlay{.cdk-overlay-container{z-index:1000}}.cdk-overlay-container:empty{display:none}.cdk-global-overlay-wrapper{display:flex;position:absolute}@layer cdk-overlay{.cdk-global-overlay-wrapper{z-index:1000}}.cdk-overlay-pane{position:absolute;pointer-events:auto;box-sizing:border-box;display:flex;max-width:100%;max-height:100%}@layer cdk-overlay{.cdk-overlay-pane{z-index:1000}}.cdk-overlay-backdrop{position:absolute;top:0;bottom:0;left:0;right:0;pointer-events:auto;-webkit-tap-highlight-color:rgba(0,0,0,0);opacity:0;touch-action:manipulation}@layer cdk-overlay{.cdk-overlay-backdrop{z-index:1000;transition:opacity 400ms cubic-bezier(0.25, 0.8, 0.25, 1)}}@media(prefers-reduced-motion){.cdk-overlay-backdrop{transition-duration:1ms}}.cdk-overlay-backdrop-showing{opacity:1}@media(forced-colors: active){.cdk-overlay-backdrop-showing{opacity:.6}}@layer cdk-overlay{.cdk-overlay-dark-backdrop{background:rgba(0,0,0,.32)}}.cdk-overlay-transparent-backdrop{transition:visibility 1ms linear,opacity 1ms linear;visibility:hidden;opacity:1}.cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing,.cdk-high-contrast-active .cdk-overlay-transparent-backdrop{opacity:0;visibility:visible}.cdk-overlay-backdrop-noop-animation{transition:none}.cdk-overlay-connected-position-bounding-box{position:absolute;display:flex;flex-direction:column;min-width:1px;min-height:1px}@layer cdk-overlay{.cdk-overlay-connected-position-bounding-box{z-index:1000}}.cdk-global-scrollblock{position:fixed;width:100%;overflow-y:scroll}.cdk-overlay-popover{background:none;border:none;padding:0;color:inherit;outline:0;overflow:visible;position:fixed;pointer-events:none;width:100%;height:100%;inset:auto}.cdk-overlay-popover::backdrop{display:none}.cdk-overlay-popover .cdk-overlay-backdrop{position:fixed}\n"],
+    styles: [".cdk-overlay-container,.cdk-global-overlay-wrapper{pointer-events:none;top:0;left:0;height:100%;width:100%}.cdk-overlay-container{position:fixed}@layer cdk-overlay{.cdk-overlay-container{z-index:1000}}.cdk-overlay-container:empty{display:none}.cdk-global-overlay-wrapper{display:flex;position:absolute}@layer cdk-overlay{.cdk-global-overlay-wrapper{z-index:1000}}.cdk-overlay-pane{position:absolute;pointer-events:auto;box-sizing:border-box;display:flex;max-width:100%;max-height:100%}@layer cdk-overlay{.cdk-overlay-pane{z-index:1000}}.cdk-overlay-backdrop{position:absolute;top:0;bottom:0;left:0;right:0;pointer-events:auto;-webkit-tap-highlight-color:rgba(0,0,0,0);opacity:0;touch-action:manipulation}@layer cdk-overlay{.cdk-overlay-backdrop{z-index:1000;transition:opacity 400ms cubic-bezier(0.25, 0.8, 0.25, 1)}}@media(prefers-reduced-motion){.cdk-overlay-backdrop{transition-duration:1ms}}.cdk-overlay-backdrop-showing{opacity:1}@media(forced-colors: active){.cdk-overlay-backdrop-showing{opacity:.6}}@layer cdk-overlay{.cdk-overlay-dark-backdrop{background:rgba(0,0,0,.32)}}.cdk-overlay-transparent-backdrop{transition:visibility 1ms linear,opacity 1ms linear;visibility:hidden;opacity:1}.cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing,.cdk-high-contrast-active .cdk-overlay-transparent-backdrop{opacity:0;visibility:visible}.cdk-overlay-backdrop-noop-animation{transition:none}.cdk-overlay-connected-position-bounding-box{position:absolute;display:flex;flex-direction:column;min-width:1px;min-height:1px}@layer cdk-overlay{.cdk-overlay-connected-position-bounding-box{z-index:1000}}.cdk-global-scrollblock{position:fixed;width:100%;overflow-y:scroll}.cdk-overlay-popover{background:none;border:none;padding:0;outline:0;overflow:visible;position:fixed;pointer-events:none;white-space:normal;line-height:normal;text-decoration:none;width:100%;height:100%;inset:auto}.cdk-overlay-popover::backdrop{display:none}.cdk-overlay-popover .cdk-overlay-backdrop{position:fixed}\n"],
     changeDetection: i0.ChangeDetectionStrategy.OnPush,
     encapsulation: i0.ViewEncapsulation.None
   });
@@ -594,7 +594,7 @@ i0.ɵɵngDeclareClassMetadata({
       host: {
         'cdk-overlay-style-loader': ''
       },
-      styles: [".cdk-overlay-container,.cdk-global-overlay-wrapper{pointer-events:none;top:0;left:0;height:100%;width:100%}.cdk-overlay-container{position:fixed}@layer cdk-overlay{.cdk-overlay-container{z-index:1000}}.cdk-overlay-container:empty{display:none}.cdk-global-overlay-wrapper{display:flex;position:absolute}@layer cdk-overlay{.cdk-global-overlay-wrapper{z-index:1000}}.cdk-overlay-pane{position:absolute;pointer-events:auto;box-sizing:border-box;display:flex;max-width:100%;max-height:100%}@layer cdk-overlay{.cdk-overlay-pane{z-index:1000}}.cdk-overlay-backdrop{position:absolute;top:0;bottom:0;left:0;right:0;pointer-events:auto;-webkit-tap-highlight-color:rgba(0,0,0,0);opacity:0;touch-action:manipulation}@layer cdk-overlay{.cdk-overlay-backdrop{z-index:1000;transition:opacity 400ms cubic-bezier(0.25, 0.8, 0.25, 1)}}@media(prefers-reduced-motion){.cdk-overlay-backdrop{transition-duration:1ms}}.cdk-overlay-backdrop-showing{opacity:1}@media(forced-colors: active){.cdk-overlay-backdrop-showing{opacity:.6}}@layer cdk-overlay{.cdk-overlay-dark-backdrop{background:rgba(0,0,0,.32)}}.cdk-overlay-transparent-backdrop{transition:visibility 1ms linear,opacity 1ms linear;visibility:hidden;opacity:1}.cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing,.cdk-high-contrast-active .cdk-overlay-transparent-backdrop{opacity:0;visibility:visible}.cdk-overlay-backdrop-noop-animation{transition:none}.cdk-overlay-connected-position-bounding-box{position:absolute;display:flex;flex-direction:column;min-width:1px;min-height:1px}@layer cdk-overlay{.cdk-overlay-connected-position-bounding-box{z-index:1000}}.cdk-global-scrollblock{position:fixed;width:100%;overflow-y:scroll}.cdk-overlay-popover{background:none;border:none;padding:0;color:inherit;outline:0;overflow:visible;position:fixed;pointer-events:none;width:100%;height:100%;inset:auto}.cdk-overlay-popover::backdrop{display:none}.cdk-overlay-popover .cdk-overlay-backdrop{position:fixed}\n"]
+      styles: [".cdk-overlay-container,.cdk-global-overlay-wrapper{pointer-events:none;top:0;left:0;height:100%;width:100%}.cdk-overlay-container{position:fixed}@layer cdk-overlay{.cdk-overlay-container{z-index:1000}}.cdk-overlay-container:empty{display:none}.cdk-global-overlay-wrapper{display:flex;position:absolute}@layer cdk-overlay{.cdk-global-overlay-wrapper{z-index:1000}}.cdk-overlay-pane{position:absolute;pointer-events:auto;box-sizing:border-box;display:flex;max-width:100%;max-height:100%}@layer cdk-overlay{.cdk-overlay-pane{z-index:1000}}.cdk-overlay-backdrop{position:absolute;top:0;bottom:0;left:0;right:0;pointer-events:auto;-webkit-tap-highlight-color:rgba(0,0,0,0);opacity:0;touch-action:manipulation}@layer cdk-overlay{.cdk-overlay-backdrop{z-index:1000;transition:opacity 400ms cubic-bezier(0.25, 0.8, 0.25, 1)}}@media(prefers-reduced-motion){.cdk-overlay-backdrop{transition-duration:1ms}}.cdk-overlay-backdrop-showing{opacity:1}@media(forced-colors: active){.cdk-overlay-backdrop-showing{opacity:.6}}@layer cdk-overlay{.cdk-overlay-dark-backdrop{background:rgba(0,0,0,.32)}}.cdk-overlay-transparent-backdrop{transition:visibility 1ms linear,opacity 1ms linear;visibility:hidden;opacity:1}.cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing,.cdk-high-contrast-active .cdk-overlay-transparent-backdrop{opacity:0;visibility:visible}.cdk-overlay-backdrop-noop-animation{transition:none}.cdk-overlay-connected-position-bounding-box{position:absolute;display:flex;flex-direction:column;min-width:1px;min-height:1px}@layer cdk-overlay{.cdk-overlay-connected-position-bounding-box{z-index:1000}}.cdk-global-scrollblock{position:fixed;width:100%;overflow-y:scroll}.cdk-overlay-popover{background:none;border:none;padding:0;outline:0;overflow:visible;position:fixed;pointer-events:none;white-space:normal;line-height:normal;text-decoration:none;width:100%;height:100%;inset:auto}.cdk-overlay-popover::backdrop{display:none}.cdk-overlay-popover .cdk-overlay-backdrop{position:fixed}\n"]
     }]
   }]
 });
@@ -940,8 +940,9 @@ class OverlayRef {
   }
   _attachHost() {
     if (!this._host.parentElement) {
-      if (this._config.usePopover && this._positionStrategy?.getPopoverInsertionPoint) {
-        this._positionStrategy.getPopoverInsertionPoint().after(this._host);
+      const customInsertionPoint = this._config.usePopover ? this._positionStrategy?.getPopoverInsertionPoint?.() : null;
+      if (customInsertionPoint) {
+        customInsertionPoint.after(this._host);
       } else {
         this._previousHostParent?.appendChild(this._host);
       }
@@ -1083,6 +1084,7 @@ class FlexibleConnectedPositionStrategy {
   _transformOriginSelector;
   _appliedPanelClasses = [];
   _previousPushAmount;
+  _popoverLocation = 'global';
   positionChanges = this._positionChanges;
   get positions() {
     return this._preferredPositions;
@@ -1279,7 +1281,14 @@ class FlexibleConnectedPositionStrategy {
     this._transformOriginSelector = selector;
     return this;
   }
+  withPopoverLocation(location) {
+    this._popoverLocation = location;
+    return this;
+  }
   getPopoverInsertionPoint() {
+    if (this._popoverLocation === 'global') {
+      return null;
+    }
     const origin = this._origin;
     if (origin instanceof ElementRef) {
       return origin.nativeElement;
@@ -1815,8 +1824,8 @@ const STANDARD_DROPDOWN_ADJACENT_POSITIONS = [{
 }];
 
 const wrapperClass = 'cdk-global-overlay-wrapper';
-function createGlobalPositionStrategy(injector) {
-  return new GlobalPositionStrategy(injector);
+function createGlobalPositionStrategy(_injector) {
+  return new GlobalPositionStrategy();
 }
 class GlobalPositionStrategy {
   _overlayRef;
@@ -1829,10 +1838,6 @@ class GlobalPositionStrategy {
   _width = '';
   _height = '';
   _isDisposed = false;
-  _document;
-  constructor(injector) {
-    this._document = injector?.get(DOCUMENT) || document;
-  }
   attach(overlayRef) {
     const config = overlayRef.getConfig();
     this._overlayRef = overlayRef;
@@ -1976,16 +1981,13 @@ class GlobalPositionStrategy {
     this._overlayRef = null;
     this._isDisposed = true;
   }
-  getPopoverInsertionPoint() {
-    return this._document.body.lastChild;
-  }
 }
 
 class OverlayPositionBuilder {
   _injector = inject(Injector);
   constructor() {}
   global() {
-    return createGlobalPositionStrategy(this._injector);
+    return createGlobalPositionStrategy();
   }
   flexibleConnectedTo(origin) {
     return createFlexibleConnectedPositionStrategy(this._injector, origin);
@@ -2042,8 +2044,9 @@ function createOverlayRef(injector, config) {
     host.setAttribute('popover', 'manual');
     host.classList.add('cdk-overlay-popover');
   }
-  if (overlayConfig.usePopover && overlayConfig.positionStrategy?.getPopoverInsertionPoint) {
-    overlayConfig.positionStrategy.getPopoverInsertionPoint().after(host);
+  const customInsertionPoint = overlayConfig.usePopover ? overlayConfig.positionStrategy?.getPopoverInsertionPoint?.() : null;
+  if (customInsertionPoint) {
+    customInsertionPoint.after(host);
   } else {
     overlayContainer.getContainerElement().appendChild(host);
   }
@@ -2210,7 +2213,7 @@ class CdkConnectedOverlay {
   growAfterOpen = false;
   push = false;
   disposeOnNavigation = false;
-  usePopover = false;
+  usePopover = null;
   matchWidth = false;
   set _config(value) {
     if (typeof value !== 'string') {
@@ -2295,7 +2298,7 @@ class CdkConnectedOverlay {
       scrollStrategy: this.scrollStrategy,
       hasBackdrop: this.hasBackdrop,
       disposeOnNavigation: this.disposeOnNavigation,
-      usePopover: this.usePopover
+      usePopover: !!this.usePopover
     });
     if (this.height || this.height === 0) {
       overlayConfig.height = this.height;
@@ -2324,7 +2327,7 @@ class CdkConnectedOverlay {
       offsetY: currentPosition.offsetY || this.offsetY,
       panelClass: currentPosition.panelClass || undefined
     }));
-    return positionStrategy.setOrigin(this._getOrigin()).withPositions(positions).withFlexibleDimensions(this.flexibleDimensions).withPush(this.push).withGrowAfterOpen(this.growAfterOpen).withViewportMargin(this.viewportMargin).withLockedPosition(this.lockPosition).withTransformOriginOn(this.transformOriginSelector);
+    return positionStrategy.setOrigin(this._getOrigin()).withPositions(positions).withFlexibleDimensions(this.flexibleDimensions).withPush(this.push).withGrowAfterOpen(this.growAfterOpen).withViewportMargin(this.viewportMargin).withLockedPosition(this.lockPosition).withTransformOriginOn(this.transformOriginSelector).withPopoverLocation(this.usePopover === 'global' ? 'global' : 'inline');
   }
   _createPositionStrategy() {
     const strategy = createFlexibleConnectedPositionStrategy(this._injector, this._getOrigin());
@@ -2452,7 +2455,7 @@ class CdkConnectedOverlay {
       growAfterOpen: ["cdkConnectedOverlayGrowAfterOpen", "growAfterOpen", booleanAttribute],
       push: ["cdkConnectedOverlayPush", "push", booleanAttribute],
       disposeOnNavigation: ["cdkConnectedOverlayDisposeOnNavigation", "disposeOnNavigation", booleanAttribute],
-      usePopover: ["cdkConnectedOverlayUsePopover", "usePopover", booleanAttribute],
+      usePopover: ["cdkConnectedOverlayUsePopover", "usePopover"],
       matchWidth: ["cdkConnectedOverlayMatchWidth", "matchWidth", booleanAttribute],
       _config: ["cdkConnectedOverlay", "_config"]
     },
@@ -2592,8 +2595,7 @@ i0.ɵɵngDeclareClassMetadata({
     usePopover: [{
       type: Input,
       args: [{
-        alias: 'cdkConnectedOverlayUsePopover',
-        transform: booleanAttribute
+        alias: 'cdkConnectedOverlayUsePopover'
       }]
     }],
     matchWidth: [{

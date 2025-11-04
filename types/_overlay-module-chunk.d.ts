@@ -235,7 +235,7 @@ interface PositionStrategy {
      * Gets the element in the DOM after which to insert
      * the overlay when it is rendered out as a popover.
      */
-    getPopoverInsertionPoint?(): Element;
+    getPopoverInsertionPoint?(): Element | null;
 }
 
 /** Initial configuration used when creating an overlay. */
@@ -423,6 +423,8 @@ type FlexibleConnectedPositionStrategyOrigin = ElementRef | Element | (Point & {
  * @param origin Origin relative to which to position the overlay.
  */
 declare function createFlexibleConnectedPositionStrategy(injector: Injector, origin: FlexibleConnectedPositionStrategyOrigin): FlexibleConnectedPositionStrategy;
+/** Supported locations in the DOM for connected overlays. */
+type FlexibleOverlayPopoverLocation = 'global' | 'inline';
 /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
  * implicit position relative some origin element. The relative position is defined in terms of
@@ -494,6 +496,8 @@ declare class FlexibleConnectedPositionStrategy implements PositionStrategy {
     private _appliedPanelClasses;
     /** Amount by which the overlay was pushed in each axis during the last time it was positioned. */
     private _previousPushAmount;
+    /** Configures where in the DOM to insert the overlay when popovers are enabled. */
+    private _popoverLocation;
     /** Observable sequence of position changes. */
     positionChanges: Observable<ConnectedOverlayPositionChange>;
     /** Ordered list of preferred positions, from most to least desirable. */
@@ -582,8 +586,15 @@ declare class FlexibleConnectedPositionStrategy implements PositionStrategy {
      *    elements onto which to set the transform origin.
      */
     withTransformOriginOn(selector: string): this;
+    /**
+     * Determines where in the DOM the overlay will be rendered when popover mode is enabled.
+     * @param location Configures the location in the DOM. Supports the following values:
+     *  - `global` - The default which inserts the overlay inside the overlay container.
+     *  - `inline` - Inserts the overlay next to the trigger.
+     */
+    withPopoverLocation(location: FlexibleOverlayPopoverLocation): this;
     /** @docs-private */
-    getPopoverInsertionPoint(): Element;
+    getPopoverInsertionPoint(): Element | null;
     /**
      * Gets the (x, y) coordinate of a connection point on the origin based on a relative position.
      */
@@ -748,7 +759,7 @@ interface CdkConnectedOverlayConfig {
     growAfterOpen?: boolean;
     push?: boolean;
     disposeOnNavigation?: boolean;
-    usePopover?: boolean;
+    usePopover?: FlexibleOverlayPopoverLocation | null;
     matchWidth?: boolean;
 }
 /**
@@ -819,7 +830,7 @@ declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     /** Whether the overlay should be disposed of when the user goes backwards/forwards in history. */
     disposeOnNavigation: boolean;
     /** Whether the connected overlay should be rendered inside a popover element or the overlay container. */
-    usePopover: boolean;
+    usePopover: FlexibleOverlayPopoverLocation | null;
     /** Whether the overlay should match the trigger's width. */
     matchWidth: boolean;
     /** Shorthand for setting multiple overlay options at once. */
@@ -867,7 +878,6 @@ declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     static ngAcceptInputType_growAfterOpen: unknown;
     static ngAcceptInputType_push: unknown;
     static ngAcceptInputType_disposeOnNavigation: unknown;
-    static ngAcceptInputType_usePopover: unknown;
     static ngAcceptInputType_matchWidth: unknown;
 }
 
@@ -878,4 +888,4 @@ declare class OverlayModule {
 }
 
 export { CDK_CONNECTED_OVERLAY_DEFAULT_CONFIG, CdkConnectedOverlay, CdkOverlayOrigin, ConnectedOverlayPositionChange, ConnectionPositionPair, FlexibleConnectedPositionStrategy, OverlayConfig, OverlayContainer, OverlayKeyboardDispatcher, OverlayModule, OverlayOutsideClickDispatcher, OverlayRef, STANDARD_DROPDOWN_ADJACENT_POSITIONS, STANDARD_DROPDOWN_BELOW_POSITIONS, ScrollingVisibility, createFlexibleConnectedPositionStrategy, validateHorizontalPosition, validateVerticalPosition };
-export type { CdkConnectedOverlayConfig, ConnectedPosition, FlexibleConnectedPositionStrategyOrigin, HorizontalConnectionPos, OriginConnectionPosition, OverlayConnectionPosition, OverlaySizeConfig, PositionStrategy, ScrollStrategy, VerticalConnectionPos, ViewportMargin };
+export type { CdkConnectedOverlayConfig, ConnectedPosition, FlexibleConnectedPositionStrategyOrigin, FlexibleOverlayPopoverLocation, HorizontalConnectionPos, OriginConnectionPosition, OverlayConnectionPosition, OverlaySizeConfig, PositionStrategy, ScrollStrategy, VerticalConnectionPos, ViewportMargin };
