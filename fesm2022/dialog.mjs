@@ -511,7 +511,7 @@ class Dialog {
   }
   _getOverlayConfig(config) {
     const state = new OverlayConfig({
-      positionStrategy: config.positionStrategy || createGlobalPositionStrategy(this._injector).centerHorizontally().centerVertically(),
+      positionStrategy: config.positionStrategy || createGlobalPositionStrategy().centerHorizontally().centerVertically(),
       scrollStrategy: config.scrollStrategy || this._scrollStrategy(),
       panelClass: config.panelClass,
       hasBackdrop: config.hasBackdrop,
