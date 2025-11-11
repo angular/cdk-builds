@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { DOCUMENT, NgZone, inject, Injector, Injectable, RendererFactory2, Component, ChangeDetectionStrategy, ViewEncapsulation, afterNextRender, ElementRef, ApplicationRef, Renderer2, ANIMATION_MODULE_TYPE, EnvironmentInjector, InjectionToken, Directive, EventEmitter, TemplateRef, ViewContainerRef, booleanAttribute, Input, Output, NgModule } from '@angular/core';
+import { DOCUMENT, NgZone, inject, Injector, Injectable, RendererFactory2, Component, ChangeDetectionStrategy, ViewEncapsulation, afterNextRender, ElementRef, InjectionToken, ApplicationRef, Renderer2, ANIMATION_MODULE_TYPE, EnvironmentInjector, Directive, EventEmitter, TemplateRef, ViewContainerRef, booleanAttribute, Input, Output, NgModule } from '@angular/core';
 import { Location } from '@angular/common';
 import { Platform } from './_platform-chunk.mjs';
 import { _getEventTarget } from './_shadow-dom-chunk.mjs';
@@ -2025,6 +2025,7 @@ i0.ɵɵngDeclareClassMetadata({
   ctorParameters: () => []
 });
 
+const OVERLAY_DEFAULT_CONFIG = new InjectionToken('OVERLAY_DEFAULT_CONFIG');
 function createOverlayRef(injector, config) {
   injector.get(_CdkPrivateStyleLoader).load(_CdkOverlayStyleLoader);
   const overlayContainer = injector.get(OverlayContainer);
@@ -2036,11 +2037,14 @@ function createOverlayRef(injector, config) {
     optional: true
   }) || injector.get(RendererFactory2).createRenderer(null, null);
   const overlayConfig = new OverlayConfig(config);
+  const defaultUsePopover = injector.get(OVERLAY_DEFAULT_CONFIG, null, {
+    optional: true
+  })?.usePopover ?? true;
   overlayConfig.direction = overlayConfig.direction || directionality.value;
   if (!('showPopover' in doc.body)) {
     overlayConfig.usePopover = false;
   } else {
-    overlayConfig.usePopover = config?.usePopover ?? true;
+    overlayConfig.usePopover = config?.usePopover ?? defaultUsePopover;
   }
   const pane = doc.createElement('div');
   const host = doc.createElement('div');
@@ -2220,7 +2224,7 @@ class CdkConnectedOverlay {
   growAfterOpen = false;
   push = false;
   disposeOnNavigation = false;
-  usePopover = 'global';
+  usePopover;
   matchWidth = false;
   set _config(value) {
     if (typeof value !== 'string') {
@@ -2239,6 +2243,10 @@ class CdkConnectedOverlay {
     const defaultConfig = inject(CDK_CONNECTED_OVERLAY_DEFAULT_CONFIG, {
       optional: true
     });
+    const globalConfig = inject(OVERLAY_DEFAULT_CONFIG, {
+      optional: true
+    });
+    this.usePopover = globalConfig?.usePopover === false ? null : 'global';
     this._templatePortal = new TemplatePortal(templateRef, viewContainerRef);
     this.scrollStrategy = this._scrollStrategyFactory();
     if (defaultConfig) {
@@ -2678,5 +2686,5 @@ i0.ɵɵngDeclareClassMetadata({
   }]
 });
 
-export { BlockScrollStrategy, CDK_CONNECTED_OVERLAY_DEFAULT_CONFIG, CdkConnectedOverlay, CdkOverlayOrigin, CloseScrollStrategy, ConnectedOverlayPositionChange, ConnectionPositionPair, FlexibleConnectedPositionStrategy, GlobalPositionStrategy, NoopScrollStrategy, Overlay, OverlayConfig, OverlayContainer, OverlayKeyboardDispatcher, OverlayModule, OverlayOutsideClickDispatcher, OverlayPositionBuilder, OverlayRef, RepositionScrollStrategy, STANDARD_DROPDOWN_ADJACENT_POSITIONS, STANDARD_DROPDOWN_BELOW_POSITIONS, ScrollStrategyOptions, ScrollingVisibility, createBlockScrollStrategy, createCloseScrollStrategy, createFlexibleConnectedPositionStrategy, createGlobalPositionStrategy, createNoopScrollStrategy, createOverlayRef, createRepositionScrollStrategy, validateHorizontalPosition, validateVerticalPosition };
+export { BlockScrollStrategy, CDK_CONNECTED_OVERLAY_DEFAULT_CONFIG, CdkConnectedOverlay, CdkOverlayOrigin, CloseScrollStrategy, ConnectedOverlayPositionChange, ConnectionPositionPair, FlexibleConnectedPositionStrategy, GlobalPositionStrategy, NoopScrollStrategy, OVERLAY_DEFAULT_CONFIG, Overlay, OverlayConfig, OverlayContainer, OverlayKeyboardDispatcher, OverlayModule, OverlayOutsideClickDispatcher, OverlayPositionBuilder, OverlayRef, RepositionScrollStrategy, STANDARD_DROPDOWN_ADJACENT_POSITIONS, STANDARD_DROPDOWN_BELOW_POSITIONS, ScrollStrategyOptions, ScrollingVisibility, createBlockScrollStrategy, createCloseScrollStrategy, createFlexibleConnectedPositionStrategy, createGlobalPositionStrategy, createNoopScrollStrategy, createOverlayRef, createRepositionScrollStrategy, validateHorizontalPosition, validateVerticalPosition };
 //# sourceMappingURL=_overlay-module-chunk.mjs.map
