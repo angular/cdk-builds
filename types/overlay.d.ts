@@ -4,7 +4,7 @@ import { ScrollDispatcher } from './_scrolling-module-chunk.js';
 export { CdkScrollable, CdkFixedSizeVirtualScroll as ɵɵCdkFixedSizeVirtualScroll, CdkScrollableModule as ɵɵCdkScrollableModule, CdkVirtualForOf as ɵɵCdkVirtualForOf, CdkVirtualScrollViewport as ɵɵCdkVirtualScrollViewport, CdkVirtualScrollableElement as ɵɵCdkVirtualScrollableElement, CdkVirtualScrollableWindow as ɵɵCdkVirtualScrollableWindow } from './_scrolling-module-chunk.js';
 import { ViewportRuler } from './scrolling.js';
 import * as i0 from '@angular/core';
-import { Injector, NgZone, OnDestroy } from '@angular/core';
+import { Injector, NgZone, InjectionToken, OnDestroy } from '@angular/core';
 export { ComponentType } from './_portal-directives-chunk.js';
 export { Dir as ɵɵDir } from './_bidi-module-chunk.js';
 import '@angular/common';
@@ -263,6 +263,12 @@ declare class OverlayPositionBuilder {
     static ɵprov: i0.ɵɵInjectableDeclaration<OverlayPositionBuilder>;
 }
 
+/** Object used to configure the default options for overlays. */
+interface OverlayDefaultConfig {
+    usePopover?: boolean;
+}
+/** Injection token used to configure the default options for CDK overlays. */
+declare const OVERLAY_DEFAULT_CONFIG: InjectionToken<OverlayDefaultConfig>;
 /**
  * Creates an overlay.
  * @param injector Injector to use when resolving the overlay's dependencies.
@@ -324,5 +330,5 @@ declare class FullscreenOverlayContainer extends OverlayContainer implements OnD
     static ɵprov: i0.ɵɵInjectableDeclaration<FullscreenOverlayContainer>;
 }
 
-export { BlockScrollStrategy, CloseScrollStrategy, FlexibleConnectedPositionStrategy, FlexibleConnectedPositionStrategyOrigin, FullscreenOverlayContainer, GlobalPositionStrategy, NoopScrollStrategy, Overlay, OverlayConfig, OverlayContainer, OverlayPositionBuilder, OverlayRef, PositionStrategy, RepositionScrollStrategy, ScrollDispatcher, ScrollStrategy, ScrollStrategyOptions, ViewportRuler, createBlockScrollStrategy, createCloseScrollStrategy, createGlobalPositionStrategy, createNoopScrollStrategy, createOverlayRef, createRepositionScrollStrategy };
-export type { RepositionScrollStrategyConfig };
+export { BlockScrollStrategy, CloseScrollStrategy, FlexibleConnectedPositionStrategy, FlexibleConnectedPositionStrategyOrigin, FullscreenOverlayContainer, GlobalPositionStrategy, NoopScrollStrategy, OVERLAY_DEFAULT_CONFIG, Overlay, OverlayConfig, OverlayContainer, OverlayPositionBuilder, OverlayRef, PositionStrategy, RepositionScrollStrategy, ScrollDispatcher, ScrollStrategy, ScrollStrategyOptions, ViewportRuler, createBlockScrollStrategy, createCloseScrollStrategy, createGlobalPositionStrategy, createNoopScrollStrategy, createOverlayRef, createRepositionScrollStrategy };
+export type { OverlayDefaultConfig, RepositionScrollStrategyConfig };
