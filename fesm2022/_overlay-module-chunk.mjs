@@ -1297,7 +1297,7 @@ class FlexibleConnectedPositionStrategy {
     } else if (origin instanceof Element) {
       return origin;
     }
-    return document.body.lastChild;
+    return null;
   }
   _getOriginPoint(originRect, containerRect, pos) {
     let x;
