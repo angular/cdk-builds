@@ -235,7 +235,10 @@ interface PositionStrategy {
      * Gets the element in the DOM after which to insert
      * the overlay when it is rendered out as a popover.
      */
-    getPopoverInsertionPoint?(): Element | null;
+    getPopoverInsertionPoint?(): Element | null | {
+        type: 'parent';
+        element: Element;
+    };
 }
 
 /** Initial configuration used when creating an overlay. */
@@ -424,7 +427,10 @@ type FlexibleConnectedPositionStrategyOrigin = ElementRef | Element | (Point & {
  */
 declare function createFlexibleConnectedPositionStrategy(injector: Injector, origin: FlexibleConnectedPositionStrategyOrigin): FlexibleConnectedPositionStrategy;
 /** Supported locations in the DOM for connected overlays. */
-type FlexibleOverlayPopoverLocation = 'global' | 'inline';
+type FlexibleOverlayPopoverLocation = 'global' | 'inline' | {
+    type: 'parent';
+    element: Element;
+};
 /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
  * implicit position relative some origin element. The relative position is defined in terms of
@@ -591,10 +597,15 @@ declare class FlexibleConnectedPositionStrategy implements PositionStrategy {
      * @param location Configures the location in the DOM. Supports the following values:
      *  - `global` - The default which inserts the overlay inside the overlay container.
      *  - `inline` - Inserts the overlay next to the trigger.
+     *  - {type: 'parent', element: element} - Inserts the overlay to a child of a custom parent
+     *  element.
      */
     withPopoverLocation(location: FlexibleOverlayPopoverLocation): this;
     /** @docs-private */
-    getPopoverInsertionPoint(): Element | null;
+    getPopoverInsertionPoint(): Element | null | {
+        type: 'parent';
+        element: Element;
+    };
     /**
      * Gets the (x, y) coordinate of a connection point on the origin based on a relative position.
      */

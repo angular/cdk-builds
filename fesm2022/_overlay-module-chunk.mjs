@@ -942,7 +942,13 @@ class OverlayRef {
     if (!this._host.parentElement) {
       const customInsertionPoint = this._config.usePopover ? this._positionStrategy?.getPopoverInsertionPoint?.() : null;
       if (customInsertionPoint) {
-        customInsertionPoint.after(this._host);
+        if (customInsertionPoint instanceof Element) {
+          customInsertionPoint.after(this._host);
+        } else {
+          if (customInsertionPoint.type === 'parent') {
+            customInsertionPoint.element?.appendChild(this._host);
+          }
+        }
       } else {
         this._previousHostParent?.appendChild(this._host);
       }
@@ -1291,11 +1297,24 @@ class FlexibleConnectedPositionStrategy {
     if (this._popoverLocation === 'global') {
       return null;
     }
-    const origin = this._origin;
-    if (origin instanceof ElementRef) {
-      return origin.nativeElement;
-    } else if (origin instanceof Element) {
-      return origin;
+    let hostElement = null;
+    if (this._popoverLocation === 'inline') {
+      if (this._origin instanceof ElementRef) {
+        hostElement = this._origin.nativeElement;
+      } else if (this._origin instanceof Element) {
+        hostElement = this._origin;
+      }
+    } else {
+      hostElement = this._popoverLocation.element;
+    }
+    if (this._popoverLocation === 'inline') {
+      return hostElement;
+    }
+    if (hostElement) {
+      return {
+        type: 'parent',
+        element: hostElement
+      };
     }
     return null;
   }
@@ -2058,7 +2077,13 @@ function createOverlayRef(injector, config) {
   const customInsertionPoint = overlayConfig.usePopover ? overlayConfig.positionStrategy?.getPopoverInsertionPoint?.() : null;
   overlayContainer.getContainerElement().appendChild(host);
   if (customInsertionPoint) {
-    customInsertionPoint.after(host);
+    if (customInsertionPoint instanceof Element) {
+      customInsertionPoint.after(host);
+    } else {
+      if (customInsertionPoint.type === 'parent') {
+        customInsertionPoint.element?.appendChild(host);
+      }
+    }
   }
   return new OverlayRef(new DomPortalOutlet(pane, appRef, injector), host, pane, overlayConfig, injector.get(NgZone), injector.get(OverlayKeyboardDispatcher), doc, injector.get(Location), injector.get(OverlayOutsideClickDispatcher), config?.disableAnimations ?? injector.get(ANIMATION_MODULE_TYPE, null, {
     optional: true
@@ -2341,7 +2366,7 @@ class CdkConnectedOverlay {
       offsetY: currentPosition.offsetY || this.offsetY,
       panelClass: currentPosition.panelClass || undefined
     }));
-    return positionStrategy.setOrigin(this._getOrigin()).withPositions(positions).withFlexibleDimensions(this.flexibleDimensions).withPush(this.push).withGrowAfterOpen(this.growAfterOpen).withViewportMargin(this.viewportMargin).withLockedPosition(this.lockPosition).withTransformOriginOn(this.transformOriginSelector).withPopoverLocation(this.usePopover === 'global' ? 'global' : 'inline');
+    return positionStrategy.setOrigin(this._getOrigin()).withPositions(positions).withFlexibleDimensions(this.flexibleDimensions).withPush(this.push).withGrowAfterOpen(this.growAfterOpen).withViewportMargin(this.viewportMargin).withLockedPosition(this.lockPosition).withTransformOriginOn(this.transformOriginSelector).withPopoverLocation(this.usePopover === null ? 'global' : this.usePopover);
   }
   _createPositionStrategy() {
     const strategy = createFlexibleConnectedPositionStrategy(this._injector, this._getOrigin());
