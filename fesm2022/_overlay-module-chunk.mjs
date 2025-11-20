@@ -699,6 +699,9 @@ class BackdropRef {
   };
 }
 
+function isElement(value) {
+  return value && value.nodeType === 1;
+}
 class OverlayRef {
   _portalOutlet;
   _host;
@@ -941,14 +944,10 @@ class OverlayRef {
   _attachHost() {
     if (!this._host.parentElement) {
       const customInsertionPoint = this._config.usePopover ? this._positionStrategy?.getPopoverInsertionPoint?.() : null;
-      if (customInsertionPoint) {
-        if (customInsertionPoint instanceof Element) {
-          customInsertionPoint.after(this._host);
-        } else {
-          if (customInsertionPoint.type === 'parent') {
-            customInsertionPoint.element?.appendChild(this._host);
-          }
-        }
+      if (isElement(customInsertionPoint)) {
+        customInsertionPoint.after(this._host);
+      } else if (customInsertionPoint?.type === 'parent') {
+        customInsertionPoint.element.appendChild(this._host);
       } else {
         this._previousHostParent?.appendChild(this._host);
       }
@@ -1296,27 +1295,16 @@ class FlexibleConnectedPositionStrategy {
   getPopoverInsertionPoint() {
     if (this._popoverLocation === 'global') {
       return null;
+    } else if (this._popoverLocation !== 'inline') {
+      return this._popoverLocation;
     }
-    let hostElement = null;
-    if (this._popoverLocation === 'inline') {
-      if (this._origin instanceof ElementRef) {
-        hostElement = this._origin.nativeElement;
-      } else if (this._origin instanceof Element) {
-        hostElement = this._origin;
-      }
+    if (this._origin instanceof ElementRef) {
+      return this._origin.nativeElement;
+    } else if (isElement(this._origin)) {
+      return this._origin;
     } else {
-      hostElement = this._popoverLocation.element;
+      return null;
     }
-    if (this._popoverLocation === 'inline') {
-      return hostElement;
-    }
-    if (hostElement) {
-      return {
-        type: 'parent',
-        element: hostElement
-      };
-    }
-    return null;
   }
   _getOriginPoint(originRect, containerRect, pos) {
     let x;
@@ -2075,15 +2063,12 @@ function createOverlayRef(injector, config) {
     host.classList.add('cdk-overlay-popover');
   }
   const customInsertionPoint = overlayConfig.usePopover ? overlayConfig.positionStrategy?.getPopoverInsertionPoint?.() : null;
-  overlayContainer.getContainerElement().appendChild(host);
-  if (customInsertionPoint) {
-    if (customInsertionPoint instanceof Element) {
-      customInsertionPoint.after(host);
-    } else {
-      if (customInsertionPoint.type === 'parent') {
-        customInsertionPoint.element?.appendChild(host);
-      }
-    }
+  if (isElement(customInsertionPoint)) {
+    customInsertionPoint.after(host);
+  } else if (customInsertionPoint?.type === 'parent') {
+    customInsertionPoint.element.appendChild(host);
+  } else {
+    overlayContainer.getContainerElement().appendChild(host);
   }
   return new OverlayRef(new DomPortalOutlet(pane, appRef, injector), host, pane, overlayConfig, injector.get(NgZone), injector.get(OverlayKeyboardDispatcher), doc, injector.get(Location), injector.get(OverlayOutsideClickDispatcher), config?.disableAnimations ?? injector.get(ANIMATION_MODULE_TYPE, null, {
     optional: true
