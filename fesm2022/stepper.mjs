@@ -21,7 +21,7 @@ class CdkStepHeader {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "20.2.0-next.2",
+    version: "21.0.0",
     ngImport: i0,
     type: CdkStepHeader,
     deps: [],
@@ -29,7 +29,7 @@ class CdkStepHeader {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "20.2.0-next.2",
+    version: "21.0.0",
     type: CdkStepHeader,
     isStandalone: true,
     selector: "[cdkStepHeader]",
@@ -43,7 +43,7 @@ class CdkStepHeader {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "20.2.0-next.2",
+  version: "21.0.0",
   ngImport: i0,
   type: CdkStepHeader,
   decorators: [{
@@ -63,7 +63,7 @@ class CdkStepLabel {
   constructor() {}
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "20.2.0-next.2",
+    version: "21.0.0",
     ngImport: i0,
     type: CdkStepLabel,
     deps: [],
@@ -71,7 +71,7 @@ class CdkStepLabel {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "20.2.0-next.2",
+    version: "21.0.0",
     type: CdkStepLabel,
     isStandalone: true,
     selector: "[cdkStepLabel]",
@@ -80,7 +80,7 @@ class CdkStepLabel {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "20.2.0-next.2",
+  version: "21.0.0",
   ngImport: i0,
   type: CdkStepLabel,
   decorators: [{
@@ -247,7 +247,7 @@ class CdkStep {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "20.2.0-next.2",
+    version: "21.0.0",
     ngImport: i0,
     type: CdkStep,
     deps: [],
@@ -255,7 +255,7 @@ class CdkStep {
   });
   static ɵcmp = i0.ɵɵngDeclareComponent({
     minVersion: "16.1.0",
-    version: "20.2.0-next.2",
+    version: "21.0.0",
     type: CdkStep,
     isStandalone: true,
     selector: "cdk-step",
@@ -302,7 +302,7 @@ class CdkStep {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "20.2.0-next.2",
+  version: "21.0.0",
   ngImport: i0,
   type: CdkStep,
   decorators: [{
@@ -560,7 +560,7 @@ class CdkStepper {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "20.2.0-next.2",
+    version: "21.0.0",
     ngImport: i0,
     type: CdkStepper,
     deps: [],
@@ -568,7 +568,7 @@ class CdkStepper {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "16.1.0",
-    version: "20.2.0-next.2",
+    version: "21.0.0",
     type: CdkStepper,
     isStandalone: true,
     selector: "[cdkStepper]",
@@ -597,7 +597,7 @@ class CdkStepper {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "20.2.0-next.2",
+  version: "21.0.0",
   ngImport: i0,
   type: CdkStepper,
   decorators: [{
@@ -654,7 +654,7 @@ class CdkStepperNext {
   constructor() {}
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "20.2.0-next.2",
+    version: "21.0.0",
     ngImport: i0,
     type: CdkStepperNext,
     deps: [],
@@ -662,7 +662,7 @@ class CdkStepperNext {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "20.2.0-next.2",
+    version: "21.0.0",
     type: CdkStepperNext,
     isStandalone: true,
     selector: "button[cdkStepperNext]",
@@ -682,7 +682,7 @@ class CdkStepperNext {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "20.2.0-next.2",
+  version: "21.0.0",
   ngImport: i0,
   type: CdkStepperNext,
   decorators: [{
@@ -708,7 +708,7 @@ class CdkStepperPrevious {
   constructor() {}
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "20.2.0-next.2",
+    version: "21.0.0",
     ngImport: i0,
     type: CdkStepperPrevious,
     deps: [],
@@ -716,7 +716,7 @@ class CdkStepperPrevious {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "20.2.0-next.2",
+    version: "21.0.0",
     type: CdkStepperPrevious,
     isStandalone: true,
     selector: "button[cdkStepperPrevious]",
@@ -736,7 +736,7 @@ class CdkStepperPrevious {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "20.2.0-next.2",
+  version: "21.0.0",
   ngImport: i0,
   type: CdkStepperPrevious,
   decorators: [{
@@ -760,7 +760,7 @@ i0.ɵɵngDeclareClassMetadata({
 class CdkStepperModule {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "20.2.0-next.2",
+    version: "21.0.0",
     ngImport: i0,
     type: CdkStepperModule,
     deps: [],
@@ -768,7 +768,7 @@ class CdkStepperModule {
   });
   static ɵmod = i0.ɵɵngDeclareNgModule({
     minVersion: "14.0.0",
-    version: "20.2.0-next.2",
+    version: "21.0.0",
     ngImport: i0,
     type: CdkStepperModule,
     imports: [BidiModule, CdkStep, CdkStepper, CdkStepHeader, CdkStepLabel, CdkStepperNext, CdkStepperPrevious],
@@ -776,7 +776,7 @@ class CdkStepperModule {
   });
   static ɵinj = i0.ɵɵngDeclareInjector({
     minVersion: "12.0.0",
-    version: "20.2.0-next.2",
+    version: "21.0.0",
     ngImport: i0,
     type: CdkStepperModule,
     imports: [BidiModule]
@@ -784,7 +784,7 @@ class CdkStepperModule {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "20.2.0-next.2",
+  version: "21.0.0",
   ngImport: i0,
   type: CdkStepperModule,
   decorators: [{
