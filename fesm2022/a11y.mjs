@@ -6,7 +6,7 @@ import * as i0 from '@angular/core';
 import { inject, DOCUMENT, APP_ID, Injectable, InjectionToken, NgZone, Injector } from '@angular/core';
 import { Platform } from './_platform-chunk.mjs';
 import { _CdkPrivateStyleLoader } from './_style-loader-chunk.mjs';
-import { _VisuallyHiddenLoader } from './private.mjs';
+import { _VisuallyHiddenLoader } from './_visually-hidden-chunk.mjs';
 export { ActiveDescendantKeyManager } from './_activedescendant-key-manager-chunk.mjs';
 export { FocusKeyManager } from './_focus-key-manager-chunk.mjs';
 export { ListKeyManager } from './_list-key-manager-chunk.mjs';

@@ -4,7 +4,7 @@ import { CdkMonitorFocus } from './_focus-monitor-chunk.mjs';
 import { Platform } from './_platform-chunk.mjs';
 import { _getFocusedElementPierceShadowDom } from './_shadow-dom-chunk.mjs';
 import { _CdkPrivateStyleLoader } from './_style-loader-chunk.mjs';
-import { _VisuallyHiddenLoader } from './private.mjs';
+import { _VisuallyHiddenLoader } from './_visually-hidden-chunk.mjs';
 import { BreakpointObserver } from './_breakpoints-observer-chunk.mjs';
 import { ContentObserver, ObserversModule } from './observers.mjs';
 
