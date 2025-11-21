@@ -2063,12 +2063,11 @@ function createOverlayRef(injector, config) {
     host.classList.add('cdk-overlay-popover');
   }
   const customInsertionPoint = overlayConfig.usePopover ? overlayConfig.positionStrategy?.getPopoverInsertionPoint?.() : null;
+  overlayContainer.getContainerElement().appendChild(host);
   if (isElement(customInsertionPoint)) {
     customInsertionPoint.after(host);
   } else if (customInsertionPoint?.type === 'parent') {
     customInsertionPoint.element.appendChild(host);
-  } else {
-    overlayContainer.getContainerElement().appendChild(host);
   }
   return new OverlayRef(new DomPortalOutlet(pane, appRef, injector), host, pane, overlayConfig, injector.get(NgZone), injector.get(OverlayKeyboardDispatcher), doc, injector.get(Location), injector.get(OverlayOutsideClickDispatcher), config?.disableAnimations ?? injector.get(ANIMATION_MODULE_TYPE, null, {
     optional: true
