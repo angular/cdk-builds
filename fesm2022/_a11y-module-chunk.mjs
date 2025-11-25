@@ -1,11 +1,12 @@
 import * as i0 from '@angular/core';
-import { inject, Injectable, afterNextRender, NgZone, DOCUMENT, Injector, ElementRef, booleanAttribute, Directive, Input, InjectionToken, NgModule } from '@angular/core';
+import { inject, Injectable, afterNextRender, NgZone, DOCUMENT, Injector, ElementRef, booleanAttribute, Directive, Input, InjectionToken, SecurityContext, NgModule } from '@angular/core';
 import { CdkMonitorFocus } from './_focus-monitor-chunk.mjs';
 import { Platform } from './_platform-chunk.mjs';
 import { _getFocusedElementPierceShadowDom } from './_shadow-dom-chunk.mjs';
 import { _CdkPrivateStyleLoader } from './_style-loader-chunk.mjs';
-import { _VisuallyHiddenLoader } from './_visually-hidden-chunk.mjs';
+import { _VisuallyHiddenLoader, trustedHTMLFromString } from './private.mjs';
 import { BreakpointObserver } from './_breakpoints-observer-chunk.mjs';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ContentObserver, ObserversModule } from './observers.mjs';
 
 class IsFocusableConfig {
@@ -491,6 +492,7 @@ class LiveAnnouncer {
   });
   _liveElement;
   _document = inject(DOCUMENT);
+  _sanitizer = inject(DomSanitizer);
   _previousTimeout;
   _currentPromise;
   _currentResolve;
@@ -527,7 +529,15 @@ class LiveAnnouncer {
       }
       clearTimeout(this._previousTimeout);
       this._previousTimeout = setTimeout(() => {
-        this._liveElement.textContent = message;
+        if (!message || typeof message === 'string') {
+          this._liveElement.textContent = message;
+        } else {
+          const cleanMessage = this._sanitizer.sanitize(SecurityContext.HTML, message);
+          if (cleanMessage === null && (typeof ngDevMode === 'undefined' || ngDevMode)) {
+            throw new Error(`The message provided to LiveAnnouncer was not trusted as safe HTML by ` + `Angular's DomSanitizer. Attempted message was "${message}".`);
+          }
+          this._liveElement.innerHTML = trustedHTMLFromString(cleanMessage || '');
+        }
         if (typeof duration === 'number') {
           this._previousTimeout = setTimeout(() => this.clear(), duration);
         }

@@ -14,9 +14,10 @@ import { createBlockScrollStrategy, OverlayContainer, createOverlayRef, OverlayC
 import { _IdGenerator } from './_id-generator-chunk.mjs';
 import { Directionality } from './_directionality-chunk.mjs';
 import './_style-loader-chunk.mjs';
-import './_visually-hidden-chunk.mjs';
+import './private.mjs';
 import './_breakpoints-observer-chunk.mjs';
 import './_array-chunk.mjs';
+import '@angular/platform-browser';
 import './observers.mjs';
 import './_element-chunk.mjs';
 import './_fake-event-detection-chunk.mjs';
