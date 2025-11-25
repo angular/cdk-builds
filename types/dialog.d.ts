@@ -10,7 +10,6 @@ import { PositionStrategy, ScrollStrategy, OverlayRef, OverlayModule } from './_
 import * as _angular_cdk_portal from '@angular/cdk/portal';
 import './observers.js';
 import './_number-property-chunk.js';
-import '@angular/platform-browser';
 import './_scrolling-module-chunk.js';
 import './_data-source-chunk.js';
 import '@angular/common';

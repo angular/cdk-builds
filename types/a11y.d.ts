@@ -6,11 +6,10 @@ export { ListKeyManager, ListKeyManagerModifierKey, ListKeyManagerOption } from 
 import { Subject, Observable } from 'rxjs';
 import { TreeKeyManagerItem, TreeKeyManagerStrategy, TreeKeyManagerOptions, TreeKeyManagerFactory } from './_tree-key-manager-strategy-chunk.js';
 import { FocusTrap, InteractivityChecker } from './_a11y-module-chunk.js';
-export { A11yModule, AriaLivePoliteness, CdkAriaLive, CdkTrapFocus, FocusTrapFactory, IsFocusableConfig, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LiveAnnouncer, LiveAnnouncerDefaultOptions, LiveAnnouncerMessage } from './_a11y-module-chunk.js';
+export { A11yModule, AriaLivePoliteness, CdkAriaLive, CdkTrapFocus, FocusTrapFactory, IsFocusableConfig, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LiveAnnouncer, LiveAnnouncerDefaultOptions } from './_a11y-module-chunk.js';
 export { CdkMonitorFocus, FOCUS_MONITOR_DEFAULT_OPTIONS, FocusMonitor, FocusMonitorDetectionMode, FocusMonitorOptions, FocusOptions, FocusOrigin } from './_focus-monitor-chunk.js';
 import './observers.js';
 import './_number-property-chunk.js';
-import '@angular/platform-browser';
 
 /**
  * Interface used to register message elements and keep a count of how many registrations have
