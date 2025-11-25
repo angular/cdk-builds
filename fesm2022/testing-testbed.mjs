@@ -53,7 +53,7 @@ function createMouseEvent(type, clientX = 0, clientY = 0, offsetX = 0, offsetY =
     bubbles: true,
     cancelable: true,
     composed: true,
-    view: window,
+    view: getEventView(),
     detail: 1,
     relatedTarget: null,
     screenX,
@@ -82,7 +82,7 @@ function createPointerEvent(type, clientX = 0, clientY = 0, offsetX, offsetY, op
     bubbles: true,
     cancelable: true,
     composed: true,
-    view: window,
+    view: getEventView(),
     clientX,
     clientY,
     ...options
@@ -100,7 +100,7 @@ function createKeyboardEvent(type, keyCode = 0, key = '', modifiers = {}, code =
     bubbles: true,
     cancelable: true,
     composed: true,
-    view: window,
+    view: getEventView(),
     keyCode,
     key,
     shiftKey: modifiers.shift,
@@ -122,6 +122,9 @@ function defineReadonlyEventProperty(event, propertyName, value) {
     get: () => value,
     configurable: true
   });
+}
+function getEventView() {
+  return typeof window !== 'undefined' && window && !window.jsdom ? window : undefined;
 }
 
 function dispatchEvent(node, event) {
