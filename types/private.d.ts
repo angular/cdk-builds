@@ -1,5 +1,6 @@
 export { _CdkPrivateStyleLoader } from './_style-loader-chunk.js';
 import * as i0 from '@angular/core';
+import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 
 /**
  * Component used to load the .cdk-visually-hidden styles.
@@ -25,5 +26,8 @@ interface TrustedHTML {
  */
 declare function trustedHTMLFromString(html: string): TrustedHTML;
 
-export { _VisuallyHiddenLoader, trustedHTMLFromString };
+/** Sanitizes and sets the `innerHTML` of an element. */
+declare function _setInnerHtml(element: HTMLElement, html: SafeHtml, sanitizer: DomSanitizer): void;
+
+export { _VisuallyHiddenLoader, _setInnerHtml, trustedHTMLFromString };
 export type { TrustedHTML };

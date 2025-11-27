@@ -4,8 +4,9 @@ import { CdkMonitorFocus } from './_focus-monitor-chunk.mjs';
 import { Platform } from './_platform-chunk.mjs';
 import { _getFocusedElementPierceShadowDom } from './_shadow-dom-chunk.mjs';
 import { _CdkPrivateStyleLoader } from './_style-loader-chunk.mjs';
-import { _VisuallyHiddenLoader } from './_visually-hidden-chunk.mjs';
+import { _VisuallyHiddenLoader, _setInnerHtml } from './private.mjs';
 import { BreakpointObserver } from './_breakpoints-observer-chunk.mjs';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ContentObserver, ObserversModule } from './observers.mjs';
 
 class IsFocusableConfig {
@@ -491,6 +492,7 @@ class LiveAnnouncer {
   });
   _liveElement;
   _document = inject(DOCUMENT);
+  _sanitizer = inject(DomSanitizer);
   _previousTimeout;
   _currentPromise;
   _currentResolve;
@@ -527,7 +529,11 @@ class LiveAnnouncer {
       }
       clearTimeout(this._previousTimeout);
       this._previousTimeout = setTimeout(() => {
-        this._liveElement.textContent = message;
+        if (!message || typeof message === 'string') {
+          this._liveElement.textContent = message;
+        } else {
+          _setInnerHtml(this._liveElement, message, this._sanitizer);
+        }
         if (typeof duration === 'number') {
           this._previousTimeout = setTimeout(() => this.clear(), duration);
         }

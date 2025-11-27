@@ -1,6 +1,7 @@
 import * as i0 from '@angular/core';
 import { NgZone, Injector, OnDestroy, AfterContentInit, OnChanges, DoCheck, SimpleChanges, InjectionToken } from '@angular/core';
 import { ObserversModule } from './observers.js';
+import { SafeHtml } from '@angular/platform-browser';
 import { CdkMonitorFocus } from './_focus-monitor-chunk.js';
 
 /**
@@ -216,11 +217,14 @@ interface LiveAnnouncerDefaultOptions {
 /** Injection token that can be used to configure the default options for the LiveAnnouncer. */
 declare const LIVE_ANNOUNCER_DEFAULT_OPTIONS: InjectionToken<LiveAnnouncerDefaultOptions>;
 
+/** Possible types for a message that can be announced by the `LiveAnnouncer`. */
+type LiveAnnouncerMessage = string | SafeHtml;
 declare class LiveAnnouncer implements OnDestroy {
     private _ngZone;
     private _defaultOptions;
     private _liveElement;
     private _document;
+    private _sanitizer;
     private _previousTimeout;
     private _currentPromise;
     private _currentResolve;
@@ -230,14 +234,14 @@ declare class LiveAnnouncer implements OnDestroy {
      * @param message Message to be announced to the screen reader.
      * @returns Promise that will be resolved when the message is added to the DOM.
      */
-    announce(message: string): Promise<void>;
+    announce(message: LiveAnnouncerMessage): Promise<void>;
     /**
      * Announces a message to screen readers.
      * @param message Message to be announced to the screen reader.
      * @param politeness The politeness of the announcer element.
      * @returns Promise that will be resolved when the message is added to the DOM.
      */
-    announce(message: string, politeness?: AriaLivePoliteness): Promise<void>;
+    announce(message: LiveAnnouncerMessage, politeness?: AriaLivePoliteness): Promise<void>;
     /**
      * Announces a message to screen readers.
      * @param message Message to be announced to the screen reader.
@@ -246,7 +250,7 @@ declare class LiveAnnouncer implements OnDestroy {
      *   100ms after `announce` has been called.
      * @returns Promise that will be resolved when the message is added to the DOM.
      */
-    announce(message: string, duration?: number): Promise<void>;
+    announce(message: LiveAnnouncerMessage, duration?: number): Promise<void>;
     /**
      * Announces a message to screen readers.
      * @param message Message to be announced to the screen reader.
@@ -256,7 +260,7 @@ declare class LiveAnnouncer implements OnDestroy {
      *   100ms after `announce` has been called.
      * @returns Promise that will be resolved when the message is added to the DOM.
      */
-    announce(message: string, politeness?: AriaLivePoliteness, duration?: number): Promise<void>;
+    announce(message: LiveAnnouncerMessage, politeness?: AriaLivePoliteness, duration?: number): Promise<void>;
     /**
      * Clears the current text from the announcer element. Can be used to prevent
      * screen readers from reading the text out again while the user is going
@@ -305,4 +309,4 @@ declare class A11yModule {
 }
 
 export { A11yModule, CdkAriaLive, CdkTrapFocus, FocusTrap, FocusTrapFactory, InteractivityChecker, IsFocusableConfig, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LiveAnnouncer };
-export type { AriaLivePoliteness, LiveAnnouncerDefaultOptions };
+export type { AriaLivePoliteness, LiveAnnouncerDefaultOptions, LiveAnnouncerMessage };
