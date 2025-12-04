@@ -319,6 +319,11 @@ declare abstract class CdkMenuTriggerBase implements OnDestroy {
     menuTemplateRef: TemplateRef<unknown> | null;
     /** Context data to be passed along to the menu template */
     menuData: unknown;
+    /**
+     * Selector for the element on which to set the transform origin once the menu is open.
+     * This makes it easier to implement animations that start from the attachment point of the menu.
+     */
+    transformOriginSelector: string | null;
     /** Close the opened menu. */
     abstract close(): void;
     /** A reference to the overlay which manages the triggered menu */
@@ -436,7 +441,7 @@ declare class CdkMenuTrigger extends CdkMenuTriggerBase implements OnChanges, On
     /** Sets thte `type` attribute of the trigger. */
     private _setType;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuTrigger, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuTrigger, "[cdkMenuTriggerFor]", ["cdkMenuTriggerFor"], { "menuTemplateRef": { "alias": "cdkMenuTriggerFor"; "required": false; }; "menuPosition": { "alias": "cdkMenuPosition"; "required": false; }; "menuData": { "alias": "cdkMenuTriggerData"; "required": false; }; }, { "opened": "cdkMenuOpened"; "closed": "cdkMenuClosed"; }, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuTrigger, "[cdkMenuTriggerFor]", ["cdkMenuTriggerFor"], { "menuTemplateRef": { "alias": "cdkMenuTriggerFor"; "required": false; }; "menuPosition": { "alias": "cdkMenuPosition"; "required": false; }; "menuData": { "alias": "cdkMenuTriggerData"; "required": false; }; "transformOriginSelector": { "alias": "cdkMenuTriggerTransformOriginOn"; "required": false; }; }, { "opened": "cdkMenuOpened"; "closed": "cdkMenuClosed"; }, never, never, true, never>;
 }
 
 /**
@@ -817,7 +822,7 @@ declare class CdkContextMenuTrigger extends CdkMenuTriggerBase implements OnDest
      */
     private _open;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkContextMenuTrigger, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkContextMenuTrigger, "[cdkContextMenuTriggerFor]", ["cdkContextMenuTriggerFor"], { "menuTemplateRef": { "alias": "cdkContextMenuTriggerFor"; "required": false; }; "menuPosition": { "alias": "cdkContextMenuPosition"; "required": false; }; "menuData": { "alias": "cdkContextMenuTriggerData"; "required": false; }; "disabled": { "alias": "cdkContextMenuDisabled"; "required": false; }; }, { "opened": "cdkContextMenuOpened"; "closed": "cdkContextMenuClosed"; }, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkContextMenuTrigger, "[cdkContextMenuTriggerFor]", ["cdkContextMenuTriggerFor"], { "menuTemplateRef": { "alias": "cdkContextMenuTriggerFor"; "required": false; }; "menuPosition": { "alias": "cdkContextMenuPosition"; "required": false; }; "menuData": { "alias": "cdkContextMenuTriggerData"; "required": false; }; "transformOriginSelector": { "alias": "cdkContextMenuTriggerTransformOriginOn"; "required": false; }; "disabled": { "alias": "cdkContextMenuDisabled"; "required": false; }; }, { "opened": "cdkContextMenuOpened"; "closed": "cdkContextMenuClosed"; }, never, never, true, never>;
     static ngAcceptInputType_disabled: unknown;
 }
 
