@@ -8,7 +8,7 @@ import { Directionality } from './_directionality-chunk.mjs';
 import { getRtlScrollAxisType, RtlScrollAxisType, supportsScrollBehavior } from './_scrolling-chunk.mjs';
 import { BidiModule } from './bidi.mjs';
 export { Dir as ɵɵDir } from './bidi.mjs';
-import { _VIEW_REPEATER_STRATEGY, ArrayDataSource, _RecycleViewRepeaterStrategy } from './_recycle-view-repeater-strategy-chunk.mjs';
+import { _RecycleViewRepeaterStrategy, ArrayDataSource } from './_recycle-view-repeater-strategy-chunk.mjs';
 import { isDataSource } from './_data-source-chunk.mjs';
 import '@angular/common';
 
@@ -588,6 +588,7 @@ function rangesEqual(r1, r2) {
   return r1.start == r2.start && r1.end == r2.end;
 }
 const SCROLL_SCHEDULER = typeof requestAnimationFrame !== 'undefined' ? animationFrameScheduler : asapScheduler;
+const CDK_VIRTUAL_SCROLL_VIEWPORT = new InjectionToken('CDK_VIRTUAL_SCROLL_VIEWPORT');
 class CdkVirtualScrollViewport extends CdkVirtualScrollable {
   elementRef = inject(ElementRef);
   _changeDetectorRef = inject(ChangeDetectorRef);
@@ -894,6 +895,9 @@ class CdkVirtualScrollViewport extends CdkVirtualScrollable {
       useFactory: () => inject(VIRTUAL_SCROLLABLE, {
         optional: true
       }) || inject(CdkVirtualScrollViewport)
+    }, {
+      provide: CDK_VIRTUAL_SCROLL_VIEWPORT,
+      useExisting: CdkVirtualScrollViewport
     }],
     viewQueries: [{
       propertyName: "_contentWrapper",
@@ -931,6 +935,9 @@ i0.ɵɵngDeclareClassMetadata({
         useFactory: () => inject(VIRTUAL_SCROLLABLE, {
           optional: true
         }) || inject(CdkVirtualScrollViewport)
+      }, {
+        provide: CDK_VIRTUAL_SCROLL_VIEWPORT,
+        useExisting: CdkVirtualScrollViewport
       }],
       template: "<!--\n  Wrap the rendered content in an element that will be used to offset it based on the scroll\n  position.\n-->\n<div #contentWrapper class=\"cdk-virtual-scroll-content-wrapper\">\n  <ng-content></ng-content>\n</div>\n<!--\n  Spacer used to force the scrolling container to the correct size for the *total* number of items\n  so that the scrollbar captures the size of the entire data set.\n-->\n<div class=\"cdk-virtual-scroll-spacer\"\n     [style.width]=\"_totalContentWidth()\" [style.height]=\"_totalContentHeight()\"></div>\n",
       styles: ["cdk-virtual-scroll-viewport{display:block;position:relative;transform:translateZ(0)}.cdk-virtual-scrollable{overflow:auto;will-change:scroll-position;contain:strict}.cdk-virtual-scroll-content-wrapper{position:absolute;top:0;left:0;contain:content}[dir=rtl] .cdk-virtual-scroll-content-wrapper{right:0;left:auto}.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper{min-height:100%}.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]){padding-left:0;padding-right:0;margin-left:0;margin-right:0;border-left-width:0;border-right-width:0;outline:none}.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper{min-width:100%}.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]){padding-top:0;padding-bottom:0;margin-top:0;margin-bottom:0;border-top-width:0;border-bottom-width:0;outline:none}.cdk-virtual-scroll-spacer{height:1px;transform-origin:0 0;flex:0 0 auto}[dir=rtl] .cdk-virtual-scroll-spacer{transform-origin:100% 0}\n"]
@@ -974,8 +981,8 @@ class CdkVirtualForOf {
   _viewContainerRef = inject(ViewContainerRef);
   _template = inject(TemplateRef);
   _differs = inject(IterableDiffers);
-  _viewRepeater = inject(_VIEW_REPEATER_STRATEGY);
-  _viewport = inject(CdkVirtualScrollViewport, {
+  _viewRepeater = new _RecycleViewRepeaterStrategy();
+  _viewport = inject(CDK_VIRTUAL_SCROLL_VIEWPORT, {
     skipSelf: true
   });
   viewChange = new Subject();
@@ -1171,10 +1178,6 @@ class CdkVirtualForOf {
       cdkVirtualForTemplate: "cdkVirtualForTemplate",
       cdkVirtualForTemplateCacheSize: "cdkVirtualForTemplateCacheSize"
     },
-    providers: [{
-      provide: _VIEW_REPEATER_STRATEGY,
-      useClass: _RecycleViewRepeaterStrategy
-    }],
     ngImport: i0
   });
 }
@@ -1186,11 +1189,7 @@ i0.ɵɵngDeclareClassMetadata({
   decorators: [{
     type: Directive,
     args: [{
-      selector: '[cdkVirtualFor][cdkVirtualForOf]',
-      providers: [{
-        provide: _VIEW_REPEATER_STRATEGY,
-        useClass: _RecycleViewRepeaterStrategy
-      }]
+      selector: '[cdkVirtualFor][cdkVirtualForOf]'
     }]
   }],
   ctorParameters: () => [],
@@ -1389,5 +1388,5 @@ i0.ɵɵngDeclareClassMetadata({
   }]
 });
 
-export { CdkFixedSizeVirtualScroll, CdkScrollable, CdkScrollableModule, CdkVirtualForOf, CdkVirtualScrollViewport, CdkVirtualScrollable, CdkVirtualScrollableElement, CdkVirtualScrollableWindow, DEFAULT_RESIZE_TIME, DEFAULT_SCROLL_TIME, FixedSizeVirtualScrollStrategy, ScrollDispatcher, ScrollingModule, VIRTUAL_SCROLLABLE, VIRTUAL_SCROLL_STRATEGY, ViewportRuler, _fixedSizeVirtualScrollStrategyFactory };
+export { CDK_VIRTUAL_SCROLL_VIEWPORT, CdkFixedSizeVirtualScroll, CdkScrollable, CdkScrollableModule, CdkVirtualForOf, CdkVirtualScrollViewport, CdkVirtualScrollable, CdkVirtualScrollableElement, CdkVirtualScrollableWindow, DEFAULT_RESIZE_TIME, DEFAULT_SCROLL_TIME, FixedSizeVirtualScrollStrategy, ScrollDispatcher, ScrollingModule, VIRTUAL_SCROLLABLE, VIRTUAL_SCROLL_STRATEGY, ViewportRuler, _fixedSizeVirtualScrollStrategyFactory };
 //# sourceMappingURL=scrolling.mjs.map

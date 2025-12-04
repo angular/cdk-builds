@@ -171,6 +171,11 @@ declare abstract class CdkVirtualScrollable extends CdkScrollable {
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkVirtualScrollable, never, never, {}, {}, never, never, true, never>;
 }
 
+/**
+ * Lightweight token that can be used to inject the `CdkVirtualScrollViewport`
+ * without introducing a hard dependency on it.
+ */
+declare const CDK_VIRTUAL_SCROLL_VIEWPORT: InjectionToken<CdkVirtualScrollViewport>;
 /** A viewport that virtualizes its scrolling with the help of `CdkVirtualForOf`. */
 declare class CdkVirtualScrollViewport extends CdkVirtualScrollable implements OnInit, OnDestroy {
     elementRef: ElementRef<HTMLElement>;
@@ -547,5 +552,5 @@ declare class ScrollingModule {
     static ɵinj: i0.ɵɵInjectorDeclaration<ScrollingModule>;
 }
 
-export { CdkFixedSizeVirtualScroll, CdkScrollable, CdkScrollableModule, CdkVirtualForOf, CdkVirtualScrollViewport, CdkVirtualScrollable, CdkVirtualScrollableElement, CdkVirtualScrollableWindow, DEFAULT_SCROLL_TIME, FixedSizeVirtualScrollStrategy, ScrollDispatcher, ScrollingModule, VIRTUAL_SCROLLABLE, VIRTUAL_SCROLL_STRATEGY, _fixedSizeVirtualScrollStrategyFactory };
+export { CDK_VIRTUAL_SCROLL_VIEWPORT, CdkFixedSizeVirtualScroll, CdkScrollable, CdkScrollableModule, CdkVirtualForOf, CdkVirtualScrollViewport, CdkVirtualScrollable, CdkVirtualScrollableElement, CdkVirtualScrollableWindow, DEFAULT_SCROLL_TIME, FixedSizeVirtualScrollStrategy, ScrollDispatcher, ScrollingModule, VIRTUAL_SCROLLABLE, VIRTUAL_SCROLL_STRATEGY, _fixedSizeVirtualScrollStrategyFactory };
 export type { CdkVirtualForOfContext, CdkVirtualScrollRepeater, ExtendedScrollToOptions, VirtualScrollStrategy, _Bottom, _End, _Left, _Right, _Start, _Top, _Without, _XAxis, _XOR, _YAxis };

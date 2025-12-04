@@ -271,6 +271,7 @@ class CdkMenuTriggerBase {
   closed = new EventEmitter();
   menuTemplateRef;
   menuData;
+  transformOriginSelector = null;
   overlayRef = null;
   destroyed = new Subject();
   stopOutsideClicksListener = merge(this.closed, this.destroyed);
@@ -704,7 +705,11 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
     });
   }
   _getOverlayPositionStrategy() {
-    return createFlexibleConnectedPositionStrategy(this._injector, this._elementRef).withLockedPosition().withFlexibleDimensions(false).withPositions(this._getOverlayPositions());
+    const strategy = createFlexibleConnectedPositionStrategy(this._injector, this._elementRef).withLockedPosition().withFlexibleDimensions(false).withPositions(this._getOverlayPositions());
+    if (this.transformOriginSelector) {
+      strategy.withTransformOriginOn(this.transformOriginSelector);
+    }
+    return strategy;
   }
   _getOverlayPositions() {
     return this.menuPosition ?? (!this._parentMenu || this._parentMenu.orientation === 'horizontal' ? STANDARD_DROPDOWN_BELOW_POSITIONS : STANDARD_DROPDOWN_ADJACENT_POSITIONS);
@@ -783,7 +788,8 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
     inputs: {
       menuTemplateRef: ["cdkMenuTriggerFor", "menuTemplateRef"],
       menuPosition: ["cdkMenuPosition", "menuPosition"],
-      menuData: ["cdkMenuTriggerData", "menuData"]
+      menuData: ["cdkMenuTriggerData", "menuData"],
+      transformOriginSelector: ["cdkMenuTriggerTransformOriginOn", "transformOriginSelector"]
     },
     outputs: {
       opened: "cdkMenuOpened",
@@ -840,6 +846,9 @@ i0.ɵɵngDeclareClassMetadata({
       }, {
         name: 'menuData',
         alias: 'cdkMenuTriggerData'
+      }, {
+        name: 'transformOriginSelector',
+        alias: 'cdkMenuTriggerTransformOriginOn'
       }],
       outputs: ['opened: cdkMenuOpened', 'closed: cdkMenuClosed'],
       providers: [{
@@ -1899,7 +1908,11 @@ class CdkContextMenuTrigger extends CdkMenuTriggerBase {
     });
   }
   _getOverlayPositionStrategy(coordinates) {
-    return createFlexibleConnectedPositionStrategy(this._injector, coordinates).withLockedPosition().withGrowAfterOpen().withPositions(this.menuPosition ?? CONTEXT_MENU_POSITIONS);
+    const strategy = createFlexibleConnectedPositionStrategy(this._injector, coordinates).withLockedPosition().withGrowAfterOpen().withPositions(this.menuPosition ?? CONTEXT_MENU_POSITIONS);
+    if (this.transformOriginSelector) {
+      strategy.withTransformOriginOn(this.transformOriginSelector);
+    }
+    return strategy;
   }
   _setMenuStackCloseListener() {
     this.menuStack.closed.pipe(takeUntil(this.destroyed)).subscribe(({
@@ -1967,6 +1980,7 @@ class CdkContextMenuTrigger extends CdkMenuTriggerBase {
       menuTemplateRef: ["cdkContextMenuTriggerFor", "menuTemplateRef"],
       menuPosition: ["cdkContextMenuPosition", "menuPosition"],
       menuData: ["cdkContextMenuTriggerData", "menuData"],
+      transformOriginSelector: ["cdkContextMenuTriggerTransformOriginOn", "transformOriginSelector"],
       disabled: ["cdkContextMenuDisabled", "disabled", booleanAttribute]
     },
     outputs: {
@@ -2016,6 +2030,9 @@ i0.ɵɵngDeclareClassMetadata({
       }, {
         name: 'menuData',
         alias: 'cdkContextMenuTriggerData'
+      }, {
+        name: 'transformOriginSelector',
+        alias: 'cdkContextMenuTriggerTransformOriginOn'
       }],
       outputs: ['opened: cdkContextMenuOpened', 'closed: cdkContextMenuClosed'],
       providers: [{

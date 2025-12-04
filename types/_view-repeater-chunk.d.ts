@@ -1,4 +1,4 @@
-import { TemplateRef, IterableChangeRecord, IterableChanges, ViewContainerRef, InjectionToken } from '@angular/core';
+import { TemplateRef, IterableChangeRecord, IterableChanges, ViewContainerRef } from '@angular/core';
 
 /**
  * The context for an embedded view in the repeater's view container.
@@ -78,11 +78,6 @@ interface _ViewRepeater<T, R, C extends _ViewRepeaterItemContext<T>> {
     applyChanges(changes: IterableChanges<R>, viewContainerRef: ViewContainerRef, itemContextFactory: _ViewRepeaterItemContextFactory<T, R, C>, itemValueResolver: _ViewRepeaterItemValueResolver<T, R>, itemViewChanged?: _ViewRepeaterItemChanged<R, C>): void;
     detach(): void;
 }
-/**
- * Injection token for `_ViewRepeater`. This token is for use by Angular Material only.
- * @docs-private
- */
-declare const _VIEW_REPEATER_STRATEGY: InjectionToken<_ViewRepeater<unknown, unknown, _ViewRepeaterItemContext<unknown>>>;
 
-export { _VIEW_REPEATER_STRATEGY, _ViewRepeaterOperation };
+export { _ViewRepeaterOperation };
 export type { _ViewRepeater, _ViewRepeaterItemChange, _ViewRepeaterItemChanged, _ViewRepeaterItemContext, _ViewRepeaterItemContextFactory, _ViewRepeaterItemInsertArgs, _ViewRepeaterItemValueResolver };

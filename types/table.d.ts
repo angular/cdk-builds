@@ -351,6 +351,9 @@ interface StickyPositioningListener {
 /**
  * Enables the recycle view repeater strategy, which reduces rendering latency. Not compatible with
  * tables that animate rows.
+ *
+ * @deprecated This directive is a no-op and will be removed.
+ * @breaking-change 23.0.0
  */
 declare class CdkRecycleRows {
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkRecycleRows, never>;
@@ -443,7 +446,7 @@ declare class CdkTable<T> implements AfterContentInit, AfterContentChecked, Coll
     protected readonly _elementRef: ElementRef<any>;
     protected readonly _dir: Directionality | null;
     private _platform;
-    protected readonly _viewRepeater: _ViewRepeater<T, RenderRow<T>, RowContext<T>>;
+    protected _viewRepeater: _ViewRepeater<T, RenderRow<T>, RowContext<T>>;
     private readonly _viewportRuler;
     protected readonly _stickyPositioningListener: StickyPositioningListener;
     private _document;
@@ -620,6 +623,11 @@ declare class CdkTable<T> implements AfterContentInit, AfterContentChecked, Coll
     get fixedLayout(): boolean;
     set fixedLayout(value: boolean);
     private _fixedLayout;
+    /**
+     * Whether rows should be recycled which reduces latency, but is not compatible with tables
+     * that animate rows. Note that this input cannot change after the table is initialized.
+     */
+    recycleRows: boolean;
     /**
      * Emits when the table completes rendering a set of data rows based on the latest data from the
      * data source, even if the set of rows is empty.
@@ -806,9 +814,10 @@ declare class CdkTable<T> implements AfterContentInit, AfterContentChecked, Coll
     /** Creates or removes the no data row, depending on whether any data is being shown. */
     private _updateNoDataRow;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTable<any>, never>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<CdkTable<any>, "cdk-table, table[cdk-table]", ["cdkTable"], { "trackBy": { "alias": "trackBy"; "required": false; }; "dataSource": { "alias": "dataSource"; "required": false; }; "multiTemplateDataRows": { "alias": "multiTemplateDataRows"; "required": false; }; "fixedLayout": { "alias": "fixedLayout"; "required": false; }; }, { "contentChanged": "contentChanged"; }, ["_noDataRow", "_contentColumnDefs", "_contentRowDefs", "_contentHeaderRowDefs", "_contentFooterRowDefs"], ["caption", "colgroup, col", "*"], true, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<CdkTable<any>, "cdk-table, table[cdk-table]", ["cdkTable"], { "trackBy": { "alias": "trackBy"; "required": false; }; "dataSource": { "alias": "dataSource"; "required": false; }; "multiTemplateDataRows": { "alias": "multiTemplateDataRows"; "required": false; }; "fixedLayout": { "alias": "fixedLayout"; "required": false; }; "recycleRows": { "alias": "recycleRows"; "required": false; }; }, { "contentChanged": "contentChanged"; }, ["_noDataRow", "_contentColumnDefs", "_contentRowDefs", "_contentHeaderRowDefs", "_contentFooterRowDefs"], ["caption", "colgroup, col", "*"], true, never>;
     static ngAcceptInputType_multiTemplateDataRows: unknown;
     static ngAcceptInputType_fixedLayout: unknown;
+    static ngAcceptInputType_recycleRows: unknown;
 }
 
 /**

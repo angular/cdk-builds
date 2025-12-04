@@ -4,8 +4,8 @@ import * as i0 from '@angular/core';
 import { InjectionToken, inject, TemplateRef, Directive, booleanAttribute, Input, ContentChild, ElementRef, IterableDiffers, ViewContainerRef, Component, ChangeDetectionStrategy, ViewEncapsulation, afterNextRender, ChangeDetectorRef, DOCUMENT, EventEmitter, Injector, HostAttributeToken, Output, ContentChildren, ViewChild, NgModule } from '@angular/core';
 import { Subject, BehaviorSubject, isObservable, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { _VIEW_REPEATER_STRATEGY, _RecycleViewRepeaterStrategy, _ViewRepeaterOperation } from './_recycle-view-repeater-strategy-chunk.mjs';
 import { _DisposeViewRepeaterStrategy } from './_dispose-view-repeater-strategy-chunk.mjs';
+import { _RecycleViewRepeaterStrategy, _ViewRepeaterOperation } from './_recycle-view-repeater-strategy-chunk.mjs';
 import { Directionality } from './_directionality-chunk.mjs';
 import { Platform } from './_platform-chunk.mjs';
 import { ViewportRuler, ScrollingModule } from './scrolling.mjs';
@@ -1284,10 +1284,6 @@ class CdkRecycleRows {
     type: CdkRecycleRows,
     isStandalone: true,
     selector: "cdk-table[recycleRows], table[cdk-table][recycleRows]",
-    providers: [{
-      provide: _VIEW_REPEATER_STRATEGY,
-      useClass: _RecycleViewRepeaterStrategy
-    }],
     ngImport: i0
   });
 }
@@ -1299,11 +1295,7 @@ i0.ɵɵngDeclareClassMetadata({
   decorators: [{
     type: Directive,
     args: [{
-      selector: 'cdk-table[recycleRows], table[cdk-table][recycleRows]',
-      providers: [{
-        provide: _VIEW_REPEATER_STRATEGY,
-        useClass: _RecycleViewRepeaterStrategy
-      }]
+      selector: 'cdk-table[recycleRows], table[cdk-table][recycleRows]'
     }]
   }]
 });
@@ -1467,7 +1459,7 @@ class CdkTable {
     optional: true
   });
   _platform = inject(Platform);
-  _viewRepeater = inject(_VIEW_REPEATER_STRATEGY);
+  _viewRepeater;
   _viewportRuler = inject(ViewportRuler);
   _stickyPositioningListener = inject(STICKY_POSITIONING_LISTENER, {
     optional: true,
@@ -1549,6 +1541,7 @@ class CdkTable {
     this._stickyColumnStylesNeedReset = true;
   }
   _fixedLayout = false;
+  recycleRows = false;
   contentChanged = new EventEmitter();
   viewChange = new BehaviorSubject({
     start: 0,
@@ -1584,6 +1577,7 @@ class CdkTable {
     });
   }
   ngAfterContentInit() {
+    this._viewRepeater = this.recycleRows ? new _RecycleViewRepeaterStrategy() : new _DisposeViewRepeaterStrategy();
     this._hasInitialized = true;
   }
   ngAfterContentChecked() {
@@ -2050,7 +2044,8 @@ class CdkTable {
       trackBy: "trackBy",
       dataSource: "dataSource",
       multiTemplateDataRows: ["multiTemplateDataRows", "multiTemplateDataRows", booleanAttribute],
-      fixedLayout: ["fixedLayout", "fixedLayout", booleanAttribute]
+      fixedLayout: ["fixedLayout", "fixedLayout", booleanAttribute],
+      recycleRows: ["recycleRows", "recycleRows", booleanAttribute]
     },
     outputs: {
       contentChanged: "contentChanged"
@@ -2064,9 +2059,6 @@ class CdkTable {
     providers: [{
       provide: CDK_TABLE,
       useExisting: CdkTable
-    }, {
-      provide: _VIEW_REPEATER_STRATEGY,
-      useClass: _DisposeViewRepeaterStrategy
     }, {
       provide: STICKY_POSITIONING_LISTENER,
       useValue: null
@@ -2198,9 +2190,6 @@ i0.ɵɵngDeclareClassMetadata({
         provide: CDK_TABLE,
         useExisting: CdkTable
       }, {
-        provide: _VIEW_REPEATER_STRATEGY,
-        useClass: _DisposeViewRepeaterStrategy
-      }, {
         provide: STICKY_POSITIONING_LISTENER,
         useValue: null
       }],
@@ -2223,6 +2212,12 @@ i0.ɵɵngDeclareClassMetadata({
       }]
     }],
     fixedLayout: [{
+      type: Input,
+      args: [{
+        transform: booleanAttribute
+      }]
+    }],
+    recycleRows: [{
       type: Input,
       args: [{
         transform: booleanAttribute

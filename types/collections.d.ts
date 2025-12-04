@@ -3,7 +3,7 @@ import { DataSource } from './_data-source-chunk.js';
 export { CollectionViewer, ListRange, isDataSource } from './_data-source-chunk.js';
 import { IterableChanges, ViewContainerRef } from '@angular/core';
 import { _ViewRepeaterItemContext, _ViewRepeater, _ViewRepeaterItemContextFactory, _ViewRepeaterItemValueResolver, _ViewRepeaterItemChanged } from './_view-repeater-chunk.js';
-export { _VIEW_REPEATER_STRATEGY, _ViewRepeaterItemChange, _ViewRepeaterItemInsertArgs, _ViewRepeaterOperation } from './_view-repeater-chunk.js';
+export { _ViewRepeaterItemChange, _ViewRepeaterItemInsertArgs, _ViewRepeaterOperation } from './_view-repeater-chunk.js';
 import { SelectionModel } from './_selection-model-chunk.js';
 export { SelectionChange, getMultipleValuesInSingleSelectionError } from './_selection-model-chunk.js';
 export { UniqueSelectionDispatcher, UniqueSelectionDispatcherListener } from './_unique-selection-dispatcher-chunk.js';

@@ -1,6 +1,5 @@
 import { isObservable, of } from 'rxjs';
 import { DataSource } from './_data-source-chunk.mjs';
-import { InjectionToken } from '@angular/core';
 
 class ArrayDataSource extends DataSource {
   _data;
@@ -21,7 +20,6 @@ var _ViewRepeaterOperation;
   _ViewRepeaterOperation[_ViewRepeaterOperation["MOVED"] = 2] = "MOVED";
   _ViewRepeaterOperation[_ViewRepeaterOperation["REMOVED"] = 3] = "REMOVED";
 })(_ViewRepeaterOperation || (_ViewRepeaterOperation = {}));
-const _VIEW_REPEATER_STRATEGY = new InjectionToken('_ViewRepeater');
 
 class _RecycleViewRepeaterStrategy {
   viewCacheSize = 20;
@@ -96,5 +94,5 @@ class _RecycleViewRepeaterStrategy {
   }
 }
 
-export { ArrayDataSource, _RecycleViewRepeaterStrategy, _VIEW_REPEATER_STRATEGY, _ViewRepeaterOperation };
+export { ArrayDataSource, _RecycleViewRepeaterStrategy, _ViewRepeaterOperation };
 //# sourceMappingURL=_recycle-view-repeater-strategy-chunk.mjs.map
