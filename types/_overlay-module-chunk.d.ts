@@ -119,6 +119,7 @@ declare class OverlayRef implements PortalOutlet {
     private _backdropRef;
     private _detachContentMutationObserver;
     private _detachContentAfterRenderRef;
+    private _disposed;
     /**
      * Reference to the parent of the `_host` at the time it was detached. Used to restore
      * the `_host` to its original position in the DOM when it gets re-attached.
