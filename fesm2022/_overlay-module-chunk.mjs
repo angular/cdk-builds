@@ -724,6 +724,7 @@ class OverlayRef {
   _backdropRef = null;
   _detachContentMutationObserver;
   _detachContentAfterRenderRef;
+  _disposed;
   _previousHostParent;
   _keydownEvents = new Subject();
   _outsidePointerEvents = new Subject();
@@ -757,6 +758,9 @@ class OverlayRef {
     return this._host;
   }
   attach(portal) {
+    if (this._disposed) {
+      return null;
+    }
     this._attachHost();
     const attachResult = this._portalOutlet.attach(portal);
     this._positionStrategy?.attach(this);
@@ -819,6 +823,9 @@ class OverlayRef {
     return detachmentResult;
   }
   dispose() {
+    if (this._disposed) {
+      return;
+    }
     const isAttached = this.hasAttached();
     if (this._positionStrategy) {
       this._positionStrategy.dispose();
@@ -841,6 +848,7 @@ class OverlayRef {
     }
     this._detachments.complete();
     this._completeDetachContent();
+    this._disposed = true;
   }
   hasAttached() {
     return this._portalOutlet.hasAttached();
