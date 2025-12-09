@@ -1,18 +1,18 @@
 import { isDataSource } from './_data-source-chunk.mjs';
 export { DataSource } from './_data-source-chunk.mjs';
 import * as i0 from '@angular/core';
-import { InjectionToken, inject, TemplateRef, Directive, booleanAttribute, Input, ContentChild, ElementRef, IterableDiffers, ViewContainerRef, Component, ChangeDetectionStrategy, ViewEncapsulation, afterNextRender, ChangeDetectorRef, DOCUMENT, EventEmitter, Injector, HostAttributeToken, Output, ContentChildren, ViewChild, NgModule } from '@angular/core';
-import { Subject, BehaviorSubject, isObservable, of } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { InjectionToken, inject, TemplateRef, Directive, booleanAttribute, Input, ContentChild, ElementRef, IterableDiffers, ViewContainerRef, Component, ChangeDetectionStrategy, ViewEncapsulation, afterNextRender, ChangeDetectorRef, Injector, DOCUMENT, EventEmitter, HostAttributeToken, Output, ContentChildren, ViewChild, NgModule } from '@angular/core';
+import { Subject, BehaviorSubject, isObservable, of, combineLatest, animationFrameScheduler, asapScheduler } from 'rxjs';
+import { takeUntil, auditTime } from 'rxjs/operators';
+import { ViewportRuler, CDK_VIRTUAL_SCROLL_VIEWPORT, ScrollingModule } from './scrolling.mjs';
 import { _DisposeViewRepeaterStrategy } from './_dispose-view-repeater-strategy-chunk.mjs';
 import { _RecycleViewRepeaterStrategy, _ViewRepeaterOperation } from './_recycle-view-repeater-strategy-chunk.mjs';
 import { Directionality } from './_directionality-chunk.mjs';
 import { Platform } from './_platform-chunk.mjs';
-import { ViewportRuler, ScrollingModule } from './scrolling.mjs';
-import '@angular/common';
 import './_element-chunk.mjs';
 import './_scrolling-chunk.mjs';
 import './bidi.mjs';
+import '@angular/common';
 
 const CDK_TABLE = new InjectionToken('CDK_TABLE');
 const TEXT_COLUMN_OPTIONS = new InjectionToken('text-column-options');
@@ -1267,7 +1267,7 @@ function getTableTextColumnMissingNameError() {
   return Error(`Table text column must have a name.`);
 }
 
-const STICKY_POSITIONING_LISTENER = new InjectionToken('CDK_SPL');
+const STICKY_POSITIONING_LISTENER = new InjectionToken('STICKY_POSITIONING_LISTENER');
 
 class CdkRecycleRows {
   static ɵfac = i0.ɵɵngDeclareFactory({
@@ -1461,12 +1461,20 @@ class CdkTable {
   _platform = inject(Platform);
   _viewRepeater;
   _viewportRuler = inject(ViewportRuler);
-  _stickyPositioningListener = inject(STICKY_POSITIONING_LISTENER, {
+  _injector = inject(Injector);
+  _virtualScrollViewport = inject(CDK_VIRTUAL_SCROLL_VIEWPORT, {
+    optional: true,
+    host: true
+  });
+  _positionListener = inject(STICKY_POSITIONING_LISTENER, {
+    optional: true
+  }) || inject(STICKY_POSITIONING_LISTENER, {
     optional: true,
     skipSelf: true
   });
   _document = inject(DOCUMENT);
   _data;
+  _renderedRange;
   _onDestroy = new Subject();
   _renderRows;
   _renderChangeSubscription;
@@ -1494,6 +1502,9 @@ class CdkTable {
   _isShowingNoDataRow = false;
   _hasAllOutlets = false;
   _hasInitialized = false;
+  _headerRowStickyUpdates = new Subject();
+  _footerRowStickyUpdates = new Subject();
+  _disableVirtualScrolling = false;
   _getCellRole() {
     if (this._cellRoleInternal === undefined) {
       const tableRole = this._elementRef.nativeElement.getAttribute('role');
@@ -1518,9 +1529,12 @@ class CdkTable {
   set dataSource(dataSource) {
     if (this._dataSource !== dataSource) {
       this._switchDataSource(dataSource);
+      this._changeDetectorRef.markForCheck();
     }
   }
   _dataSource;
+  _dataSourceChanges = new Subject();
+  _dataStream = new Subject();
   get multiTemplateDataRows() {
     return this._multiTemplateDataRows;
   }
@@ -1533,7 +1547,7 @@ class CdkTable {
   }
   _multiTemplateDataRows = false;
   get fixedLayout() {
-    return this._fixedLayout;
+    return this._virtualScrollEnabled() ? true : this._fixedLayout;
   }
   set fixedLayout(value) {
     this._fixedLayout = value;
@@ -1556,7 +1570,6 @@ class CdkTable {
   _contentHeaderRowDefs;
   _contentFooterRowDefs;
   _noDataRow;
-  _injector = inject(Injector);
   constructor() {
     const role = inject(new HostAttributeToken('role'), {
       optional: true
@@ -1577,7 +1590,10 @@ class CdkTable {
     });
   }
   ngAfterContentInit() {
-    this._viewRepeater = this.recycleRows ? new _RecycleViewRepeaterStrategy() : new _DisposeViewRepeaterStrategy();
+    this._viewRepeater = this.recycleRows || this._virtualScrollEnabled() ? new _RecycleViewRepeaterStrategy() : new _DisposeViewRepeaterStrategy();
+    if (this._virtualScrollEnabled()) {
+      this._setupVirtualScrolling(this._virtualScrollViewport);
+    }
     this._hasInitialized = true;
   }
   ngAfterContentChecked() {
@@ -1593,6 +1609,8 @@ class CdkTable {
     this._headerRowDefs = [];
     this._footerRowDefs = [];
     this._defaultRowDef = null;
+    this._headerRowStickyUpdates.complete();
+    this._footerRowStickyUpdates.complete();
     this._onDestroy.next();
     this._onDestroy.complete();
     if (isDataSource(this.dataSource)) {
@@ -1684,7 +1702,7 @@ class CdkTable {
     const headerRows = this._getRenderedRows(this._headerRowOutlet);
     const dataRows = this._getRenderedRows(this._rowOutlet);
     const footerRows = this._getRenderedRows(this._footerRowOutlet);
-    if (this._isNativeHtmlTable && !this._fixedLayout || this._stickyColumnStylesNeedReset) {
+    if (this._isNativeHtmlTable && !this.fixedLayout || this._stickyColumnStylesNeedReset) {
       this._stickyStyler.clearStickyPositioning([...headerRows, ...dataRows, ...footerRows], ['left', 'right']);
       this._stickyColumnStylesNeedReset = false;
     }
@@ -1704,6 +1722,20 @@ class CdkTable {
       this._addStickyColumnStyles([footerRow], this._footerRowDefs[i]);
     });
     Array.from(this._columnDefsByName.values()).forEach(def => def.resetStickyChanged());
+  }
+  stickyColumnsUpdated(update) {
+    this._positionListener?.stickyColumnsUpdated(update);
+  }
+  stickyEndColumnsUpdated(update) {
+    this._positionListener?.stickyEndColumnsUpdated(update);
+  }
+  stickyHeaderRowsUpdated(update) {
+    this._headerRowStickyUpdates.next(update);
+    this._positionListener?.stickyHeaderRowsUpdated(update);
+  }
+  stickyFooterRowsUpdated(update) {
+    this._footerRowStickyUpdates.next(update);
+    this._positionListener?.stickyFooterRowsUpdated(update);
   }
   _outletAssigned() {
     if (!this._hasAllOutlets && this._rowOutlet && this._headerRowOutlet && this._footerRowOutlet && this._noDataRowOutlet) {
@@ -1742,14 +1774,15 @@ class CdkTable {
     this._checkStickyStates();
   }
   _getAllRenderRows() {
+    if (!Array.isArray(this._data) || !this._renderedRange) {
+      return [];
+    }
     const renderRows = [];
+    const end = Math.min(this._data.length, this._renderedRange.end);
     const prevCachedRenderRows = this._cachedRenderRowsMap;
     this._cachedRenderRowsMap = new Map();
-    if (!this._data) {
-      return renderRows;
-    }
-    for (let i = 0; i < this._data.length; i++) {
-      let data = this._data[i];
+    for (let i = this._renderedRange.start; i < end; i++) {
+      const data = this._data[i];
       const renderRowsForData = this._getRenderRowsForData(data, i, prevCachedRenderRows.get(data));
       if (!this._cachedRenderRowsMap.has(data)) {
         this._cachedRenderRowsMap.set(data, new WeakMap());
@@ -1857,8 +1890,10 @@ class CdkTable {
     if (dataStream === undefined && (typeof ngDevMode === 'undefined' || ngDevMode)) {
       throw getTableUnknownDataSourceError();
     }
-    this._renderChangeSubscription = dataStream.pipe(takeUntil(this._onDestroy)).subscribe(data => {
+    this._renderChangeSubscription = combineLatest([dataStream, this.viewChange]).pipe(takeUntil(this._onDestroy)).subscribe(([data, range]) => {
       this._data = data || [];
+      this._renderedRange = range;
+      this._dataStream.next(data);
       this.renderRows();
     });
   }
@@ -1886,7 +1921,7 @@ class CdkTable {
     });
     const stickyStartStates = columnDefs.map(columnDef => columnDef.sticky);
     const stickyEndStates = columnDefs.map(columnDef => columnDef.stickyEnd);
-    this._stickyStyler.updateStickyColumns(rows, stickyStartStates, stickyEndStates, !this._fixedLayout || this._forceRecalculateCellWidths);
+    this._stickyStyler.updateStickyColumns(rows, stickyStartStates, stickyEndStates, !this.fixedLayout || this._forceRecalculateCellWidths);
   }
   _getRenderedRows(rowOutlet) {
     const renderedRows = [];
@@ -1990,10 +2025,51 @@ class CdkTable {
   }
   _setupStickyStyler() {
     const direction = this._dir ? this._dir.value : 'ltr';
-    this._stickyStyler = new StickyStyler(this._isNativeHtmlTable, this.stickyCssClass, this._platform.isBrowser, this.needsPositionStickyOnElement, direction, this._stickyPositioningListener, this._injector);
+    const injector = this._injector;
+    this._stickyStyler = new StickyStyler(this._isNativeHtmlTable, this.stickyCssClass, this._platform.isBrowser, this.needsPositionStickyOnElement, direction, this, injector);
     (this._dir ? this._dir.change : of()).pipe(takeUntil(this._onDestroy)).subscribe(value => {
       this._stickyStyler.direction = value;
       this.updateStickyColumnStyles();
+    });
+  }
+  _setupVirtualScrolling(viewport) {
+    const virtualScrollScheduler = typeof requestAnimationFrame !== 'undefined' ? animationFrameScheduler : asapScheduler;
+    this.viewChange.next({
+      start: 0,
+      end: 0
+    });
+    viewport.renderedRangeStream.pipe(auditTime(0, virtualScrollScheduler), takeUntil(this._onDestroy)).subscribe(this.viewChange);
+    viewport.attach({
+      dataStream: this._dataStream,
+      measureRangeSize: (range, orientation) => this._measureRangeSize(range, orientation)
+    });
+    combineLatest([viewport.renderedContentOffset, this._headerRowStickyUpdates]).pipe(takeUntil(this._onDestroy)).subscribe(([offsetFromTop, update]) => {
+      if (!update.sizes || !update.offsets || !update.elements) {
+        return;
+      }
+      for (let i = 0; i < update.elements.length; i++) {
+        const cells = update.elements[i];
+        if (cells) {
+          const current = update.offsets[i];
+          const offset = offsetFromTop !== 0 ? Math.max(offsetFromTop - current, current) : -current;
+          for (const cell of cells) {
+            cell.style.top = `${-offset}px`;
+          }
+        }
+      }
+    });
+    combineLatest([viewport.renderedContentOffset, this._footerRowStickyUpdates]).pipe(takeUntil(this._onDestroy)).subscribe(([offsetFromTop, update]) => {
+      if (!update.sizes || !update.offsets || !update.elements) {
+        return;
+      }
+      for (let i = 0; i < update.elements.length; i++) {
+        const cells = update.elements[i];
+        if (cells) {
+          for (const cell of cells) {
+            cell.style.bottom = `${offsetFromTop + update.offsets[i]}px`;
+          }
+        }
+      }
     });
   }
   _getOwnDefs(items) {
@@ -2025,6 +2101,40 @@ class CdkTable {
     }
     this._isShowingNoDataRow = shouldShow;
     this._changeDetectorRef.markForCheck();
+  }
+  _measureRangeSize(range, orientation) {
+    if (range.start >= range.end || orientation !== 'vertical') {
+      return 0;
+    }
+    const renderedRange = this.viewChange.value;
+    const viewContainerRef = this._rowOutlet.viewContainer;
+    if ((range.start < renderedRange.start || range.end > renderedRange.end) && (typeof ngDevMode === 'undefined' || ngDevMode)) {
+      throw Error(`Error: attempted to measure an item that isn't rendered.`);
+    }
+    const renderedStartIndex = range.start - renderedRange.start;
+    const rangeLen = range.end - range.start;
+    let firstNode;
+    let lastNode;
+    for (let i = 0; i < rangeLen; i++) {
+      const view = viewContainerRef.get(i + renderedStartIndex);
+      if (view && view.rootNodes.length) {
+        firstNode = lastNode = view.rootNodes[0];
+        break;
+      }
+    }
+    for (let i = rangeLen - 1; i > -1; i--) {
+      const view = viewContainerRef.get(i + renderedStartIndex);
+      if (view && view.rootNodes.length) {
+        lastNode = view.rootNodes[view.rootNodes.length - 1];
+        break;
+      }
+    }
+    const startRect = firstNode?.getBoundingClientRect?.();
+    const endRect = lastNode?.getBoundingClientRect?.();
+    return startRect && endRect ? endRect.bottom - startRect.top : 0;
+  }
+  _virtualScrollEnabled() {
+    return !this._disableVirtualScrolling && this._virtualScrollViewport != null;
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",

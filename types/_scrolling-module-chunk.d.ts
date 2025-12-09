@@ -187,6 +187,7 @@ declare class CdkVirtualScrollViewport extends CdkVirtualScrollable implements O
     private readonly _detachedSubject;
     /** Emits when the rendered range changes. */
     private readonly _renderedRangeSubject;
+    private readonly _renderedContentOffsetSubject;
     /** The direction the viewport scrolls. */
     get orientation(): "horizontal" | "vertical";
     set orientation(orientation: 'horizontal' | 'vertical');
@@ -202,6 +203,10 @@ declare class CdkVirtualScrollViewport extends CdkVirtualScrollable implements O
     _contentWrapper: ElementRef<HTMLElement>;
     /** A stream that emits whenever the rendered range changes. */
     readonly renderedRangeStream: Observable<ListRange>;
+    /**
+     * Emits the offset from the start of the viewport to the start of the rendered data (in pixels).
+     */
+    readonly renderedContentOffset: Observable<number>;
     /**
      * The total size of all content (in pixels), including content that is not currently rendered.
      */

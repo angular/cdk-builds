@@ -601,6 +601,7 @@ class CdkVirtualScrollViewport extends CdkVirtualScrollable {
   _platform = inject(Platform);
   _detachedSubject = new Subject();
   _renderedRangeSubject = new Subject();
+  _renderedContentOffsetSubject = new Subject();
   get orientation() {
     return this._orientation;
   }
@@ -615,6 +616,7 @@ class CdkVirtualScrollViewport extends CdkVirtualScrollable {
   scrolledIndexChange = new Observable(observer => this._scrollStrategy.scrolledIndexChange.subscribe(index => Promise.resolve().then(() => this.ngZone.run(() => observer.next(index)))));
   _contentWrapper;
   renderedRangeStream = this._renderedRangeSubject;
+  renderedContentOffset = this._renderedContentOffsetSubject.pipe(filter(offset => offset !== null), distinctUntilChanged());
   _totalContentSize = 0;
   _totalContentWidth = signal('', ...(ngDevMode ? [{
     debugName: "_totalContentWidth"
@@ -846,6 +848,7 @@ class CdkVirtualScrollViewport extends CdkVirtualScrollable {
     this.ngZone.run(() => {
       this._changeDetectorRef.markForCheck();
       this._contentWrapper.nativeElement.style.transform = this._renderedContentTransform;
+      this._renderedContentOffsetSubject.next(this.getOffsetToRenderedContentStart());
       afterNextRender(() => {
         this._changeDetectionNeeded.set(false);
         const runAfterChangeDetection = this._runAfterChangeDetection;

@@ -1,8 +1,8 @@
 import { Directionality } from './_bidi-module-chunk.js';
 import * as i0 from '@angular/core';
 import { TemplateRef, ElementRef, OnChanges, IterableDiffers, IterableDiffer, SimpleChanges, IterableChanges, OnDestroy, ViewContainerRef, InjectionToken, AfterContentInit, AfterContentChecked, OnInit, ChangeDetectorRef, TrackByFunction, EventEmitter, QueryList } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { DataSource, CollectionViewer } from './_data-source-chunk.js';
+import { Observable, Subject, BehaviorSubject } from 'rxjs';
+import { DataSource, CollectionViewer, ListRange } from './_data-source-chunk.js';
 import { _ViewRepeater } from './_view-repeater-chunk.js';
 import { ScrollingModule } from './_scrolling-module-chunk.js';
 import './_number-property-chunk.js';
@@ -440,7 +440,7 @@ interface RenderRow<T> {
  * as a data array, an Observable stream that emits the data array to render, or a DataSource with a
  * connect function that will return an Observable stream that emits the data array to render.
  */
-declare class CdkTable<T> implements AfterContentInit, AfterContentChecked, CollectionViewer, OnDestroy, OnInit {
+declare class CdkTable<T> implements AfterContentInit, AfterContentChecked, CollectionViewer, OnDestroy, OnInit, StickyPositioningListener {
     protected readonly _differs: IterableDiffers;
     protected readonly _changeDetectorRef: ChangeDetectorRef;
     protected readonly _elementRef: ElementRef<any>;
@@ -448,10 +448,14 @@ declare class CdkTable<T> implements AfterContentInit, AfterContentChecked, Coll
     private _platform;
     protected _viewRepeater: _ViewRepeater<T, RenderRow<T>, RowContext<T>>;
     private readonly _viewportRuler;
-    protected readonly _stickyPositioningListener: StickyPositioningListener;
+    private _injector;
+    private _virtualScrollViewport;
+    private _positionListener;
     private _document;
     /** Latest data provided by the data source. */
     protected _data: readonly T[] | undefined;
+    /** Latest range of data rendered. */
+    protected _renderedRange?: ListRange;
     /** Subject that emits when the component has been destroyed. */
     private readonly _onDestroy;
     /** List of the rendered rows as identified by their `RenderRow` object. */
@@ -572,6 +576,17 @@ declare class CdkTable<T> implements AfterContentInit, AfterContentChecked, Coll
     private _hasAllOutlets;
     /** Whether the table is done initializing. */
     private _hasInitialized;
+    /** Emits when the header rows sticky state changes. */
+    private readonly _headerRowStickyUpdates;
+    /** Emits when the footer rows sticky state changes. */
+    private readonly _footerRowStickyUpdates;
+    /**
+     * Whether to explicitly disable virtual scrolling even if there is a virtual scroll viewport
+     * parent. This can't be changed externally, whereas internally it is turned into an input that
+     * we use to opt out existing apps that were implementing virtual scroll before we added support
+     * for it.
+     */
+    private readonly _disableVirtualScrolling;
     /** Aria role to apply to the table's cells based on the table's own role. */
     _getCellRole(): string | null;
     private _cellRoleInternal;
@@ -607,6 +622,10 @@ declare class CdkTable<T> implements AfterContentInit, AfterContentChecked, Coll
     get dataSource(): CdkTableDataSourceInput<T>;
     set dataSource(dataSource: CdkTableDataSourceInput<T>);
     private _dataSource;
+    /** Emits when the data source changes. */
+    readonly _dataSourceChanges: Subject<CdkTableDataSourceInput<T>>;
+    /** Observable that emits the data source's complete data set. */
+    readonly _dataStream: Subject<readonly T[]>;
     /**
      * Whether to allow multiple rows per data object by evaluating which rows evaluate their 'when'
      * predicate to true. If `multiTemplateDataRows` is false, which is the default value, then each
@@ -639,10 +658,7 @@ declare class CdkTable<T> implements AfterContentInit, AfterContentChecked, Coll
      *
      * @docs-private
      */
-    readonly viewChange: BehaviorSubject<{
-        start: number;
-        end: number;
-    }>;
+    readonly viewChange: BehaviorSubject<ListRange>;
     _rowOutlet: DataRowOutlet;
     _headerRowOutlet: HeaderRowOutlet;
     _footerRowOutlet: FooterRowOutlet;
@@ -660,7 +676,6 @@ declare class CdkTable<T> implements AfterContentInit, AfterContentChecked, Coll
     _contentFooterRowDefs: QueryList<CdkFooterRowDef>;
     /** Row definition that will only be rendered if there's no data in the table. */
     _noDataRow: CdkNoDataRow;
-    private _injector;
     constructor(...args: unknown[]);
     ngOnInit(): void;
     ngAfterContentInit(): void;
@@ -719,6 +734,26 @@ declare class CdkTable<T> implements AfterContentInit, AfterContentChecked, Coll
      * input. May be called manually for cases where the cell content changes outside of these events.
      */
     updateStickyColumnStyles(): void;
+    /**
+     * Implemented as a part of `StickyPositioningListener`.
+     * @docs-private
+     */
+    stickyColumnsUpdated(update: StickyUpdate): void;
+    /**
+     * Implemented as a part of `StickyPositioningListener`.
+     * @docs-private
+     */
+    stickyEndColumnsUpdated(update: StickyUpdate): void;
+    /**
+     * Implemented as a part of `StickyPositioningListener`.
+     * @docs-private
+     */
+    stickyHeaderRowsUpdated(update: StickyUpdate): void;
+    /**
+     * Implemented as a part of `StickyPositioningListener`.
+     * @docs-private
+     */
+    stickyFooterRowsUpdated(update: StickyUpdate): void;
     /** Invoked whenever an outlet is created and has been assigned to the table. */
     _outletAssigned(): void;
     /** Whether the table has all the information to start rendering. */
@@ -809,10 +844,17 @@ declare class CdkTable<T> implements AfterContentInit, AfterContentChecked, Coll
      * stickiness when directionality changes.
      */
     private _setupStickyStyler;
+    private _setupVirtualScrolling;
     /** Filters definitions that belong to this table from a QueryList. */
     private _getOwnDefs;
     /** Creates or removes the no data row, depending on whether any data is being shown. */
     private _updateNoDataRow;
+    /**
+     * Measures the size of the rendered range in the table.
+     * This is used for virtual scrolling when auto-sizing is enabled.
+     */
+    private _measureRangeSize;
+    private _virtualScrollEnabled;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTable<any>, never>;
     static ɵcmp: i0.ɵɵComponentDeclaration<CdkTable<any>, "cdk-table, table[cdk-table]", ["cdkTable"], { "trackBy": { "alias": "trackBy"; "required": false; }; "dataSource": { "alias": "dataSource"; "required": false; }; "multiTemplateDataRows": { "alias": "multiTemplateDataRows"; "required": false; }; "fixedLayout": { "alias": "fixedLayout"; "required": false; }; "recycleRows": { "alias": "recycleRows"; "required": false; }; }, { "contentChanged": "contentChanged"; }, ["_noDataRow", "_contentColumnDefs", "_contentRowDefs", "_contentHeaderRowDefs", "_contentFooterRowDefs"], ["caption", "colgroup, col", "*"], true, never>;
     static ngAcceptInputType_multiTemplateDataRows: unknown;
