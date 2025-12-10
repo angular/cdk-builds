@@ -74,7 +74,7 @@ class SharedResizeObserver {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: SharedResizeObserver,
     deps: [],
@@ -82,7 +82,7 @@ class SharedResizeObserver {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: SharedResizeObserver,
     providedIn: 'root'
@@ -90,7 +90,7 @@ class SharedResizeObserver {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.0",
+  version: "21.0.3",
   ngImport: i0,
   type: SharedResizeObserver,
   decorators: [{

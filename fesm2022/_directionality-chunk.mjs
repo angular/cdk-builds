@@ -37,7 +37,7 @@ class Directionality {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: Directionality,
     deps: [],
@@ -45,7 +45,7 @@ class Directionality {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: Directionality,
     providedIn: 'root'
@@ -53,7 +53,7 @@ class Directionality {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.0",
+  version: "21.0.3",
   ngImport: i0,
   type: Directionality,
   decorators: [{

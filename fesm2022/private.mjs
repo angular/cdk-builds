@@ -5,7 +5,7 @@ export { _CdkPrivateStyleLoader } from './_style-loader-chunk.mjs';
 class _VisuallyHiddenLoader {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: _VisuallyHiddenLoader,
     deps: [],
@@ -13,7 +13,7 @@ class _VisuallyHiddenLoader {
   });
   static ɵcmp = i0.ɵɵngDeclareComponent({
     minVersion: "14.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     type: _VisuallyHiddenLoader,
     isStandalone: true,
     selector: "ng-component",
@@ -28,7 +28,7 @@ class _VisuallyHiddenLoader {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.0",
+  version: "21.0.3",
   ngImport: i0,
   type: _VisuallyHiddenLoader,
   decorators: [{

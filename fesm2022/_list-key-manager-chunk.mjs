@@ -34,12 +34,12 @@ class ListKeyManager {
       if (!injector && (typeof ngDevMode === 'undefined' || ngDevMode)) {
         throw new Error('ListKeyManager constructed with a signal must receive an injector');
       }
-      this._effectRef = effect(() => this._itemsChanged(_items()), ...(ngDevMode ? [{
-        debugName: "_effectRef",
+      this._effectRef = effect(() => this._itemsChanged(_items()), {
+        ...(ngDevMode ? {
+          debugName: "_effectRef"
+        } : {}),
         injector
-      }] : [{
-        injector
-      }]));
+      });
     }
   }
   tabOut = new Subject();

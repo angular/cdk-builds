@@ -29,7 +29,7 @@ class MutationObserverFactory {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: MutationObserverFactory,
     deps: [],
@@ -37,7 +37,7 @@ class MutationObserverFactory {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: MutationObserverFactory,
     providedIn: 'root'
@@ -45,7 +45,7 @@ class MutationObserverFactory {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.0",
+  version: "21.0.3",
   ngImport: i0,
   type: MutationObserverFactory,
   decorators: [{
@@ -124,7 +124,7 @@ class ContentObserver {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: ContentObserver,
     deps: [],
@@ -132,7 +132,7 @@ class ContentObserver {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: ContentObserver,
     providedIn: 'root'
@@ -140,7 +140,7 @@ class ContentObserver {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.0",
+  version: "21.0.3",
   ngImport: i0,
   type: ContentObserver,
   decorators: [{
@@ -191,7 +191,7 @@ class CdkObserveContent {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: CdkObserveContent,
     deps: [],
@@ -199,7 +199,7 @@ class CdkObserveContent {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "16.1.0",
-    version: "21.0.0",
+    version: "21.0.3",
     type: CdkObserveContent,
     isStandalone: true,
     selector: "[cdkObserveContent]",
@@ -216,7 +216,7 @@ class CdkObserveContent {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.0",
+  version: "21.0.3",
   ngImport: i0,
   type: CdkObserveContent,
   decorators: [{
@@ -247,7 +247,7 @@ i0.ɵɵngDeclareClassMetadata({
 class ObserversModule {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: ObserversModule,
     deps: [],
@@ -255,7 +255,7 @@ class ObserversModule {
   });
   static ɵmod = i0.ɵɵngDeclareNgModule({
     minVersion: "14.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: ObserversModule,
     imports: [CdkObserveContent],
@@ -263,7 +263,7 @@ class ObserversModule {
   });
   static ɵinj = i0.ɵɵngDeclareInjector({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: ObserversModule,
     providers: [MutationObserverFactory]
@@ -271,7 +271,7 @@ class ObserversModule {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.0",
+  version: "21.0.3",
   ngImport: i0,
   type: ObserversModule,
   decorators: [{
