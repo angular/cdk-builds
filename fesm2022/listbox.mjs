@@ -113,7 +113,7 @@ class CdkOption {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: CdkOption,
     deps: [],
@@ -121,7 +121,7 @@ class CdkOption {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "16.1.0",
-    version: "21.0.0",
+    version: "21.0.3",
     type: CdkOption,
     isStandalone: true,
     selector: "[cdkOption]",
@@ -155,7 +155,7 @@ class CdkOption {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.0",
+  version: "21.0.3",
   ngImport: i0,
   type: CdkOption,
   decorators: [{
@@ -670,7 +670,7 @@ class CdkListbox {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: CdkListbox,
     deps: [],
@@ -678,7 +678,7 @@ class CdkListbox {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "16.1.0",
-    version: "21.0.0",
+    version: "21.0.3",
     type: CdkListbox,
     isStandalone: true,
     selector: "[cdkListbox]",
@@ -733,7 +733,7 @@ class CdkListbox {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.0",
+  version: "21.0.3",
   ngImport: i0,
   type: CdkListbox,
   decorators: [{
@@ -835,7 +835,7 @@ const EXPORTED_DECLARATIONS = [CdkListbox, CdkOption];
 class CdkListboxModule {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: CdkListboxModule,
     deps: [],
@@ -843,7 +843,7 @@ class CdkListboxModule {
   });
   static ɵmod = i0.ɵɵngDeclareNgModule({
     minVersion: "14.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: CdkListboxModule,
     imports: [CdkListbox, CdkOption],
@@ -851,14 +851,14 @@ class CdkListboxModule {
   });
   static ɵinj = i0.ɵɵngDeclareInjector({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: CdkListboxModule
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.0",
+  version: "21.0.3",
   ngImport: i0,
   type: CdkListboxModule,
   decorators: [{

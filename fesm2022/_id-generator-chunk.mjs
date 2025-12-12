@@ -16,7 +16,7 @@ class _IdGenerator {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: _IdGenerator,
     deps: [],
@@ -24,7 +24,7 @@ class _IdGenerator {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: _IdGenerator,
     providedIn: 'root'
@@ -32,7 +32,7 @@ class _IdGenerator {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.0",
+  version: "21.0.3",
   ngImport: i0,
   type: _IdGenerator,
   decorators: [{

@@ -78,7 +78,7 @@ class InputModalityDetector {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: InputModalityDetector,
     deps: [],
@@ -86,7 +86,7 @@ class InputModalityDetector {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: InputModalityDetector,
     providedIn: 'root'
@@ -94,7 +94,7 @@ class InputModalityDetector {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.0",
+  version: "21.0.3",
   ngImport: i0,
   type: InputModalityDetector,
   decorators: [{
@@ -337,7 +337,7 @@ class FocusMonitor {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: FocusMonitor,
     deps: [],
@@ -345,7 +345,7 @@ class FocusMonitor {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: FocusMonitor,
     providedIn: 'root'
@@ -353,7 +353,7 @@ class FocusMonitor {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.0",
+  version: "21.0.3",
   ngImport: i0,
   type: FocusMonitor,
   decorators: [{
@@ -389,7 +389,7 @@ class CdkMonitorFocus {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: CdkMonitorFocus,
     deps: [],
@@ -397,7 +397,7 @@ class CdkMonitorFocus {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     type: CdkMonitorFocus,
     isStandalone: true,
     selector: "[cdkMonitorElementFocus], [cdkMonitorSubtreeFocus]",
@@ -410,7 +410,7 @@ class CdkMonitorFocus {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.0",
+  version: "21.0.3",
   ngImport: i0,
   type: CdkMonitorFocus,
   decorators: [{

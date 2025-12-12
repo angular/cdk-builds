@@ -66,7 +66,7 @@ class InteractivityChecker {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: InteractivityChecker,
     deps: [],
@@ -74,7 +74,7 @@ class InteractivityChecker {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: InteractivityChecker,
     providedIn: 'root'
@@ -82,7 +82,7 @@ class InteractivityChecker {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.0",
+  version: "21.0.3",
   ngImport: i0,
   type: InteractivityChecker,
   decorators: [{
@@ -348,7 +348,7 @@ class FocusTrapFactory {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: FocusTrapFactory,
     deps: [],
@@ -356,7 +356,7 @@ class FocusTrapFactory {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: FocusTrapFactory,
     providedIn: 'root'
@@ -364,7 +364,7 @@ class FocusTrapFactory {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.0",
+  version: "21.0.3",
   ngImport: i0,
   type: FocusTrapFactory,
   decorators: [{
@@ -425,7 +425,7 @@ class CdkTrapFocus {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: CdkTrapFocus,
     deps: [],
@@ -433,7 +433,7 @@ class CdkTrapFocus {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "16.1.0",
-    version: "21.0.0",
+    version: "21.0.3",
     type: CdkTrapFocus,
     isStandalone: true,
     selector: "[cdkTrapFocus]",
@@ -448,7 +448,7 @@ class CdkTrapFocus {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.0",
+  version: "21.0.3",
   ngImport: i0,
   type: CdkTrapFocus,
   decorators: [{
@@ -578,7 +578,7 @@ class LiveAnnouncer {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: LiveAnnouncer,
     deps: [],
@@ -586,7 +586,7 @@ class LiveAnnouncer {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: LiveAnnouncer,
     providedIn: 'root'
@@ -594,7 +594,7 @@ class LiveAnnouncer {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.0",
+  version: "21.0.3",
   ngImport: i0,
   type: LiveAnnouncer,
   decorators: [{
@@ -646,7 +646,7 @@ class CdkAriaLive {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: CdkAriaLive,
     deps: [],
@@ -654,7 +654,7 @@ class CdkAriaLive {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     type: CdkAriaLive,
     isStandalone: true,
     selector: "[cdkAriaLive]",
@@ -668,7 +668,7 @@ class CdkAriaLive {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.0",
+  version: "21.0.3",
   ngImport: i0,
   type: CdkAriaLive,
   decorators: [{
@@ -754,7 +754,7 @@ class HighContrastModeDetector {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: HighContrastModeDetector,
     deps: [],
@@ -762,7 +762,7 @@ class HighContrastModeDetector {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: HighContrastModeDetector,
     providedIn: 'root'
@@ -770,7 +770,7 @@ class HighContrastModeDetector {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.0",
+  version: "21.0.3",
   ngImport: i0,
   type: HighContrastModeDetector,
   decorators: [{
@@ -788,7 +788,7 @@ class A11yModule {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: A11yModule,
     deps: [],
@@ -796,7 +796,7 @@ class A11yModule {
   });
   static ɵmod = i0.ɵɵngDeclareNgModule({
     minVersion: "14.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: A11yModule,
     imports: [ObserversModule, CdkAriaLive, CdkTrapFocus, CdkMonitorFocus],
@@ -804,7 +804,7 @@ class A11yModule {
   });
   static ɵinj = i0.ɵɵngDeclareInjector({
     minVersion: "12.0.0",
-    version: "21.0.0",
+    version: "21.0.3",
     ngImport: i0,
     type: A11yModule,
     imports: [ObserversModule]
@@ -812,7 +812,7 @@ class A11yModule {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.0",
+  version: "21.0.3",
   ngImport: i0,
   type: A11yModule,
   decorators: [{
