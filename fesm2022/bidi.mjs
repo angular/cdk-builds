@@ -5,7 +5,7 @@ import { EventEmitter, signal, Directive, Output, Input, NgModule } from '@angul
 
 class Dir {
   _isInitialized = false;
-  _rawDir;
+  _rawDir = '';
   change = new EventEmitter();
   get dir() {
     return this.valueSignal();

@@ -347,7 +347,7 @@ declare abstract class CdkMenuTriggerBase implements OnDestroy {
      * Get the portal to be attached to the overlay which contains the menu. Allows for the menu
      * content to change dynamically and be reflected in the application.
      */
-    protected getMenuContentPortal(): TemplatePortal<any>;
+    protected getMenuContentPortal(): TemplatePortal<any> | undefined;
     /**
      * Whether the given element is inside the scope of this trigger's menu stack.
      * @param element The element to check.
@@ -744,8 +744,6 @@ declare class CdkMenuItemRadio extends CdkMenuItemSelectable implements OnDestro
     trigger(options?: {
         keepOpen: boolean;
     }): void;
-    /** Configure the unique selection dispatcher listener in order to toggle the checked state  */
-    private _registerDispatcherListener;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuItemRadio, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuItemRadio, "[cdkMenuItemRadio]", ["cdkMenuItemRadio"], {}, {}, never, never, true, never>;
 }

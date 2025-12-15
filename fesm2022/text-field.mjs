@@ -246,7 +246,7 @@ class CdkTextareaAutosize {
   _cachedLineHeight;
   _cachedPlaceholderHeight;
   _document = inject(DOCUMENT);
-  _hasFocus;
+  _hasFocus = false;
   _isViewInited = false;
   constructor() {
     const styleLoader = inject(_CdkPrivateStyleLoader);

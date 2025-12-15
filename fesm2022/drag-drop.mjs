@@ -262,7 +262,7 @@ class PreviewRef {
   _initialTransform;
   _zIndex;
   _renderer;
-  _previewEmbeddedView;
+  _previewEmbeddedView = null;
   _preview;
   get element() {
     return this._preview;
@@ -377,9 +377,9 @@ class DragRef {
   _renderer;
   _rootElementCleanups;
   _cleanupShadowRootSelectStart;
-  _preview;
+  _preview = null;
   _previewContainer;
-  _placeholderRef;
+  _placeholderRef = null;
   _placeholder;
   _pickupPositionInElement;
   _pickupPositionOnPage;
@@ -397,7 +397,7 @@ class DragRef {
   _hasStartedDragging = signal(false, ...(ngDevMode ? [{
     debugName: "_hasStartedDragging"
   }] : []));
-  _hasMoved;
+  _hasMoved = false;
   _initialContainer;
   _initialIndex;
   _parentPositions;
@@ -406,7 +406,7 @@ class DragRef {
   _pointerPositionAtLastDirectionChange;
   _lastKnownPointerPosition;
   _rootElement;
-  _ownerSVGElement;
+  _ownerSVGElement = null;
   _rootElementTapHighlight;
   _pointerMoveSubscription = Subscription.EMPTY;
   _pointerUpSubscription = Subscription.EMPTY;
@@ -425,7 +425,7 @@ class DragRef {
   _disabledHandles = new Set();
   _dropContainer;
   _direction = 'ltr';
-  _parentDragRef;
+  _parentDragRef = null;
   _cachedShadowRoot;
   lockAxis = null;
   dragStartDelay = 0;
@@ -1268,7 +1268,7 @@ class SingleAxisSortStrategy {
   _itemPositions = [];
   _activeDraggables;
   orientation = 'vertical';
-  direction;
+  direction = 'ltr';
   constructor(_dragDropRegistry) {
     this._dragDropRegistry = _dragDropRegistry;
   }
@@ -2470,8 +2470,8 @@ class CdkDrag {
   _dragDropRegistry = inject(DragDropRegistry);
   _destroyed = new Subject();
   _handles = new BehaviorSubject([]);
-  _previewTemplate;
-  _placeholderTemplate;
+  _previewTemplate = null;
+  _placeholderTemplate = null;
   _dragRef;
   data;
   lockAxis = null;
@@ -2486,7 +2486,7 @@ class CdkDrag {
     this._disabled = value;
     this._dragRef.disabled = this._disabled;
   }
-  _disabled;
+  _disabled = false;
   constrainPosition;
   previewClass;
   previewContainer;
@@ -3005,12 +3005,12 @@ class CdkDropList {
   });
   _latestSortedRefs;
   _destroyed = new Subject();
-  _scrollableParentsResolved;
+  _scrollableParentsResolved = false;
   static _dropLists = [];
   _dropListRef;
   connectedTo = [];
   data;
-  orientation;
+  orientation = 'vertical';
   id = inject(_IdGenerator).getId('cdk-drop-list-');
   lockAxis = null;
   get disabled() {
@@ -3019,14 +3019,14 @@ class CdkDropList {
   set disabled(value) {
     this._dropListRef.disabled = this._disabled = value;
   }
-  _disabled;
-  sortingDisabled;
+  _disabled = false;
+  sortingDisabled = false;
   enterPredicate = () => true;
   sortPredicate = () => true;
-  autoScrollDisabled;
+  autoScrollDisabled = false;
   autoScrollStep;
-  elementContainerSelector;
-  hasAnchor;
+  elementContainerSelector = null;
+  hasAnchor = false;
   dropped = new EventEmitter();
   entered = new EventEmitter();
   exited = new EventEmitter();

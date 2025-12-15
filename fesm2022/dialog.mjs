@@ -335,8 +335,8 @@ i0.ɵɵngDeclareClassMetadata({
 class DialogRef {
   overlayRef;
   config;
-  componentInstance;
-  componentRef;
+  componentInstance = null;
+  componentRef = null;
   containerInstance;
   disableClose;
   closed = new Subject();

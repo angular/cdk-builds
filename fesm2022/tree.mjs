@@ -227,7 +227,7 @@ class CdkTree {
   _dir = inject(Directionality);
   _onDestroy = new Subject();
   _dataDiffer;
-  _defaultNodeDef;
+  _defaultNodeDef = null;
   _dataSubscription;
   _levels = new Map();
   _parents = new Map();
@@ -280,10 +280,8 @@ class CdkTree {
     if (this._dataSource && typeof this._dataSource.disconnect === 'function') {
       this.dataSource.disconnect(this);
     }
-    if (this._dataSubscription) {
-      this._dataSubscription.unsubscribe();
-      this._dataSubscription = null;
-    }
+    this._dataSubscription?.unsubscribe();
+    this._dataSubscription = undefined;
     this._keyManager?.destroy();
   }
   ngOnInit() {
@@ -312,10 +310,8 @@ class CdkTree {
     if (this._dataSource && typeof this._dataSource.disconnect === 'function') {
       this.dataSource.disconnect(this);
     }
-    if (this._dataSubscription) {
-      this._dataSubscription.unsubscribe();
-      this._dataSubscription = null;
-    }
+    this._dataSubscription?.unsubscribe();
+    this._dataSubscription = undefined;
     if (!dataSource) {
       this._nodeOutlet.viewContainer.clear();
     }
@@ -968,8 +964,8 @@ class CdkTreeNode {
       this.collapse();
     }
   }
-  isDisabled;
-  typeaheadLabel;
+  isDisabled = false;
+  typeaheadLabel = null;
   getLabel() {
     return this.typeaheadLabel || this._elementRef.nativeElement.textContent?.trim() || '';
   }
@@ -1335,7 +1331,7 @@ class CdkTreeNodePadding {
   _dir = inject(Directionality, {
     optional: true
   });
-  _currentPadding;
+  _currentPadding = null;
   _destroyed = new Subject();
   indentUnits = 'px';
   get level() {

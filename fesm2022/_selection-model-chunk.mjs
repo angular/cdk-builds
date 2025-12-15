@@ -7,7 +7,7 @@ class SelectionModel {
   _selection = new Set();
   _deselectedToEmit = [];
   _selectedToEmit = [];
-  _selected;
+  _selected = null;
   get selected() {
     if (!this._selected) {
       this._selected = Array.from(this._selection.values());

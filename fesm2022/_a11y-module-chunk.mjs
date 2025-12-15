@@ -155,8 +155,8 @@ class FocusTrap {
   _ngZone;
   _document;
   _injector;
-  _startAnchor;
-  _endAnchor;
+  _startAnchor = null;
+  _endAnchor = null;
   _hasAttached = false;
   startAnchorListener = () => this.focusLastTabbableElement();
   endAnchorListener = () => this.focusFirstTabbableElement();
@@ -379,7 +379,7 @@ i0.ɵɵngDeclareClassMetadata({
 class CdkTrapFocus {
   _elementRef = inject(ElementRef);
   _focusTrapFactory = inject(FocusTrapFactory);
-  focusTrap;
+  focusTrap = undefined;
   _previouslyFocusedElement = null;
   get enabled() {
     return this.focusTrap?.enabled || false;
@@ -389,7 +389,7 @@ class CdkTrapFocus {
       this.focusTrap.enabled = value;
     }
   }
-  autoCapture;
+  autoCapture = false;
   constructor() {
     const platform = inject(Platform);
     if (platform.isBrowser) {
@@ -624,7 +624,7 @@ class CdkAriaLive {
     if (this._politeness === 'off') {
       if (this._subscription) {
         this._subscription.unsubscribe();
-        this._subscription = null;
+        this._subscription = undefined;
       }
     } else if (!this._subscription) {
       this._subscription = this._ngZone.runOutsideAngular(() => {
@@ -646,9 +646,7 @@ class CdkAriaLive {
     inject(_CdkPrivateStyleLoader).load(_VisuallyHiddenLoader);
   }
   ngOnDestroy() {
-    if (this._subscription) {
-      this._subscription.unsubscribe();
-    }
+    this._subscription?.unsubscribe();
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
@@ -708,7 +706,7 @@ const WHITE_ON_BLACK_CSS_CLASS = 'cdk-high-contrast-white-on-black';
 const HIGH_CONTRAST_MODE_ACTIVE_CSS_CLASS = 'cdk-high-contrast-active';
 class HighContrastModeDetector {
   _platform = inject(Platform);
-  _hasCheckedHighContrastMode;
+  _hasCheckedHighContrastMode = false;
   _document = inject(DOCUMENT);
   _breakpointSubscription;
   constructor() {

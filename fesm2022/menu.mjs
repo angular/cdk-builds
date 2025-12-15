@@ -269,7 +269,7 @@ class CdkMenuTriggerBase {
   menuPosition;
   opened = new EventEmitter();
   closed = new EventEmitter();
-  menuTemplateRef;
+  menuTemplateRef = null;
   menuData;
   transformOriginSelector = null;
   overlayRef = null;
@@ -394,7 +394,7 @@ class TargetMenuAim {
   _points = [];
   _menu;
   _pointerTracker;
-  _timeoutId;
+  _timeoutId = null;
   _destroyed = new Subject();
   ngOnDestroy() {
     this._cleanupMousemove?.();
@@ -881,7 +881,7 @@ class CdkMenuItem {
     self: true
   });
   disabled = false;
-  typeaheadLabel;
+  typeaheadLabel = null;
   triggered = new EventEmitter();
   get hasMenu() {
     return this._menuTrigger?.menuTemplateRef != null;
@@ -1711,7 +1711,9 @@ class CdkMenuItemRadio extends CdkMenuItemSelectable {
   _removeDispatcherListener;
   constructor() {
     super();
-    this._registerDispatcherListener();
+    this._removeDispatcherListener = this._selectionDispatcher.listen(id => {
+      this.checked = this._id === id;
+    });
   }
   ngOnDestroy() {
     super.ngOnDestroy();
@@ -1722,11 +1724,6 @@ class CdkMenuItemRadio extends CdkMenuItemSelectable {
     if (!this.disabled) {
       this._selectionDispatcher.notify(this._id, '');
     }
-  }
-  _registerDispatcherListener() {
-    this._removeDispatcherListener = this._selectionDispatcher.listen(id => {
-      this.checked = this._id === id;
-    });
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",

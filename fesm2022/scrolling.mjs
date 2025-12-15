@@ -437,7 +437,7 @@ const DEFAULT_RESIZE_TIME = 20;
 class ViewportRuler {
   _platform = inject(Platform);
   _listeners;
-  _viewportSize;
+  _viewportSize = null;
   _change = new Subject();
   _document = inject(DOCUMENT);
   constructor() {
@@ -631,7 +631,7 @@ class CdkVirtualScrollViewport extends CdkVirtualScrollable {
   };
   _dataLength = 0;
   _viewportSize = 0;
-  _forOf;
+  _forOf = null;
   _renderedContentOffset = 0;
   _renderedContentOffsetNeedsRewrite = false;
   _changeDetectionNeeded = signal(false, ...(ngDevMode ? [{
@@ -1024,9 +1024,12 @@ class CdkVirtualForOf {
   }
   dataStream = this._dataSourceChanges.pipe(startWith(null), pairwise(), switchMap(([prev, cur]) => this._changeDataSource(prev, cur)), shareReplay(1));
   _differ = null;
-  _data;
-  _renderedItems;
-  _renderedRange;
+  _data = [];
+  _renderedItems = [];
+  _renderedRange = {
+    start: 0,
+    end: 0
+  };
   _needsUpdate = false;
   _destroyed = new Subject();
   constructor() {

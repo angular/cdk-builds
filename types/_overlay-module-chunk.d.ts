@@ -393,7 +393,7 @@ declare function validateHorizontalPosition(property: string, value: HorizontalC
 /** Container inside which all overlays will render. */
 declare class OverlayContainer implements OnDestroy {
     protected _platform: Platform;
-    protected _containerElement: HTMLElement;
+    protected _containerElement: HTMLElement | undefined;
     protected _document: Document;
     protected _styleLoader: _CdkPrivateStyleLoader;
     constructor(...args: unknown[]);

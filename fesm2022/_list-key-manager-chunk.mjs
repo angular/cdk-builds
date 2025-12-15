@@ -16,7 +16,7 @@ class ListKeyManager {
   _typeaheadSubscription = Subscription.EMPTY;
   _itemChangesSubscription;
   _vertical = true;
-  _horizontal;
+  _horizontal = null;
   _allowedModifierKeys = [];
   _homeAndEnd = false;
   _pageUpAndDown = {

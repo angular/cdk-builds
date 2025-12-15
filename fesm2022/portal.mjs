@@ -21,7 +21,7 @@ function throwNoPortalAttachedError() {
 }
 
 class Portal {
-  _attachedHost;
+  _attachedHost = null;
   attach(host) {
     if (typeof ngDevMode === 'undefined' || ngDevMode) {
       if (host == null) {
@@ -95,8 +95,8 @@ class DomPortal extends Portal {
   }
 }
 class BasePortalOutlet {
-  _attachedPortal;
-  _disposeFn;
+  _attachedPortal = null;
+  _disposeFn = null;
   _isDisposed = false;
   hasAttached() {
     return !!this._attachedPortal;
@@ -287,7 +287,7 @@ class CdkPortalOutlet extends BasePortalOutlet {
   _document = inject(DOCUMENT);
   _viewContainerRef = inject(ViewContainerRef);
   _isInitialized = false;
-  _attachedRef;
+  _attachedRef = null;
   constructor() {
     super();
   }

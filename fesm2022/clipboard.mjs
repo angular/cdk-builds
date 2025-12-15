@@ -91,7 +91,7 @@ class CdkCopyToClipboard {
   attempts = 1;
   copied = new EventEmitter();
   _pending = new Set();
-  _destroyed;
+  _destroyed = false;
   _currentTimeout;
   constructor() {
     const config = inject(CDK_COPY_TO_CLIPBOARD_CONFIG, {

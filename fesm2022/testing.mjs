@@ -118,7 +118,16 @@ class HarnessPredicate {
   _ancestor;
   constructor(harnessType, options) {
     this.harnessType = harnessType;
-    this._addBaseOptions(options);
+    this._ancestor = options.ancestor || '';
+    if (this._ancestor) {
+      this._descriptions.push(`has ancestor matching selector "${this._ancestor}"`);
+    }
+    const selector = options.selector;
+    if (selector !== undefined) {
+      this.add(`host matches selector "${selector}"`, async item => {
+        return (await item.host()).matchesSelector(selector);
+      });
+    }
   }
   static async stringMatches(value, pattern) {
     value = await value;
@@ -166,18 +175,6 @@ class HarnessPredicate {
       return selectors.forEach(escapedSelector => result.push(`${ancestor} ${_restoreSelector(escapedSelector, selectorPlaceholders)}`));
     });
     return result.join(', ');
-  }
-  _addBaseOptions(options) {
-    this._ancestor = options.ancestor || '';
-    if (this._ancestor) {
-      this._descriptions.push(`has ancestor matching selector "${this._ancestor}"`);
-    }
-    const selector = options.selector;
-    if (selector !== undefined) {
-      this.add(`host matches selector "${selector}"`, async item => {
-        return (await item.host()).matchesSelector(selector);
-      });
-    }
   }
 }
 function _valueAsString(value) {

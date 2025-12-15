@@ -42,7 +42,7 @@ class CdkOption {
   _id;
   _generatedId = inject(_IdGenerator).getId('cdk-option-');
   value;
-  typeaheadLabel;
+  typeaheadLabel = null;
   get disabled() {
     return this.listbox.disabled || this._disabled();
   }

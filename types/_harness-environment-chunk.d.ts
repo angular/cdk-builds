@@ -687,8 +687,6 @@ declare class HarnessPredicate<T extends ComponentHarness> {
     getDescription(): string;
     /** Gets the selector used to find candidate elements. */
     getSelector(): string;
-    /** Adds base options common to all harness types. */
-    private _addBaseOptions;
 }
 
 /**

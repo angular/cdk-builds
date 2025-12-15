@@ -121,7 +121,7 @@ class FocusMonitor {
   _platform = inject(Platform);
   _inputModalityDetector = inject(InputModalityDetector);
   _origin = null;
-  _lastFocusOrigin;
+  _lastFocusOrigin = null;
   _windowFocused = false;
   _windowFocusTimeoutId;
   _originTimeoutId;
@@ -383,9 +383,7 @@ class CdkMonitorFocus {
   }
   ngOnDestroy() {
     this._focusMonitor.stopMonitoring(this._elementRef);
-    if (this._monitorSubscription) {
-      this._monitorSubscription.unsubscribe();
-    }
+    this._monitorSubscription?.unsubscribe();
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",

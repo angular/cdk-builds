@@ -320,10 +320,10 @@ class ConnectionPositionPair {
   }
 }
 class ScrollingVisibility {
-  isOriginClipped;
-  isOriginOutsideView;
-  isOverlayClipped;
-  isOverlayOutsideView;
+  isOriginClipped = false;
+  isOriginOutsideView = false;
+  isOverlayClipped = false;
+  isOverlayOutsideView = false;
 }
 class ConnectedOverlayPositionChange {
   connectionPair;
@@ -347,7 +347,7 @@ function validateHorizontalPosition(property, value) {
 class BaseOverlayDispatcher {
   _attachedOverlays = [];
   _document = inject(DOCUMENT);
-  _isAttached;
+  _isAttached = false;
   constructor() {}
   ngOnDestroy() {
     this.detach();
@@ -458,7 +458,7 @@ class OverlayOutsideClickDispatcher extends BaseOverlayDispatcher {
   _renderer = inject(RendererFactory2).createRenderer(null, null);
   _cursorOriginalValue;
   _cursorStyleIsSet = false;
-  _pointerDownEventTarget;
+  _pointerDownEventTarget = null;
   _cleanups;
   add(overlayRef) {
     super.add(overlayRef);
@@ -724,7 +724,7 @@ class OverlayRef {
   _backdropRef = null;
   _detachContentMutationObserver;
   _detachContentAfterRenderRef;
-  _disposed;
+  _disposed = false;
   _previousHostParent;
   _keydownEvents = new Subject();
   _outsidePointerEvents = new Subject();
@@ -1069,7 +1069,7 @@ class FlexibleConnectedPositionStrategy {
   _platform;
   _overlayContainer;
   _overlayRef;
-  _isInitialRender;
+  _isInitialRender = false;
   _lastBoundingBoxSize = {
     width: 0,
     height: 0
@@ -1088,17 +1088,17 @@ class FlexibleConnectedPositionStrategy {
   _preferredPositions = [];
   _origin;
   _pane;
-  _isDisposed;
-  _boundingBox;
-  _lastPosition;
-  _lastScrollVisibility;
+  _isDisposed = false;
+  _boundingBox = null;
+  _lastPosition = null;
+  _lastScrollVisibility = null;
   _positionChanges = new Subject();
   _resizeSubscription = Subscription.EMPTY;
   _offsetX = 0;
   _offsetY = 0;
   _transformOriginSelector;
   _appliedPanelClasses = [];
-  _previousPushAmount;
+  _previousPushAmount = null;
   _popoverLocation = 'global';
   positionChanges = this._positionChanges;
   get positions() {
