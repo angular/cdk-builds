@@ -24,6 +24,12 @@ class TaskStateZoneInterceptor {
       stable: !state.macroTask && !state.microTask
     };
   }
+  static isInProxyZone() {
+    if (typeof Zone === 'undefined') {
+      return false;
+    }
+    return Zone['ProxyZoneSpec']?.get() !== undefined;
+  }
   static setup() {
     if (Zone === undefined) {
       throw Error('Could not find ZoneJS. For test harnesses running in TestBed, ' + 'ZoneJS needs to be installed.');
@@ -608,7 +614,7 @@ class TestbedHarnessEnvironment extends HarnessEnvironment {
       ...defaultEnvironmentOptions,
       ...options
     };
-    if (typeof Zone !== 'undefined') {
+    if (TaskStateZoneInterceptor.isInProxyZone()) {
       this._taskState = TaskStateZoneInterceptor.setup();
     }
     this._stabilizeCallback = () => this.forceStabilize();

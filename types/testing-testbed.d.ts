@@ -43,6 +43,9 @@ declare class TestbedHarnessEnvironment extends HarnessEnvironment<Element> {
     /**
      * Waits for all scheduled or running async tasks to complete. This allows harness
      * authors to wait for async tasks outside of the Angular zone.
+     *
+     * This only works when Zone.js is present _and_ patches are applied to the test framework
+     * by `zone.js/testing` (Jasmine and Jest only) or another script.
      */
     waitForTasksOutsideAngular(): Promise<void>;
     /** Gets the root element for the document. */
