@@ -713,6 +713,8 @@ declare class FlexibleConnectedPositionStrategy implements PositionStrategy {
     private _getViewportMarginBottom;
     /** Returns the DOMRect of the current origin. */
     private _getOriginRect;
+    /** Gets the dimensions of the overlay container. */
+    private _getContainerRect;
 }
 /** A simple (x, y) coordinate. */
 interface Point {
