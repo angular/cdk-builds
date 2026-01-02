@@ -1143,7 +1143,7 @@ class FlexibleConnectedPositionStrategy {
     this._viewportRect = this._getNarrowedViewportRect();
     this._originRect = this._getOriginRect();
     this._overlayRect = this._pane.getBoundingClientRect();
-    this._containerRect = this._overlayContainer.getContainerElement().getBoundingClientRect();
+    this._containerRect = this._getContainerRect();
     const originRect = this._originRect;
     const overlayRect = this._overlayRect;
     const viewportRect = this._viewportRect;
@@ -1241,9 +1241,8 @@ class FlexibleConnectedPositionStrategy {
       this._originRect = this._getOriginRect();
       this._overlayRect = this._pane.getBoundingClientRect();
       this._viewportRect = this._getNarrowedViewportRect();
-      this._containerRect = this._overlayContainer.getContainerElement().getBoundingClientRect();
-      const originPoint = this._getOriginPoint(this._originRect, this._containerRect, lastPosition);
-      this._applyPosition(lastPosition, originPoint);
+      this._containerRect = this._getContainerRect();
+      this._applyPosition(lastPosition, this._getOriginPoint(this._originRect, this._containerRect, lastPosition));
     } else {
       this.apply();
     }
@@ -1765,6 +1764,18 @@ class FlexibleConnectedPositionStrategy {
       height,
       width
     };
+  }
+  _getContainerRect() {
+    const isInlinePopover = this._overlayRef.getConfig().usePopover && this._popoverLocation !== 'global';
+    const element = this._overlayContainer.getContainerElement();
+    if (isInlinePopover) {
+      element.style.display = 'block';
+    }
+    const dimensions = element.getBoundingClientRect();
+    if (isInlinePopover) {
+      element.style.display = '';
+    }
+    return dimensions;
   }
 }
 function extendStyles(destination, source) {
