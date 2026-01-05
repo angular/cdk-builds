@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { InjectionToken, ElementRef, NgZone, OnDestroy, EventEmitter, AfterViewInit, TemplateRef, OnChanges, SimpleChanges, ViewContainerRef, Renderer2 } from '@angular/core';
+import { InjectionToken, Injector, ElementRef, NgZone, OnDestroy, EventEmitter, AfterViewInit, TemplateRef, OnChanges, SimpleChanges, ViewContainerRef, Renderer2 } from '@angular/core';
 import { Direction } from './_bidi-module-chunk.js';
 import { Subject, Observable } from 'rxjs';
 import { ViewportRuler } from './scrolling.js';
@@ -41,6 +41,12 @@ interface DragDropConfig extends Partial<DragRefConfig> {
     previewContainer?: 'global' | 'parent';
 }
 
+/**
+ * Creates a `DropListRef` for an element, turning it into a drop list.
+ * @param injector Injector used to resolve dependencies.
+ * @param element Element to which to attach the drop list functionality.
+ */
+declare function createDropListRef<T = unknown>(injector: Injector, element: ElementRef<HTMLElement> | HTMLElement): DropListRef<T>;
 /**
  * Reference to a drop list. Used to manipulate or dispose of the container.
  */
@@ -925,6 +931,13 @@ interface Point {
  */
 type PreviewContainer = 'global' | 'parent' | ElementRef<HTMLElement> | HTMLElement;
 /**
+ * Creates a `DragRef` for an element, turning it into a draggable item.
+ * @param injector Injector used to resolve dependencies.
+ * @param element Element to which to attach the dragging functionality.
+ * @param config Object used to configure the dragging behavior.
+ */
+declare function createDragRef<T = unknown>(injector: Injector, element: ElementRef<HTMLElement> | HTMLElement, config?: DragRefConfig): DragRef<T>;
+/**
  * Reference to a draggable item. Used to manipulate or dispose of the item.
  */
 declare class DragRef<T = any> {
@@ -1320,23 +1333,26 @@ declare class DragRef<T = any> {
 
 /**
  * Service that allows for drag-and-drop functionality to be attached to DOM elements.
+ * @deprecated Use the `createDragRef` or `createDropListRef` function for better tree shaking.
+ * Will be removed in v23.
+ * @breaking-change 23.0.0
  */
 declare class DragDrop {
-    private _document;
-    private _ngZone;
-    private _viewportRuler;
-    private _dragDropRegistry;
-    private _renderer;
+    private _injector;
     constructor(...args: unknown[]);
     /**
      * Turns an element into a draggable item.
      * @param element Element to which to attach the dragging functionality.
      * @param config Object used to configure the dragging behavior.
+     * @deprecated Use the `createDragRef` function that provides better tree shaking.
+     * @breaking-change 23.0.0
      */
     createDrag<T = any>(element: ElementRef<HTMLElement> | HTMLElement, config?: DragRefConfig): DragRef<T>;
     /**
      * Turns an element into a drop list.
      * @param element Element to which to attach the drop list functionality.
+     * @deprecated Use the `createDropListRef` function that provides better tree shaking.
+     * @breaking-change 23.0.0
      */
     createDropList<T = any>(element: ElementRef<HTMLElement> | HTMLElement): DropListRef<T>;
     static ɵfac: i0.ɵɵFactoryDeclaration<DragDrop, never>;
@@ -1406,5 +1422,5 @@ declare class DragDropModule {
     static ɵinj: i0.ɵɵInjectorDeclaration<DragDropModule>;
 }
 
-export { CDK_DRAG_CONFIG, CDK_DRAG_HANDLE, CDK_DRAG_PARENT, CDK_DRAG_PLACEHOLDER, CDK_DRAG_PREVIEW, CDK_DROP_LIST, CDK_DROP_LIST_GROUP, CdkDrag, CdkDragHandle, CdkDragPlaceholder, CdkDragPreview, CdkDropList, CdkDropListGroup, DragDrop, DragDropModule, DragDropRegistry, DragRef, DropListRef, copyArrayItem, moveItemInArray, transferArrayItem };
+export { CDK_DRAG_CONFIG, CDK_DRAG_HANDLE, CDK_DRAG_PARENT, CDK_DRAG_PLACEHOLDER, CDK_DRAG_PREVIEW, CDK_DROP_LIST, CDK_DROP_LIST_GROUP, CdkDrag, CdkDragHandle, CdkDragPlaceholder, CdkDragPreview, CdkDropList, CdkDropListGroup, DragDrop, DragDropModule, DragDropRegistry, DragRef, DropListRef, copyArrayItem, createDragRef, createDropListRef, moveItemInArray, transferArrayItem };
 export type { CdkDragDrop, CdkDragEnd, CdkDragEnter, CdkDragExit, CdkDragMove, CdkDragRelease, CdkDragSortEvent, CdkDragStart, DragAxis, DragConstrainPosition, DragDropConfig, DragRefConfig, DragStartDelay, DropListOrientation, Point, PreviewContainer };
