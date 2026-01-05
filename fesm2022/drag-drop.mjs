@@ -1,13 +1,13 @@
 import * as i0 from '@angular/core';
-import { signal, Component, ViewEncapsulation, ChangeDetectionStrategy, inject, NgZone, DOCUMENT, RendererFactory2, Injectable, InjectionToken, ElementRef, booleanAttribute, Directive, Input, ViewContainerRef, ChangeDetectorRef, EventEmitter, Injector, afterNextRender, numberAttribute, Output, TemplateRef, NgModule } from '@angular/core';
-import { Subject, Subscription, interval, animationFrameScheduler, Observable, merge, BehaviorSubject } from 'rxjs';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy, inject, NgZone, DOCUMENT, RendererFactory2, signal, Injectable, Renderer2, Injector, InjectionToken, ElementRef, booleanAttribute, Directive, Input, ViewContainerRef, ChangeDetectorRef, EventEmitter, afterNextRender, numberAttribute, Output, TemplateRef, NgModule } from '@angular/core';
+import { Subject, Observable, merge, Subscription, interval, animationFrameScheduler, BehaviorSubject } from 'rxjs';
 import { _getEventTarget, _getShadowRoot } from './_shadow-dom-chunk.mjs';
-import { isFakeTouchstartFromScreenReader, isFakeMousedownFromScreenReader } from './_fake-event-detection-chunk.mjs';
-import { coerceElement, coerceNumberProperty } from './_element-chunk.mjs';
-import { takeUntil, map, take, tap, switchMap, startWith } from 'rxjs/operators';
 import { _CdkPrivateStyleLoader } from './_style-loader-chunk.mjs';
+import { isFakeTouchstartFromScreenReader, isFakeMousedownFromScreenReader } from './_fake-event-detection-chunk.mjs';
 import { ViewportRuler, ScrollDispatcher, CdkScrollableModule } from './scrolling.mjs';
 export { CdkScrollable as ɵɵCdkScrollable } from './scrolling.mjs';
+import { coerceElement, coerceNumberProperty } from './_element-chunk.mjs';
+import { takeUntil, map, take, tap, switchMap, startWith } from 'rxjs/operators';
 import { Directionality } from './_directionality-chunk.mjs';
 import { _IdGenerator } from './_id-generator-chunk.mjs';
 import { coerceArray } from './_array-chunk.mjs';
@@ -229,6 +229,223 @@ function getTransform(x, y) {
   return `translate3d(${Math.round(x)}px, ${Math.round(y)}px, 0)`;
 }
 
+const capturingEventOptions = {
+  capture: true
+};
+const activeCapturingEventOptions$1 = {
+  passive: false,
+  capture: true
+};
+class _ResetsLoader {
+  static ɵfac = i0.ɵɵngDeclareFactory({
+    minVersion: "12.0.0",
+    version: "21.0.3",
+    ngImport: i0,
+    type: _ResetsLoader,
+    deps: [],
+    target: i0.ɵɵFactoryTarget.Component
+  });
+  static ɵcmp = i0.ɵɵngDeclareComponent({
+    minVersion: "14.0.0",
+    version: "21.0.3",
+    type: _ResetsLoader,
+    isStandalone: true,
+    selector: "ng-component",
+    host: {
+      attributes: {
+        "cdk-drag-resets-container": ""
+      }
+    },
+    ngImport: i0,
+    template: '',
+    isInline: true,
+    styles: ["@layer cdk-resets{.cdk-drag-preview{background:none;border:none;padding:0;color:inherit;inset:auto}}.cdk-drag-placeholder *,.cdk-drag-preview *{pointer-events:none !important}\n"],
+    changeDetection: i0.ChangeDetectionStrategy.OnPush,
+    encapsulation: i0.ViewEncapsulation.None
+  });
+}
+i0.ɵɵngDeclareClassMetadata({
+  minVersion: "12.0.0",
+  version: "21.0.3",
+  ngImport: i0,
+  type: _ResetsLoader,
+  decorators: [{
+    type: Component,
+    args: [{
+      encapsulation: ViewEncapsulation.None,
+      template: '',
+      changeDetection: ChangeDetectionStrategy.OnPush,
+      host: {
+        'cdk-drag-resets-container': ''
+      },
+      styles: ["@layer cdk-resets{.cdk-drag-preview{background:none;border:none;padding:0;color:inherit;inset:auto}}.cdk-drag-placeholder *,.cdk-drag-preview *{pointer-events:none !important}\n"]
+    }]
+  }]
+});
+class DragDropRegistry {
+  _ngZone = inject(NgZone);
+  _document = inject(DOCUMENT);
+  _styleLoader = inject(_CdkPrivateStyleLoader);
+  _renderer = inject(RendererFactory2).createRenderer(null, null);
+  _cleanupDocumentTouchmove;
+  _scroll = new Subject();
+  _dropInstances = new Set();
+  _dragInstances = new Set();
+  _activeDragInstances = signal([], ...(ngDevMode ? [{
+    debugName: "_activeDragInstances"
+  }] : []));
+  _globalListeners;
+  _draggingPredicate = item => item.isDragging();
+  _domNodesToDirectives = null;
+  pointerMove = new Subject();
+  pointerUp = new Subject();
+  constructor() {}
+  registerDropContainer(drop) {
+    if (!this._dropInstances.has(drop)) {
+      this._dropInstances.add(drop);
+    }
+  }
+  registerDragItem(drag) {
+    this._dragInstances.add(drag);
+    if (this._dragInstances.size === 1) {
+      this._ngZone.runOutsideAngular(() => {
+        this._cleanupDocumentTouchmove?.();
+        this._cleanupDocumentTouchmove = this._renderer.listen(this._document, 'touchmove', this._persistentTouchmoveListener, activeCapturingEventOptions$1);
+      });
+    }
+  }
+  removeDropContainer(drop) {
+    this._dropInstances.delete(drop);
+  }
+  removeDragItem(drag) {
+    this._dragInstances.delete(drag);
+    this.stopDragging(drag);
+    if (this._dragInstances.size === 0) {
+      this._cleanupDocumentTouchmove?.();
+    }
+  }
+  startDragging(drag, event) {
+    if (this._activeDragInstances().indexOf(drag) > -1) {
+      return;
+    }
+    this._styleLoader.load(_ResetsLoader);
+    this._activeDragInstances.update(instances => [...instances, drag]);
+    if (this._activeDragInstances().length === 1) {
+      const isTouchEvent = event.type.startsWith('touch');
+      const endEventHandler = e => this.pointerUp.next(e);
+      const toBind = [['scroll', e => this._scroll.next(e), capturingEventOptions], ['selectstart', this._preventDefaultWhileDragging, activeCapturingEventOptions$1]];
+      if (isTouchEvent) {
+        toBind.push(['touchend', endEventHandler, capturingEventOptions], ['touchcancel', endEventHandler, capturingEventOptions]);
+      } else {
+        toBind.push(['mouseup', endEventHandler, capturingEventOptions]);
+      }
+      if (!isTouchEvent) {
+        toBind.push(['mousemove', e => this.pointerMove.next(e), activeCapturingEventOptions$1]);
+      }
+      this._ngZone.runOutsideAngular(() => {
+        this._globalListeners = toBind.map(([name, handler, options]) => this._renderer.listen(this._document, name, handler, options));
+      });
+    }
+  }
+  stopDragging(drag) {
+    this._activeDragInstances.update(instances => {
+      const index = instances.indexOf(drag);
+      if (index > -1) {
+        instances.splice(index, 1);
+        return [...instances];
+      }
+      return instances;
+    });
+    if (this._activeDragInstances().length === 0) {
+      this._clearGlobalListeners();
+    }
+  }
+  isDragging(drag) {
+    return this._activeDragInstances().indexOf(drag) > -1;
+  }
+  scrolled(shadowRoot) {
+    const streams = [this._scroll];
+    if (shadowRoot && shadowRoot !== this._document) {
+      streams.push(new Observable(observer => {
+        return this._ngZone.runOutsideAngular(() => {
+          const cleanup = this._renderer.listen(shadowRoot, 'scroll', event => {
+            if (this._activeDragInstances().length) {
+              observer.next(event);
+            }
+          }, capturingEventOptions);
+          return () => {
+            cleanup();
+          };
+        });
+      }));
+    }
+    return merge(...streams);
+  }
+  registerDirectiveNode(node, dragRef) {
+    this._domNodesToDirectives ??= new WeakMap();
+    this._domNodesToDirectives.set(node, dragRef);
+  }
+  removeDirectiveNode(node) {
+    this._domNodesToDirectives?.delete(node);
+  }
+  getDragDirectiveForNode(node) {
+    return this._domNodesToDirectives?.get(node) || null;
+  }
+  ngOnDestroy() {
+    this._dragInstances.forEach(instance => this.removeDragItem(instance));
+    this._dropInstances.forEach(instance => this.removeDropContainer(instance));
+    this._domNodesToDirectives = null;
+    this._clearGlobalListeners();
+    this.pointerMove.complete();
+    this.pointerUp.complete();
+  }
+  _preventDefaultWhileDragging = event => {
+    if (this._activeDragInstances().length > 0) {
+      event.preventDefault();
+    }
+  };
+  _persistentTouchmoveListener = event => {
+    if (this._activeDragInstances().length > 0) {
+      if (this._activeDragInstances().some(this._draggingPredicate)) {
+        event.preventDefault();
+      }
+      this.pointerMove.next(event);
+    }
+  };
+  _clearGlobalListeners() {
+    this._globalListeners?.forEach(cleanup => cleanup());
+    this._globalListeners = undefined;
+  }
+  static ɵfac = i0.ɵɵngDeclareFactory({
+    minVersion: "12.0.0",
+    version: "21.0.3",
+    ngImport: i0,
+    type: DragDropRegistry,
+    deps: [],
+    target: i0.ɵɵFactoryTarget.Injectable
+  });
+  static ɵprov = i0.ɵɵngDeclareInjectable({
+    minVersion: "12.0.0",
+    version: "21.0.3",
+    ngImport: i0,
+    type: DragDropRegistry,
+    providedIn: 'root'
+  });
+}
+i0.ɵɵngDeclareClassMetadata({
+  minVersion: "12.0.0",
+  version: "21.0.3",
+  ngImport: i0,
+  type: DragDropRegistry,
+  decorators: [{
+    type: Injectable,
+    args: [{
+      providedIn: 'root'
+    }]
+  }],
+  ctorParameters: () => []
+});
+
 function parseCssTimeUnitsToMs(value) {
   const multiplier = value.toLowerCase().indexOf('ms') > -1 ? 1 : 1000;
   return parseFloat(value) * multiplier;
@@ -361,13 +578,22 @@ const passiveEventListenerOptions = {
 const activeEventListenerOptions = {
   passive: false
 };
-const activeCapturingEventOptions$1 = {
+const activeCapturingEventOptions = {
   passive: false,
   capture: true
 };
 const MOUSE_EVENT_IGNORE_TIME = 800;
 const PLACEHOLDER_CLASS = 'cdk-drag-placeholder';
 const dragImportantProperties = new Set(['position']);
+function createDragRef(injector, element, config = {
+  dragStartThreshold: 5,
+  pointerDirectionChangeThreshold: 5
+}) {
+  const renderer = injector.get(Renderer2, null, {
+    optional: true
+  }) || injector.get(RendererFactory2).createRenderer(null, null);
+  return new DragRef(element, config, injector.get(DOCUMENT), injector.get(NgZone), injector.get(ViewportRuler), injector.get(DragDropRegistry), renderer);
+}
 class DragRef {
   _config;
   _document;
@@ -768,7 +994,7 @@ class DragRef {
     const dropContainer = this._dropContainer;
     if (shadowRoot) {
       this._ngZone.runOutsideAngular(() => {
-        this._cleanupShadowRootSelectStart = this._renderer.listen(shadowRoot, 'selectstart', shadowDomSelectStart, activeCapturingEventOptions$1);
+        this._cleanupShadowRootSelectStart = this._renderer.listen(shadowRoot, 'selectstart', shadowDomSelectStart, activeCapturingEventOptions);
       });
     }
     if (dropContainer) {
@@ -1647,6 +1873,9 @@ var AutoScrollHorizontalDirection;
   AutoScrollHorizontalDirection[AutoScrollHorizontalDirection["LEFT"] = 1] = "LEFT";
   AutoScrollHorizontalDirection[AutoScrollHorizontalDirection["RIGHT"] = 2] = "RIGHT";
 })(AutoScrollHorizontalDirection || (AutoScrollHorizontalDirection = {}));
+function createDropListRef(injector, element) {
+  return new DropListRef(element, injector.get(DragDropRegistry), injector.get(DOCUMENT), injector.get(NgZone), injector.get(ViewportRuler));
+}
 class DropListRef {
   _dragDropRegistry;
   _ngZone;
@@ -2074,239 +2303,14 @@ function getElementScrollDirections(element, clientRect, direction, pointerX, po
   return [verticalScrollDirection, horizontalScrollDirection];
 }
 
-const capturingEventOptions = {
-  capture: true
-};
-const activeCapturingEventOptions = {
-  passive: false,
-  capture: true
-};
-class _ResetsLoader {
-  static ɵfac = i0.ɵɵngDeclareFactory({
-    minVersion: "12.0.0",
-    version: "21.0.3",
-    ngImport: i0,
-    type: _ResetsLoader,
-    deps: [],
-    target: i0.ɵɵFactoryTarget.Component
-  });
-  static ɵcmp = i0.ɵɵngDeclareComponent({
-    minVersion: "14.0.0",
-    version: "21.0.3",
-    type: _ResetsLoader,
-    isStandalone: true,
-    selector: "ng-component",
-    host: {
-      attributes: {
-        "cdk-drag-resets-container": ""
-      }
-    },
-    ngImport: i0,
-    template: '',
-    isInline: true,
-    styles: ["@layer cdk-resets{.cdk-drag-preview{background:none;border:none;padding:0;color:inherit;inset:auto}}.cdk-drag-placeholder *,.cdk-drag-preview *{pointer-events:none !important}\n"],
-    changeDetection: i0.ChangeDetectionStrategy.OnPush,
-    encapsulation: i0.ViewEncapsulation.None
-  });
-}
-i0.ɵɵngDeclareClassMetadata({
-  minVersion: "12.0.0",
-  version: "21.0.3",
-  ngImport: i0,
-  type: _ResetsLoader,
-  decorators: [{
-    type: Component,
-    args: [{
-      encapsulation: ViewEncapsulation.None,
-      template: '',
-      changeDetection: ChangeDetectionStrategy.OnPush,
-      host: {
-        'cdk-drag-resets-container': ''
-      },
-      styles: ["@layer cdk-resets{.cdk-drag-preview{background:none;border:none;padding:0;color:inherit;inset:auto}}.cdk-drag-placeholder *,.cdk-drag-preview *{pointer-events:none !important}\n"]
-    }]
-  }]
-});
-class DragDropRegistry {
-  _ngZone = inject(NgZone);
-  _document = inject(DOCUMENT);
-  _styleLoader = inject(_CdkPrivateStyleLoader);
-  _renderer = inject(RendererFactory2).createRenderer(null, null);
-  _cleanupDocumentTouchmove;
-  _scroll = new Subject();
-  _dropInstances = new Set();
-  _dragInstances = new Set();
-  _activeDragInstances = signal([], ...(ngDevMode ? [{
-    debugName: "_activeDragInstances"
-  }] : []));
-  _globalListeners;
-  _draggingPredicate = item => item.isDragging();
-  _domNodesToDirectives = null;
-  pointerMove = new Subject();
-  pointerUp = new Subject();
-  constructor() {}
-  registerDropContainer(drop) {
-    if (!this._dropInstances.has(drop)) {
-      this._dropInstances.add(drop);
-    }
-  }
-  registerDragItem(drag) {
-    this._dragInstances.add(drag);
-    if (this._dragInstances.size === 1) {
-      this._ngZone.runOutsideAngular(() => {
-        this._cleanupDocumentTouchmove?.();
-        this._cleanupDocumentTouchmove = this._renderer.listen(this._document, 'touchmove', this._persistentTouchmoveListener, activeCapturingEventOptions);
-      });
-    }
-  }
-  removeDropContainer(drop) {
-    this._dropInstances.delete(drop);
-  }
-  removeDragItem(drag) {
-    this._dragInstances.delete(drag);
-    this.stopDragging(drag);
-    if (this._dragInstances.size === 0) {
-      this._cleanupDocumentTouchmove?.();
-    }
-  }
-  startDragging(drag, event) {
-    if (this._activeDragInstances().indexOf(drag) > -1) {
-      return;
-    }
-    this._styleLoader.load(_ResetsLoader);
-    this._activeDragInstances.update(instances => [...instances, drag]);
-    if (this._activeDragInstances().length === 1) {
-      const isTouchEvent = event.type.startsWith('touch');
-      const endEventHandler = e => this.pointerUp.next(e);
-      const toBind = [['scroll', e => this._scroll.next(e), capturingEventOptions], ['selectstart', this._preventDefaultWhileDragging, activeCapturingEventOptions]];
-      if (isTouchEvent) {
-        toBind.push(['touchend', endEventHandler, capturingEventOptions], ['touchcancel', endEventHandler, capturingEventOptions]);
-      } else {
-        toBind.push(['mouseup', endEventHandler, capturingEventOptions]);
-      }
-      if (!isTouchEvent) {
-        toBind.push(['mousemove', e => this.pointerMove.next(e), activeCapturingEventOptions]);
-      }
-      this._ngZone.runOutsideAngular(() => {
-        this._globalListeners = toBind.map(([name, handler, options]) => this._renderer.listen(this._document, name, handler, options));
-      });
-    }
-  }
-  stopDragging(drag) {
-    this._activeDragInstances.update(instances => {
-      const index = instances.indexOf(drag);
-      if (index > -1) {
-        instances.splice(index, 1);
-        return [...instances];
-      }
-      return instances;
-    });
-    if (this._activeDragInstances().length === 0) {
-      this._clearGlobalListeners();
-    }
-  }
-  isDragging(drag) {
-    return this._activeDragInstances().indexOf(drag) > -1;
-  }
-  scrolled(shadowRoot) {
-    const streams = [this._scroll];
-    if (shadowRoot && shadowRoot !== this._document) {
-      streams.push(new Observable(observer => {
-        return this._ngZone.runOutsideAngular(() => {
-          const cleanup = this._renderer.listen(shadowRoot, 'scroll', event => {
-            if (this._activeDragInstances().length) {
-              observer.next(event);
-            }
-          }, capturingEventOptions);
-          return () => {
-            cleanup();
-          };
-        });
-      }));
-    }
-    return merge(...streams);
-  }
-  registerDirectiveNode(node, dragRef) {
-    this._domNodesToDirectives ??= new WeakMap();
-    this._domNodesToDirectives.set(node, dragRef);
-  }
-  removeDirectiveNode(node) {
-    this._domNodesToDirectives?.delete(node);
-  }
-  getDragDirectiveForNode(node) {
-    return this._domNodesToDirectives?.get(node) || null;
-  }
-  ngOnDestroy() {
-    this._dragInstances.forEach(instance => this.removeDragItem(instance));
-    this._dropInstances.forEach(instance => this.removeDropContainer(instance));
-    this._domNodesToDirectives = null;
-    this._clearGlobalListeners();
-    this.pointerMove.complete();
-    this.pointerUp.complete();
-  }
-  _preventDefaultWhileDragging = event => {
-    if (this._activeDragInstances().length > 0) {
-      event.preventDefault();
-    }
-  };
-  _persistentTouchmoveListener = event => {
-    if (this._activeDragInstances().length > 0) {
-      if (this._activeDragInstances().some(this._draggingPredicate)) {
-        event.preventDefault();
-      }
-      this.pointerMove.next(event);
-    }
-  };
-  _clearGlobalListeners() {
-    this._globalListeners?.forEach(cleanup => cleanup());
-    this._globalListeners = undefined;
-  }
-  static ɵfac = i0.ɵɵngDeclareFactory({
-    minVersion: "12.0.0",
-    version: "21.0.3",
-    ngImport: i0,
-    type: DragDropRegistry,
-    deps: [],
-    target: i0.ɵɵFactoryTarget.Injectable
-  });
-  static ɵprov = i0.ɵɵngDeclareInjectable({
-    minVersion: "12.0.0",
-    version: "21.0.3",
-    ngImport: i0,
-    type: DragDropRegistry,
-    providedIn: 'root'
-  });
-}
-i0.ɵɵngDeclareClassMetadata({
-  minVersion: "12.0.0",
-  version: "21.0.3",
-  ngImport: i0,
-  type: DragDropRegistry,
-  decorators: [{
-    type: Injectable,
-    args: [{
-      providedIn: 'root'
-    }]
-  }],
-  ctorParameters: () => []
-});
-
-const DEFAULT_CONFIG = {
-  dragStartThreshold: 5,
-  pointerDirectionChangeThreshold: 5
-};
 class DragDrop {
-  _document = inject(DOCUMENT);
-  _ngZone = inject(NgZone);
-  _viewportRuler = inject(ViewportRuler);
-  _dragDropRegistry = inject(DragDropRegistry);
-  _renderer = inject(RendererFactory2).createRenderer(null, null);
+  _injector = inject(Injector);
   constructor() {}
-  createDrag(element, config = DEFAULT_CONFIG) {
-    return new DragRef(element, config, this._document, this._ngZone, this._viewportRuler, this._dragDropRegistry, this._renderer);
+  createDrag(element, config) {
+    return createDragRef(this._injector, element, config);
   }
   createDropList(element) {
-    return new DropListRef(element, this._dragDropRegistry, this._document, this._ngZone, this._viewportRuler);
+    return createDropListRef(this._injector, element);
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
@@ -2515,8 +2519,7 @@ class CdkDrag {
     const config = inject(CDK_DRAG_CONFIG, {
       optional: true
     });
-    const dragDrop = inject(DragDrop);
-    this._dragRef = dragDrop.createDrag(this.element, {
+    this._dragRef = createDragRef(this._injector, this.element, {
       dragStartThreshold: config && config.dragStartThreshold != null ? config.dragStartThreshold : 5,
       pointerDirectionChangeThreshold: config && config.pointerDirectionChangeThreshold != null ? config.pointerDirectionChangeThreshold : 5,
       zIndex: config?.zIndex
@@ -3033,14 +3036,14 @@ class CdkDropList {
   sorted = new EventEmitter();
   _unsortedItems = new Set();
   constructor() {
-    const dragDrop = inject(DragDrop);
     const config = inject(CDK_DRAG_CONFIG, {
       optional: true
     });
+    const injector = inject(Injector);
     if (typeof ngDevMode === 'undefined' || ngDevMode) {
       assertElementNode(this.element.nativeElement, 'cdkDropList');
     }
-    this._dropListRef = dragDrop.createDropList(this.element);
+    this._dropListRef = createDropListRef(injector, this.element);
     this._dropListRef.data = this;
     if (config) {
       this._assignDefaults(config);
@@ -3534,5 +3537,5 @@ i0.ɵɵngDeclareClassMetadata({
   }]
 });
 
-export { CDK_DRAG_CONFIG, CDK_DRAG_HANDLE, CDK_DRAG_PARENT, CDK_DRAG_PLACEHOLDER, CDK_DRAG_PREVIEW, CDK_DROP_LIST, CDK_DROP_LIST_GROUP, CdkDrag, CdkDragHandle, CdkDragPlaceholder, CdkDragPreview, CdkDropList, CdkDropListGroup, DragDrop, DragDropModule, DragDropRegistry, DragRef, DropListRef, copyArrayItem, moveItemInArray, transferArrayItem };
+export { CDK_DRAG_CONFIG, CDK_DRAG_HANDLE, CDK_DRAG_PARENT, CDK_DRAG_PLACEHOLDER, CDK_DRAG_PREVIEW, CDK_DROP_LIST, CDK_DROP_LIST_GROUP, CdkDrag, CdkDragHandle, CdkDragPlaceholder, CdkDragPreview, CdkDropList, CdkDropListGroup, DragDrop, DragDropModule, DragDropRegistry, DragRef, DropListRef, copyArrayItem, createDragRef, createDropListRef, moveItemInArray, transferArrayItem };
 //# sourceMappingURL=drag-drop.mjs.map
