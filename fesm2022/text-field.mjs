@@ -312,7 +312,7 @@ class CdkTextareaAutosize {
     const element = this._textareaElement;
     const previousMargin = element.style.marginBottom || '';
     const isFirefox = this._platform.FIREFOX;
-    const needsMarginFiller = isFirefox && this._hasFocus;
+    const needsMarginFiller = this._hasFocus;
     const measuringClass = isFirefox ? 'cdk-textarea-autosize-measuring-firefox' : 'cdk-textarea-autosize-measuring';
     if (needsMarginFiller) {
       element.style.marginBottom = `${element.clientHeight}px`;
