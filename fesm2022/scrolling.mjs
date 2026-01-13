@@ -494,8 +494,8 @@ class ViewportRuler {
     const window = this._getWindow();
     const documentElement = document.documentElement;
     const documentRect = documentElement.getBoundingClientRect();
-    const top = -documentRect.top || document.body.scrollTop || window.scrollY || documentElement.scrollTop || 0;
-    const left = -documentRect.left || document.body.scrollLeft || window.scrollX || documentElement.scrollLeft || 0;
+    const top = -documentRect.top || document.body?.scrollTop || window.scrollY || documentElement.scrollTop || 0;
+    const left = -documentRect.left || document.body?.scrollLeft || window.scrollX || documentElement.scrollLeft || 0;
     return {
       top,
       left
