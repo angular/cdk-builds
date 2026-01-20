@@ -191,10 +191,6 @@ class CdkColumnDef {
       sticky: ["sticky", "sticky", booleanAttribute],
       stickyEnd: ["stickyEnd", "stickyEnd", booleanAttribute]
     },
-    providers: [{
-      provide: 'MAT_SORT_HEADER_COLUMN_DEF',
-      useExisting: CdkColumnDef
-    }],
     queries: [{
       propertyName: "cell",
       first: true,
@@ -222,11 +218,7 @@ i0.ɵɵngDeclareClassMetadata({
   decorators: [{
     type: Directive,
     args: [{
-      selector: '[cdkColumnDef]',
-      providers: [{
-        provide: 'MAT_SORT_HEADER_COLUMN_DEF',
-        useExisting: CdkColumnDef
-      }]
+      selector: '[cdkColumnDef]'
     }]
   }],
   ctorParameters: () => [],
