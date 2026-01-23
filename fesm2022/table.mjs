@@ -1832,8 +1832,13 @@ class CdkTable {
     this._footerRowDefs = mergeArrayAndSet(this._getOwnDefs(this._contentFooterRowDefs), this._customFooterRowDefs);
     this._rowDefs = mergeArrayAndSet(this._getOwnDefs(this._contentRowDefs), this._customRowDefs);
     const defaultRowDefs = this._rowDefs.filter(def => !def.when);
-    if (!this.multiTemplateDataRows && defaultRowDefs.length > 1 && (typeof ngDevMode === 'undefined' || ngDevMode)) {
-      throw getTableMultipleDefaultRowDefsError();
+    if (typeof ngDevMode === 'undefined' || ngDevMode) {
+      if (this._virtualScrollEnabled() && this._rowDefs.some(def => def.when)) {
+        throw new Error('Conditional row definitions via the `when` input are not ' + 'supported when virtual scrolling is enabled, at the moment.');
+      }
+      if (!this.multiTemplateDataRows && defaultRowDefs.length > 1) {
+        throw getTableMultipleDefaultRowDefsError();
+      }
     }
     this._defaultRowDef = defaultRowDefs[0];
   }
@@ -1932,7 +1937,7 @@ class CdkTable {
     return renderedRows;
   }
   _getRowDefs(data, dataIndex) {
-    if (this._rowDefs.length == 1) {
+    if (this._rowDefs.length === 1) {
       return [this._rowDefs[0]];
     }
     let rowDefs = [];
