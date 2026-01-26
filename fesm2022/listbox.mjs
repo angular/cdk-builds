@@ -649,7 +649,7 @@ class CdkListbox {
       const selected = this.selectionModel.selected;
       const invalidValues = this._getInvalidOptionValues(selected);
       if (!this.multiple && selected.length > 1) {
-        throw Error('Listbox cannot have more than one selected value in multi-selection mode.');
+        throw Error('Listbox cannot have more than one selected value in single selection mode.');
       }
       if (invalidValues.length) {
         throw Error('Listbox has selected values that do not match any of its options.');
