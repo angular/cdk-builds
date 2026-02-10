@@ -27,6 +27,8 @@ declare abstract class BaseOverlayDispatcher implements OnDestroy {
     remove(overlayRef: OverlayRef): void;
     /** Detaches the global event listener. */
     protected abstract detach(): void;
+    /** Determines whether an overlay is allowed to receive an event. */
+    protected canReceiveEvent<T>(overlayRef: OverlayRef, event: Event, stream: Subject<T>): boolean;
     static ɵfac: i0.ɵɵFactoryDeclaration<BaseOverlayDispatcher, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<BaseOverlayDispatcher>;
 }
@@ -142,6 +144,10 @@ declare class OverlayRef implements PortalOutlet {
      * required around the overlay pane.
      */
     get hostElement(): HTMLElement;
+    /**
+     * Function that determines if this overlay should receive a specific event.
+     */
+    get eventPredicate(): ((event: Event) => boolean) | null;
     attach<T>(portal: ComponentPortal<T>): ComponentRef<T>;
     attach<T>(portal: TemplatePortal<T>): EmbeddedViewRef<T>;
     attach(portal: any): any;
@@ -284,6 +290,11 @@ declare class OverlayConfig {
      * rather than placing it inside of the overlay container.
      */
     usePopover?: boolean;
+    /**
+     * Function that determines if the overlay should receive a specific
+     * event or if the event should go to the next overlay in the stack.
+     */
+    eventPredicate?: (event: Event) => boolean;
     constructor(config?: OverlayConfig);
 }
 
