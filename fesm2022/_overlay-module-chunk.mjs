@@ -289,6 +289,7 @@ class OverlayConfig {
   direction;
   disposeOnNavigation = false;
   usePopover;
+  eventPredicate;
   constructor(config) {
     if (config) {
       const configKeys = Object.keys(config);
@@ -365,6 +366,15 @@ class BaseOverlayDispatcher {
       this.detach();
     }
   }
+  canReceiveEvent(overlayRef, event, stream) {
+    if (stream.observers.length < 1) {
+      return false;
+    }
+    if (overlayRef.eventPredicate) {
+      return overlayRef.eventPredicate(event);
+    }
+    return true;
+  }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
     version: "21.0.3",
@@ -417,8 +427,9 @@ class OverlayKeyboardDispatcher extends BaseOverlayDispatcher {
   _keydownListener = event => {
     const overlays = this._attachedOverlays;
     for (let i = overlays.length - 1; i > -1; i--) {
-      if (overlays[i]._keydownEvents.observers.length > 0) {
-        this._ngZone.run(() => overlays[i]._keydownEvents.next(event));
+      const overlayRef = overlays[i];
+      if (this.canReceiveEvent(overlayRef, event, overlayRef._keydownEvents)) {
+        this._ngZone.run(() => overlayRef._keydownEvents.next(event));
         break;
       }
     }
@@ -498,13 +509,13 @@ class OverlayOutsideClickDispatcher extends BaseOverlayDispatcher {
     const overlays = this._attachedOverlays.slice();
     for (let i = overlays.length - 1; i > -1; i--) {
       const overlayRef = overlays[i];
-      if (overlayRef._outsidePointerEvents.observers.length < 1 || !overlayRef.hasAttached()) {
+      const outsidePointerEvents = overlayRef._outsidePointerEvents;
+      if (!overlayRef.hasAttached() || !this.canReceiveEvent(overlayRef, event, outsidePointerEvents)) {
         continue;
       }
       if (containsPierceShadowDom(overlayRef.overlayElement, target) || containsPierceShadowDom(overlayRef.overlayElement, origin)) {
         break;
       }
-      const outsidePointerEvents = overlayRef._outsidePointerEvents;
       if (this._ngZone) {
         this._ngZone.run(() => outsidePointerEvents.next(event));
       } else {
@@ -756,6 +767,9 @@ class OverlayRef {
   }
   get hostElement() {
     return this._host;
+  }
+  get eventPredicate() {
+    return this._config?.eventPredicate || null;
   }
   attach(portal) {
     if (this._disposed) {
