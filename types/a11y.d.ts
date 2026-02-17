@@ -215,6 +215,8 @@ declare class TreeKeyManager<T extends TreeKeyManagerItem> implements TreeKeyMan
     getActiveItemIndex(): number | null;
     /** The currently active item. */
     getActiveItem(): T | null;
+    /** Called when the list of items has changed. */
+    private _itemsChanged;
     /** Focus the first available item. */
     private _focusFirstItem;
     /** Focus the last available item. */
