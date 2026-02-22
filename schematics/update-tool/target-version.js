@@ -14,6 +14,7 @@ exports.getAllVersionNames = getAllVersionNames;
 var TargetVersion;
 (function (TargetVersion) {
     TargetVersion["V21"] = "version 21";
+    TargetVersion["V22"] = "version 22";
 })(TargetVersion || (exports.TargetVersion = TargetVersion = {}));
 /**
  * Returns all versions that are supported by "ng update". The versions are determined
