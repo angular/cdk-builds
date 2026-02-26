@@ -305,7 +305,7 @@ i0.ɵɵngDeclareClassMetadata({
     args: [{
       selector: 'cdk-dialog-container',
       encapsulation: ViewEncapsulation.None,
-      changeDetection: ChangeDetectionStrategy.Default,
+      changeDetection: ChangeDetectionStrategy.Eager,
       imports: [CdkPortalOutlet],
       host: {
         'class': 'cdk-dialog-container',

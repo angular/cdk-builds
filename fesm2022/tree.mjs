@@ -892,7 +892,7 @@ i0.ɵɵngDeclareClassMetadata({
         '(keydown)': '_sendKeydownToKeyManager($event)'
       },
       encapsulation: ViewEncapsulation.None,
-      changeDetection: ChangeDetectionStrategy.Default,
+      changeDetection: ChangeDetectionStrategy.Eager,
       imports: [CdkTreeNodeOutlet]
     }]
   }],

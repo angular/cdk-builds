@@ -748,7 +748,7 @@ i0.ɵɵngDeclareClassMetadata({
         'class': 'cdk-header-row',
         'role': 'row'
       },
-      changeDetection: ChangeDetectionStrategy.Default,
+      changeDetection: ChangeDetectionStrategy.Eager,
       encapsulation: ViewEncapsulation.None,
       imports: [CdkCellOutlet]
     }]
@@ -801,7 +801,7 @@ i0.ɵɵngDeclareClassMetadata({
         'class': 'cdk-footer-row',
         'role': 'row'
       },
-      changeDetection: ChangeDetectionStrategy.Default,
+      changeDetection: ChangeDetectionStrategy.Eager,
       encapsulation: ViewEncapsulation.None,
       imports: [CdkCellOutlet]
     }]
@@ -854,7 +854,7 @@ i0.ɵɵngDeclareClassMetadata({
         'class': 'cdk-row',
         'role': 'row'
       },
-      changeDetection: ChangeDetectionStrategy.Default,
+      changeDetection: ChangeDetectionStrategy.Eager,
       encapsulation: ViewEncapsulation.None,
       imports: [CdkCellOutlet]
     }]
@@ -2292,7 +2292,7 @@ i0.ɵɵngDeclareClassMetadata({
         '[class.cdk-table-fixed-layout]': 'fixedLayout'
       },
       encapsulation: ViewEncapsulation.None,
-      changeDetection: ChangeDetectionStrategy.Default,
+      changeDetection: ChangeDetectionStrategy.Eager,
       providers: [{
         provide: CDK_TABLE,
         useExisting: CdkTable
@@ -2538,7 +2538,7 @@ i0.ɵɵngDeclareClassMetadata({
     </ng-container>
   `,
       encapsulation: ViewEncapsulation.None,
-      changeDetection: ChangeDetectionStrategy.Default,
+      changeDetection: ChangeDetectionStrategy.Eager,
       imports: [CdkColumnDef, CdkHeaderCellDef, CdkHeaderCell, CdkCellDef, CdkCell]
     }]
   }],
