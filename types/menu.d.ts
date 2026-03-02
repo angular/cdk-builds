@@ -395,7 +395,7 @@ declare class CdkMenuTrigger extends CdkMenuTriggerBase implements OnChanges, On
      * Get a reference to the rendered Menu if the Menu is open and rendered in the DOM.
      */
     getMenu(): Menu | undefined;
-    ngOnChanges(changes: SimpleChanges): void;
+    ngOnChanges(changes: SimpleChanges<this>): void;
     ngOnDestroy(): void;
     /**
      * Handles keyboard events for the menu item.

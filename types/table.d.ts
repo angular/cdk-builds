@@ -164,7 +164,7 @@ declare abstract class BaseRowDef implements OnChanges {
     /** Differ used to check if any changes were made to the columns. */
     protected _columnsDiffer: IterableDiffer<any>;
     constructor(...args: unknown[]);
-    ngOnChanges(changes: SimpleChanges): void;
+    ngOnChanges(changes: SimpleChanges<this>): void;
     /**
      * Returns the difference between the current columns and the columns from the last diff, or null
      * if there is no difference.
@@ -187,7 +187,7 @@ declare class CdkHeaderRowDef extends BaseRowDef implements CanStick, OnChanges 
     set sticky(value: boolean);
     private _sticky;
     constructor(...args: unknown[]);
-    ngOnChanges(changes: SimpleChanges): void;
+    ngOnChanges(changes: SimpleChanges<this>): void;
     /** Whether the sticky state has changed. */
     hasStickyChanged(): boolean;
     /** Resets the sticky changed state. */
@@ -208,7 +208,7 @@ declare class CdkFooterRowDef extends BaseRowDef implements CanStick, OnChanges 
     set sticky(value: boolean);
     private _sticky;
     constructor(...args: unknown[]);
-    ngOnChanges(changes: SimpleChanges): void;
+    ngOnChanges(changes: SimpleChanges<this>): void;
     /** Whether the sticky state has changed. */
     hasStickyChanged(): boolean;
     /** Resets the sticky changed state. */

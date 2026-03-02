@@ -14,9 +14,7 @@ declare const CDK_ACCORDION: InjectionToken<CdkAccordion>;
  */
 declare class CdkAccordion implements OnDestroy, OnChanges {
     /** Emits when the state of the accordion changes */
-    readonly _stateChanges: Subject<{
-        [propName: string]: i0.SimpleChange<any>;
-    }>;
+    readonly _stateChanges: Subject<SimpleChanges<this>>;
     /** Stream that emits true/false when openAll/closeAll is triggered. */
     readonly _openCloseAllActions: Subject<boolean>;
     /** A readonly id value to use for unique selection coordination. */
@@ -27,7 +25,7 @@ declare class CdkAccordion implements OnDestroy, OnChanges {
     openAll(): void;
     /** Closes all enabled accordion items. */
     closeAll(): void;
-    ngOnChanges(changes: SimpleChanges): void;
+    ngOnChanges(changes: SimpleChanges<this>): void;
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkAccordion, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkAccordion, "cdk-accordion, [cdkAccordion]", ["cdkAccordion"], { "multi": { "alias": "multi"; "required": false; }; }, {}, never, never, true, never>;

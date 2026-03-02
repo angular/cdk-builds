@@ -878,7 +878,7 @@ declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     /** The element's layout direction. */
     get dir(): Direction;
     ngOnDestroy(): void;
-    ngOnChanges(changes: SimpleChanges): void;
+    ngOnChanges(changes: SimpleChanges<this>): void;
     /** Creates an overlay */
     private _createOverlay;
     /** Builds the overlay config based on the directive's inputs */

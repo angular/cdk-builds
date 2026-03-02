@@ -755,7 +755,7 @@ declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDestroy {
      */
     setFreeDragPosition(value: Point): void;
     ngAfterViewInit(): void;
-    ngOnChanges(changes: SimpleChanges): void;
+    ngOnChanges(changes: SimpleChanges<this>): void;
     ngOnDestroy(): void;
     _addHandle(handle: CdkDragHandle): void;
     _removeHandle(handle: CdkDragHandle): void;
