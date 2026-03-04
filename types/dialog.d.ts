@@ -20,6 +20,15 @@ import './_style-loader-chunk.js';
 
 /** Options for where to set focus to automatically on dialog open */
 type AutoFocusTarget = 'dialog' | 'first-tabbable' | 'first-heading';
+/**
+ * Value that determines the focus restoration behavior for a dialog.
+ * The values represent the following behaviors:
+ * - `boolean` - when true, will return focus to the element that was focused before the dialog
+ *    was opened, otherwise won't restore focus at all.
+ * - `string` - focus will be restored to the first element that matches the CSS selector.
+ * - `HTMLElement` - focus will be restored to the specific element.
+ */
+type RestoreFocusValue = boolean | string | HTMLElement;
 /** Valid ARIA roles for a dialog. */
 type DialogRole = 'dialog' | 'alertdialog';
 /** Component that can be used as the container for the dialog. */
@@ -92,15 +101,8 @@ declare class DialogConfig<D = unknown, R = unknown, C extends DialogContainer =
      * AutoFocusTarget instead.
      */
     autoFocus?: AutoFocusTarget | string | boolean;
-    /**
-     * Whether the dialog should restore focus to the previously-focused element upon closing.
-     * Has the following behavior based on the type that is passed in:
-     * - `boolean` - when true, will return focus to the element that was focused before the dialog
-     *    was opened, otherwise won't restore focus at all.
-     * - `string` - focus will be restored to the first element that matches the CSS selector.
-     * - `HTMLElement` - focus will be restored to the specific element.
-     */
-    restoreFocus?: boolean | string | HTMLElement;
+    /** Configures the focus restoration behavior. See `RestoreFocusValue` for more information. */
+    restoreFocus?: RestoreFocusValue;
     /**
      * Scroll strategy to be used for the dialog. This determines how
      * the dialog responds to scrolling underneath the panel element.
@@ -410,4 +412,4 @@ declare const DIALOG_DATA: InjectionToken<any>;
 declare const DEFAULT_DIALOG_CONFIG: InjectionToken<DialogConfig<unknown, unknown, _angular_cdk_portal.BasePortalOutlet>>;
 
 export { CdkDialogContainer, DEFAULT_DIALOG_CONFIG, DIALOG_DATA, DIALOG_SCROLL_STRATEGY, Dialog, DialogConfig, DialogModule, DialogRef, throwDialogContentAlreadyAttachedError, CdkPortalOutlet as ɵɵCdkPortalOutlet };
-export type { AutoFocusTarget, DialogCloseOptions, DialogContainer, DialogRole };
+export type { AutoFocusTarget, DialogCloseOptions, DialogContainer, DialogRole, RestoreFocusValue };
