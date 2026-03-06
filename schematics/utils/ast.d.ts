@@ -9,6 +9,12 @@ import { Tree } from '@angular-devkit/schematics';
 import { Schema as ComponentOptions } from '@schematics/angular/component/schema';
 import { ProjectDefinition } from '@schematics/angular/utility';
 import * as ts from 'typescript';
+/**
+ * Temporary type until the CLI starts bundling TS6.
+ *
+ * TODO(crisbeto): clean this up eventually.
+ */
+export type AnyDuringTs6Migration = any;
 /** Reads file given path and returns TypeScript source file. */
 export declare function parseSourceFile(host: Tree, path: string): ts.SourceFile;
 /** Import and add module to root app module. */
