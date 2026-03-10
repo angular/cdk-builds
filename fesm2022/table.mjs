@@ -22,7 +22,7 @@ class CdkCellDef {
   constructor() {}
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     ngImport: i0,
     type: CdkCellDef,
     deps: [],
@@ -30,7 +30,7 @@ class CdkCellDef {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     type: CdkCellDef,
     isStandalone: true,
     selector: "[cdkCellDef]",
@@ -39,7 +39,7 @@ class CdkCellDef {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.3",
+  version: "22.0.0-next.1",
   ngImport: i0,
   type: CdkCellDef,
   decorators: [{
@@ -55,7 +55,7 @@ class CdkHeaderCellDef {
   constructor() {}
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     ngImport: i0,
     type: CdkHeaderCellDef,
     deps: [],
@@ -63,7 +63,7 @@ class CdkHeaderCellDef {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     type: CdkHeaderCellDef,
     isStandalone: true,
     selector: "[cdkHeaderCellDef]",
@@ -72,7 +72,7 @@ class CdkHeaderCellDef {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.3",
+  version: "22.0.0-next.1",
   ngImport: i0,
   type: CdkHeaderCellDef,
   decorators: [{
@@ -88,7 +88,7 @@ class CdkFooterCellDef {
   constructor() {}
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     ngImport: i0,
     type: CdkFooterCellDef,
     deps: [],
@@ -96,7 +96,7 @@ class CdkFooterCellDef {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     type: CdkFooterCellDef,
     isStandalone: true,
     selector: "[cdkFooterCellDef]",
@@ -105,7 +105,7 @@ class CdkFooterCellDef {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.3",
+  version: "22.0.0-next.1",
   ngImport: i0,
   type: CdkFooterCellDef,
   decorators: [{
@@ -174,7 +174,7 @@ class CdkColumnDef {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     ngImport: i0,
     type: CdkColumnDef,
     deps: [],
@@ -182,7 +182,7 @@ class CdkColumnDef {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "16.1.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     type: CdkColumnDef,
     isStandalone: true,
     selector: "[cdkColumnDef]",
@@ -212,7 +212,7 @@ class CdkColumnDef {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.3",
+  version: "22.0.0-next.1",
   ngImport: i0,
   type: CdkColumnDef,
   decorators: [{
@@ -264,7 +264,7 @@ class CdkHeaderCell extends BaseCdkCell {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     ngImport: i0,
     type: CdkHeaderCell,
     deps: [],
@@ -272,7 +272,7 @@ class CdkHeaderCell extends BaseCdkCell {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     type: CdkHeaderCell,
     isStandalone: true,
     selector: "cdk-header-cell, th[cdk-header-cell]",
@@ -288,7 +288,7 @@ class CdkHeaderCell extends BaseCdkCell {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.3",
+  version: "22.0.0-next.1",
   ngImport: i0,
   type: CdkHeaderCell,
   decorators: [{
@@ -315,7 +315,7 @@ class CdkFooterCell extends BaseCdkCell {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     ngImport: i0,
     type: CdkFooterCell,
     deps: [],
@@ -323,7 +323,7 @@ class CdkFooterCell extends BaseCdkCell {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     type: CdkFooterCell,
     isStandalone: true,
     selector: "cdk-footer-cell, td[cdk-footer-cell]",
@@ -336,7 +336,7 @@ class CdkFooterCell extends BaseCdkCell {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.3",
+  version: "22.0.0-next.1",
   ngImport: i0,
   type: CdkFooterCell,
   decorators: [{
@@ -362,7 +362,7 @@ class CdkCell extends BaseCdkCell {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     ngImport: i0,
     type: CdkCell,
     deps: [],
@@ -370,7 +370,7 @@ class CdkCell extends BaseCdkCell {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     type: CdkCell,
     isStandalone: true,
     selector: "cdk-cell, td[cdk-cell]",
@@ -383,7 +383,7 @@ class CdkCell extends BaseCdkCell {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.3",
+  version: "22.0.0-next.1",
   ngImport: i0,
   type: CdkCell,
   decorators: [{
@@ -427,7 +427,7 @@ class BaseRowDef {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     ngImport: i0,
     type: BaseRowDef,
     deps: [],
@@ -435,7 +435,7 @@ class BaseRowDef {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     type: BaseRowDef,
     isStandalone: true,
     usesOnChanges: true,
@@ -444,7 +444,7 @@ class BaseRowDef {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.3",
+  version: "22.0.0-next.1",
   ngImport: i0,
   type: BaseRowDef,
   decorators: [{
@@ -483,7 +483,7 @@ class CdkHeaderRowDef extends BaseRowDef {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     ngImport: i0,
     type: CdkHeaderRowDef,
     deps: [],
@@ -491,7 +491,7 @@ class CdkHeaderRowDef extends BaseRowDef {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "16.1.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     type: CdkHeaderRowDef,
     isStandalone: true,
     selector: "[cdkHeaderRowDef]",
@@ -506,7 +506,7 @@ class CdkHeaderRowDef extends BaseRowDef {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.3",
+  version: "22.0.0-next.1",
   ngImport: i0,
   type: CdkHeaderRowDef,
   decorators: [{
@@ -561,7 +561,7 @@ class CdkFooterRowDef extends BaseRowDef {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     ngImport: i0,
     type: CdkFooterRowDef,
     deps: [],
@@ -569,7 +569,7 @@ class CdkFooterRowDef extends BaseRowDef {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "16.1.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     type: CdkFooterRowDef,
     isStandalone: true,
     selector: "[cdkFooterRowDef]",
@@ -584,7 +584,7 @@ class CdkFooterRowDef extends BaseRowDef {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.3",
+  version: "22.0.0-next.1",
   ngImport: i0,
   type: CdkFooterRowDef,
   decorators: [{
@@ -618,7 +618,7 @@ class CdkRowDef extends BaseRowDef {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     ngImport: i0,
     type: CdkRowDef,
     deps: [],
@@ -626,7 +626,7 @@ class CdkRowDef extends BaseRowDef {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     type: CdkRowDef,
     isStandalone: true,
     selector: "[cdkRowDef]",
@@ -640,7 +640,7 @@ class CdkRowDef extends BaseRowDef {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.3",
+  version: "22.0.0-next.1",
   ngImport: i0,
   type: CdkRowDef,
   decorators: [{
@@ -673,7 +673,7 @@ class CdkCellOutlet {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     ngImport: i0,
     type: CdkCellOutlet,
     deps: [],
@@ -681,7 +681,7 @@ class CdkCellOutlet {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     type: CdkCellOutlet,
     isStandalone: true,
     selector: "[cdkCellOutlet]",
@@ -690,7 +690,7 @@ class CdkCellOutlet {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.3",
+  version: "22.0.0-next.1",
   ngImport: i0,
   type: CdkCellOutlet,
   decorators: [{
@@ -704,7 +704,7 @@ i0.ɵɵngDeclareClassMetadata({
 class CdkHeaderRow {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     ngImport: i0,
     type: CdkHeaderRow,
     deps: [],
@@ -712,7 +712,7 @@ class CdkHeaderRow {
   });
   static ɵcmp = i0.ɵɵngDeclareComponent({
     minVersion: "14.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     type: CdkHeaderRow,
     isStandalone: true,
     selector: "cdk-header-row, tr[cdk-header-row]",
@@ -730,13 +730,13 @@ class CdkHeaderRow {
       type: CdkCellOutlet,
       selector: "[cdkCellOutlet]"
     }],
-    changeDetection: i0.ChangeDetectionStrategy.Default,
+    changeDetection: i0.ChangeDetectionStrategy.Eager,
     encapsulation: i0.ViewEncapsulation.None
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.3",
+  version: "22.0.0-next.1",
   ngImport: i0,
   type: CdkHeaderRow,
   decorators: [{
@@ -757,7 +757,7 @@ i0.ɵɵngDeclareClassMetadata({
 class CdkFooterRow {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     ngImport: i0,
     type: CdkFooterRow,
     deps: [],
@@ -765,7 +765,7 @@ class CdkFooterRow {
   });
   static ɵcmp = i0.ɵɵngDeclareComponent({
     minVersion: "14.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     type: CdkFooterRow,
     isStandalone: true,
     selector: "cdk-footer-row, tr[cdk-footer-row]",
@@ -783,13 +783,13 @@ class CdkFooterRow {
       type: CdkCellOutlet,
       selector: "[cdkCellOutlet]"
     }],
-    changeDetection: i0.ChangeDetectionStrategy.Default,
+    changeDetection: i0.ChangeDetectionStrategy.Eager,
     encapsulation: i0.ViewEncapsulation.None
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.3",
+  version: "22.0.0-next.1",
   ngImport: i0,
   type: CdkFooterRow,
   decorators: [{
@@ -810,7 +810,7 @@ i0.ɵɵngDeclareClassMetadata({
 class CdkRow {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     ngImport: i0,
     type: CdkRow,
     deps: [],
@@ -818,7 +818,7 @@ class CdkRow {
   });
   static ɵcmp = i0.ɵɵngDeclareComponent({
     minVersion: "14.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     type: CdkRow,
     isStandalone: true,
     selector: "cdk-row, tr[cdk-row]",
@@ -836,13 +836,13 @@ class CdkRow {
       type: CdkCellOutlet,
       selector: "[cdkCellOutlet]"
     }],
-    changeDetection: i0.ChangeDetectionStrategy.Default,
+    changeDetection: i0.ChangeDetectionStrategy.Eager,
     encapsulation: i0.ViewEncapsulation.None
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.3",
+  version: "22.0.0-next.1",
   ngImport: i0,
   type: CdkRow,
   decorators: [{
@@ -868,7 +868,7 @@ class CdkNoDataRow {
   constructor() {}
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     ngImport: i0,
     type: CdkNoDataRow,
     deps: [],
@@ -876,7 +876,7 @@ class CdkNoDataRow {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     type: CdkNoDataRow,
     isStandalone: true,
     selector: "ng-template[cdkNoDataRow]",
@@ -885,7 +885,7 @@ class CdkNoDataRow {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.3",
+  version: "22.0.0-next.1",
   ngImport: i0,
   type: CdkNoDataRow,
   decorators: [{
@@ -1264,7 +1264,7 @@ const STICKY_POSITIONING_LISTENER = new InjectionToken('STICKY_POSITIONING_LISTE
 class CdkRecycleRows {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     ngImport: i0,
     type: CdkRecycleRows,
     deps: [],
@@ -1272,7 +1272,7 @@ class CdkRecycleRows {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     type: CdkRecycleRows,
     isStandalone: true,
     selector: "cdk-table[recycleRows], table[cdk-table][recycleRows]",
@@ -1281,7 +1281,7 @@ class CdkRecycleRows {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.3",
+  version: "22.0.0-next.1",
   ngImport: i0,
   type: CdkRecycleRows,
   decorators: [{
@@ -1301,7 +1301,7 @@ class DataRowOutlet {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     ngImport: i0,
     type: DataRowOutlet,
     deps: [],
@@ -1309,7 +1309,7 @@ class DataRowOutlet {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     type: DataRowOutlet,
     isStandalone: true,
     selector: "[rowOutlet]",
@@ -1318,7 +1318,7 @@ class DataRowOutlet {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.3",
+  version: "22.0.0-next.1",
   ngImport: i0,
   type: DataRowOutlet,
   decorators: [{
@@ -1339,7 +1339,7 @@ class HeaderRowOutlet {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     ngImport: i0,
     type: HeaderRowOutlet,
     deps: [],
@@ -1347,7 +1347,7 @@ class HeaderRowOutlet {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     type: HeaderRowOutlet,
     isStandalone: true,
     selector: "[headerRowOutlet]",
@@ -1356,7 +1356,7 @@ class HeaderRowOutlet {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.3",
+  version: "22.0.0-next.1",
   ngImport: i0,
   type: HeaderRowOutlet,
   decorators: [{
@@ -1377,7 +1377,7 @@ class FooterRowOutlet {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     ngImport: i0,
     type: FooterRowOutlet,
     deps: [],
@@ -1385,7 +1385,7 @@ class FooterRowOutlet {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     type: FooterRowOutlet,
     isStandalone: true,
     selector: "[footerRowOutlet]",
@@ -1394,7 +1394,7 @@ class FooterRowOutlet {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.3",
+  version: "22.0.0-next.1",
   ngImport: i0,
   type: FooterRowOutlet,
   decorators: [{
@@ -1415,7 +1415,7 @@ class NoDataRowOutlet {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     ngImport: i0,
     type: NoDataRowOutlet,
     deps: [],
@@ -1423,7 +1423,7 @@ class NoDataRowOutlet {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     type: NoDataRowOutlet,
     isStandalone: true,
     selector: "[noDataRowOutlet]",
@@ -1432,7 +1432,7 @@ class NoDataRowOutlet {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.3",
+  version: "22.0.0-next.1",
   ngImport: i0,
   type: NoDataRowOutlet,
   decorators: [{
@@ -2135,7 +2135,7 @@ class CdkTable {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     ngImport: i0,
     type: CdkTable,
     deps: [],
@@ -2143,7 +2143,7 @@ class CdkTable {
   });
   static ɵcmp = i0.ɵɵngDeclareComponent({
     minVersion: "17.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     type: CdkTable,
     isStandalone: true,
     selector: "cdk-table, table[cdk-table]",
@@ -2243,13 +2243,13 @@ class CdkTable {
       type: FooterRowOutlet,
       selector: "[footerRowOutlet]"
     }],
-    changeDetection: i0.ChangeDetectionStrategy.Default,
+    changeDetection: i0.ChangeDetectionStrategy.Eager,
     encapsulation: i0.ViewEncapsulation.None
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.3",
+  version: "22.0.0-next.1",
   ngImport: i0,
   type: CdkTable,
   decorators: [{
@@ -2443,7 +2443,7 @@ class CdkTextColumn {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     ngImport: i0,
     type: CdkTextColumn,
     deps: [],
@@ -2451,7 +2451,7 @@ class CdkTextColumn {
   });
   static ɵcmp = i0.ɵɵngDeclareComponent({
     minVersion: "14.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     type: CdkTextColumn,
     isStandalone: true,
     selector: "cdk-text-column",
@@ -2514,13 +2514,13 @@ class CdkTextColumn {
       type: CdkCell,
       selector: "cdk-cell, td[cdk-cell]"
     }],
-    changeDetection: i0.ChangeDetectionStrategy.Default,
+    changeDetection: i0.ChangeDetectionStrategy.Eager,
     encapsulation: i0.ViewEncapsulation.None
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.3",
+  version: "22.0.0-next.1",
   ngImport: i0,
   type: CdkTextColumn,
   decorators: [{
@@ -2581,7 +2581,7 @@ const EXPORTED_DECLARATIONS = [CdkTable, CdkRowDef, CdkCellDef, CdkCellOutlet, C
 class CdkTableModule {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     ngImport: i0,
     type: CdkTableModule,
     deps: [],
@@ -2589,7 +2589,7 @@ class CdkTableModule {
   });
   static ɵmod = i0.ɵɵngDeclareNgModule({
     minVersion: "14.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     ngImport: i0,
     type: CdkTableModule,
     imports: [ScrollingModule, CdkTable, CdkRowDef, CdkCellDef, CdkCellOutlet, CdkHeaderCellDef, CdkFooterCellDef, CdkColumnDef, CdkCell, CdkRow, CdkHeaderCell, CdkFooterCell, CdkHeaderRow, CdkHeaderRowDef, CdkFooterRow, CdkFooterRowDef, DataRowOutlet, HeaderRowOutlet, FooterRowOutlet, CdkTextColumn, CdkNoDataRow, CdkRecycleRows, NoDataRowOutlet],
@@ -2597,7 +2597,7 @@ class CdkTableModule {
   });
   static ɵinj = i0.ɵɵngDeclareInjector({
     minVersion: "12.0.0",
-    version: "21.0.3",
+    version: "22.0.0-next.1",
     ngImport: i0,
     type: CdkTableModule,
     imports: [ScrollingModule]
@@ -2605,7 +2605,7 @@ class CdkTableModule {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "21.0.3",
+  version: "22.0.0-next.1",
   ngImport: i0,
   type: CdkTableModule,
   decorators: [{
