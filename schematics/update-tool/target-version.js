@@ -13,7 +13,6 @@ exports.getAllVersionNames = getAllVersionNames;
 // tslint:disable-next-line:prefer-const-enum
 var TargetVersion;
 (function (TargetVersion) {
-    TargetVersion["V21"] = "version 21";
     TargetVersion["V22"] = "version 22";
 })(TargetVersion || (exports.TargetVersion = TargetVersion = {}));
 /**
