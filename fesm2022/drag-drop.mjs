@@ -1548,19 +1548,19 @@ class SingleAxisSortStrategy {
     };
   }
   enter(item, pointerX, pointerY, index) {
-    const newIndex = index == null || index < 0 ? this._getItemIndexFromPointerPosition(item, pointerX, pointerY) : index;
     const activeDraggables = this._activeDraggables;
     const currentIndex = activeDraggables.indexOf(item);
     const placeholder = item.getPlaceholderElement();
+    if (currentIndex > -1) {
+      activeDraggables.splice(currentIndex, 1);
+    }
+    const newIndex = index == null || index < 0 ? this._getItemIndexFromPointerPosition(item, pointerX, pointerY) : index;
     let newPositionReference = activeDraggables[newIndex];
     if (newPositionReference === item) {
       newPositionReference = activeDraggables[newIndex + 1];
     }
     if (!newPositionReference && (newIndex == null || newIndex === -1 || newIndex < activeDraggables.length - 1) && this._shouldEnterAsFirstChild(pointerX, pointerY)) {
       newPositionReference = activeDraggables[0];
-    }
-    if (currentIndex > -1) {
-      activeDraggables.splice(currentIndex, 1);
     }
     if (newPositionReference && !this._dragDropRegistry.isDragging(newPositionReference)) {
       const element = newPositionReference.getRootElement();
