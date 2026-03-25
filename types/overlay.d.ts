@@ -4,7 +4,7 @@ import { ScrollDispatcher } from './_scrolling-module-chunk.js';
 export { CdkScrollable, CdkFixedSizeVirtualScroll as ɵɵCdkFixedSizeVirtualScroll, CdkScrollableModule as ɵɵCdkScrollableModule, CdkVirtualForOf as ɵɵCdkVirtualForOf, CdkVirtualScrollViewport as ɵɵCdkVirtualScrollViewport, CdkVirtualScrollableElement as ɵɵCdkVirtualScrollableElement, CdkVirtualScrollableWindow as ɵɵCdkVirtualScrollableWindow } from './_scrolling-module-chunk.js';
 import { ViewportRuler } from './scrolling.js';
 import * as i0 from '@angular/core';
-import { Injector, NgZone, InjectionToken, OnDestroy } from '@angular/core';
+import { NgZone, Injector, InjectionToken, OnDestroy } from '@angular/core';
 export { ComponentType } from './_portal-directives-chunk.js';
 export { Dir as ɵɵDir } from './_bidi-module-chunk.js';
 import '@angular/common';

@@ -1,8 +1,8 @@
 import { OverlayContainer } from './_overlay-module-chunk.mjs';
 export { BlockScrollStrategy, CDK_CONNECTED_OVERLAY_DEFAULT_CONFIG, CdkConnectedOverlay, CdkOverlayOrigin, CloseScrollStrategy, ConnectedOverlayPositionChange, ConnectionPositionPair, FlexibleConnectedPositionStrategy, GlobalPositionStrategy, NoopScrollStrategy, OVERLAY_DEFAULT_CONFIG, Overlay, OverlayConfig, OverlayKeyboardDispatcher, OverlayModule, OverlayOutsideClickDispatcher, OverlayPositionBuilder, OverlayRef, RepositionScrollStrategy, STANDARD_DROPDOWN_ADJACENT_POSITIONS, STANDARD_DROPDOWN_BELOW_POSITIONS, ScrollStrategyOptions, ScrollingVisibility, createBlockScrollStrategy, createCloseScrollStrategy, createFlexibleConnectedPositionStrategy, createGlobalPositionStrategy, createNoopScrollStrategy, createOverlayRef, createRepositionScrollStrategy, validateHorizontalPosition, validateVerticalPosition } from './_overlay-module-chunk.mjs';
+export { CdkScrollable, ScrollDispatcher, ViewportRuler, CdkFixedSizeVirtualScroll as ɵɵCdkFixedSizeVirtualScroll, CdkScrollableModule as ɵɵCdkScrollableModule, CdkVirtualForOf as ɵɵCdkVirtualForOf, CdkVirtualScrollViewport as ɵɵCdkVirtualScrollViewport, CdkVirtualScrollableElement as ɵɵCdkVirtualScrollableElement, CdkVirtualScrollableWindow as ɵɵCdkVirtualScrollableWindow } from './scrolling.mjs';
 import * as i0 from '@angular/core';
 import { inject, RendererFactory2, Injectable } from '@angular/core';
-export { CdkScrollable, ScrollDispatcher, ViewportRuler, CdkFixedSizeVirtualScroll as ɵɵCdkFixedSizeVirtualScroll, CdkScrollableModule as ɵɵCdkScrollableModule, CdkVirtualForOf as ɵɵCdkVirtualForOf, CdkVirtualScrollViewport as ɵɵCdkVirtualScrollViewport, CdkVirtualScrollableElement as ɵɵCdkVirtualScrollableElement, CdkVirtualScrollableWindow as ɵɵCdkVirtualScrollableWindow } from './scrolling.mjs';
 export { Dir as ɵɵDir } from './bidi.mjs';
 import '@angular/common';
 import './_platform-chunk.mjs';
@@ -12,9 +12,9 @@ import './_style-loader-chunk.mjs';
 import 'rxjs';
 import './_css-pixel-value-chunk.mjs';
 import './_array-chunk.mjs';
-import './portal.mjs';
 import './_scrolling-chunk.mjs';
 import 'rxjs/operators';
+import './portal.mjs';
 import './_id-generator-chunk.mjs';
 import './_directionality-chunk.mjs';
 import './_keycodes-chunk.mjs';
@@ -73,7 +73,7 @@ class FullscreenOverlayContainer extends OverlayContainer {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.1",
+    version: "22.0.0-next.4",
     ngImport: i0,
     type: FullscreenOverlayContainer,
     deps: [],
@@ -81,7 +81,7 @@ class FullscreenOverlayContainer extends OverlayContainer {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.0.0-next.1",
+    version: "22.0.0-next.4",
     ngImport: i0,
     type: FullscreenOverlayContainer,
     providedIn: 'root'
@@ -89,7 +89,7 @@ class FullscreenOverlayContainer extends OverlayContainer {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.1",
+  version: "22.0.0-next.4",
   ngImport: i0,
   type: FullscreenOverlayContainer,
   decorators: [{

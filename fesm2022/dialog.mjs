@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { inject, ElementRef, NgZone, Renderer2, ChangeDetectorRef, Injector, DOCUMENT, afterNextRender, Component, ViewEncapsulation, ChangeDetectionStrategy, ViewChild, InjectionToken, TemplateRef, Injectable, signal, EventEmitter, NgModule } from '@angular/core';
+import { inject, ElementRef, NgZone, Renderer2, ChangeDetectorRef, Injector, DOCUMENT, afterNextRender, ViewChild, ChangeDetectionStrategy, ViewEncapsulation, Component, InjectionToken, TemplateRef, signal, EventEmitter, Injectable, NgModule } from '@angular/core';
 import { Subject, defer } from 'rxjs';
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, TemplatePortal, PortalModule } from './portal.mjs';
 export { CdkPortal as ɵɵCdkPortal } from './portal.mjs';
@@ -7,10 +7,10 @@ import { FocusTrapFactory, InteractivityChecker, A11yModule } from './_a11y-modu
 import { FocusMonitor } from './_focus-monitor-chunk.mjs';
 import { Platform } from './_platform-chunk.mjs';
 import { _getFocusedElementPierceShadowDom } from './_shadow-dom-chunk.mjs';
+import { createBlockScrollStrategy, OverlayContainer, createOverlayRef, OverlayConfig, createGlobalPositionStrategy, OverlayRef, OverlayModule } from './_overlay-module-chunk.mjs';
+import { startWith, take } from 'rxjs/operators';
 import { ESCAPE } from './_keycodes-chunk.mjs';
 import { hasModifierKey } from './keycodes.mjs';
-import { startWith, take } from 'rxjs/operators';
-import { createBlockScrollStrategy, OverlayContainer, createOverlayRef, OverlayConfig, createGlobalPositionStrategy, OverlayRef, OverlayModule } from './_overlay-module-chunk.mjs';
 import { _IdGenerator } from './_id-generator-chunk.mjs';
 import { Directionality } from './_directionality-chunk.mjs';
 import './_style-loader-chunk.mjs';
@@ -27,9 +27,9 @@ import './_test-environment-chunk.mjs';
 import './_css-pixel-value-chunk.mjs';
 import './scrolling.mjs';
 import './_scrolling-chunk.mjs';
-import './bidi.mjs';
 import './_recycle-view-repeater-strategy-chunk.mjs';
 import './_data-source-chunk.mjs';
+import './bidi.mjs';
 
 class DialogConfig {
   viewContainerRef;
@@ -246,7 +246,7 @@ class CdkDialogContainer extends BasePortalOutlet {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.1",
+    version: "22.0.0-next.4",
     ngImport: i0,
     type: CdkDialogContainer,
     deps: [],
@@ -254,7 +254,7 @@ class CdkDialogContainer extends BasePortalOutlet {
   });
   static ɵcmp = i0.ɵɵngDeclareComponent({
     minVersion: "14.0.0",
-    version: "22.0.0-next.1",
+    version: "22.0.0-next.4",
     type: CdkDialogContainer,
     isStandalone: true,
     selector: "cdk-dialog-container",
@@ -282,7 +282,7 @@ class CdkDialogContainer extends BasePortalOutlet {
     usesInheritance: true,
     ngImport: i0,
     template: "<ng-template cdkPortalOutlet />\n",
-    styles: [".cdk-dialog-container{display:block;width:100%;height:100%;min-height:inherit;max-height:inherit}\n"],
+    styles: [".cdk-dialog-container {\n  display: block;\n  width: 100%;\n  height: 100%;\n  min-height: inherit;\n  max-height: inherit;\n}\n"],
     dependencies: [{
       kind: "directive",
       type: CdkPortalOutlet,
@@ -297,7 +297,7 @@ class CdkDialogContainer extends BasePortalOutlet {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.1",
+  version: "22.0.0-next.4",
   ngImport: i0,
   type: CdkDialogContainer,
   decorators: [{
@@ -318,7 +318,7 @@ i0.ɵɵngDeclareClassMetadata({
         '[attr.aria-describedby]': '_config.ariaDescribedBy || null'
       },
       template: "<ng-template cdkPortalOutlet />\n",
-      styles: [".cdk-dialog-container{display:block;width:100%;height:100%;min-height:inherit;max-height:inherit}\n"]
+      styles: [".cdk-dialog-container {\n  display: block;\n  width: 100%;\n  height: 100%;\n  min-height: inherit;\n  max-height: inherit;\n}\n"]
     }]
   }],
   ctorParameters: () => [],
@@ -648,7 +648,7 @@ class Dialog {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.1",
+    version: "22.0.0-next.4",
     ngImport: i0,
     type: Dialog,
     deps: [],
@@ -656,7 +656,7 @@ class Dialog {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.0.0-next.1",
+    version: "22.0.0-next.4",
     ngImport: i0,
     type: Dialog,
     providedIn: 'root'
@@ -664,7 +664,7 @@ class Dialog {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.1",
+  version: "22.0.0-next.4",
   ngImport: i0,
   type: Dialog,
   decorators: [{
@@ -685,7 +685,7 @@ function reverseForEach(items, callback) {
 class DialogModule {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.1",
+    version: "22.0.0-next.4",
     ngImport: i0,
     type: DialogModule,
     deps: [],
@@ -693,7 +693,7 @@ class DialogModule {
   });
   static ɵmod = i0.ɵɵngDeclareNgModule({
     minVersion: "14.0.0",
-    version: "22.0.0-next.1",
+    version: "22.0.0-next.4",
     ngImport: i0,
     type: DialogModule,
     imports: [OverlayModule, PortalModule, A11yModule, CdkDialogContainer],
@@ -701,7 +701,7 @@ class DialogModule {
   });
   static ɵinj = i0.ɵɵngDeclareInjector({
     minVersion: "12.0.0",
-    version: "22.0.0-next.1",
+    version: "22.0.0-next.4",
     ngImport: i0,
     type: DialogModule,
     providers: [Dialog],
@@ -710,7 +710,7 @@ class DialogModule {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.1",
+  version: "22.0.0-next.4",
   ngImport: i0,
   type: DialogModule,
   decorators: [{

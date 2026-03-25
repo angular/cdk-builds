@@ -1,4 +1,4 @@
-import { ListKeyManagerOption, ListKeyManager } from './_list-key-manager-chunk.js';
+import { ListKeyManager, ListKeyManagerOption } from './_list-key-manager-chunk.js';
 
 /**
  * This is the interface for highlightable items (used by the ActiveDescendantKeyManager).

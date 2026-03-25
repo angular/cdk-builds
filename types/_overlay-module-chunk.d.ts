@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { OnDestroy, NgZone, EnvironmentInjector, Renderer2, ComponentRef, EmbeddedViewRef, ElementRef, Injector, InjectionToken, OnChanges, EventEmitter, SimpleChanges } from '@angular/core';
+import { OnDestroy, NgZone, EnvironmentInjector, Renderer2, ComponentRef, EmbeddedViewRef, ElementRef, Injector, OnChanges, EventEmitter, SimpleChanges, InjectionToken } from '@angular/core';
 import { Direction, Directionality, BidiModule } from './_bidi-module-chunk.js';
 import { PortalOutlet, ComponentPortal, TemplatePortal, PortalModule } from './_portal-directives-chunk.js';
 import { CdkScrollable, ScrollingModule } from './_scrolling-module-chunk.js';
