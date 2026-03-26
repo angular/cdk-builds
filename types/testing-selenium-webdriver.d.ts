@@ -89,25 +89,6 @@ declare class SeleniumWebDriverElement implements TestElement {
     private _dispatchClickEventSequence;
 }
 
-/**
- * An Angular framework stabilizer function that takes a callback and calls it when the application
- * is stable, passing a boolean indicating if any work was done.
- */
-declare interface FrameworkStabilizer {
-    (callback: (didWork: boolean) => void): void;
-}
-declare global {
-    interface Window {
-        /**
-         * These hooks are exposed by Angular to register a callback for when the application is stable
-         * (no more pending tasks).
-         *
-         * For the implementation, see: https://github.com/
-         *  angular/angular/blob/main/packages/platform-browser/src/browser/testability.ts#L30-L49
-         */
-        frameworkStabilizers: FrameworkStabilizer[];
-    }
-}
 /** Options to configure the environment. */
 interface WebDriverHarnessEnvironmentOptions {
     /** The query function used to find DOM elements. */
