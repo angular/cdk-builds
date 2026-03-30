@@ -395,7 +395,15 @@ class CdkStepper {
   steps = new QueryList();
   _stepHeader;
   _sortedHeaders = new QueryList();
-  linear = false;
+  get linear() {
+    return this._linear();
+  }
+  set linear(value) {
+    this._linear.set(value);
+  }
+  _linear = signal(false, ...(ngDevMode ? [{
+    debugName: "_linear"
+  }] : []));
   get selectedIndex() {
     return this._selectedIndex();
   }
