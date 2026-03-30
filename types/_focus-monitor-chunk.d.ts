@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { InjectionToken, OnDestroy, ElementRef, AfterViewInit, EventEmitter } from '@angular/core';
+import { AfterViewInit, OnDestroy, EventEmitter, InjectionToken, ElementRef } from '@angular/core';
 import { Observable } from 'rxjs';
 
 type FocusOrigin = 'touch' | 'mouse' | 'keyboard' | 'program' | null;

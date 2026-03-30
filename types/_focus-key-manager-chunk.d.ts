@@ -1,4 +1,4 @@
-import { ListKeyManagerOption, ListKeyManager } from './_list-key-manager-chunk.js';
+import { ListKeyManager, ListKeyManagerOption } from './_list-key-manager-chunk.js';
 import { FocusOrigin } from './_focus-monitor-chunk.js';
 
 /**

@@ -1,29 +1,29 @@
-export { CdkMonitorFocus, FOCUS_MONITOR_DEFAULT_OPTIONS, FocusMonitor, FocusMonitorDetectionMode, INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS, INPUT_MODALITY_DETECTOR_OPTIONS, InputModalityDetector } from './_focus-monitor-chunk.mjs';
 import { FocusTrap, InteractivityChecker } from './_a11y-module-chunk.mjs';
 export { A11yModule, CdkAriaLive, CdkTrapFocus, FocusTrapFactory, HighContrastMode, HighContrastModeDetector, IsFocusableConfig, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LiveAnnouncer } from './_a11y-module-chunk.mjs';
-export { _IdGenerator } from './_id-generator-chunk.mjs';
+export { ActiveDescendantKeyManager } from './_activedescendant-key-manager-chunk.mjs';
 import * as i0 from '@angular/core';
 import { inject, DOCUMENT, APP_ID, Injectable, InjectionToken, NgZone, Injector } from '@angular/core';
 import { Platform } from './_platform-chunk.mjs';
 import { _CdkPrivateStyleLoader } from './_style-loader-chunk.mjs';
 import { _VisuallyHiddenLoader } from './private.mjs';
-export { ActiveDescendantKeyManager } from './_activedescendant-key-manager-chunk.mjs';
+export { CdkMonitorFocus, FOCUS_MONITOR_DEFAULT_OPTIONS, FocusMonitor, FocusMonitorDetectionMode, INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS, INPUT_MODALITY_DETECTOR_OPTIONS, InputModalityDetector } from './_focus-monitor-chunk.mjs';
 export { FocusKeyManager } from './_focus-key-manager-chunk.mjs';
 export { ListKeyManager } from './_list-key-manager-chunk.mjs';
 import { Subject } from 'rxjs';
 import { TREE_KEY_MANAGER } from './_tree-key-manager-chunk.mjs';
 export { TreeKeyManager } from './_tree-key-manager-chunk.mjs';
+export { _IdGenerator } from './_id-generator-chunk.mjs';
 export { isFakeMousedownFromScreenReader, isFakeTouchstartFromScreenReader } from './_fake-event-detection-chunk.mjs';
-import 'rxjs/operators';
-import './_keycodes-chunk.mjs';
 import './_shadow-dom-chunk.mjs';
-import './_passive-listeners-chunk.mjs';
-import './_element-chunk.mjs';
 import './_breakpoints-observer-chunk.mjs';
+import 'rxjs/operators';
 import './_array-chunk.mjs';
 import '@angular/platform-browser';
 import './observers.mjs';
+import './_element-chunk.mjs';
 import '@angular/common';
+import './_keycodes-chunk.mjs';
+import './_passive-listeners-chunk.mjs';
 import './_typeahead-chunk.mjs';
 import './keycodes.mjs';
 import './coercion-private.mjs';
@@ -189,7 +189,7 @@ class AriaDescriber {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.1",
+    version: "22.0.0-next.5",
     ngImport: i0,
     type: AriaDescriber,
     deps: [],
@@ -197,7 +197,7 @@ class AriaDescriber {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.0.0-next.1",
+    version: "22.0.0-next.5",
     ngImport: i0,
     type: AriaDescriber,
     providedIn: 'root'
@@ -205,7 +205,7 @@ class AriaDescriber {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.1",
+  version: "22.0.0-next.5",
   ngImport: i0,
   type: AriaDescriber,
   decorators: [{
@@ -336,7 +336,7 @@ class FocusTrapManager {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.1",
+    version: "22.0.0-next.5",
     ngImport: i0,
     type: FocusTrapManager,
     deps: [],
@@ -344,7 +344,7 @@ class FocusTrapManager {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.0.0-next.1",
+    version: "22.0.0-next.5",
     ngImport: i0,
     type: FocusTrapManager,
     providedIn: 'root'
@@ -352,7 +352,7 @@ class FocusTrapManager {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.1",
+  version: "22.0.0-next.5",
   ngImport: i0,
   type: FocusTrapManager,
   decorators: [{
@@ -391,7 +391,7 @@ class ConfigurableFocusTrapFactory {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.1",
+    version: "22.0.0-next.5",
     ngImport: i0,
     type: ConfigurableFocusTrapFactory,
     deps: [],
@@ -399,7 +399,7 @@ class ConfigurableFocusTrapFactory {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.0.0-next.1",
+    version: "22.0.0-next.5",
     ngImport: i0,
     type: ConfigurableFocusTrapFactory,
     providedIn: 'root'
@@ -407,7 +407,7 @@ class ConfigurableFocusTrapFactory {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.1",
+  version: "22.0.0-next.5",
   ngImport: i0,
   type: ConfigurableFocusTrapFactory,
   decorators: [{

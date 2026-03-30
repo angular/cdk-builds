@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { InjectionToken, inject, NgZone, DOCUMENT, RendererFactory2, Injectable, ElementRef, EventEmitter, Directive, Output } from '@angular/core';
+import { InjectionToken, inject, NgZone, DOCUMENT, RendererFactory2, Injectable, ElementRef, EventEmitter, Output, Directive } from '@angular/core';
 import { BehaviorSubject, Subject, of } from 'rxjs';
 import { skip, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { isFakeMousedownFromScreenReader, isFakeTouchstartFromScreenReader } from './_fake-event-detection-chunk.mjs';
@@ -78,7 +78,7 @@ class InputModalityDetector {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.1",
+    version: "22.0.0-next.5",
     ngImport: i0,
     type: InputModalityDetector,
     deps: [],
@@ -86,7 +86,7 @@ class InputModalityDetector {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.0.0-next.1",
+    version: "22.0.0-next.5",
     ngImport: i0,
     type: InputModalityDetector,
     providedIn: 'root'
@@ -94,7 +94,7 @@ class InputModalityDetector {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.1",
+  version: "22.0.0-next.5",
   ngImport: i0,
   type: InputModalityDetector,
   decorators: [{
@@ -337,7 +337,7 @@ class FocusMonitor {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.1",
+    version: "22.0.0-next.5",
     ngImport: i0,
     type: FocusMonitor,
     deps: [],
@@ -345,7 +345,7 @@ class FocusMonitor {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.0.0-next.1",
+    version: "22.0.0-next.5",
     ngImport: i0,
     type: FocusMonitor,
     providedIn: 'root'
@@ -353,7 +353,7 @@ class FocusMonitor {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.1",
+  version: "22.0.0-next.5",
   ngImport: i0,
   type: FocusMonitor,
   decorators: [{
@@ -387,7 +387,7 @@ class CdkMonitorFocus {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.1",
+    version: "22.0.0-next.5",
     ngImport: i0,
     type: CdkMonitorFocus,
     deps: [],
@@ -395,7 +395,7 @@ class CdkMonitorFocus {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "22.0.0-next.1",
+    version: "22.0.0-next.5",
     type: CdkMonitorFocus,
     isStandalone: true,
     selector: "[cdkMonitorElementFocus], [cdkMonitorSubtreeFocus]",
@@ -408,7 +408,7 @@ class CdkMonitorFocus {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.1",
+  version: "22.0.0-next.5",
   ngImport: i0,
   type: CdkMonitorFocus,
   decorators: [{

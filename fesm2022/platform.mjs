@@ -1,16 +1,16 @@
 export { Platform } from './_platform-chunk.mjs';
 import * as i0 from '@angular/core';
 import { NgModule } from '@angular/core';
-export { normalizePassiveListenerOptions, supportsPassiveEventListeners } from './_passive-listeners-chunk.mjs';
 export { RtlScrollAxisType, getRtlScrollAxisType, supportsScrollBehavior } from './_scrolling-chunk.mjs';
 export { _getEventTarget, _getFocusedElementPierceShadowDom, _getShadowRoot, _supportsShadowDom } from './_shadow-dom-chunk.mjs';
 export { _isTestEnvironment } from './_test-environment-chunk.mjs';
+export { normalizePassiveListenerOptions, supportsPassiveEventListeners } from './_passive-listeners-chunk.mjs';
 import '@angular/common';
 
 class PlatformModule {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.1",
+    version: "22.0.0-next.5",
     ngImport: i0,
     type: PlatformModule,
     deps: [],
@@ -18,20 +18,20 @@ class PlatformModule {
   });
   static ɵmod = i0.ɵɵngDeclareNgModule({
     minVersion: "14.0.0",
-    version: "22.0.0-next.1",
+    version: "22.0.0-next.5",
     ngImport: i0,
     type: PlatformModule
   });
   static ɵinj = i0.ɵɵngDeclareInjector({
     minVersion: "12.0.0",
-    version: "22.0.0-next.1",
+    version: "22.0.0-next.5",
     ngImport: i0,
     type: PlatformModule
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.1",
+  version: "22.0.0-next.5",
   ngImport: i0,
   type: PlatformModule,
   decorators: [{

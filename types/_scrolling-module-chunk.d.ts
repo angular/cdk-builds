@@ -1,8 +1,8 @@
 import * as i0 from '@angular/core';
-import { OnDestroy, ElementRef, OnInit, NgZone, InjectionToken, OnChanges, NgIterable, DoCheck, TrackByFunction, TemplateRef } from '@angular/core';
+import { OnDestroy, ElementRef, OnInit, NgZone, InjectionToken, OnChanges, DoCheck, NgIterable, TrackByFunction, TemplateRef } from '@angular/core';
 import { Directionality, BidiModule } from './_bidi-module-chunk.js';
 import { Observable, Subscription, Subject } from 'rxjs';
-import { ListRange, DataSource, CollectionViewer } from './_data-source-chunk.js';
+import { ListRange, CollectionViewer, DataSource } from './_data-source-chunk.js';
 import { NumberInput } from './_number-property-chunk.js';
 
 /**

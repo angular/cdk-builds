@@ -1,4 +1,4 @@
-import { TemplateRef, IterableChangeRecord, IterableChanges, ViewContainerRef } from '@angular/core';
+import { IterableChanges, ViewContainerRef, IterableChangeRecord, TemplateRef } from '@angular/core';
 
 /**
  * The context for an embedded view in the repeater's view container.

@@ -1,10 +1,10 @@
 import * as i0 from '@angular/core';
-import { OnDestroy, Provider, QueryList, InjectionToken, NgZone, Injector } from '@angular/core';
+import { OnDestroy, Provider, InjectionToken, QueryList, NgZone, Injector } from '@angular/core';
 export { ActiveDescendantKeyManager, Highlightable } from './_activedescendant-key-manager-chunk.js';
 export { FocusKeyManager, FocusableOption } from './_focus-key-manager-chunk.js';
 export { ListKeyManager, ListKeyManagerModifierKey, ListKeyManagerOption } from './_list-key-manager-chunk.js';
 import { Subject, Observable } from 'rxjs';
-import { TreeKeyManagerItem, TreeKeyManagerStrategy, TreeKeyManagerOptions, TreeKeyManagerFactory } from './_tree-key-manager-strategy-chunk.js';
+import { TreeKeyManagerItem, TreeKeyManagerStrategy, TreeKeyManagerFactory, TreeKeyManagerOptions } from './_tree-key-manager-strategy-chunk.js';
 import { FocusTrap, InteractivityChecker } from './_a11y-module-chunk.js';
 export { A11yModule, AriaLivePoliteness, CdkAriaLive, CdkTrapFocus, FocusTrapFactory, IsFocusableConfig, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LiveAnnouncer, LiveAnnouncerDefaultOptions, LiveAnnouncerMessage } from './_a11y-module-chunk.js';
 export { CdkMonitorFocus, FOCUS_MONITOR_DEFAULT_OPTIONS, FocusMonitor, FocusMonitorDetectionMode, FocusMonitorOptions, FocusOptions, FocusOrigin } from './_focus-monitor-chunk.js';

@@ -2,7 +2,7 @@ import { flush } from '@angular/core/testing';
 import { takeWhile } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 import { getNoKeysSpecifiedError, _getTextWithExcludedElements, TestKey, HarnessEnvironment, handleAutoChangeDetectionStatus, stopHandlingAutoChangeDetectionStatus } from './testing.mjs';
-import { PERIOD, BACKSPACE, TAB, ENTER, SHIFT, CONTROL, ALT, ESCAPE, PAGE_UP, PAGE_DOWN, END, HOME, LEFT_ARROW, UP_ARROW, RIGHT_ARROW, DOWN_ARROW, INSERT, DELETE, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12, META, COMMA } from './_keycodes-chunk.mjs';
+import { PERIOD, COMMA, META, F12, F11, F10, F9, F8, F7, F6, F5, F4, F3, F2, F1, DELETE, INSERT, DOWN_ARROW, RIGHT_ARROW, UP_ARROW, LEFT_ARROW, HOME, END, PAGE_DOWN, PAGE_UP, ESCAPE, ALT, CONTROL, SHIFT, ENTER, TAB, BACKSPACE } from './_keycodes-chunk.mjs';
 
 const stateObservableSymbol = Symbol('ProxyZone_PATCHED#stateObservable');
 class TaskStateZoneInterceptor {

@@ -1,7 +1,7 @@
+import * as i0 from '@angular/core';
+import { EventEmitter, signal, Input, Output, Directive, NgModule } from '@angular/core';
 import { _resolveDirectionality, Directionality } from './_directionality-chunk.mjs';
 export { DIR_DOCUMENT } from './_directionality-chunk.mjs';
-import * as i0 from '@angular/core';
-import { EventEmitter, signal, Directive, Output, Input, NgModule } from '@angular/core';
 
 class Dir {
   _isInitialized = false;
@@ -32,7 +32,7 @@ class Dir {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.1",
+    version: "22.0.0-next.5",
     ngImport: i0,
     type: Dir,
     deps: [],
@@ -40,7 +40,7 @@ class Dir {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "22.0.0-next.1",
+    version: "22.0.0-next.5",
     type: Dir,
     isStandalone: true,
     selector: "[dir]",
@@ -65,7 +65,7 @@ class Dir {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.1",
+  version: "22.0.0-next.5",
   ngImport: i0,
   type: Dir,
   decorators: [{
@@ -96,7 +96,7 @@ i0.ɵɵngDeclareClassMetadata({
 class BidiModule {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.1",
+    version: "22.0.0-next.5",
     ngImport: i0,
     type: BidiModule,
     deps: [],
@@ -104,7 +104,7 @@ class BidiModule {
   });
   static ɵmod = i0.ɵɵngDeclareNgModule({
     minVersion: "14.0.0",
-    version: "22.0.0-next.1",
+    version: "22.0.0-next.5",
     ngImport: i0,
     type: BidiModule,
     imports: [Dir],
@@ -112,14 +112,14 @@ class BidiModule {
   });
   static ɵinj = i0.ɵɵngDeclareInjector({
     minVersion: "12.0.0",
-    version: "22.0.0-next.1",
+    version: "22.0.0-next.5",
     ngImport: i0,
     type: BidiModule
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.1",
+  version: "22.0.0-next.5",
   ngImport: i0,
   type: BidiModule,
   decorators: [{

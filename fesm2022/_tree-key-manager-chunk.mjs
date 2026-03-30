@@ -1,4 +1,4 @@
-import { QueryList, InjectionToken } from '@angular/core';
+import { InjectionToken, QueryList } from '@angular/core';
 import { Subscription, isObservable, Subject, of } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Typeahead } from './_typeahead-chunk.mjs';
