@@ -155,7 +155,9 @@ declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDestroy {
     /** List of step headers sorted based on their DOM order. */
     private _sortedHeaders;
     /** Whether the validity of previous steps should be checked or not. */
-    linear: boolean;
+    get linear(): boolean;
+    set linear(value: boolean);
+    private _linear;
     /** The index of the selected step. */
     get selectedIndex(): number;
     set selectedIndex(index: number);
