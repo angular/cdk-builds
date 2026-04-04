@@ -1398,7 +1398,7 @@ declare function copyArrayItem<T = any>(currentArray: T[], targetArray: T[], cur
  * alternative token to the actual `CdkDropListGroup` class which could cause unnecessary
  * retention of the class and its directive metadata.
  */
-declare const CDK_DROP_LIST_GROUP: InjectionToken<CdkDropListGroup<unknown>>;
+declare const CDK_DROP_LIST_GROUP: InjectionToken<CdkDropListGroup<CdkDropList<any>>>;
 /**
  * Declaratively connects sibling `cdkDropList` instances together. All of the `cdkDropList`
  * elements that are placed inside a `cdkDropListGroup` will be connected to each other
