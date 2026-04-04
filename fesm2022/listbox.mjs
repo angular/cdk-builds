@@ -3,11 +3,11 @@ import { inject, signal, ElementRef, NgZone, ChangeDetectorRef, Renderer2, boole
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Subject, defer, merge } from 'rxjs';
 import { startWith, switchMap, map, takeUntil, filter } from 'rxjs/operators';
+import { _IdGenerator } from './_id-generator-chunk.mjs';
+import { Directionality } from './_directionality-chunk.mjs';
 import { A, SPACE, ENTER, HOME, END, UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW } from './_keycodes-chunk.mjs';
 import { ActiveDescendantKeyManager } from './_activedescendant-key-manager-chunk.mjs';
 import { SelectionModel } from './_selection-model-chunk.mjs';
-import { _IdGenerator } from './_id-generator-chunk.mjs';
-import { Directionality } from './_directionality-chunk.mjs';
 import { Platform } from './_platform-chunk.mjs';
 import { hasModifierKey } from './keycodes.mjs';
 import { coerceArray } from './_array-chunk.mjs';
@@ -113,7 +113,7 @@ class CdkOption {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.5",
+    version: "22.0.0-next.6",
     ngImport: i0,
     type: CdkOption,
     deps: [],
@@ -121,7 +121,7 @@ class CdkOption {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "16.1.0",
-    version: "22.0.0-next.5",
+    version: "22.0.0-next.6",
     type: CdkOption,
     isStandalone: true,
     selector: "[cdkOption]",
@@ -155,7 +155,7 @@ class CdkOption {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.5",
+  version: "22.0.0-next.6",
   ngImport: i0,
   type: CdkOption,
   decorators: [{
@@ -670,7 +670,7 @@ class CdkListbox {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.5",
+    version: "22.0.0-next.6",
     ngImport: i0,
     type: CdkListbox,
     deps: [],
@@ -678,7 +678,7 @@ class CdkListbox {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "16.1.0",
-    version: "22.0.0-next.5",
+    version: "22.0.0-next.6",
     type: CdkListbox,
     isStandalone: true,
     selector: "[cdkListbox]",
@@ -733,7 +733,7 @@ class CdkListbox {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.5",
+  version: "22.0.0-next.6",
   ngImport: i0,
   type: CdkListbox,
   decorators: [{
@@ -835,7 +835,7 @@ const EXPORTED_DECLARATIONS = [CdkListbox, CdkOption];
 class CdkListboxModule {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.5",
+    version: "22.0.0-next.6",
     ngImport: i0,
     type: CdkListboxModule,
     deps: [],
@@ -843,7 +843,7 @@ class CdkListboxModule {
   });
   static ɵmod = i0.ɵɵngDeclareNgModule({
     minVersion: "14.0.0",
-    version: "22.0.0-next.5",
+    version: "22.0.0-next.6",
     ngImport: i0,
     type: CdkListboxModule,
     imports: [CdkListbox, CdkOption],
@@ -851,14 +851,14 @@ class CdkListboxModule {
   });
   static ɵinj = i0.ɵɵngDeclareInjector({
     minVersion: "12.0.0",
-    version: "22.0.0-next.5",
+    version: "22.0.0-next.6",
     ngImport: i0,
     type: CdkListboxModule
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.5",
+  version: "22.0.0-next.6",
   ngImport: i0,
   type: CdkListboxModule,
   decorators: [{

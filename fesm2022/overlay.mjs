@@ -14,9 +14,9 @@ import './_css-pixel-value-chunk.mjs';
 import './_array-chunk.mjs';
 import './_scrolling-chunk.mjs';
 import 'rxjs/operators';
-import './portal.mjs';
 import './_id-generator-chunk.mjs';
 import './_directionality-chunk.mjs';
+import './portal.mjs';
 import './_keycodes-chunk.mjs';
 import './keycodes.mjs';
 import './_element-chunk.mjs';
@@ -73,7 +73,7 @@ class FullscreenOverlayContainer extends OverlayContainer {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.5",
+    version: "22.0.0-next.6",
     ngImport: i0,
     type: FullscreenOverlayContainer,
     deps: [],
@@ -81,7 +81,7 @@ class FullscreenOverlayContainer extends OverlayContainer {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.0.0-next.5",
+    version: "22.0.0-next.6",
     ngImport: i0,
     type: FullscreenOverlayContainer,
     providedIn: 'root'
@@ -89,7 +89,7 @@ class FullscreenOverlayContainer extends OverlayContainer {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.5",
+  version: "22.0.0-next.6",
   ngImport: i0,
   type: FullscreenOverlayContainer,
   decorators: [{
