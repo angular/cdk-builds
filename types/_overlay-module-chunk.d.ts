@@ -19,7 +19,6 @@ declare abstract class BaseOverlayDispatcher implements OnDestroy {
     _attachedOverlays: OverlayRef[];
     protected _document: Document;
     protected _isAttached: boolean;
-    constructor(...args: unknown[]);
     ngOnDestroy(): void;
     /** Add a new overlay to the list of attached overlay refs. */
     add(overlayRef: OverlayRef): void;
@@ -407,7 +406,6 @@ declare class OverlayContainer implements OnDestroy {
     protected _containerElement: HTMLElement | undefined;
     protected _document: Document;
     protected _styleLoader: _CdkPrivateStyleLoader;
-    constructor(...args: unknown[]);
     ngOnDestroy(): void;
     /**
      * This method returns the overlay container element. It will lazily
@@ -752,7 +750,6 @@ declare const STANDARD_DROPDOWN_ADJACENT_POSITIONS: ConnectedPosition[];
  */
 declare class CdkOverlayOrigin {
     elementRef: ElementRef<any>;
-    constructor(...args: unknown[]);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkOverlayOrigin, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkOverlayOrigin, "[cdk-overlay-origin], [overlay-origin], [cdkOverlayOrigin]", ["cdkOverlayOrigin"], {}, {}, never, never, true, never>;
 }
@@ -872,7 +869,7 @@ declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     readonly overlayKeydown: EventEmitter<KeyboardEvent>;
     /** Emits when there are mouse outside click events that are targeted at the overlay. */
     readonly overlayOutsideClick: EventEmitter<MouseEvent>;
-    constructor(...args: unknown[]);
+    constructor();
     /** The associated overlay reference. */
     get overlayRef(): OverlayRef;
     /** The element's layout direction. */

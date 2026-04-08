@@ -26,7 +26,7 @@ declare class ViewportRuler implements OnDestroy {
     private readonly _change;
     /** Used to reference correct document/window */
     protected _document: Document;
-    constructor(...args: unknown[]);
+    constructor();
     ngOnDestroy(): void;
     /** Returns the viewport's width and height. */
     getViewportSize(): Readonly<{

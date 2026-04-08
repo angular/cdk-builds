@@ -131,7 +131,7 @@ declare abstract class BasePortalOutlet implements PortalOutlet {
  * the directive instance itself can be attached to a host, enabling declarative use of portals.
  */
 declare class CdkPortal extends TemplatePortal {
-    constructor(...args: unknown[]);
+    constructor();
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkPortal, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkPortal, "[cdkPortal]", ["cdkPortal"], {}, {}, never, never, true, never>;
 }
@@ -154,7 +154,6 @@ declare class CdkPortalOutlet extends BasePortalOutlet implements OnInit, OnDest
     private _isInitialized;
     /** Reference to the currently-attached component/view ref. */
     private _attachedRef;
-    constructor(...args: unknown[]);
     /** Portal associated with the Portal outlet. */
     get portal(): Portal<any> | null;
     set portal(portal: Portal<any> | null | undefined | '');

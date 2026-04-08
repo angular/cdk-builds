@@ -15,7 +15,7 @@ declare class Directionality implements OnDestroy {
     readonly valueSignal: i0.WritableSignal<Direction>;
     /** Stream that emits whenever the 'ltr' / 'rtl' state changes. */
     readonly change: EventEmitter<Direction>;
-    constructor(...args: unknown[]);
+    constructor();
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<Directionality, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<Directionality>;

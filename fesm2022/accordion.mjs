@@ -118,7 +118,6 @@ class CdkAccordionItem {
     debugName: "_disabled"
   }] : []));
   _removeUniqueSelectionListener = () => {};
-  constructor() {}
   ngOnInit() {
     this._removeUniqueSelectionListener = this._expansionDispatcher.listen((id, accordionId) => {
       if (this.accordion && !this.accordion.multi && this.accordion.id === accordionId && this.id !== id) {
@@ -207,7 +206,6 @@ i0.ɵɵngDeclareClassMetadata({
       }]
     }]
   }],
-  ctorParameters: () => [],
   propDecorators: {
     closed: [{
       type: Output

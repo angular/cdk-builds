@@ -200,7 +200,6 @@ class ScrollDispatcher {
   _platform = inject(Platform);
   _renderer = inject(RendererFactory2).createRenderer(null, null);
   _cleanupGlobalListener;
-  constructor() {}
   _scrolled = new Subject();
   _scrolledCount = 0;
   scrollContainers = new Map();
@@ -291,8 +290,7 @@ i0.ɵɵngDeclareClassMetadata({
     args: [{
       providedIn: 'root'
     }]
-  }],
-  ctorParameters: () => []
+  }]
 });
 
 class CdkScrollable {
@@ -307,7 +305,6 @@ class CdkScrollable {
   _renderer = inject(Renderer2);
   _cleanupScroll;
   _elementScrolled = new Subject();
-  constructor() {}
   ngOnInit() {
     this._cleanupScroll = this.ngZone.runOutsideAngular(() => this._renderer.listen(this._scrollElement, 'scroll', event => this._elementScrolled.next(event)));
     this.scrollDispatcher.register(this);
@@ -429,8 +426,7 @@ i0.ɵɵngDeclareClassMetadata({
     args: [{
       selector: '[cdk-scrollable], [cdkScrollable]'
     }]
-  }],
-  ctorParameters: () => []
+  }]
 });
 
 const DEFAULT_RESIZE_TIME = 20;
@@ -549,9 +545,6 @@ i0.ɵɵngDeclareClassMetadata({
 
 const VIRTUAL_SCROLLABLE = new InjectionToken('VIRTUAL_SCROLLABLE');
 class CdkVirtualScrollable extends CdkScrollable {
-  constructor() {
-    super();
-  }
   measureViewportSize(orientation) {
     const viewportEl = this.elementRef.nativeElement;
     return orientation === 'horizontal' ? viewportEl.clientWidth : viewportEl.clientHeight;
@@ -561,7 +554,7 @@ class CdkVirtualScrollable extends CdkScrollable {
     version: "22.0.0-next.6",
     ngImport: i0,
     type: CdkVirtualScrollable,
-    deps: [],
+    deps: null,
     target: i0.ɵɵFactoryTarget.Directive
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
@@ -580,8 +573,7 @@ i0.ɵɵngDeclareClassMetadata({
   type: CdkVirtualScrollable,
   decorators: [{
     type: Directive
-  }],
-  ctorParameters: () => []
+  }]
 });
 
 function rangesEqual(r1, r2) {
@@ -1216,9 +1208,6 @@ i0.ɵɵngDeclareClassMetadata({
 });
 
 class CdkVirtualScrollableElement extends CdkVirtualScrollable {
-  constructor() {
-    super();
-  }
   measureBoundingClientRectWithScrollOffset(from) {
     return this.getElementRef().nativeElement.getBoundingClientRect()[from] - this.measureScrollOffset(from);
   }
@@ -1227,7 +1216,7 @@ class CdkVirtualScrollableElement extends CdkVirtualScrollable {
     version: "22.0.0-next.6",
     ngImport: i0,
     type: CdkVirtualScrollableElement,
-    deps: [],
+    deps: null,
     target: i0.ɵɵFactoryTarget.Directive
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
@@ -1264,8 +1253,7 @@ i0.ɵɵngDeclareClassMetadata({
         'class': 'cdk-virtual-scrollable'
       }
     }]
-  }],
-  ctorParameters: () => []
+  }]
 });
 
 class CdkVirtualScrollableWindow extends CdkVirtualScrollable {

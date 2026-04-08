@@ -76,7 +76,7 @@ declare class FocusMonitor implements OnDestroy {
     protected _document: Document;
     /** Subject for stopping our InputModalityDetector subscription. */
     private readonly _stopInputModalityDetector;
-    constructor(...args: unknown[]);
+    constructor();
     /**
      * Event listener for `focus` and 'blur' events on the document.
      * Needs to be an arrow function in order to preserve the context when it gets bound.
@@ -196,7 +196,6 @@ declare class CdkMonitorFocus implements AfterViewInit, OnDestroy {
     private _monitorSubscription;
     private _focusOrigin;
     readonly cdkFocusChange: EventEmitter<FocusOrigin>;
-    constructor(...args: unknown[]);
     get focusOrigin(): FocusOrigin;
     ngAfterViewInit(): void;
     ngOnDestroy(): void;

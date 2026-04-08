@@ -121,7 +121,6 @@ class CdkTreeNodeOutlet {
   _node = inject(CDK_TREE_NODE_OUTLET_NODE, {
     optional: true
   });
-  constructor() {}
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
     version: "22.0.0-next.6",
@@ -149,8 +148,7 @@ i0.ɵɵngDeclareClassMetadata({
     args: [{
       selector: '[cdkTreeNodeOutlet]'
     }]
-  }],
-  ctorParameters: () => []
+  }]
 });
 
 class CdkTreeNodeOutletContext {
@@ -165,7 +163,6 @@ class CdkTreeNodeOutletContext {
 class CdkTreeNodeDef {
   template = inject(TemplateRef);
   when;
-  constructor() {}
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
     version: "22.0.0-next.6",
@@ -200,8 +197,7 @@ i0.ɵɵngDeclareClassMetadata({
         alias: 'cdkTreeNodeDefWhen'
       }]
     }]
-  }],
-  ctorParameters: () => []
+  }]
 });
 
 function getTreeNoValidDataSourceError() {
@@ -260,7 +256,6 @@ class CdkTree {
   _keyManagerFactory = inject(TREE_KEY_MANAGER);
   _keyManager;
   _viewInit = false;
-  constructor() {}
   ngAfterContentInit() {
     this._initializeKeyManager();
   }
@@ -896,7 +891,6 @@ i0.ɵɵngDeclareClassMetadata({
       imports: [CdkTreeNodeOutlet]
     }]
   }],
-  ctorParameters: () => [],
   propDecorators: {
     dataSource: [{
       type: Input
@@ -1221,9 +1215,6 @@ class CdkNestedTreeNode extends CdkTreeNode {
   _dataDiffer;
   _children;
   nodeOutlet;
-  constructor() {
-    super();
-  }
   ngAfterContentInit() {
     this._dataDiffer = this._differs.find([]).create(this._tree.trackBy);
     this._tree._getDirectChildren(this.data).pipe(takeUntil(this._destroyed)).subscribe(result => this.updateChildrenNodes(result));
@@ -1261,7 +1252,7 @@ class CdkNestedTreeNode extends CdkTreeNode {
     version: "22.0.0-next.6",
     ngImport: i0,
     type: CdkNestedTreeNode,
-    deps: [],
+    deps: null,
     target: i0.ɵɵFactoryTarget.Directive
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
@@ -1312,7 +1303,6 @@ i0.ɵɵngDeclareClassMetadata({
       }
     }]
   }],
-  ctorParameters: () => [],
   propDecorators: {
     nodeOutlet: [{
       type: ContentChildren,
@@ -1441,7 +1431,6 @@ class CdkTreeNodeToggle {
   _tree = inject(CdkTree);
   _treeNode = inject(CdkTreeNode);
   recursive = false;
-  constructor() {}
   _toggle() {
     this.recursive ? this._tree.toggleDescendants(this._treeNode.data) : this._tree.toggle(this._treeNode.data);
     this._tree._keyManager.focusItem(this._treeNode);
@@ -1493,7 +1482,6 @@ i0.ɵɵngDeclareClassMetadata({
       }
     }]
   }],
-  ctorParameters: () => [],
   propDecorators: {
     recursive: [{
       type: Input,

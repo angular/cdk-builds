@@ -66,7 +66,6 @@ declare class CdkAccordionItem implements OnInit, OnDestroy {
     private _disabled;
     /** Unregister function for _expansionDispatcher. */
     private _removeUniqueSelectionListener;
-    constructor(...args: unknown[]);
     ngOnInit(): void;
     /** Emits an event for the accordion item being destroyed. */
     ngOnDestroy(): void;

@@ -19,7 +19,6 @@ const TEXT_COLUMN_OPTIONS = new InjectionToken('text-column-options');
 
 class CdkCellDef {
   template = inject(TemplateRef);
-  constructor() {}
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
     version: "22.0.0-next.6",
@@ -47,12 +46,10 @@ i0.ɵɵngDeclareClassMetadata({
     args: [{
       selector: '[cdkCellDef]'
     }]
-  }],
-  ctorParameters: () => []
+  }]
 });
 class CdkHeaderCellDef {
   template = inject(TemplateRef);
-  constructor() {}
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
     version: "22.0.0-next.6",
@@ -80,12 +77,10 @@ i0.ɵɵngDeclareClassMetadata({
     args: [{
       selector: '[cdkHeaderCellDef]'
     }]
-  }],
-  ctorParameters: () => []
+  }]
 });
 class CdkFooterCellDef {
   template = inject(TemplateRef);
-  constructor() {}
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
     version: "22.0.0-next.6",
@@ -113,8 +108,7 @@ i0.ɵɵngDeclareClassMetadata({
     args: [{
       selector: '[cdkFooterCellDef]'
     }]
-  }],
-  ctorParameters: () => []
+  }]
 });
 class CdkColumnDef {
   _table = inject(CDK_TABLE, {
@@ -153,7 +147,6 @@ class CdkColumnDef {
   footerCell;
   cssClassFriendlyName;
   _columnCssClassName;
-  constructor() {}
   hasStickyChanged() {
     const hasStickyChanged = this._hasStickyChanged;
     this.resetStickyChanged();
@@ -221,7 +214,6 @@ i0.ɵɵngDeclareClassMetadata({
       selector: '[cdkColumnDef]'
     }]
   }],
-  ctorParameters: () => [],
   propDecorators: {
     name: [{
       type: Input,
@@ -404,7 +396,6 @@ class BaseRowDef {
   _differs = inject(IterableDiffers);
   columns;
   _columnsDiffer;
-  constructor() {}
   ngOnChanges(changes) {
     if (!this._columnsDiffer) {
       const columns = changes['columns'] && changes['columns'].currentValue || [];
@@ -449,8 +440,7 @@ i0.ɵɵngDeclareClassMetadata({
   type: BaseRowDef,
   decorators: [{
     type: Directive
-  }],
-  ctorParameters: () => []
+  }]
 });
 class CdkHeaderRowDef extends BaseRowDef {
   _table = inject(CDK_TABLE, {
@@ -467,9 +457,6 @@ class CdkHeaderRowDef extends BaseRowDef {
     }
   }
   _sticky = false;
-  constructor() {
-    super(inject(TemplateRef), inject(IterableDiffers));
-  }
   ngOnChanges(changes) {
     super.ngOnChanges(changes);
   }
@@ -486,7 +473,7 @@ class CdkHeaderRowDef extends BaseRowDef {
     version: "22.0.0-next.6",
     ngImport: i0,
     type: CdkHeaderRowDef,
-    deps: [],
+    deps: null,
     target: i0.ɵɵFactoryTarget.Directive
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
@@ -519,7 +506,6 @@ i0.ɵɵngDeclareClassMetadata({
       }]
     }]
   }],
-  ctorParameters: () => [],
   propDecorators: {
     sticky: [{
       type: Input,
@@ -545,9 +531,6 @@ class CdkFooterRowDef extends BaseRowDef {
     }
   }
   _sticky = false;
-  constructor() {
-    super(inject(TemplateRef), inject(IterableDiffers));
-  }
   ngOnChanges(changes) {
     super.ngOnChanges(changes);
   }
@@ -564,7 +547,7 @@ class CdkFooterRowDef extends BaseRowDef {
     version: "22.0.0-next.6",
     ngImport: i0,
     type: CdkFooterRowDef,
-    deps: [],
+    deps: null,
     target: i0.ɵɵFactoryTarget.Directive
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
@@ -597,7 +580,6 @@ i0.ɵɵngDeclareClassMetadata({
       }]
     }]
   }],
-  ctorParameters: () => [],
   propDecorators: {
     sticky: [{
       type: Input,
@@ -613,15 +595,12 @@ class CdkRowDef extends BaseRowDef {
     optional: true
   });
   when;
-  constructor() {
-    super(inject(TemplateRef), inject(IterableDiffers));
-  }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
     version: "22.0.0-next.6",
     ngImport: i0,
     type: CdkRowDef,
-    deps: [],
+    deps: null,
     target: i0.ɵɵFactoryTarget.Directive
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
@@ -655,8 +634,7 @@ i0.ɵɵngDeclareClassMetadata({
         alias: 'cdkRowDefWhen'
       }]
     }]
-  }],
-  ctorParameters: () => []
+  }]
 });
 class CdkCellOutlet {
   _viewContainer = inject(ViewContainerRef);
@@ -865,7 +843,6 @@ class CdkNoDataRow {
   _contentClassNames = ['cdk-no-data-row', 'cdk-row'];
   _cellClassNames = ['cdk-cell', 'cdk-no-data-cell'];
   _cellSelector = 'td, cdk-cell, [cdk-cell], .cdk-cell';
-  constructor() {}
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
     version: "22.0.0-next.6",
@@ -893,8 +870,7 @@ i0.ɵɵngDeclareClassMetadata({
     args: [{
       selector: 'ng-template[cdkNoDataRow]'
     }]
-  }],
-  ctorParameters: () => []
+  }]
 });
 
 const STICKY_DIRECTIONS = ['top', 'bottom', 'left', 'right'];

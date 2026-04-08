@@ -19,7 +19,6 @@ class Platform {
   FIREFOX = this.isBrowser && /(firefox|minefield)/i.test(navigator.userAgent);
   ANDROID = this.isBrowser && /android/i.test(navigator.userAgent) && !this.TRIDENT;
   SAFARI = this.isBrowser && /safari/i.test(navigator.userAgent) && this.WEBKIT;
-  constructor() {}
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
     version: "22.0.0-next.6",
@@ -46,8 +45,7 @@ i0.ɵɵngDeclareClassMetadata({
     args: [{
       providedIn: 'root'
     }]
-  }],
-  ctorParameters: () => []
+  }]
 });
 
 export { Platform };

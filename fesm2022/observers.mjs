@@ -59,7 +59,6 @@ class ContentObserver {
   _mutationObserverFactory = inject(MutationObserverFactory);
   _observedElements = new Map();
   _ngZone = inject(NgZone);
-  constructor() {}
   ngOnDestroy() {
     this._observedElements.forEach((_, element) => this._cleanupObserver(element));
   }
@@ -148,8 +147,7 @@ i0.ɵɵngDeclareClassMetadata({
     args: [{
       providedIn: 'root'
     }]
-  }],
-  ctorParameters: () => []
+  }]
 });
 class CdkObserveContent {
   _contentObserver = inject(ContentObserver);
@@ -172,7 +170,6 @@ class CdkObserveContent {
   }
   _debounce;
   _currentSubscription = null;
-  constructor() {}
   ngAfterContentInit() {
     if (!this._currentSubscription && !this.disabled) {
       this._subscribe();
@@ -226,7 +223,6 @@ i0.ɵɵngDeclareClassMetadata({
       exportAs: 'cdkObserveContent'
     }]
   }],
-  ctorParameters: () => [],
   propDecorators: {
     event: [{
       type: Output,

@@ -130,7 +130,6 @@ declare class NoopScrollStrategy implements ScrollStrategy {
  */
 declare class ScrollStrategyOptions {
     private _injector;
-    constructor(...args: unknown[]);
     /** Do nothing on scroll. */
     noop: () => NoopScrollStrategy;
     /**
@@ -249,7 +248,6 @@ declare class GlobalPositionStrategy implements PositionStrategy {
 /** Builder for overlay position strategy. */
 declare class OverlayPositionBuilder {
     private _injector;
-    constructor(...args: unknown[]);
     /**
      * Creates a global position strategy.
      */
@@ -288,7 +286,6 @@ declare class Overlay {
     scrollStrategies: ScrollStrategyOptions;
     private _positionBuilder;
     private _injector;
-    constructor(...args: unknown[]);
     /**
      * Creates an overlay.
      * @param config Configuration applied to the overlay.
@@ -316,7 +313,6 @@ declare class FullscreenOverlayContainer extends OverlayContainer implements OnD
     private _renderer;
     private _fullScreenEventName;
     private _cleanupFullScreenListener;
-    constructor(...args: unknown[]);
     ngOnDestroy(): void;
     protected _createContainer(): void;
     private _adjustParentForFullscreenChange;

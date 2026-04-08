@@ -9,7 +9,6 @@ import './_focus-monitor-chunk.js';
 
 declare class CdkStepHeader implements FocusableOption {
     _elementRef: ElementRef<HTMLElement>;
-    constructor(...args: unknown[]);
     /** Focuses the step header. */
     focus(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkStepHeader, never>;
@@ -18,7 +17,6 @@ declare class CdkStepHeader implements FocusableOption {
 
 declare class CdkStepLabel {
     template: TemplateRef<any>;
-    constructor(...args: unknown[]);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkStepLabel, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepLabel, "[cdkStepLabel]", never, {}, {}, never, never, true, never>;
 }
@@ -122,7 +120,7 @@ declare class CdkStep implements OnChanges {
     set hasError(value: boolean);
     private _customError;
     private _getDefaultError;
-    constructor(...args: unknown[]);
+    constructor();
     /** Selects this step component. */
     select(): void;
     /** Resets the step to its initial state. Note that this includes resetting form data. */
@@ -175,7 +173,6 @@ declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDestroy {
     get orientation(): StepperOrientation;
     set orientation(value: StepperOrientation);
     private _orientation;
-    constructor(...args: unknown[]);
     ngAfterContentInit(): void;
     ngAfterViewInit(): void;
     ngOnDestroy(): void;
@@ -214,7 +211,6 @@ declare class CdkStepperNext {
     _stepper: CdkStepper;
     /** Type of the next button. Defaults to "submit" if not specified. */
     type: string;
-    constructor(...args: unknown[]);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkStepperNext, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepperNext, "button[cdkStepperNext]", never, { "type": { "alias": "type"; "required": false; }; }, {}, never, never, true, never>;
 }
@@ -223,7 +219,6 @@ declare class CdkStepperPrevious {
     _stepper: CdkStepper;
     /** Type of the previous button. Defaults to "button" if not specified. */
     type: string;
-    constructor(...args: unknown[]);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkStepperPrevious, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepperPrevious, "button[cdkStepperPrevious]", never, { "type": { "alias": "type"; "required": false; }; }, {}, never, never, true, never>;
 }

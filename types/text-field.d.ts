@@ -21,7 +21,6 @@ declare class AutofillMonitor implements OnDestroy {
     private _renderer;
     private _styleLoader;
     private _monitoredElements;
-    constructor(...args: unknown[]);
     /**
      * Monitor for changes in the autofill state of the given input element.
      * @param element The element to monitor.
@@ -54,7 +53,6 @@ declare class CdkAutofill implements OnDestroy, OnInit {
     private _autofillMonitor;
     /** Emits when the autofill state of the element changes. */
     readonly cdkAutofill: EventEmitter<AutofillEvent>;
-    constructor(...args: unknown[]);
     ngOnInit(): void;
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkAutofill, never>;
@@ -102,7 +100,7 @@ declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDestroy {
     protected _document: Document;
     private _hasFocus;
     private _isViewInited;
-    constructor(...args: unknown[]);
+    constructor();
     /** Sets the minimum height of the textarea as determined by minRows. */
     _setMinHeight(): void;
     /** Sets the maximum height of the textarea as determined by maxRows. */

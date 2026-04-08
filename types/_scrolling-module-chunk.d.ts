@@ -24,7 +24,6 @@ declare class ScrollDispatcher implements OnDestroy {
     private _platform;
     private _renderer;
     private _cleanupGlobalListener;
-    constructor(...args: unknown[]);
     /** Subject for notifying that a registered scrollable reference element has been scrolled. */
     private readonly _scrolled;
     /** Keeps track of the amount of subscriptions to `scrolled`. Used for cleaning up afterwards. */
@@ -118,7 +117,6 @@ declare class CdkScrollable implements OnInit, OnDestroy {
     private _renderer;
     private _cleanupScroll;
     private _elementScrolled;
-    constructor(...args: unknown[]);
     ngOnInit(): void;
     ngOnDestroy(): void;
     /** Returns observable that emits when a scroll event is fired on the host element. */
@@ -154,7 +152,6 @@ declare const VIRTUAL_SCROLLABLE: InjectionToken<CdkVirtualScrollable>;
  * Extending the `CdkScrollable` to be used as scrolling container for virtual scrolling.
  */
 declare abstract class CdkVirtualScrollable extends CdkScrollable {
-    constructor(...args: unknown[]);
     /**
      * Measure the viewport size for the provided orientation.
      *
@@ -242,7 +239,7 @@ declare class CdkVirtualScrollViewport extends CdkVirtualScrollable implements O
     private _viewportChanges;
     private _injector;
     private _isDestroyed;
-    constructor(...args: unknown[]);
+    constructor();
     ngOnInit(): void;
     ngOnDestroy(): void;
     /** Attaches a `CdkVirtualScrollRepeater` to this viewport. */
@@ -498,7 +495,7 @@ declare class CdkVirtualForOf<T> implements CdkVirtualScrollRepeater<T>, Collect
     /** Whether the rendered data should be updated during the next ngDoCheck cycle. */
     private _needsUpdate;
     private readonly _destroyed;
-    constructor(...args: unknown[]);
+    constructor();
     /**
      * Measures the combined size (width for horizontal orientation, height for vertical) of all items
      * in the specified range. Throws an error if the range includes items that are not currently
@@ -527,7 +524,7 @@ declare class CdkVirtualForOf<T> implements CdkVirtualScrollRepeater<T>, Collect
  * Provides as virtual scrollable for the global / window scrollbar.
  */
 declare class CdkVirtualScrollableWindow extends CdkVirtualScrollable {
-    constructor(...args: unknown[]);
+    constructor();
     measureBoundingClientRectWithScrollOffset(from: 'left' | 'top' | 'right' | 'bottom'): number;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkVirtualScrollableWindow, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkVirtualScrollableWindow, "cdk-virtual-scroll-viewport[scrollWindow]", never, {}, {}, never, never, true, never>;
@@ -537,7 +534,6 @@ declare class CdkVirtualScrollableWindow extends CdkVirtualScrollable {
  * Provides a virtual scrollable for the element it is attached to.
  */
 declare class CdkVirtualScrollableElement extends CdkVirtualScrollable {
-    constructor(...args: unknown[]);
     measureBoundingClientRectWithScrollOffset(from: 'left' | 'top' | 'right' | 'bottom'): number;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkVirtualScrollableElement, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkVirtualScrollableElement, "[cdkVirtualScrollingElement]", never, {}, {}, never, never, true, never>;

@@ -238,7 +238,6 @@ class RepositionScrollStrategy {
 
 class ScrollStrategyOptions {
   _injector = inject(Injector);
-  constructor() {}
   noop = () => new NoopScrollStrategy();
   close = config => createCloseScrollStrategy(this._injector, config);
   block = () => createBlockScrollStrategy(this._injector);
@@ -269,8 +268,7 @@ i0.ɵɵngDeclareClassMetadata({
     args: [{
       providedIn: 'root'
     }]
-  }],
-  ctorParameters: () => []
+  }]
 });
 
 class OverlayConfig {
@@ -349,7 +347,6 @@ class BaseOverlayDispatcher {
   _attachedOverlays = [];
   _document = inject(DOCUMENT);
   _isAttached = false;
-  constructor() {}
   ngOnDestroy() {
     this.detach();
   }
@@ -401,8 +398,7 @@ i0.ɵɵngDeclareClassMetadata({
     args: [{
       providedIn: 'root'
     }]
-  }],
-  ctorParameters: () => []
+  }]
 });
 
 class OverlayKeyboardDispatcher extends BaseOverlayDispatcher {
@@ -614,7 +610,6 @@ class OverlayContainer {
   _containerElement;
   _document = inject(DOCUMENT);
   _styleLoader = inject(_CdkPrivateStyleLoader);
-  constructor() {}
   ngOnDestroy() {
     this._containerElement?.remove();
   }
@@ -672,8 +667,7 @@ i0.ɵɵngDeclareClassMetadata({
     args: [{
       providedIn: 'root'
     }]
-  }],
-  ctorParameters: () => []
+  }]
 });
 
 class BackdropRef {
@@ -2028,7 +2022,6 @@ class GlobalPositionStrategy {
 
 class OverlayPositionBuilder {
   _injector = inject(Injector);
-  constructor() {}
   global() {
     return createGlobalPositionStrategy();
   }
@@ -2061,8 +2054,7 @@ i0.ɵɵngDeclareClassMetadata({
     args: [{
       providedIn: 'root'
     }]
-  }],
-  ctorParameters: () => []
+  }]
 });
 
 const OVERLAY_DEFAULT_CONFIG = new InjectionToken('OVERLAY_DEFAULT_CONFIG');
@@ -2111,7 +2103,6 @@ class Overlay {
   scrollStrategies = inject(ScrollStrategyOptions);
   _positionBuilder = inject(OverlayPositionBuilder);
   _injector = inject(Injector);
-  constructor() {}
   create(config) {
     return createOverlayRef(this._injector, config);
   }
@@ -2144,8 +2135,7 @@ i0.ɵɵngDeclareClassMetadata({
     args: [{
       providedIn: 'root'
     }]
-  }],
-  ctorParameters: () => []
+  }]
 });
 
 const defaultPositionList = [{
@@ -2178,7 +2168,6 @@ const CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY = new InjectionToken('cdk-connected-
 });
 class CdkOverlayOrigin {
   elementRef = inject(ElementRef);
-  constructor() {}
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
     version: "22.0.0-next.6",
@@ -2208,8 +2197,7 @@ i0.ɵɵngDeclareClassMetadata({
       selector: '[cdk-overlay-origin], [overlay-origin], [cdkOverlayOrigin]',
       exportAs: 'cdkOverlayOrigin'
     }]
-  }],
-  ctorParameters: () => []
+  }]
 });
 const CDK_CONNECTED_OVERLAY_DEFAULT_CONFIG = new InjectionToken('cdk-connected-overlay-default-config');
 class CdkConnectedOverlay {

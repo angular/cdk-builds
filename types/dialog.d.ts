@@ -189,7 +189,7 @@ declare class CdkDialogContainer<C extends DialogConfig = DialogConfig> extends 
      */
     _ariaLabelledByQueue: string[];
     private _isDestroyed;
-    constructor(...args: unknown[]);
+    constructor();
     _addAriaLabelledBy(id: string): void;
     _removeAriaLabelledBy(id: string): void;
     protected _contentAttached(): void;
@@ -326,7 +326,6 @@ declare class Dialog implements OnDestroy {
      * Will emit on subscribe if there are no open dialogs to begin with.
      */
     readonly afterAllClosed: Observable<void>;
-    constructor(...args: unknown[]);
     /**
      * Opens a modal dialog containing the given component.
      * @param component Type of the component to load into the dialog.

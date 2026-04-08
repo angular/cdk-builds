@@ -18,7 +18,6 @@ declare class ContentObserver implements OnDestroy {
     /** Keeps track of the existing MutationObservers so they can be reused. */
     private _observedElements;
     private _ngZone;
-    constructor(...args: unknown[]);
     ngOnDestroy(): void;
     /**
      * Observe content changes on an element.
@@ -66,7 +65,6 @@ declare class CdkObserveContent implements AfterContentInit, OnDestroy {
     set debounce(value: NumberInput);
     private _debounce;
     private _currentSubscription;
-    constructor(...args: unknown[]);
     ngAfterContentInit(): void;
     ngOnDestroy(): void;
     private _subscribe;

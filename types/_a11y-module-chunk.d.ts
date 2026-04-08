@@ -19,7 +19,6 @@ declare class IsFocusableConfig {
  */
 declare class InteractivityChecker {
     private _platform;
-    constructor(...args: unknown[]);
     /**
      * Gets whether an element is disabled.
      *
@@ -164,7 +163,7 @@ declare class FocusTrapFactory {
     private _ngZone;
     private _document;
     private _injector;
-    constructor(...args: unknown[]);
+    constructor();
     /**
      * Creates a focus-trapped region around the given element.
      * @param element The element around which focus will be trapped.
@@ -192,7 +191,7 @@ declare class CdkTrapFocus implements OnDestroy, AfterContentInit, OnChanges, Do
      * initialization and return focus to the previous activeElement upon destruction.
      */
     autoCapture: boolean;
-    constructor(...args: unknown[]);
+    constructor();
     ngOnDestroy(): void;
     ngAfterContentInit(): void;
     ngDoCheck(): void;
@@ -228,7 +227,7 @@ declare class LiveAnnouncer implements OnDestroy {
     private _previousTimeout;
     private _currentPromise;
     private _currentResolve;
-    constructor(...args: unknown[]);
+    constructor();
     /**
      * Announces a message to screen readers.
      * @param message Message to be announced to the screen reader.
@@ -295,7 +294,7 @@ declare class CdkAriaLive implements OnDestroy {
     duration: number;
     private _previousAnnouncedText?;
     private _subscription;
-    constructor(...args: unknown[]);
+    constructor();
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkAriaLive, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkAriaLive, "[cdkAriaLive]", ["cdkAriaLive"], { "politeness": { "alias": "cdkAriaLive"; "required": false; }; "duration": { "alias": "cdkAriaLiveDuration"; "required": false; }; }, {}, never, never, true, never>;

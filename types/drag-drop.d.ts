@@ -423,7 +423,7 @@ declare class CdkDropList<T = any> implements OnDestroy {
      * and then we sort them based on their position in the DOM.
      */
     private _unsortedItems;
-    constructor(...args: unknown[]);
+    constructor();
     /** Registers an items with the drop list. */
     addItem(item: CdkDrag): void;
     /** Removes an item from the drop list. */
@@ -580,7 +580,7 @@ declare class CdkDragHandle implements AfterViewInit, OnDestroy {
     get disabled(): boolean;
     set disabled(value: boolean);
     private _disabled;
-    constructor(...args: unknown[]);
+    constructor();
     ngAfterViewInit(): void;
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkDragHandle, never>;
@@ -603,7 +603,7 @@ declare class CdkDragPlaceholder<T = any> implements OnDestroy {
     private _drag;
     /** Context data to be added to the placeholder template instance. */
     data: T;
-    constructor(...args: unknown[]);
+    constructor();
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkDragPlaceholder<any>, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDragPlaceholder<any>, "ng-template[cdkDragPlaceholder]", never, { "data": { "alias": "data"; "required": false; }; }, {}, never, never, true, never>;
@@ -626,7 +626,7 @@ declare class CdkDragPreview<T = any> implements OnDestroy {
     data: T;
     /** Whether the preview should preserve the same size as the item that is being dragged. */
     matchSize: boolean;
-    constructor(...args: unknown[]);
+    constructor();
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkDragPreview<any>, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDragPreview<any>, "ng-template[cdkDragPreview]", never, { "data": { "alias": "data"; "required": false; }; "matchSize": { "alias": "matchSize"; "required": false; }; }, {}, never, never, true, never>;
@@ -733,7 +733,7 @@ declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDestroy {
      */
     readonly moved: Observable<CdkDragMove<T>>;
     private _injector;
-    constructor(...args: unknown[]);
+    constructor();
     /**
      * Returns the element that is being used as a placeholder
      * while the current element is being dragged.
@@ -822,7 +822,6 @@ declare class DragDropRegistry implements OnDestroy {
      * while the user is dragging a drag item instance.
      */
     readonly pointerUp: Subject<TouchEvent | MouseEvent>;
-    constructor(...args: unknown[]);
     /** Adds a drop container to the registry. */
     registerDropContainer(drop: DropListRef): void;
     /** Adds a drag item instance to the registry. */
@@ -1339,7 +1338,6 @@ declare class DragRef<T = any> {
  */
 declare class DragDrop {
     private _injector;
-    constructor(...args: unknown[]);
     /**
      * Turns an element into a draggable item.
      * @param element Element to which to attach the dragging functionality.

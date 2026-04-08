@@ -86,7 +86,6 @@ class BreakpointObserver {
   _zone = inject(NgZone);
   _queries = new Map();
   _destroySubject = new Subject();
-  constructor() {}
   ngOnDestroy() {
     this._destroySubject.next();
     this._destroySubject.complete();
@@ -165,8 +164,7 @@ i0.ɵɵngDeclareClassMetadata({
     args: [{
       providedIn: 'root'
     }]
-  }],
-  ctorParameters: () => []
+  }]
 });
 function splitQueries(queries) {
   return queries.map(query => query.split(',')).reduce((a1, a2) => a1.concat(a2)).map(query => query.trim());

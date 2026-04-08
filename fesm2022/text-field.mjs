@@ -63,7 +63,6 @@ class AutofillMonitor {
   _renderer = inject(RendererFactory2).createRenderer(null, null);
   _styleLoader = inject(_CdkPrivateStyleLoader);
   _monitoredElements = new Map();
-  constructor() {}
   monitor(elementOrRef) {
     if (!this._platform.isBrowser) {
       return EMPTY;
@@ -141,14 +140,12 @@ i0.ɵɵngDeclareClassMetadata({
     args: [{
       providedIn: 'root'
     }]
-  }],
-  ctorParameters: () => []
+  }]
 });
 class CdkAutofill {
   _elementRef = inject(ElementRef);
   _autofillMonitor = inject(AutofillMonitor);
   cdkAutofill = new EventEmitter();
-  constructor() {}
   ngOnInit() {
     this._autofillMonitor.monitor(this._elementRef).subscribe(event => this.cdkAutofill.emit(event));
   }
@@ -186,7 +183,6 @@ i0.ɵɵngDeclareClassMetadata({
       selector: '[cdkAutofill]'
     }]
   }],
-  ctorParameters: () => [],
   propDecorators: {
     cdkAutofill: [{
       type: Output

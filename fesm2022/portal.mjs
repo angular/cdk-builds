@@ -292,9 +292,6 @@ class CdkPortalOutlet extends BasePortalOutlet {
   _viewContainerRef = inject(ViewContainerRef);
   _isInitialized = false;
   _attachedRef = null;
-  constructor() {
-    super();
-  }
   get portal() {
     return this._attachedPortal;
   }
@@ -376,7 +373,7 @@ class CdkPortalOutlet extends BasePortalOutlet {
     version: "22.0.0-next.6",
     ngImport: i0,
     type: CdkPortalOutlet,
-    deps: [],
+    deps: null,
     target: i0.ɵɵFactoryTarget.Directive
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
@@ -408,7 +405,6 @@ i0.ɵɵngDeclareClassMetadata({
       exportAs: 'cdkPortalOutlet'
     }]
   }],
-  ctorParameters: () => [],
   propDecorators: {
     portal: [{
       type: Input,

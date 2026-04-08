@@ -29,7 +29,6 @@ declare class PendingCopy {
  */
 declare class Clipboard {
     private readonly _document;
-    constructor(...args: unknown[]);
     /**
      * Copies the provided text into the user's clipboard.
      *
@@ -83,7 +82,7 @@ declare class CdkCopyToClipboard implements OnDestroy {
     private _destroyed;
     /** Timeout for the current copy attempt. */
     private _currentTimeout;
-    constructor(...args: unknown[]);
+    constructor();
     /** Copies the current text to the clipboard. */
     copy(attempts?: number): void;
     ngOnDestroy(): void;

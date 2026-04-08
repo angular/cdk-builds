@@ -299,7 +299,6 @@ class DragDropRegistry {
   _domNodesToDirectives = null;
   pointerMove = new Subject();
   pointerUp = new Subject();
-  constructor() {}
   registerDropContainer(drop) {
     if (!this._dropInstances.has(drop)) {
       this._dropInstances.add(drop);
@@ -442,8 +441,7 @@ i0.ɵɵngDeclareClassMetadata({
     args: [{
       providedIn: 'root'
     }]
-  }],
-  ctorParameters: () => []
+  }]
 });
 
 function parseCssTimeUnitsToMs(value) {
@@ -2305,7 +2303,6 @@ function getElementScrollDirections(element, clientRect, direction, pointerX, po
 
 class DragDrop {
   _injector = inject(Injector);
-  constructor() {}
   createDrag(element, config) {
     return createDragRef(this._injector, element, config);
   }
@@ -2338,8 +2335,7 @@ i0.ɵɵngDeclareClassMetadata({
     args: [{
       providedIn: 'root'
     }]
-  }],
-  ctorParameters: () => []
+  }]
 });
 
 const CDK_DRAG_PARENT = new InjectionToken('CDK_DRAG_PARENT');

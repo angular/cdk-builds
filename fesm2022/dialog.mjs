@@ -461,7 +461,6 @@ class Dialog {
     return this._parentDialog ? this._parentDialog.afterOpened : this._afterOpenedAtThisLevel;
   }
   afterAllClosed = defer(() => this.openDialogs.length ? this._getAfterAllClosed() : this._getAfterAllClosed().pipe(startWith(undefined)));
-  constructor() {}
   open(componentOrTemplateRef, config) {
     const defaults = this._defaultOptions || new DialogConfig();
     config = {
@@ -672,8 +671,7 @@ i0.ɵɵngDeclareClassMetadata({
     args: [{
       providedIn: 'root'
     }]
-  }],
-  ctorParameters: () => []
+  }]
 });
 function reverseForEach(items, callback) {
   let i = items.length;

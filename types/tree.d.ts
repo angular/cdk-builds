@@ -176,7 +176,6 @@ declare const CDK_TREE_NODE_OUTLET_NODE: InjectionToken<{}>;
 declare class CdkTreeNodeOutlet {
     viewContainer: ViewContainerRef;
     _node?: {} | null | undefined;
-    constructor(...args: unknown[]);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNodeOutlet, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodeOutlet, "[cdkTreeNodeOutlet]", never, {}, {}, never, never, true, never>;
 }
@@ -208,7 +207,6 @@ declare class CdkTreeNodeDef<T> {
      * default.
      */
     when: (index: number, nodeData: T) => boolean;
-    constructor(...args: unknown[]);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNodeDef<any>, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodeDef<any>, "[cdkTreeNodeDef]", never, { "when": { "alias": "cdkTreeNodeDefWhen"; "required": false; }; }, {}, never, never, true, never>;
 }
@@ -317,7 +315,6 @@ declare class CdkTree<T, K = T> implements AfterContentChecked, AfterContentInit
     /** The key manager for this tree. Handles focus and activation based on user keyboard input. */
     _keyManager: TreeKeyManagerStrategy<CdkTreeNode<T, K>>;
     private _viewInit;
-    constructor(...args: unknown[]);
     ngAfterContentInit(): void;
     ngAfterContentChecked(): void;
     ngOnDestroy(): void;
@@ -564,7 +561,7 @@ declare class CdkTreeNode<T, K = T> implements OnDestroy, OnInit, TreeKeyManager
      */
     _getPositionInSet(): number;
     private _changeDetectorRef;
-    constructor(...args: unknown[]);
+    constructor();
     ngOnInit(): void;
     ngOnDestroy(): void;
     getParent(): CdkTreeNode<T, K> | null;
@@ -605,7 +602,6 @@ declare class CdkNestedTreeNode<T, K = T> extends CdkTreeNode<T, K> implements A
     protected _children: T[];
     /** The children node placeholder. */
     nodeOutlet: QueryList<CdkTreeNodeOutlet>;
-    constructor(...args: unknown[]);
     ngAfterContentInit(): void;
     ngOnDestroy(): void;
     /** Add children dataNodes to the NodeOutlet */
@@ -644,7 +640,7 @@ declare class CdkTreeNodePadding<T, K = T> implements OnDestroy {
     get indent(): number | string;
     set indent(indent: number | string);
     _indent: number;
-    constructor(...args: unknown[]);
+    constructor();
     ngOnDestroy(): void;
     /** The padding indent value for the tree node. Returns a string with px numbers if not null. */
     _paddingIndent(): string | null;
@@ -703,7 +699,6 @@ declare class CdkTreeNodeToggle<T, K = T> {
     protected _treeNode: CdkTreeNode<T, K>;
     /** Whether expand/collapse the node recursively. */
     recursive: boolean;
-    constructor(...args: unknown[]);
     _toggle(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNodeToggle<any, any>, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodeToggle<any, any>, "[cdkTreeNodeToggle]", never, { "recursive": { "alias": "cdkTreeNodeToggleRecursive"; "required": false; }; }, {}, never, never, true, never>;

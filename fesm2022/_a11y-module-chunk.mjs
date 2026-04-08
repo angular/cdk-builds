@@ -14,7 +14,6 @@ class IsFocusableConfig {
 }
 class InteractivityChecker {
   _platform = inject(Platform);
-  constructor() {}
   isDisabled(element) {
     return element.hasAttribute('disabled');
   }
@@ -91,8 +90,7 @@ i0.ɵɵngDeclareClassMetadata({
     args: [{
       providedIn: 'root'
     }]
-  }],
-  ctorParameters: () => []
+  }]
 });
 function getFrameElement(window) {
   try {

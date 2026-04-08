@@ -28,7 +28,6 @@ declare class BreakpointObserver implements OnDestroy {
     private _queries;
     /** A subject for all other observables to takeUntil based on. */
     private readonly _destroySubject;
-    constructor(...args: unknown[]);
     /** Completes the active subject, signalling to all other observables to complete. */
     ngOnDestroy(): void;
     /**
@@ -73,7 +72,7 @@ declare class MediaMatcher {
     private _nonce;
     /** The internal matchMedia method to return back a MediaQueryList like object. */
     private _matchMedia;
-    constructor(...args: unknown[]);
+    constructor();
     /**
      * Evaluates the given media query and returns the native MediaQueryList from which results
      * can be retrieved.

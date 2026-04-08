@@ -15,7 +15,6 @@ import './_typeahead-chunk.mjs';
 
 class CdkStepHeader {
   _elementRef = inject(ElementRef);
-  constructor() {}
   focus() {
     this._elementRef.nativeElement.focus();
   }
@@ -54,13 +53,11 @@ i0.ɵɵngDeclareClassMetadata({
         'role': 'tab'
       }
     }]
-  }],
-  ctorParameters: () => []
+  }]
 });
 
 class CdkStepLabel {
   template = inject(TemplateRef);
-  constructor() {}
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
     version: "22.0.0-next.6",
@@ -88,8 +85,7 @@ i0.ɵɵngDeclareClassMetadata({
     args: [{
       selector: '[cdkStepLabel]'
     }]
-  }],
-  ctorParameters: () => []
+  }]
 });
 
 class StepperSelectionEvent {
@@ -444,7 +440,6 @@ class CdkStepper {
     }
   }
   _orientation = 'horizontal';
-  constructor() {}
   ngAfterContentInit() {
     this._steps.changes.pipe(startWith(this._steps), takeUntil(this._destroyed)).subscribe(steps => {
       this.steps.reset(steps.filter(step => step._stepper === this));
@@ -615,7 +610,6 @@ i0.ɵɵngDeclareClassMetadata({
       exportAs: 'cdkStepper'
     }]
   }],
-  ctorParameters: () => [],
   propDecorators: {
     _steps: [{
       type: ContentChildren,
@@ -659,7 +653,6 @@ i0.ɵɵngDeclareClassMetadata({
 class CdkStepperNext {
   _stepper = inject(CdkStepper);
   type = 'submit';
-  constructor() {}
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
     version: "22.0.0-next.6",
@@ -703,7 +696,6 @@ i0.ɵɵngDeclareClassMetadata({
       }
     }]
   }],
-  ctorParameters: () => [],
   propDecorators: {
     type: [{
       type: Input
@@ -713,7 +705,6 @@ i0.ɵɵngDeclareClassMetadata({
 class CdkStepperPrevious {
   _stepper = inject(CdkStepper);
   type = 'button';
-  constructor() {}
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
     version: "22.0.0-next.6",
@@ -757,7 +748,6 @@ i0.ɵɵngDeclareClassMetadata({
       }
     }]
   }],
-  ctorParameters: () => [],
   propDecorators: {
     type: [{
       type: Input

@@ -24,8 +24,6 @@ declare class Platform {
     ANDROID: boolean;
     /** Whether the current browser is Safari. */
     SAFARI: boolean;
-    /** Backwards-compatible constructor. */
-    constructor(..._args: unknown[]);
     static ɵfac: i0.ɵɵFactoryDeclaration<Platform, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<Platform>;
 }

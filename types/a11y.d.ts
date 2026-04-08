@@ -54,7 +54,7 @@ declare class AriaDescriber implements OnDestroy {
     private _messagesContainer;
     /** Unique ID for the service. */
     private readonly _id;
-    constructor(...args: unknown[]);
+    constructor();
     /**
      * Adds to the host element an aria-describedby reference to a hidden element that contains
      * the message. If the same message has already been registered, then it will reuse the created
@@ -338,7 +338,7 @@ declare class ConfigurableFocusTrapFactory {
     private _document;
     private _inertStrategy;
     private readonly _injector;
-    constructor(...args: unknown[]);
+    constructor();
     /**
      * Creates a focus-trapped region around the given element.
      * @param element The element around which focus will be trapped.
@@ -459,7 +459,7 @@ declare class InputModalityDetector implements OnDestroy {
      * gets bound.
      */
     private _onTouchstart;
-    constructor(...args: unknown[]);
+    constructor();
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<InputModalityDetector, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<InputModalityDetector>;
@@ -496,7 +496,7 @@ declare class HighContrastModeDetector implements OnDestroy {
     private _hasCheckedHighContrastMode;
     private _document;
     private _breakpointSubscription;
-    constructor(...args: unknown[]);
+    constructor();
     /** Gets the current high-contrast-mode for the page. */
     getHighContrastMode(): HighContrastMode;
     ngOnDestroy(): void;

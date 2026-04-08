@@ -370,7 +370,6 @@ class CdkMonitorFocus {
   _monitorSubscription;
   _focusOrigin = null;
   cdkFocusChange = new EventEmitter();
-  constructor() {}
   get focusOrigin() {
     return this._focusOrigin;
   }
@@ -418,7 +417,6 @@ i0.ɵɵngDeclareClassMetadata({
       exportAs: 'cdkMonitorFocus'
     }]
   }],
-  ctorParameters: () => [],
   propDecorators: {
     cdkFocusChange: [{
       type: Output

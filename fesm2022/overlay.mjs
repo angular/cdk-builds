@@ -27,9 +27,6 @@ class FullscreenOverlayContainer extends OverlayContainer {
   _renderer = inject(RendererFactory2).createRenderer(null, null);
   _fullScreenEventName;
   _cleanupFullScreenListener;
-  constructor() {
-    super();
-  }
   ngOnDestroy() {
     super.ngOnDestroy();
     this._cleanupFullScreenListener?.();
@@ -76,7 +73,7 @@ class FullscreenOverlayContainer extends OverlayContainer {
     version: "22.0.0-next.6",
     ngImport: i0,
     type: FullscreenOverlayContainer,
-    deps: [],
+    deps: null,
     target: i0.ɵɵFactoryTarget.Injectable
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
@@ -97,8 +94,7 @@ i0.ɵɵngDeclareClassMetadata({
     args: [{
       providedIn: 'root'
     }]
-  }],
-  ctorParameters: () => []
+  }]
 });
 
 export { FullscreenOverlayContainer, OverlayContainer };

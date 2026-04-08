@@ -43,7 +43,6 @@ class PendingCopy {
 
 class Clipboard {
   _document = inject(DOCUMENT);
-  constructor() {}
   copy(text) {
     const pendingCopy = this.beginCopy(text);
     const successful = pendingCopy.copy();
@@ -79,8 +78,7 @@ i0.ɵɵngDeclareClassMetadata({
     args: [{
       providedIn: 'root'
     }]
-  }],
-  ctorParameters: () => []
+  }]
 });
 
 const CDK_COPY_TO_CLIPBOARD_CONFIG = new InjectionToken('CDK_COPY_TO_CLIPBOARD_CONFIG');
