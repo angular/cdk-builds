@@ -123,7 +123,7 @@ class CdkTreeNodeOutlet {
   });
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     ngImport: i0,
     type: CdkTreeNodeOutlet,
     deps: [],
@@ -131,7 +131,7 @@ class CdkTreeNodeOutlet {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     type: CdkTreeNodeOutlet,
     isStandalone: true,
     selector: "[cdkTreeNodeOutlet]",
@@ -140,7 +140,7 @@ class CdkTreeNodeOutlet {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.6",
+  version: "22.0.0-next.8",
   ngImport: i0,
   type: CdkTreeNodeOutlet,
   decorators: [{
@@ -165,7 +165,7 @@ class CdkTreeNodeDef {
   when;
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     ngImport: i0,
     type: CdkTreeNodeDef,
     deps: [],
@@ -173,7 +173,7 @@ class CdkTreeNodeDef {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     type: CdkTreeNodeDef,
     isStandalone: true,
     selector: "[cdkTreeNodeDef]",
@@ -185,7 +185,7 @@ class CdkTreeNodeDef {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.6",
+  version: "22.0.0-next.8",
   ngImport: i0,
   type: CdkTreeNodeDef,
   decorators: [{
@@ -816,7 +816,7 @@ class CdkTree {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     ngImport: i0,
     type: CdkTree,
     deps: [],
@@ -824,7 +824,7 @@ class CdkTree {
   });
   static ɵcmp = i0.ɵɵngDeclareComponent({
     minVersion: "14.0.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     type: CdkTree,
     isStandalone: true,
     selector: "cdk-tree",
@@ -872,7 +872,7 @@ class CdkTree {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.6",
+  version: "22.0.0-next.8",
   ngImport: i0,
   type: CdkTree,
   decorators: [{
@@ -1088,7 +1088,7 @@ class CdkTreeNode {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     ngImport: i0,
     type: CdkTreeNode,
     deps: [],
@@ -1096,7 +1096,7 @@ class CdkTreeNode {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "16.1.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     type: CdkTreeNode,
     isStandalone: true,
     selector: "cdk-tree-node",
@@ -1134,7 +1134,7 @@ class CdkTreeNode {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.6",
+  version: "22.0.0-next.8",
   ngImport: i0,
   type: CdkTreeNode,
   decorators: [{
@@ -1249,7 +1249,7 @@ class CdkNestedTreeNode extends CdkTreeNode {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     ngImport: i0,
     type: CdkNestedTreeNode,
     deps: null,
@@ -1257,7 +1257,7 @@ class CdkNestedTreeNode extends CdkTreeNode {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     type: CdkNestedTreeNode,
     isStandalone: true,
     selector: "cdk-nested-tree-node",
@@ -1283,7 +1283,7 @@ class CdkNestedTreeNode extends CdkTreeNode {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.6",
+  version: "22.0.0-next.8",
   ngImport: i0,
   type: CdkNestedTreeNode,
   decorators: [{
@@ -1381,7 +1381,7 @@ class CdkTreeNodePadding {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     ngImport: i0,
     type: CdkTreeNodePadding,
     deps: [],
@@ -1389,7 +1389,7 @@ class CdkTreeNodePadding {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "16.1.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     type: CdkTreeNodePadding,
     isStandalone: true,
     selector: "[cdkTreeNodePadding]",
@@ -1402,7 +1402,7 @@ class CdkTreeNodePadding {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.6",
+  version: "22.0.0-next.8",
   ngImport: i0,
   type: CdkTreeNodePadding,
   decorators: [{
@@ -1437,7 +1437,7 @@ class CdkTreeNodeToggle {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     ngImport: i0,
     type: CdkTreeNodeToggle,
     deps: [],
@@ -1445,7 +1445,7 @@ class CdkTreeNodeToggle {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "16.1.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     type: CdkTreeNodeToggle,
     isStandalone: true,
     selector: "[cdkTreeNodeToggle]",
@@ -1467,7 +1467,7 @@ class CdkTreeNodeToggle {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.6",
+  version: "22.0.0-next.8",
   ngImport: i0,
   type: CdkTreeNodeToggle,
   decorators: [{
@@ -1497,7 +1497,7 @@ const EXPORTED_DECLARATIONS = [CdkNestedTreeNode, CdkTreeNodeDef, CdkTreeNodePad
 class CdkTreeModule {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     ngImport: i0,
     type: CdkTreeModule,
     deps: [],
@@ -1505,7 +1505,7 @@ class CdkTreeModule {
   });
   static ɵmod = i0.ɵɵngDeclareNgModule({
     minVersion: "14.0.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     ngImport: i0,
     type: CdkTreeModule,
     imports: [CdkNestedTreeNode, CdkTreeNodeDef, CdkTreeNodePadding, CdkTreeNodeToggle, CdkTree, CdkTreeNode, CdkTreeNodeOutlet],
@@ -1513,14 +1513,14 @@ class CdkTreeModule {
   });
   static ɵinj = i0.ɵɵngDeclareInjector({
     minVersion: "12.0.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     ngImport: i0,
     type: CdkTreeModule
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.6",
+  version: "22.0.0-next.8",
   ngImport: i0,
   type: CdkTreeModule,
   decorators: [{

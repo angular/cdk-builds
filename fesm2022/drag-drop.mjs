@@ -239,7 +239,7 @@ const activeCapturingEventOptions$1 = {
 class _ResetsLoader {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     ngImport: i0,
     type: _ResetsLoader,
     deps: [],
@@ -247,7 +247,7 @@ class _ResetsLoader {
   });
   static ɵcmp = i0.ɵɵngDeclareComponent({
     minVersion: "14.0.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     type: _ResetsLoader,
     isStandalone: true,
     selector: "ng-component",
@@ -266,7 +266,7 @@ class _ResetsLoader {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.6",
+  version: "22.0.0-next.8",
   ngImport: i0,
   type: _ResetsLoader,
   decorators: [{
@@ -417,7 +417,7 @@ class DragDropRegistry {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     ngImport: i0,
     type: DragDropRegistry,
     deps: [],
@@ -425,7 +425,7 @@ class DragDropRegistry {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     ngImport: i0,
     type: DragDropRegistry,
     providedIn: 'root'
@@ -433,7 +433,7 @@ class DragDropRegistry {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.6",
+  version: "22.0.0-next.8",
   ngImport: i0,
   type: DragDropRegistry,
   decorators: [{
@@ -2311,7 +2311,7 @@ class DragDrop {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     ngImport: i0,
     type: DragDrop,
     deps: [],
@@ -2319,7 +2319,7 @@ class DragDrop {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     ngImport: i0,
     type: DragDrop,
     providedIn: 'root'
@@ -2327,7 +2327,7 @@ class DragDrop {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.6",
+  version: "22.0.0-next.8",
   ngImport: i0,
   type: DragDrop,
   decorators: [{
@@ -2389,7 +2389,7 @@ class CdkDragHandle {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     ngImport: i0,
     type: CdkDragHandle,
     deps: [],
@@ -2397,7 +2397,7 @@ class CdkDragHandle {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "16.1.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     type: CdkDragHandle,
     isStandalone: true,
     selector: "[cdkDragHandle]",
@@ -2416,7 +2416,7 @@ class CdkDragHandle {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.6",
+  version: "22.0.0-next.8",
   ngImport: i0,
   type: CdkDragHandle,
   decorators: [{
@@ -2778,7 +2778,7 @@ class CdkDrag {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     ngImport: i0,
     type: CdkDrag,
     deps: [],
@@ -2786,7 +2786,7 @@ class CdkDrag {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "16.1.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     type: CdkDrag,
     isStandalone: true,
     selector: "[cdkDrag]",
@@ -2830,7 +2830,7 @@ class CdkDrag {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.6",
+  version: "22.0.0-next.8",
   ngImport: i0,
   type: CdkDrag,
   decorators: [{
@@ -2941,7 +2941,7 @@ class CdkDropListGroup {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     ngImport: i0,
     type: CdkDropListGroup,
     deps: [],
@@ -2949,7 +2949,7 @@ class CdkDropListGroup {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "16.1.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     type: CdkDropListGroup,
     isStandalone: true,
     selector: "[cdkDropListGroup]",
@@ -2966,7 +2966,7 @@ class CdkDropListGroup {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.6",
+  version: "22.0.0-next.8",
   ngImport: i0,
   type: CdkDropListGroup,
   decorators: [{
@@ -3200,7 +3200,7 @@ class CdkDropList {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     ngImport: i0,
     type: CdkDropList,
     deps: [],
@@ -3208,7 +3208,7 @@ class CdkDropList {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "16.1.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     type: CdkDropList,
     isStandalone: true,
     selector: "[cdkDropList], cdk-drop-list",
@@ -3255,7 +3255,7 @@ class CdkDropList {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.6",
+  version: "22.0.0-next.8",
   ngImport: i0,
   type: CdkDropList,
   decorators: [{
@@ -3379,7 +3379,7 @@ class CdkDragPreview {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     ngImport: i0,
     type: CdkDragPreview,
     deps: [],
@@ -3387,7 +3387,7 @@ class CdkDragPreview {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "16.1.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     type: CdkDragPreview,
     isStandalone: true,
     selector: "ng-template[cdkDragPreview]",
@@ -3404,7 +3404,7 @@ class CdkDragPreview {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.6",
+  version: "22.0.0-next.8",
   ngImport: i0,
   type: CdkDragPreview,
   decorators: [{
@@ -3446,7 +3446,7 @@ class CdkDragPlaceholder {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     ngImport: i0,
     type: CdkDragPlaceholder,
     deps: [],
@@ -3454,7 +3454,7 @@ class CdkDragPlaceholder {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     type: CdkDragPlaceholder,
     isStandalone: true,
     selector: "ng-template[cdkDragPlaceholder]",
@@ -3470,7 +3470,7 @@ class CdkDragPlaceholder {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.6",
+  version: "22.0.0-next.8",
   ngImport: i0,
   type: CdkDragPlaceholder,
   decorators: [{
@@ -3495,7 +3495,7 @@ const DRAG_DROP_DIRECTIVES = [CdkDropList, CdkDropListGroup, CdkDrag, CdkDragHan
 class DragDropModule {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     ngImport: i0,
     type: DragDropModule,
     deps: [],
@@ -3503,7 +3503,7 @@ class DragDropModule {
   });
   static ɵmod = i0.ɵɵngDeclareNgModule({
     minVersion: "14.0.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     ngImport: i0,
     type: DragDropModule,
     imports: [CdkDropList, CdkDropListGroup, CdkDrag, CdkDragHandle, CdkDragPreview, CdkDragPlaceholder],
@@ -3511,7 +3511,7 @@ class DragDropModule {
   });
   static ɵinj = i0.ɵɵngDeclareInjector({
     minVersion: "12.0.0",
-    version: "22.0.0-next.6",
+    version: "22.0.0-next.8",
     ngImport: i0,
     type: DragDropModule,
     providers: [DragDrop],
@@ -3520,7 +3520,7 @@ class DragDropModule {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.6",
+  version: "22.0.0-next.8",
   ngImport: i0,
   type: DragDropModule,
   decorators: [{
