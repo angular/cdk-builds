@@ -24,7 +24,7 @@ class MediaMatcher {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.8",
+    version: "22.0.0-next.9",
     ngImport: i0,
     type: MediaMatcher,
     deps: [],
@@ -32,7 +32,7 @@ class MediaMatcher {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.0.0-next.8",
+    version: "22.0.0-next.9",
     ngImport: i0,
     type: MediaMatcher,
     providedIn: 'root'
@@ -40,7 +40,7 @@ class MediaMatcher {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.8",
+  version: "22.0.0-next.9",
   ngImport: i0,
   type: MediaMatcher,
   decorators: [{
@@ -140,7 +140,7 @@ class BreakpointObserver {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.8",
+    version: "22.0.0-next.9",
     ngImport: i0,
     type: BreakpointObserver,
     deps: [],
@@ -148,7 +148,7 @@ class BreakpointObserver {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.0.0-next.8",
+    version: "22.0.0-next.9",
     ngImport: i0,
     type: BreakpointObserver,
     providedIn: 'root'
@@ -156,7 +156,7 @@ class BreakpointObserver {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.8",
+  version: "22.0.0-next.9",
   ngImport: i0,
   type: BreakpointObserver,
   decorators: [{

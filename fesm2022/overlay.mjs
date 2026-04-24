@@ -70,7 +70,7 @@ class FullscreenOverlayContainer extends OverlayContainer {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.8",
+    version: "22.0.0-next.9",
     ngImport: i0,
     type: FullscreenOverlayContainer,
     deps: null,
@@ -78,7 +78,7 @@ class FullscreenOverlayContainer extends OverlayContainer {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.0.0-next.8",
+    version: "22.0.0-next.9",
     ngImport: i0,
     type: FullscreenOverlayContainer,
     providedIn: 'root'
@@ -86,7 +86,7 @@ class FullscreenOverlayContainer extends OverlayContainer {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.8",
+  version: "22.0.0-next.9",
   ngImport: i0,
   type: FullscreenOverlayContainer,
   decorators: [{

@@ -246,7 +246,7 @@ class CdkDialogContainer extends BasePortalOutlet {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.8",
+    version: "22.0.0-next.9",
     ngImport: i0,
     type: CdkDialogContainer,
     deps: [],
@@ -254,7 +254,7 @@ class CdkDialogContainer extends BasePortalOutlet {
   });
   static ɵcmp = i0.ɵɵngDeclareComponent({
     minVersion: "14.0.0",
-    version: "22.0.0-next.8",
+    version: "22.0.0-next.9",
     type: CdkDialogContainer,
     isStandalone: true,
     selector: "cdk-dialog-container",
@@ -297,7 +297,7 @@ class CdkDialogContainer extends BasePortalOutlet {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.8",
+  version: "22.0.0-next.9",
   ngImport: i0,
   type: CdkDialogContainer,
   decorators: [{
@@ -647,7 +647,7 @@ class Dialog {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.8",
+    version: "22.0.0-next.9",
     ngImport: i0,
     type: Dialog,
     deps: [],
@@ -655,7 +655,7 @@ class Dialog {
   });
   static ɵprov = i0.ɵɵngDeclareInjectable({
     minVersion: "12.0.0",
-    version: "22.0.0-next.8",
+    version: "22.0.0-next.9",
     ngImport: i0,
     type: Dialog,
     providedIn: 'root'
@@ -663,7 +663,7 @@ class Dialog {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.8",
+  version: "22.0.0-next.9",
   ngImport: i0,
   type: Dialog,
   decorators: [{
@@ -683,7 +683,7 @@ function reverseForEach(items, callback) {
 class DialogModule {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-next.8",
+    version: "22.0.0-next.9",
     ngImport: i0,
     type: DialogModule,
     deps: [],
@@ -691,7 +691,7 @@ class DialogModule {
   });
   static ɵmod = i0.ɵɵngDeclareNgModule({
     minVersion: "14.0.0",
-    version: "22.0.0-next.8",
+    version: "22.0.0-next.9",
     ngImport: i0,
     type: DialogModule,
     imports: [OverlayModule, PortalModule, A11yModule, CdkDialogContainer],
@@ -699,7 +699,7 @@ class DialogModule {
   });
   static ɵinj = i0.ɵɵngDeclareInjector({
     minVersion: "12.0.0",
-    version: "22.0.0-next.8",
+    version: "22.0.0-next.9",
     ngImport: i0,
     type: DialogModule,
     providers: [Dialog],
@@ -708,7 +708,7 @@ class DialogModule {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-next.8",
+  version: "22.0.0-next.9",
   ngImport: i0,
   type: DialogModule,
   decorators: [{
