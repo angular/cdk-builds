@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { ViewContainerRef, Injector, StaticProvider, Type, OnDestroy, ElementRef, NgZone, ChangeDetectorRef, ComponentRef, EmbeddedViewRef, TemplateRef, InjectionToken } from '@angular/core';
+import { ViewContainerRef, Injector, StaticProvider, Type, Binding, OnDestroy, ElementRef, NgZone, ChangeDetectorRef, ComponentRef, EmbeddedViewRef, TemplateRef, InjectionToken } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { FocusOrigin } from './_focus-monitor-chunk.js';
 import { FocusTrapFactory, A11yModule } from './_a11y-module-chunk.js';
@@ -149,6 +149,11 @@ declare class DialogConfig<D = unknown, R = unknown, C extends DialogContainer =
      * A function can be passed in to resolve the context lazily.
      */
     templateContext?: Record<string, any> | (() => Record<string, any>);
+    /**
+     * Bindings to apply to the component rendered inside the dialog.
+     * Does nothing for template-based dialogs.
+     */
+    bindings?: Binding[];
 }
 
 declare function throwDialogContentAlreadyAttachedError(): void;

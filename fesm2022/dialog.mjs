@@ -64,6 +64,7 @@ class DialogConfig {
   providers;
   container;
   templateContext;
+  bindings;
 }
 
 function throwDialogContentAlreadyAttachedError() {
@@ -576,7 +577,7 @@ class Dialog {
       dialogContainer.attachTemplatePortal(new TemplatePortal(componentOrTemplateRef, null, context, injector));
     } else {
       const injector = this._createInjector(config, dialogRef, dialogContainer, this._injector);
-      const contentRef = dialogContainer.attachComponentPortal(new ComponentPortal(componentOrTemplateRef, config.viewContainerRef, injector));
+      const contentRef = dialogContainer.attachComponentPortal(new ComponentPortal(componentOrTemplateRef, config.viewContainerRef, injector, null, config.bindings));
       dialogRef.componentRef = contentRef;
       dialogRef.componentInstance = contentRef.instance;
     }
