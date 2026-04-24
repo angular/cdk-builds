@@ -1442,7 +1442,8 @@ class CdkTreeNodeToggle {
   _treeNode = inject(CdkTreeNode);
   recursive = false;
   constructor() {}
-  _toggle() {
+  _toggle(event) {
+    event.stopPropagation();
     this.recursive ? this._tree.toggleDescendants(this._treeNode.data) : this._tree.toggle(this._treeNode.data);
     this._tree._keyManager.focusItem(this._treeNode);
   }
@@ -1468,9 +1469,9 @@ class CdkTreeNodeToggle {
         "tabindex": "-1"
       },
       listeners: {
-        "click": "_toggle(); $event.stopPropagation();",
-        "keydown.Enter": "_toggle(); $event.preventDefault();",
-        "keydown.Space": "_toggle(); $event.preventDefault();"
+        "click": "_toggle($event)",
+        "keydown.Enter": "_toggle($event); $event.preventDefault();",
+        "keydown.Space": "_toggle($event); $event.preventDefault();"
       }
     },
     ngImport: i0
@@ -1486,9 +1487,9 @@ i0.ɵɵngDeclareClassMetadata({
     args: [{
       selector: '[cdkTreeNodeToggle]',
       host: {
-        '(click)': '_toggle(); $event.stopPropagation();',
-        '(keydown.Enter)': '_toggle(); $event.preventDefault();',
-        '(keydown.Space)': '_toggle(); $event.preventDefault();',
+        '(click)': '_toggle($event)',
+        '(keydown.Enter)': '_toggle($event); $event.preventDefault();',
+        '(keydown.Space)': '_toggle($event); $event.preventDefault();',
         'tabindex': '-1'
       }
     }]
