@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { InjectionToken, inject, NgZone, DOCUMENT, RendererFactory2, Injectable, ElementRef, EventEmitter, Output, Directive } from '@angular/core';
+import { InjectionToken, inject, NgZone, DOCUMENT, RendererFactory2, Service, ElementRef, EventEmitter, Output, Directive } from '@angular/core';
 import { BehaviorSubject, Subject, of } from 'rxjs';
 import { skip, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { isFakeMousedownFromScreenReader, isFakeTouchstartFromScreenReader } from './_fake-event-detection-chunk.mjs';
@@ -82,14 +82,13 @@ class InputModalityDetector {
     ngImport: i0,
     type: InputModalityDetector,
     deps: [],
-    target: i0.ɵɵFactoryTarget.Injectable
+    target: i0.ɵɵFactoryTarget.Service
   });
-  static ɵprov = i0.ɵɵngDeclareInjectable({
-    minVersion: "12.0.0",
+  static ɵprov = i0.ɵɵngDeclareService({
+    minVersion: "22.0.0",
     version: "22.0.0-next.9",
     ngImport: i0,
-    type: InputModalityDetector,
-    providedIn: 'root'
+    type: InputModalityDetector
   });
 }
 i0.ɵɵngDeclareClassMetadata({
@@ -98,10 +97,7 @@ i0.ɵɵngDeclareClassMetadata({
   ngImport: i0,
   type: InputModalityDetector,
   decorators: [{
-    type: Injectable,
-    args: [{
-      providedIn: 'root'
-    }]
+    type: Service
   }],
   ctorParameters: () => []
 });
@@ -341,14 +337,13 @@ class FocusMonitor {
     ngImport: i0,
     type: FocusMonitor,
     deps: [],
-    target: i0.ɵɵFactoryTarget.Injectable
+    target: i0.ɵɵFactoryTarget.Service
   });
-  static ɵprov = i0.ɵɵngDeclareInjectable({
-    minVersion: "12.0.0",
+  static ɵprov = i0.ɵɵngDeclareService({
+    minVersion: "22.0.0",
     version: "22.0.0-next.9",
     ngImport: i0,
-    type: FocusMonitor,
-    providedIn: 'root'
+    type: FocusMonitor
   });
 }
 i0.ɵɵngDeclareClassMetadata({
@@ -357,10 +352,7 @@ i0.ɵɵngDeclareClassMetadata({
   ngImport: i0,
   type: FocusMonitor,
   decorators: [{
-    type: Injectable,
-    args: [{
-      providedIn: 'root'
-    }]
+    type: Service
   }],
   ctorParameters: () => []
 });

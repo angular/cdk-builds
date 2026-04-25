@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { inject, Injectable, ElementRef, booleanAttribute, afterNextRender, NgZone, DOCUMENT, Injector, Input, Directive, InjectionToken, NgModule } from '@angular/core';
+import { inject, Service, ElementRef, booleanAttribute, afterNextRender, NgZone, DOCUMENT, Injector, Input, Directive, InjectionToken, NgModule } from '@angular/core';
 import { CdkMonitorFocus } from './_focus-monitor-chunk.mjs';
 import { Platform } from './_platform-chunk.mjs';
 import { _getFocusedElementPierceShadowDom } from './_shadow-dom-chunk.mjs';
@@ -70,14 +70,13 @@ class InteractivityChecker {
     ngImport: i0,
     type: InteractivityChecker,
     deps: [],
-    target: i0.ɵɵFactoryTarget.Injectable
+    target: i0.ɵɵFactoryTarget.Service
   });
-  static ɵprov = i0.ɵɵngDeclareInjectable({
-    minVersion: "12.0.0",
+  static ɵprov = i0.ɵɵngDeclareService({
+    minVersion: "22.0.0",
     version: "22.0.0-next.9",
     ngImport: i0,
-    type: InteractivityChecker,
-    providedIn: 'root'
+    type: InteractivityChecker
   });
 }
 i0.ɵɵngDeclareClassMetadata({
@@ -86,10 +85,7 @@ i0.ɵɵngDeclareClassMetadata({
   ngImport: i0,
   type: InteractivityChecker,
   decorators: [{
-    type: Injectable,
-    args: [{
-      providedIn: 'root'
-    }]
+    type: Service
   }]
 });
 function getFrameElement(window) {
@@ -351,14 +347,13 @@ class FocusTrapFactory {
     ngImport: i0,
     type: FocusTrapFactory,
     deps: [],
-    target: i0.ɵɵFactoryTarget.Injectable
+    target: i0.ɵɵFactoryTarget.Service
   });
-  static ɵprov = i0.ɵɵngDeclareInjectable({
-    minVersion: "12.0.0",
+  static ɵprov = i0.ɵɵngDeclareService({
+    minVersion: "22.0.0",
     version: "22.0.0-next.9",
     ngImport: i0,
-    type: FocusTrapFactory,
-    providedIn: 'root'
+    type: FocusTrapFactory
   });
 }
 i0.ɵɵngDeclareClassMetadata({
@@ -367,10 +362,7 @@ i0.ɵɵngDeclareClassMetadata({
   ngImport: i0,
   type: FocusTrapFactory,
   decorators: [{
-    type: Injectable,
-    args: [{
-      providedIn: 'root'
-    }]
+    type: Service
   }],
   ctorParameters: () => []
 });
@@ -586,14 +578,13 @@ class LiveAnnouncer {
     ngImport: i0,
     type: LiveAnnouncer,
     deps: [],
-    target: i0.ɵɵFactoryTarget.Injectable
+    target: i0.ɵɵFactoryTarget.Service
   });
-  static ɵprov = i0.ɵɵngDeclareInjectable({
-    minVersion: "12.0.0",
+  static ɵprov = i0.ɵɵngDeclareService({
+    minVersion: "22.0.0",
     version: "22.0.0-next.9",
     ngImport: i0,
-    type: LiveAnnouncer,
-    providedIn: 'root'
+    type: LiveAnnouncer
   });
 }
 i0.ɵɵngDeclareClassMetadata({
@@ -602,10 +593,7 @@ i0.ɵɵngDeclareClassMetadata({
   ngImport: i0,
   type: LiveAnnouncer,
   decorators: [{
-    type: Injectable,
-    args: [{
-      providedIn: 'root'
-    }]
+    type: Service
   }],
   ctorParameters: () => []
 });
@@ -760,14 +748,13 @@ class HighContrastModeDetector {
     ngImport: i0,
     type: HighContrastModeDetector,
     deps: [],
-    target: i0.ɵɵFactoryTarget.Injectable
+    target: i0.ɵɵFactoryTarget.Service
   });
-  static ɵprov = i0.ɵɵngDeclareInjectable({
-    minVersion: "12.0.0",
+  static ɵprov = i0.ɵɵngDeclareService({
+    minVersion: "22.0.0",
     version: "22.0.0-next.9",
     ngImport: i0,
-    type: HighContrastModeDetector,
-    providedIn: 'root'
+    type: HighContrastModeDetector
   });
 }
 i0.ɵɵngDeclareClassMetadata({
@@ -776,10 +763,7 @@ i0.ɵɵngDeclareClassMetadata({
   ngImport: i0,
   type: HighContrastModeDetector,
   decorators: [{
-    type: Injectable,
-    args: [{
-      providedIn: 'root'
-    }]
+    type: Service
   }],
   ctorParameters: () => []
 });

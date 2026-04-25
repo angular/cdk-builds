@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { Directive, InjectionToken, inject, Injectable, Injector, ViewContainerRef, EventEmitter, NgZone, RendererFactory2, ElementRef, ChangeDetectorRef, Renderer2, booleanAttribute, Output, Input, QueryList, signal, computed, ContentChildren, NgModule } from '@angular/core';
+import { Directive, InjectionToken, inject, Service, Injector, ViewContainerRef, EventEmitter, NgZone, RendererFactory2, ElementRef, ChangeDetectorRef, Renderer2, booleanAttribute, Output, Input, QueryList, signal, computed, ContentChildren, NgModule } from '@angular/core';
 import { Subject, merge, partition } from 'rxjs';
 import { startWith, debounceTime, distinctUntilChanged, takeUntil, mergeMap, mapTo, mergeAll, switchMap, skipWhile, skip } from 'rxjs/operators';
 import { _IdGenerator } from './_id-generator-chunk.mjs';
@@ -198,13 +198,14 @@ class MenuStack {
     ngImport: i0,
     type: MenuStack,
     deps: [],
-    target: i0.ɵɵFactoryTarget.Injectable
+    target: i0.ɵɵFactoryTarget.Service
   });
-  static ɵprov = i0.ɵɵngDeclareInjectable({
-    minVersion: "12.0.0",
+  static ɵprov = i0.ɵɵngDeclareService({
+    minVersion: "22.0.0",
     version: "22.0.0-next.9",
     ngImport: i0,
-    type: MenuStack
+    type: MenuStack,
+    autoProvided: false
   });
 }
 i0.ɵɵngDeclareClassMetadata({
@@ -213,7 +214,10 @@ i0.ɵɵngDeclareClassMetadata({
   ngImport: i0,
   type: MenuStack,
   decorators: [{
-    type: Injectable
+    type: Service,
+    args: [{
+      autoProvided: false
+    }]
   }]
 });
 
@@ -239,14 +243,13 @@ class MenuTracker {
     ngImport: i0,
     type: MenuTracker,
     deps: [],
-    target: i0.ɵɵFactoryTarget.Injectable
+    target: i0.ɵɵFactoryTarget.Service
   });
-  static ɵprov = i0.ɵɵngDeclareInjectable({
-    minVersion: "12.0.0",
+  static ɵprov = i0.ɵɵngDeclareService({
+    minVersion: "22.0.0",
     version: "22.0.0-next.9",
     ngImport: i0,
-    type: MenuTracker,
-    providedIn: 'root'
+    type: MenuTracker
   });
 }
 i0.ɵɵngDeclareClassMetadata({
@@ -255,10 +258,7 @@ i0.ɵɵngDeclareClassMetadata({
   ngImport: i0,
   type: MenuTracker,
   decorators: [{
-    type: Injectable,
-    args: [{
-      providedIn: 'root'
-    }]
+    type: Service
   }]
 });
 class CdkMenuTriggerBase {
@@ -485,13 +485,14 @@ class TargetMenuAim {
     ngImport: i0,
     type: TargetMenuAim,
     deps: [],
-    target: i0.ɵɵFactoryTarget.Injectable
+    target: i0.ɵɵFactoryTarget.Service
   });
-  static ɵprov = i0.ɵɵngDeclareInjectable({
-    minVersion: "12.0.0",
+  static ɵprov = i0.ɵɵngDeclareService({
+    minVersion: "22.0.0",
     version: "22.0.0-next.9",
     ngImport: i0,
-    type: TargetMenuAim
+    type: TargetMenuAim,
+    autoProvided: false
   });
 }
 i0.ɵɵngDeclareClassMetadata({
@@ -500,7 +501,10 @@ i0.ɵɵngDeclareClassMetadata({
   ngImport: i0,
   type: TargetMenuAim,
   decorators: [{
-    type: Injectable
+    type: Service,
+    args: [{
+      autoProvided: false
+    }]
   }]
 });
 class CdkTargetMenuAim {

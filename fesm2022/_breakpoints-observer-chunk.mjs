@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { inject, CSP_NONCE, Injectable, NgZone } from '@angular/core';
+import { inject, CSP_NONCE, Service, NgZone } from '@angular/core';
 import { Subject, combineLatest, concat, Observable } from 'rxjs';
 import { take, skip, debounceTime, map, startWith, takeUntil } from 'rxjs/operators';
 import { Platform } from './_platform-chunk.mjs';
@@ -28,14 +28,13 @@ class MediaMatcher {
     ngImport: i0,
     type: MediaMatcher,
     deps: [],
-    target: i0.ɵɵFactoryTarget.Injectable
+    target: i0.ɵɵFactoryTarget.Service
   });
-  static ɵprov = i0.ɵɵngDeclareInjectable({
-    minVersion: "12.0.0",
+  static ɵprov = i0.ɵɵngDeclareService({
+    minVersion: "22.0.0",
     version: "22.0.0-next.9",
     ngImport: i0,
-    type: MediaMatcher,
-    providedIn: 'root'
+    type: MediaMatcher
   });
 }
 i0.ɵɵngDeclareClassMetadata({
@@ -44,10 +43,7 @@ i0.ɵɵngDeclareClassMetadata({
   ngImport: i0,
   type: MediaMatcher,
   decorators: [{
-    type: Injectable,
-    args: [{
-      providedIn: 'root'
-    }]
+    type: Service
   }],
   ctorParameters: () => []
 });
@@ -144,14 +140,13 @@ class BreakpointObserver {
     ngImport: i0,
     type: BreakpointObserver,
     deps: [],
-    target: i0.ɵɵFactoryTarget.Injectable
+    target: i0.ɵɵFactoryTarget.Service
   });
-  static ɵprov = i0.ɵɵngDeclareInjectable({
-    minVersion: "12.0.0",
+  static ɵprov = i0.ɵɵngDeclareService({
+    minVersion: "22.0.0",
     version: "22.0.0-next.9",
     ngImport: i0,
-    type: BreakpointObserver,
-    providedIn: 'root'
+    type: BreakpointObserver
   });
 }
 i0.ɵɵngDeclareClassMetadata({
@@ -160,10 +155,7 @@ i0.ɵɵngDeclareClassMetadata({
   ngImport: i0,
   type: BreakpointObserver,
   decorators: [{
-    type: Injectable,
-    args: [{
-      providedIn: 'root'
-    }]
+    type: Service
   }]
 });
 function splitQueries(queries) {

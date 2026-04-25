@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { inject, ElementRef, NgZone, Renderer2, ChangeDetectorRef, Injector, DOCUMENT, afterNextRender, ViewChild, ChangeDetectionStrategy, ViewEncapsulation, Component, InjectionToken, TemplateRef, signal, EventEmitter, Injectable, NgModule } from '@angular/core';
+import { inject, ElementRef, NgZone, Renderer2, ChangeDetectorRef, Injector, DOCUMENT, afterNextRender, ViewChild, ChangeDetectionStrategy, ViewEncapsulation, Component, InjectionToken, TemplateRef, signal, EventEmitter, Service, NgModule } from '@angular/core';
 import { Subject, defer } from 'rxjs';
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, TemplatePortal, PortalModule } from './portal.mjs';
 export { CdkPortal as ɵɵCdkPortal } from './portal.mjs';
@@ -652,14 +652,13 @@ class Dialog {
     ngImport: i0,
     type: Dialog,
     deps: [],
-    target: i0.ɵɵFactoryTarget.Injectable
+    target: i0.ɵɵFactoryTarget.Service
   });
-  static ɵprov = i0.ɵɵngDeclareInjectable({
-    minVersion: "12.0.0",
+  static ɵprov = i0.ɵɵngDeclareService({
+    minVersion: "22.0.0",
     version: "22.0.0-next.9",
     ngImport: i0,
-    type: Dialog,
-    providedIn: 'root'
+    type: Dialog
   });
 }
 i0.ɵɵngDeclareClassMetadata({
@@ -668,10 +667,7 @@ i0.ɵɵngDeclareClassMetadata({
   ngImport: i0,
   type: Dialog,
   decorators: [{
-    type: Injectable,
-    args: [{
-      providedIn: 'root'
-    }]
+    type: Service
   }]
 });
 function reverseForEach(items, callback) {

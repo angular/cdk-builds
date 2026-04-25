@@ -2,7 +2,7 @@ import { OverlayContainer } from './_overlay-module-chunk.mjs';
 export { BlockScrollStrategy, CDK_CONNECTED_OVERLAY_DEFAULT_CONFIG, CdkConnectedOverlay, CdkOverlayOrigin, CloseScrollStrategy, ConnectedOverlayPositionChange, ConnectionPositionPair, FlexibleConnectedPositionStrategy, GlobalPositionStrategy, NoopScrollStrategy, OVERLAY_DEFAULT_CONFIG, Overlay, OverlayConfig, OverlayKeyboardDispatcher, OverlayModule, OverlayOutsideClickDispatcher, OverlayPositionBuilder, OverlayRef, RepositionScrollStrategy, STANDARD_DROPDOWN_ADJACENT_POSITIONS, STANDARD_DROPDOWN_BELOW_POSITIONS, ScrollStrategyOptions, ScrollingVisibility, createBlockScrollStrategy, createCloseScrollStrategy, createFlexibleConnectedPositionStrategy, createGlobalPositionStrategy, createNoopScrollStrategy, createOverlayRef, createRepositionScrollStrategy, validateHorizontalPosition, validateVerticalPosition } from './_overlay-module-chunk.mjs';
 export { CdkScrollable, ScrollDispatcher, ViewportRuler, CdkFixedSizeVirtualScroll as ɵɵCdkFixedSizeVirtualScroll, CdkScrollableModule as ɵɵCdkScrollableModule, CdkVirtualForOf as ɵɵCdkVirtualForOf, CdkVirtualScrollViewport as ɵɵCdkVirtualScrollViewport, CdkVirtualScrollableElement as ɵɵCdkVirtualScrollableElement, CdkVirtualScrollableWindow as ɵɵCdkVirtualScrollableWindow } from './scrolling.mjs';
 import * as i0 from '@angular/core';
-import { inject, RendererFactory2, Injectable } from '@angular/core';
+import { inject, RendererFactory2, Service } from '@angular/core';
 export { Dir as ɵɵDir } from './bidi.mjs';
 import '@angular/common';
 import './_platform-chunk.mjs';
@@ -73,15 +73,14 @@ class FullscreenOverlayContainer extends OverlayContainer {
     version: "22.0.0-next.9",
     ngImport: i0,
     type: FullscreenOverlayContainer,
-    deps: null,
-    target: i0.ɵɵFactoryTarget.Injectable
+    deps: [],
+    target: i0.ɵɵFactoryTarget.Service
   });
-  static ɵprov = i0.ɵɵngDeclareInjectable({
-    minVersion: "12.0.0",
+  static ɵprov = i0.ɵɵngDeclareService({
+    minVersion: "22.0.0",
     version: "22.0.0-next.9",
     ngImport: i0,
-    type: FullscreenOverlayContainer,
-    providedIn: 'root'
+    type: FullscreenOverlayContainer
   });
 }
 i0.ɵɵngDeclareClassMetadata({
@@ -90,10 +89,7 @@ i0.ɵɵngDeclareClassMetadata({
   ngImport: i0,
   type: FullscreenOverlayContainer,
   decorators: [{
-    type: Injectable,
-    args: [{
-      providedIn: 'root'
-    }]
+    type: Service
   }]
 });
 

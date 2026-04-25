@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { inject, PLATFORM_ID, Injectable } from '@angular/core';
+import { inject, PLATFORM_ID, Service } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
 let hasV8BreakIterator;
@@ -25,14 +25,13 @@ class Platform {
     ngImport: i0,
     type: Platform,
     deps: [],
-    target: i0.ɵɵFactoryTarget.Injectable
+    target: i0.ɵɵFactoryTarget.Service
   });
-  static ɵprov = i0.ɵɵngDeclareInjectable({
-    minVersion: "12.0.0",
+  static ɵprov = i0.ɵɵngDeclareService({
+    minVersion: "22.0.0",
     version: "22.0.0-next.9",
     ngImport: i0,
-    type: Platform,
-    providedIn: 'root'
+    type: Platform
   });
 }
 i0.ɵɵngDeclareClassMetadata({
@@ -41,10 +40,7 @@ i0.ɵɵngDeclareClassMetadata({
   ngImport: i0,
   type: Platform,
   decorators: [{
-    type: Injectable,
-    args: [{
-      providedIn: 'root'
-    }]
+    type: Service
   }]
 });
 

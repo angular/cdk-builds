@@ -2,7 +2,7 @@ import { FocusTrap, InteractivityChecker } from './_a11y-module-chunk.mjs';
 export { A11yModule, CdkAriaLive, CdkTrapFocus, FocusTrapFactory, HighContrastMode, HighContrastModeDetector, IsFocusableConfig, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LiveAnnouncer } from './_a11y-module-chunk.mjs';
 export { ActiveDescendantKeyManager } from './_activedescendant-key-manager-chunk.mjs';
 import * as i0 from '@angular/core';
-import { inject, DOCUMENT, APP_ID, Injectable, InjectionToken, NgZone, Injector } from '@angular/core';
+import { inject, DOCUMENT, APP_ID, Service, InjectionToken, NgZone, Injector } from '@angular/core';
 import { Platform } from './_platform-chunk.mjs';
 import { _CdkPrivateStyleLoader } from './_style-loader-chunk.mjs';
 import { _VisuallyHiddenLoader } from './private.mjs';
@@ -193,14 +193,13 @@ class AriaDescriber {
     ngImport: i0,
     type: AriaDescriber,
     deps: [],
-    target: i0.ɵɵFactoryTarget.Injectable
+    target: i0.ɵɵFactoryTarget.Service
   });
-  static ɵprov = i0.ɵɵngDeclareInjectable({
-    minVersion: "12.0.0",
+  static ɵprov = i0.ɵɵngDeclareService({
+    minVersion: "22.0.0",
     version: "22.0.0-next.9",
     ngImport: i0,
-    type: AriaDescriber,
-    providedIn: 'root'
+    type: AriaDescriber
   });
 }
 i0.ɵɵngDeclareClassMetadata({
@@ -209,10 +208,7 @@ i0.ɵɵngDeclareClassMetadata({
   ngImport: i0,
   type: AriaDescriber,
   decorators: [{
-    type: Injectable,
-    args: [{
-      providedIn: 'root'
-    }]
+    type: Service
   }],
   ctorParameters: () => []
 });
@@ -340,14 +336,13 @@ class FocusTrapManager {
     ngImport: i0,
     type: FocusTrapManager,
     deps: [],
-    target: i0.ɵɵFactoryTarget.Injectable
+    target: i0.ɵɵFactoryTarget.Service
   });
-  static ɵprov = i0.ɵɵngDeclareInjectable({
-    minVersion: "12.0.0",
+  static ɵprov = i0.ɵɵngDeclareService({
+    minVersion: "22.0.0",
     version: "22.0.0-next.9",
     ngImport: i0,
-    type: FocusTrapManager,
-    providedIn: 'root'
+    type: FocusTrapManager
   });
 }
 i0.ɵɵngDeclareClassMetadata({
@@ -356,10 +351,7 @@ i0.ɵɵngDeclareClassMetadata({
   ngImport: i0,
   type: FocusTrapManager,
   decorators: [{
-    type: Injectable,
-    args: [{
-      providedIn: 'root'
-    }]
+    type: Service
   }]
 });
 
@@ -395,14 +387,13 @@ class ConfigurableFocusTrapFactory {
     ngImport: i0,
     type: ConfigurableFocusTrapFactory,
     deps: [],
-    target: i0.ɵɵFactoryTarget.Injectable
+    target: i0.ɵɵFactoryTarget.Service
   });
-  static ɵprov = i0.ɵɵngDeclareInjectable({
-    minVersion: "12.0.0",
+  static ɵprov = i0.ɵɵngDeclareService({
+    minVersion: "22.0.0",
     version: "22.0.0-next.9",
     ngImport: i0,
-    type: ConfigurableFocusTrapFactory,
-    providedIn: 'root'
+    type: ConfigurableFocusTrapFactory
   });
 }
 i0.ɵɵngDeclareClassMetadata({
@@ -411,10 +402,7 @@ i0.ɵɵngDeclareClassMetadata({
   ngImport: i0,
   type: ConfigurableFocusTrapFactory,
   decorators: [{
-    type: Injectable,
-    args: [{
-      providedIn: 'root'
-    }]
+    type: Service
   }],
   ctorParameters: () => []
 });

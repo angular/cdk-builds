@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { DOCUMENT, NgZone, inject, Injector, Injectable, RendererFactory2, ViewEncapsulation, ChangeDetectionStrategy, Component, afterNextRender, ElementRef, InjectionToken, ApplicationRef, Renderer2, ANIMATION_MODULE_TYPE, EnvironmentInjector, EventEmitter, TemplateRef, ViewContainerRef, booleanAttribute, Directive, Output, Input, NgModule } from '@angular/core';
+import { DOCUMENT, NgZone, inject, Injector, Service, RendererFactory2, ViewEncapsulation, ChangeDetectionStrategy, Component, afterNextRender, ElementRef, InjectionToken, ApplicationRef, Renderer2, ANIMATION_MODULE_TYPE, EnvironmentInjector, EventEmitter, TemplateRef, ViewContainerRef, booleanAttribute, Directive, Output, Input, NgModule } from '@angular/core';
 import { Location } from '@angular/common';
 import { Platform } from './_platform-chunk.mjs';
 import { _getEventTarget } from './_shadow-dom-chunk.mjs';
@@ -248,14 +248,13 @@ class ScrollStrategyOptions {
     ngImport: i0,
     type: ScrollStrategyOptions,
     deps: [],
-    target: i0.ɵɵFactoryTarget.Injectable
+    target: i0.ɵɵFactoryTarget.Service
   });
-  static ɵprov = i0.ɵɵngDeclareInjectable({
-    minVersion: "12.0.0",
+  static ɵprov = i0.ɵɵngDeclareService({
+    minVersion: "22.0.0",
     version: "22.0.0-next.9",
     ngImport: i0,
-    type: ScrollStrategyOptions,
-    providedIn: 'root'
+    type: ScrollStrategyOptions
   });
 }
 i0.ɵɵngDeclareClassMetadata({
@@ -264,10 +263,7 @@ i0.ɵɵngDeclareClassMetadata({
   ngImport: i0,
   type: ScrollStrategyOptions,
   decorators: [{
-    type: Injectable,
-    args: [{
-      providedIn: 'root'
-    }]
+    type: Service
   }]
 });
 
@@ -378,14 +374,13 @@ class BaseOverlayDispatcher {
     ngImport: i0,
     type: BaseOverlayDispatcher,
     deps: [],
-    target: i0.ɵɵFactoryTarget.Injectable
+    target: i0.ɵɵFactoryTarget.Service
   });
-  static ɵprov = i0.ɵɵngDeclareInjectable({
-    minVersion: "12.0.0",
+  static ɵprov = i0.ɵɵngDeclareService({
+    minVersion: "22.0.0",
     version: "22.0.0-next.9",
     ngImport: i0,
-    type: BaseOverlayDispatcher,
-    providedIn: 'root'
+    type: BaseOverlayDispatcher
   });
 }
 i0.ɵɵngDeclareClassMetadata({
@@ -394,10 +389,7 @@ i0.ɵɵngDeclareClassMetadata({
   ngImport: i0,
   type: BaseOverlayDispatcher,
   decorators: [{
-    type: Injectable,
-    args: [{
-      providedIn: 'root'
-    }]
+    type: Service
   }]
 });
 
@@ -435,15 +427,14 @@ class OverlayKeyboardDispatcher extends BaseOverlayDispatcher {
     version: "22.0.0-next.9",
     ngImport: i0,
     type: OverlayKeyboardDispatcher,
-    deps: null,
-    target: i0.ɵɵFactoryTarget.Injectable
+    deps: [],
+    target: i0.ɵɵFactoryTarget.Service
   });
-  static ɵprov = i0.ɵɵngDeclareInjectable({
-    minVersion: "12.0.0",
+  static ɵprov = i0.ɵɵngDeclareService({
+    minVersion: "22.0.0",
     version: "22.0.0-next.9",
     ngImport: i0,
-    type: OverlayKeyboardDispatcher,
-    providedIn: 'root'
+    type: OverlayKeyboardDispatcher
   });
 }
 i0.ɵɵngDeclareClassMetadata({
@@ -452,10 +443,7 @@ i0.ɵɵngDeclareClassMetadata({
   ngImport: i0,
   type: OverlayKeyboardDispatcher,
   decorators: [{
-    type: Injectable,
-    args: [{
-      providedIn: 'root'
-    }]
+    type: Service
   }]
 });
 
@@ -524,15 +512,14 @@ class OverlayOutsideClickDispatcher extends BaseOverlayDispatcher {
     version: "22.0.0-next.9",
     ngImport: i0,
     type: OverlayOutsideClickDispatcher,
-    deps: null,
-    target: i0.ɵɵFactoryTarget.Injectable
+    deps: [],
+    target: i0.ɵɵFactoryTarget.Service
   });
-  static ɵprov = i0.ɵɵngDeclareInjectable({
-    minVersion: "12.0.0",
+  static ɵprov = i0.ɵɵngDeclareService({
+    minVersion: "22.0.0",
     version: "22.0.0-next.9",
     ngImport: i0,
-    type: OverlayOutsideClickDispatcher,
-    providedIn: 'root'
+    type: OverlayOutsideClickDispatcher
   });
 }
 i0.ɵɵngDeclareClassMetadata({
@@ -541,10 +528,7 @@ i0.ɵɵngDeclareClassMetadata({
   ngImport: i0,
   type: OverlayOutsideClickDispatcher,
   decorators: [{
-    type: Injectable,
-    args: [{
-      providedIn: 'root'
-    }]
+    type: Service
   }]
 });
 function containsPierceShadowDom(parent, child) {
@@ -647,14 +631,13 @@ class OverlayContainer {
     ngImport: i0,
     type: OverlayContainer,
     deps: [],
-    target: i0.ɵɵFactoryTarget.Injectable
+    target: i0.ɵɵFactoryTarget.Service
   });
-  static ɵprov = i0.ɵɵngDeclareInjectable({
-    minVersion: "12.0.0",
+  static ɵprov = i0.ɵɵngDeclareService({
+    minVersion: "22.0.0",
     version: "22.0.0-next.9",
     ngImport: i0,
-    type: OverlayContainer,
-    providedIn: 'root'
+    type: OverlayContainer
   });
 }
 i0.ɵɵngDeclareClassMetadata({
@@ -663,10 +646,7 @@ i0.ɵɵngDeclareClassMetadata({
   ngImport: i0,
   type: OverlayContainer,
   decorators: [{
-    type: Injectable,
-    args: [{
-      providedIn: 'root'
-    }]
+    type: Service
   }]
 });
 
@@ -2034,14 +2014,13 @@ class OverlayPositionBuilder {
     ngImport: i0,
     type: OverlayPositionBuilder,
     deps: [],
-    target: i0.ɵɵFactoryTarget.Injectable
+    target: i0.ɵɵFactoryTarget.Service
   });
-  static ɵprov = i0.ɵɵngDeclareInjectable({
-    minVersion: "12.0.0",
+  static ɵprov = i0.ɵɵngDeclareService({
+    minVersion: "22.0.0",
     version: "22.0.0-next.9",
     ngImport: i0,
-    type: OverlayPositionBuilder,
-    providedIn: 'root'
+    type: OverlayPositionBuilder
   });
 }
 i0.ɵɵngDeclareClassMetadata({
@@ -2050,10 +2029,7 @@ i0.ɵɵngDeclareClassMetadata({
   ngImport: i0,
   type: OverlayPositionBuilder,
   decorators: [{
-    type: Injectable,
-    args: [{
-      providedIn: 'root'
-    }]
+    type: Service
   }]
 });
 
@@ -2115,14 +2091,13 @@ class Overlay {
     ngImport: i0,
     type: Overlay,
     deps: [],
-    target: i0.ɵɵFactoryTarget.Injectable
+    target: i0.ɵɵFactoryTarget.Service
   });
-  static ɵprov = i0.ɵɵngDeclareInjectable({
-    minVersion: "12.0.0",
+  static ɵprov = i0.ɵɵngDeclareService({
+    minVersion: "22.0.0",
     version: "22.0.0-next.9",
     ngImport: i0,
-    type: Overlay,
-    providedIn: 'root'
+    type: Overlay
   });
 }
 i0.ɵɵngDeclareClassMetadata({
@@ -2131,10 +2106,7 @@ i0.ɵɵngDeclareClassMetadata({
   ngImport: i0,
   type: Overlay,
   decorators: [{
-    type: Injectable,
-    args: [{
-      providedIn: 'root'
-    }]
+    type: Service
   }]
 });
 

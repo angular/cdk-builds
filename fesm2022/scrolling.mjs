@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { InjectionToken, forwardRef, Input, Directive, inject, NgZone, RendererFactory2, Injectable, ElementRef, Renderer2, DOCUMENT, ChangeDetectorRef, signal, Injector, effect, ApplicationRef, DestroyRef, untracked, afterNextRender, booleanAttribute, ViewChild, Output, ChangeDetectionStrategy, ViewEncapsulation, Component, ViewContainerRef, TemplateRef, IterableDiffers, NgModule } from '@angular/core';
+import { InjectionToken, forwardRef, Input, Directive, inject, NgZone, RendererFactory2, Service, ElementRef, Renderer2, DOCUMENT, ChangeDetectorRef, signal, Injector, effect, ApplicationRef, DestroyRef, untracked, afterNextRender, booleanAttribute, ViewChild, Output, ChangeDetectionStrategy, ViewEncapsulation, Component, ViewContainerRef, TemplateRef, IterableDiffers, NgModule } from '@angular/core';
 import { Subject, of, Observable, Subscription, animationFrameScheduler, asapScheduler, isObservable } from 'rxjs';
 import { distinctUntilChanged, auditTime, filter, startWith, takeUntil, pairwise, switchMap, shareReplay } from 'rxjs/operators';
 import { Platform } from './_platform-chunk.mjs';
@@ -270,14 +270,13 @@ class ScrollDispatcher {
     ngImport: i0,
     type: ScrollDispatcher,
     deps: [],
-    target: i0.ɵɵFactoryTarget.Injectable
+    target: i0.ɵɵFactoryTarget.Service
   });
-  static ɵprov = i0.ɵɵngDeclareInjectable({
-    minVersion: "12.0.0",
+  static ɵprov = i0.ɵɵngDeclareService({
+    minVersion: "22.0.0",
     version: "22.0.0-next.9",
     ngImport: i0,
-    type: ScrollDispatcher,
-    providedIn: 'root'
+    type: ScrollDispatcher
   });
 }
 i0.ɵɵngDeclareClassMetadata({
@@ -286,10 +285,7 @@ i0.ɵɵngDeclareClassMetadata({
   ngImport: i0,
   type: ScrollDispatcher,
   decorators: [{
-    type: Injectable,
-    args: [{
-      providedIn: 'root'
-    }]
+    type: Service
   }]
 });
 
@@ -519,14 +515,13 @@ class ViewportRuler {
     ngImport: i0,
     type: ViewportRuler,
     deps: [],
-    target: i0.ɵɵFactoryTarget.Injectable
+    target: i0.ɵɵFactoryTarget.Service
   });
-  static ɵprov = i0.ɵɵngDeclareInjectable({
-    minVersion: "12.0.0",
+  static ɵprov = i0.ɵɵngDeclareService({
+    minVersion: "22.0.0",
     version: "22.0.0-next.9",
     ngImport: i0,
-    type: ViewportRuler,
-    providedIn: 'root'
+    type: ViewportRuler
   });
 }
 i0.ɵɵngDeclareClassMetadata({
@@ -535,10 +530,7 @@ i0.ɵɵngDeclareClassMetadata({
   ngImport: i0,
   type: ViewportRuler,
   decorators: [{
-    type: Injectable,
-    args: [{
-      providedIn: 'root'
-    }]
+    type: Service
   }],
   ctorParameters: () => []
 });

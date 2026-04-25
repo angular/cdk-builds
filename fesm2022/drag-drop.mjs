@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { inject, NgZone, DOCUMENT, RendererFactory2, signal, ChangeDetectionStrategy, ViewEncapsulation, Component, Injectable, Renderer2, Injector, InjectionToken, ElementRef, booleanAttribute, Input, Directive, ViewContainerRef, ChangeDetectorRef, EventEmitter, afterNextRender, numberAttribute, Output, TemplateRef, NgModule } from '@angular/core';
+import { inject, NgZone, DOCUMENT, RendererFactory2, signal, ChangeDetectionStrategy, ViewEncapsulation, Component, Service, Renderer2, Injector, InjectionToken, ElementRef, booleanAttribute, Input, Directive, ViewContainerRef, ChangeDetectorRef, EventEmitter, afterNextRender, numberAttribute, Output, TemplateRef, NgModule } from '@angular/core';
 import { Subject, Observable, merge, Subscription, interval, animationFrameScheduler, BehaviorSubject } from 'rxjs';
 import { _CdkPrivateStyleLoader } from './_style-loader-chunk.mjs';
 import { takeUntil, map, take, tap, switchMap, startWith } from 'rxjs/operators';
@@ -421,14 +421,13 @@ class DragDropRegistry {
     ngImport: i0,
     type: DragDropRegistry,
     deps: [],
-    target: i0.ɵɵFactoryTarget.Injectable
+    target: i0.ɵɵFactoryTarget.Service
   });
-  static ɵprov = i0.ɵɵngDeclareInjectable({
-    minVersion: "12.0.0",
+  static ɵprov = i0.ɵɵngDeclareService({
+    minVersion: "22.0.0",
     version: "22.0.0-next.9",
     ngImport: i0,
-    type: DragDropRegistry,
-    providedIn: 'root'
+    type: DragDropRegistry
   });
 }
 i0.ɵɵngDeclareClassMetadata({
@@ -437,10 +436,7 @@ i0.ɵɵngDeclareClassMetadata({
   ngImport: i0,
   type: DragDropRegistry,
   decorators: [{
-    type: Injectable,
-    args: [{
-      providedIn: 'root'
-    }]
+    type: Service
   }]
 });
 
@@ -2315,14 +2311,13 @@ class DragDrop {
     ngImport: i0,
     type: DragDrop,
     deps: [],
-    target: i0.ɵɵFactoryTarget.Injectable
+    target: i0.ɵɵFactoryTarget.Service
   });
-  static ɵprov = i0.ɵɵngDeclareInjectable({
-    minVersion: "12.0.0",
+  static ɵprov = i0.ɵɵngDeclareService({
+    minVersion: "22.0.0",
     version: "22.0.0-next.9",
     ngImport: i0,
-    type: DragDrop,
-    providedIn: 'root'
+    type: DragDrop
   });
 }
 i0.ɵɵngDeclareClassMetadata({
@@ -2331,10 +2326,7 @@ i0.ɵɵngDeclareClassMetadata({
   ngImport: i0,
   type: DragDrop,
   decorators: [{
-    type: Injectable,
-    args: [{
-      providedIn: 'root'
-    }]
+    type: Service
   }]
 });
 

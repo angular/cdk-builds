@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { inject, NgZone, RendererFactory2, Injectable } from '@angular/core';
+import { inject, NgZone, RendererFactory2, Service } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import { filter, shareReplay, takeUntil } from 'rxjs/operators';
 
@@ -78,14 +78,13 @@ class SharedResizeObserver {
     ngImport: i0,
     type: SharedResizeObserver,
     deps: [],
-    target: i0.ɵɵFactoryTarget.Injectable
+    target: i0.ɵɵFactoryTarget.Service
   });
-  static ɵprov = i0.ɵɵngDeclareInjectable({
-    minVersion: "12.0.0",
+  static ɵprov = i0.ɵɵngDeclareService({
+    minVersion: "22.0.0",
     version: "22.0.0-next.9",
     ngImport: i0,
-    type: SharedResizeObserver,
-    providedIn: 'root'
+    type: SharedResizeObserver
   });
 }
 i0.ɵɵngDeclareClassMetadata({
@@ -94,10 +93,7 @@ i0.ɵɵngDeclareClassMetadata({
   ngImport: i0,
   type: SharedResizeObserver,
   decorators: [{
-    type: Injectable,
-    args: [{
-      providedIn: 'root'
-    }]
+    type: Service
   }],
   ctorParameters: () => []
 });
