@@ -510,7 +510,7 @@ declare class CdkTreeNode<T, K = T> implements OnDestroy, OnInit, TreeKeyManager
     isDisabled: boolean;
     /**
      * The text used to locate this item during typeahead. If not specified, the `textContent` will
-     * will be used.
+     * be used.
      */
     typeaheadLabel: string | null;
     getLabel(): string;
