@@ -53,7 +53,6 @@ function getAriaReferenceIds(el, attr) {
   return attrValue?.match(/\S+/g) ?? [];
 }
 
-const MESSAGES_CONTAINER_ID = 'cdk-describedby-message-container';
 const CDK_DESCRIBEDBY_ID_PREFIX = 'cdk-describedby-message';
 const CDK_DESCRIBEDBY_HOST_ATTRIBUTE = 'cdk-describedby-host';
 let nextId = 0;
@@ -371,15 +370,7 @@ class ConfigurableFocusTrapFactory {
   create(element, config = {
     defer: false
   }) {
-    let configObject;
-    if (typeof config === 'boolean') {
-      configObject = {
-        defer: config
-      };
-    } else {
-      configObject = config;
-    }
-    return new ConfigurableFocusTrap(element, this._checker, this._ngZone, this._document, this._focusTrapManager, this._inertStrategy, configObject, this._injector);
+    return new ConfigurableFocusTrap(element, this._checker, this._ngZone, this._document, this._focusTrapManager, this._inertStrategy, config, this._injector);
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
@@ -407,5 +398,5 @@ i0.ɵɵngDeclareClassMetadata({
   ctorParameters: () => []
 });
 
-export { AriaDescriber, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, CDK_DESCRIBEDBY_ID_PREFIX, ConfigurableFocusTrap, ConfigurableFocusTrapFactory, EventListenerFocusTrapInertStrategy, FOCUS_TRAP_INERT_STRATEGY, FocusTrap, InteractivityChecker, MESSAGES_CONTAINER_ID, NOOP_TREE_KEY_MANAGER_FACTORY_PROVIDER, NoopTreeKeyManager, TREE_KEY_MANAGER, addAriaReferencedId, getAriaReferenceIds, removeAriaReferencedId };
+export { AriaDescriber, ConfigurableFocusTrap, ConfigurableFocusTrapFactory, EventListenerFocusTrapInertStrategy, FOCUS_TRAP_INERT_STRATEGY, FocusTrap, InteractivityChecker, NOOP_TREE_KEY_MANAGER_FACTORY_PROVIDER, NoopTreeKeyManager, TREE_KEY_MANAGER, addAriaReferencedId, getAriaReferenceIds, removeAriaReferencedId };
 //# sourceMappingURL=a11y.mjs.map

@@ -197,10 +197,8 @@ declare class DropListRef<T = any> {
      *    container when the item was dropped.
      * @param distance Distance the user has dragged since the start of the dragging sequence.
      * @param event Event that triggered the dropping sequence.
-     *
-     * @breaking-change 15.0.0 `previousIndex` and `event` parameters to become required.
      */
-    drop(item: DragRef, currentIndex: number, previousIndex: number, previousContainer: DropListRef, isPointerOverContainer: boolean, distance: Point, dropPoint: Point, event?: MouseEvent | TouchEvent): void;
+    drop(item: DragRef, currentIndex: number, previousIndex: number, previousContainer: DropListRef, isPointerOverContainer: boolean, distance: Point, dropPoint: Point, event: MouseEvent | TouchEvent): void;
     /**
      * Sets the draggable items that are a part of this list.
      * @param items Items that are a part of this list.

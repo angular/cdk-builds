@@ -321,13 +321,9 @@ class FocusTrap {
     }
   }
   _executeOnStable(fn) {
-    if (this._injector) {
-      afterNextRender(fn, {
-        injector: this._injector
-      });
-    } else {
-      setTimeout(fn);
-    }
+    afterNextRender(fn, {
+      injector: this._injector
+    });
   }
 }
 class FocusTrapFactory {

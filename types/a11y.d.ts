@@ -23,24 +23,6 @@ interface RegisteredMessage {
     referenceCount: number;
 }
 /**
- * ID used for the body container where all messages are appended.
- * @deprecated No longer being used. To be removed.
- * @breaking-change 14.0.0
- */
-declare const MESSAGES_CONTAINER_ID = "cdk-describedby-message-container";
-/**
- * ID prefix used for each created message element.
- * @deprecated To be turned into a private variable.
- * @breaking-change 14.0.0
- */
-declare const CDK_DESCRIBEDBY_ID_PREFIX = "cdk-describedby-message";
-/**
- * Attribute given to each host element that is described by a message element.
- * @deprecated To be turned into a private variable.
- * @breaking-change 14.0.0
- */
-declare const CDK_DESCRIBEDBY_HOST_ATTRIBUTE = "cdk-describedby-host";
-/**
  * Utility that creates visually hidden elements with a message content. Useful for elements that
  * want to use aria-describedby to further describe themselves without adding additional visual
  * content.
@@ -321,7 +303,7 @@ declare class ConfigurableFocusTrap extends FocusTrap implements ManagedFocusTra
     /** Whether the FocusTrap is enabled. */
     get enabled(): boolean;
     set enabled(value: boolean);
-    constructor(_element: HTMLElement, _checker: InteractivityChecker, _ngZone: NgZone, _document: Document, _focusTrapManager: FocusTrapManager, _inertStrategy: FocusTrapInertStrategy, config: ConfigurableFocusTrapConfig, injector?: Injector);
+    constructor(_element: HTMLElement, _checker: InteractivityChecker, _ngZone: NgZone, _document: Document, _focusTrapManager: FocusTrapManager, _inertStrategy: FocusTrapInertStrategy, config: ConfigurableFocusTrapConfig, injector: Injector);
     /** Notifies the FocusTrapManager that this FocusTrap will be destroyed. */
     destroy(): void;
     /** @docs-private Implemented as part of ManagedFocusTrap. */
@@ -346,11 +328,6 @@ declare class ConfigurableFocusTrapFactory {
      * @returns The created focus trap instance.
      */
     create(element: HTMLElement, config?: ConfigurableFocusTrapConfig): ConfigurableFocusTrap;
-    /**
-     * @deprecated Pass a config object instead of the `deferCaptureElements` flag.
-     * @breaking-change 11.0.0
-     */
-    create(element: HTMLElement, deferCaptureElements: boolean): ConfigurableFocusTrap;
     static ɵfac: i0.ɵɵFactoryDeclaration<ConfigurableFocusTrapFactory, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<ConfigurableFocusTrapFactory>;
 }
@@ -520,5 +497,5 @@ declare class _IdGenerator {
     static ɵprov: i0.ɵɵInjectableDeclaration<_IdGenerator>;
 }
 
-export { AriaDescriber, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, CDK_DESCRIBEDBY_ID_PREFIX, ConfigurableFocusTrap, ConfigurableFocusTrapFactory, EventListenerFocusTrapInertStrategy, FOCUS_TRAP_INERT_STRATEGY, FocusTrap, HighContrastMode, HighContrastModeDetector, INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS, INPUT_MODALITY_DETECTOR_OPTIONS, InputModalityDetector, InteractivityChecker, MESSAGES_CONTAINER_ID, NOOP_TREE_KEY_MANAGER_FACTORY_PROVIDER, NoopTreeKeyManager, TREE_KEY_MANAGER, TreeKeyManager, TreeKeyManagerFactory, TreeKeyManagerItem, TreeKeyManagerOptions, TreeKeyManagerStrategy, _IdGenerator, addAriaReferencedId, getAriaReferenceIds, isFakeMousedownFromScreenReader, isFakeTouchstartFromScreenReader, removeAriaReferencedId };
+export { AriaDescriber, ConfigurableFocusTrap, ConfigurableFocusTrapFactory, EventListenerFocusTrapInertStrategy, FOCUS_TRAP_INERT_STRATEGY, FocusTrap, HighContrastMode, HighContrastModeDetector, INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS, INPUT_MODALITY_DETECTOR_OPTIONS, InputModalityDetector, InteractivityChecker, NOOP_TREE_KEY_MANAGER_FACTORY_PROVIDER, NoopTreeKeyManager, TREE_KEY_MANAGER, TreeKeyManager, TreeKeyManagerFactory, TreeKeyManagerItem, TreeKeyManagerOptions, TreeKeyManagerStrategy, _IdGenerator, addAriaReferencedId, getAriaReferenceIds, isFakeMousedownFromScreenReader, isFakeTouchstartFromScreenReader, removeAriaReferencedId };
 export type { ConfigurableFocusTrapConfig, FocusTrapInertStrategy, InputModality, InputModalityDetectorOptions, RegisteredMessage };

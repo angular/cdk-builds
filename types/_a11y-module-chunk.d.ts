@@ -67,8 +67,7 @@ declare class FocusTrap {
     private _checker;
     readonly _ngZone: NgZone;
     readonly _document: Document;
-    /** @breaking-change 20.0.0 param to become required */
-    readonly _injector?: Injector | undefined;
+    readonly _injector: Injector;
     private _startAnchor;
     private _endAnchor;
     private _hasAttached;
@@ -78,9 +77,7 @@ declare class FocusTrap {
     get enabled(): boolean;
     set enabled(value: boolean);
     protected _enabled: boolean;
-    constructor(_element: HTMLElement, _checker: InteractivityChecker, _ngZone: NgZone, _document: Document, deferAnchors?: boolean, 
-    /** @breaking-change 20.0.0 param to become required */
-    _injector?: Injector | undefined);
+    constructor(_element: HTMLElement, _checker: InteractivityChecker, _ngZone: NgZone, _document: Document, deferAnchors: boolean | undefined, _injector: Injector);
     /** Destroys the focus trap by cleaning up the anchors. */
     destroy(): void;
     /**

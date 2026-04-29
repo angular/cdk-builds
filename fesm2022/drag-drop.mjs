@@ -1963,7 +1963,7 @@ class DropListRef {
       container: this
     });
   }
-  drop(item, currentIndex, previousIndex, previousContainer, isPointerOverContainer, distance, dropPoint, event = {}) {
+  drop(item, currentIndex, previousIndex, previousContainer, isPointerOverContainer, distance, dropPoint, event) {
     this._reset();
     this.dropped.next({
       item,
