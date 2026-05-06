@@ -56,13 +56,15 @@ class ComponentPortal extends Portal {
   injector;
   projectableNodes;
   bindings;
-  constructor(component, viewContainerRef, injector, projectableNodes, bindings) {
+  directives;
+  constructor(component, viewContainerRef, injector, projectableNodes, bindings, directives) {
     super();
     this.component = component;
     this.viewContainerRef = viewContainerRef;
     this.injector = injector;
     this.projectableNodes = projectableNodes;
     this.bindings = bindings || null;
+    this.directives = directives || null;
   }
 }
 class TemplatePortal extends Portal {
@@ -177,7 +179,8 @@ class DomPortalOutlet extends BasePortalOutlet {
         injector,
         ngModuleRef,
         projectableNodes: portal.projectableNodes || undefined,
-        bindings: portal.bindings || undefined
+        bindings: portal.bindings || undefined,
+        directives: portal.directives || undefined
       });
       this.setDisposeFn(() => componentRef.destroy());
     } else {
@@ -191,7 +194,8 @@ class DomPortalOutlet extends BasePortalOutlet {
         elementInjector,
         environmentInjector,
         projectableNodes: portal.projectableNodes || undefined,
-        bindings: portal.bindings || undefined
+        bindings: portal.bindings || undefined,
+        directives: portal.directives || undefined
       });
       appRef.attachView(componentRef.hostView);
       this.setDisposeFn(() => {
@@ -326,7 +330,8 @@ class CdkPortalOutlet extends BasePortalOutlet {
       injector: portal.injector || viewContainerRef.injector,
       projectableNodes: portal.projectableNodes || undefined,
       ngModuleRef: this._moduleRef || undefined,
-      bindings: portal.bindings || undefined
+      bindings: portal.bindings || undefined,
+      directives: portal.directives || undefined
     });
     if (viewContainerRef !== this._viewContainerRef) {
       this._getRootNode().appendChild(ref.hostView.rootNodes[0]);

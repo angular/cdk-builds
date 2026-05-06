@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { ComponentRef, ViewContainerRef, Injector, Binding, EmbeddedViewRef, TemplateRef, ElementRef, OnInit, OnDestroy, EventEmitter } from '@angular/core';
+import { ComponentRef, ViewContainerRef, Injector, Binding, Type, DirectiveWithBindings, EmbeddedViewRef, TemplateRef, ElementRef, OnInit, OnDestroy, EventEmitter } from '@angular/core';
 
 /** Interface that can be used to generically type a class. */
 interface ComponentType<T> {
@@ -45,7 +45,11 @@ declare class ComponentPortal<T> extends Portal<ComponentRef<T>> {
      * Bindings to apply to the created component.
      */
     readonly bindings: Binding[] | null;
-    constructor(component: ComponentType<T>, viewContainerRef?: ViewContainerRef | null, injector?: Injector | null, projectableNodes?: Node[][] | null, bindings?: Binding[]);
+    /**
+     * Directives to apply to the created component.
+     */
+    readonly directives: (Type<unknown> | DirectiveWithBindings<unknown>)[] | null;
+    constructor(component: ComponentType<T>, viewContainerRef?: ViewContainerRef | null, injector?: Injector | null, projectableNodes?: Node[][] | null, bindings?: Binding[], directives?: (Type<unknown> | DirectiveWithBindings<unknown>)[]);
 }
 /**
  * A `TemplatePortal` is a portal that represents some embedded template (TemplateRef).
