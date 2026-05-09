@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { inject, ElementRef, Directive, TemplateRef, InjectionToken, signal, EventEmitter, computed, booleanAttribute, ChangeDetectorRef, QueryList, numberAttribute, Input, Output, ViewChild, ContentChildren, ContentChild, ChangeDetectionStrategy, ViewEncapsulation, Component, NgModule } from '@angular/core';
+import { inject, ElementRef, Directive, TemplateRef, InjectionToken, signal, EventEmitter, computed, booleanAttribute, ChangeDetectorRef, QueryList, numberAttribute, Input, Output, ViewChild, ContentChildren, ContentChild, ViewEncapsulation, Component, NgModule } from '@angular/core';
 import { ControlContainer } from '@angular/forms';
 import { Subject, of } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
@@ -292,7 +292,6 @@ class CdkStep {
     ngImport: i0,
     template: '<ng-template><ng-content/></ng-template>',
     isInline: true,
-    changeDetection: i0.ChangeDetectionStrategy.OnPush,
     encapsulation: i0.ViewEncapsulation.None
   });
 }
@@ -307,8 +306,7 @@ i0.ɵɵngDeclareClassMetadata({
       selector: 'cdk-step',
       exportAs: 'cdkStep',
       template: '<ng-template><ng-content/></ng-template>',
-      encapsulation: ViewEncapsulation.None,
-      changeDetection: ChangeDetectionStrategy.OnPush
+      encapsulation: ViewEncapsulation.None
     }]
   }],
   ctorParameters: () => [],

@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { ViewEncapsulation, ChangeDetectionStrategy, Component, inject, NgZone, RendererFactory2, ElementRef, EventEmitter, Service, Output, Directive, Renderer2, DOCUMENT, booleanAttribute, Input, NgModule } from '@angular/core';
+import { ViewEncapsulation, Component, inject, NgZone, RendererFactory2, ElementRef, EventEmitter, Service, Output, Directive, Renderer2, DOCUMENT, booleanAttribute, Input, NgModule } from '@angular/core';
 import { EMPTY, Subject } from 'rxjs';
 import { Platform } from './_platform-chunk.mjs';
 import { _CdkPrivateStyleLoader } from './_style-loader-chunk.mjs';
@@ -31,7 +31,6 @@ class _CdkTextFieldStyleLoader {
     template: '',
     isInline: true,
     styles: ["textarea.cdk-textarea-autosize {\n  resize: none;\n}\n\ntextarea.cdk-textarea-autosize-measuring {\n  padding: 2px 0 !important;\n  box-sizing: content-box !important;\n  height: auto !important;\n  overflow: hidden !important;\n}\n\ntextarea.cdk-textarea-autosize-measuring-firefox {\n  padding: 2px 0 !important;\n  box-sizing: content-box !important;\n  height: 0 !important;\n}\n\n@keyframes cdk-text-field-autofill-start { /*!*/ }\n@keyframes cdk-text-field-autofill-end { /*!*/ }\n.cdk-text-field-autofill-monitored:-webkit-autofill {\n  animation: cdk-text-field-autofill-start 0s 1ms;\n}\n\n.cdk-text-field-autofill-monitored:not(:-webkit-autofill) {\n  animation: cdk-text-field-autofill-end 0s 1ms;\n}\n"],
-    changeDetection: i0.ChangeDetectionStrategy.OnPush,
     encapsulation: i0.ViewEncapsulation.None
   });
 }
@@ -44,7 +43,6 @@ i0.ɵɵngDeclareClassMetadata({
     type: Component,
     args: [{
       template: '',
-      changeDetection: ChangeDetectionStrategy.OnPush,
       encapsulation: ViewEncapsulation.None,
       host: {
         'cdk-text-field-style-loader': ''

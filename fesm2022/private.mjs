@@ -1,6 +1,6 @@
 export { _CdkPrivateStyleLoader } from './_style-loader-chunk.mjs';
 import * as i0 from '@angular/core';
-import { ChangeDetectionStrategy, ViewEncapsulation, Component, SecurityContext } from '@angular/core';
+import { ViewEncapsulation, Component, SecurityContext } from '@angular/core';
 
 class _VisuallyHiddenLoader {
   static ɵfac = i0.ɵɵngDeclareFactory({
@@ -22,7 +22,6 @@ class _VisuallyHiddenLoader {
     template: '',
     isInline: true,
     styles: [".cdk-visually-hidden {\n  border: 0;\n  clip: rect(0 0 0 0);\n  height: 1px;\n  margin: -1px;\n  overflow: hidden;\n  padding: 0;\n  position: absolute;\n  width: 1px;\n  white-space: nowrap;\n  outline: 0;\n  -webkit-appearance: none;\n  -moz-appearance: none;\n  left: 0;\n}\n[dir=rtl] .cdk-visually-hidden {\n  left: auto;\n  right: 0;\n}\n"],
-    changeDetection: i0.ChangeDetectionStrategy.OnPush,
     encapsulation: i0.ViewEncapsulation.None
   });
 }
@@ -37,7 +36,6 @@ i0.ɵɵngDeclareClassMetadata({
       exportAs: 'cdkVisuallyHidden',
       encapsulation: ViewEncapsulation.None,
       template: '',
-      changeDetection: ChangeDetectionStrategy.OnPush,
       styles: [".cdk-visually-hidden {\n  border: 0;\n  clip: rect(0 0 0 0);\n  height: 1px;\n  margin: -1px;\n  overflow: hidden;\n  padding: 0;\n  position: absolute;\n  width: 1px;\n  white-space: nowrap;\n  outline: 0;\n  -webkit-appearance: none;\n  -moz-appearance: none;\n  left: 0;\n}\n[dir=rtl] .cdk-visually-hidden {\n  left: auto;\n  right: 0;\n}\n"]
     }]
   }]
