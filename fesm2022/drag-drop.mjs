@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { inject, NgZone, DOCUMENT, RendererFactory2, signal, ChangeDetectionStrategy, ViewEncapsulation, Component, Service, Renderer2, Injector, InjectionToken, ElementRef, booleanAttribute, Input, Directive, ViewContainerRef, ChangeDetectorRef, EventEmitter, afterNextRender, numberAttribute, Output, TemplateRef, NgModule } from '@angular/core';
+import { inject, NgZone, DOCUMENT, RendererFactory2, signal, ViewEncapsulation, Component, Service, Renderer2, Injector, InjectionToken, ElementRef, booleanAttribute, Input, Directive, ViewContainerRef, ChangeDetectorRef, EventEmitter, afterNextRender, numberAttribute, Output, TemplateRef, NgModule } from '@angular/core';
 import { Subject, Observable, merge, Subscription, interval, animationFrameScheduler, BehaviorSubject } from 'rxjs';
 import { _CdkPrivateStyleLoader } from './_style-loader-chunk.mjs';
 import { takeUntil, map, take, tap, switchMap, startWith } from 'rxjs/operators';
@@ -260,7 +260,6 @@ class _ResetsLoader {
     template: '',
     isInline: true,
     styles: ["@layer cdk-resets {\n  .cdk-drag-preview {\n    background: none;\n    border: none;\n    padding: 0;\n    color: inherit;\n    inset: auto;\n  }\n}\n.cdk-drag-placeholder *,\n.cdk-drag-preview * {\n  pointer-events: none !important;\n}\n"],
-    changeDetection: i0.ChangeDetectionStrategy.OnPush,
     encapsulation: i0.ViewEncapsulation.None
   });
 }
@@ -274,7 +273,6 @@ i0.ɵɵngDeclareClassMetadata({
     args: [{
       encapsulation: ViewEncapsulation.None,
       template: '',
-      changeDetection: ChangeDetectionStrategy.OnPush,
       host: {
         'cdk-drag-resets-container': ''
       },
