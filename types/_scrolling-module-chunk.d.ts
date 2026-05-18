@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { OnDestroy, ElementRef, OnInit, NgZone, InjectionToken, OnChanges, DoCheck, NgIterable, TrackByFunction, TemplateRef } from '@angular/core';
+import { ElementRef, OnDestroy, OnInit, NgZone, InjectionToken, OnChanges, DoCheck, NgIterable, TrackByFunction, TemplateRef } from '@angular/core';
 import { Directionality, BidiModule } from './_bidi-module-chunk.js';
 import { Observable, Subscription, Subject } from 'rxjs';
 import { ListRange, CollectionViewer, DataSource } from './_data-source-chunk.js';
@@ -15,35 +15,42 @@ interface CdkVirtualScrollRepeater<T> {
 
 /** Time in ms to throttle the scrolling events by default. */
 declare const DEFAULT_SCROLL_TIME = 20;
+/** Scrollable instance that can be registered with the `ScrollDispatcher`. */
+interface ScrollDispatcherTarget {
+    /** Observable that emits when the element is scrolled. */
+    elementScrolled(): Observable<Event>;
+    /** Gets the `ElementRef` representing the scrollable element. */
+    getElementRef(): ElementRef<HTMLElement>;
+}
 /**
- * Service contained all registered Scrollable references and emits an event when any one of the
- * Scrollable references emit a scrolled event.
+ * Service contained all registered scroll targets and emits
+ * an event when any one of them emits a scrolled event.
  */
 declare class ScrollDispatcher implements OnDestroy {
     private _ngZone;
     private _platform;
     private _renderer;
     private _cleanupGlobalListener;
-    /** Subject for notifying that a registered scrollable reference element has been scrolled. */
+    /** Subject for notifying that a registered element has been scrolled. */
     private readonly _scrolled;
     /** Keeps track of the amount of subscriptions to `scrolled`. Used for cleaning up afterwards. */
     private _scrolledCount;
     /**
-     * Map of all the scrollable references that are registered with the service and their
+     * Map of all the scrollable targets that are registered with the service and their
      * scroll event subscriptions.
      */
-    scrollContainers: Map<CdkScrollable, Subscription>;
+    readonly scrollContainers: Map<ScrollDispatcherTarget, Subscription>;
     /**
      * Registers a scrollable instance with the service and listens for its scrolled events. When the
      * scrollable is scrolled, the service emits the event to its scrolled observable.
-     * @param scrollable Scrollable instance to be registered.
+     * @param target Scrollable instance to be registered.
      */
-    register(scrollable: CdkScrollable): void;
+    register(target: ScrollDispatcherTarget): void;
     /**
      * De-registers a Scrollable reference and unsubscribes from its scroll event observable.
-     * @param scrollable Scrollable instance to be deregistered.
+     * @param target Scrollable instance to be deregistered.
      */
-    deregister(scrollable: CdkScrollable): void;
+    deregister(target: ScrollDispatcherTarget): void;
     /**
      * Returns an observable that emits an event whenever any of the registered Scrollable
      * references (or window, document, or body) fire a scrolled event. Can provide a time in ms
@@ -54,7 +61,7 @@ declare class ScrollDispatcher implements OnDestroy {
      * If you need to update any data bindings as a result of a scroll event, you have
      * to run the callback using `NgZone.run`.
      */
-    scrolled(auditTimeInMs?: number): Observable<CdkScrollable | void>;
+    scrolled(auditTimeInMs?: number): Observable<ScrollDispatcherTarget | void>;
     ngOnDestroy(): void;
     /**
      * Returns an observable that emits whenever any of the
@@ -62,11 +69,11 @@ declare class ScrollDispatcher implements OnDestroy {
      * @param elementOrElementRef Element whose ancestors to listen for.
      * @param auditTimeInMs Time to throttle the scroll events.
      */
-    ancestorScrolled(elementOrElementRef: ElementRef | HTMLElement, auditTimeInMs?: number): Observable<CdkScrollable | void>;
-    /** Returns all registered Scrollables that contain the provided element. */
-    getAncestorScrollContainers(elementOrElementRef: ElementRef | HTMLElement): CdkScrollable[];
+    ancestorScrolled(elementOrElementRef: ElementRef | HTMLElement, auditTimeInMs?: number): Observable<ScrollDispatcherTarget | void>;
+    /** Returns all registered containers that contain the provided element. */
+    getAncestorScrollContainers(elementOrElementRef: ElementRef | HTMLElement): ScrollDispatcherTarget[];
     /** Returns true if the element is contained within the provided Scrollable. */
-    private _scrollableContainsElement;
+    private _targetContainsElement;
     static ɵfac: i0.ɵɵFactoryDeclaration<ScrollDispatcher, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<ScrollDispatcher>;
 }
@@ -107,7 +114,7 @@ type ExtendedScrollToOptions = _XAxis & _YAxis & ScrollOptions;
  * ScrollDispatcher service to include itself as part of its collection of scrolling events that it
  * can be listened to through the service.
  */
-declare class CdkScrollable implements OnInit, OnDestroy {
+declare class CdkScrollable implements ScrollDispatcherTarget, OnInit, OnDestroy {
     protected elementRef: ElementRef<HTMLElement>;
     protected scrollDispatcher: ScrollDispatcher;
     protected ngZone: NgZone;
@@ -554,4 +561,4 @@ declare class ScrollingModule {
 }
 
 export { CDK_VIRTUAL_SCROLL_VIEWPORT, CdkFixedSizeVirtualScroll, CdkScrollable, CdkScrollableModule, CdkVirtualForOf, CdkVirtualScrollViewport, CdkVirtualScrollable, CdkVirtualScrollableElement, CdkVirtualScrollableWindow, DEFAULT_SCROLL_TIME, FixedSizeVirtualScrollStrategy, ScrollDispatcher, ScrollingModule, VIRTUAL_SCROLLABLE, VIRTUAL_SCROLL_STRATEGY, _fixedSizeVirtualScrollStrategyFactory };
-export type { CdkVirtualForOfContext, CdkVirtualScrollRepeater, ExtendedScrollToOptions, VirtualScrollStrategy, _Bottom, _End, _Left, _Right, _Start, _Top, _Without, _XAxis, _XOR, _YAxis };
+export type { CdkVirtualForOfContext, CdkVirtualScrollRepeater, ExtendedScrollToOptions, ScrollDispatcherTarget, VirtualScrollStrategy, _Bottom, _End, _Left, _Right, _Start, _Top, _Without, _XAxis, _XOR, _YAxis };

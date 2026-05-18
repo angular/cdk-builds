@@ -203,16 +203,16 @@ class ScrollDispatcher {
   _scrolled = new Subject();
   _scrolledCount = 0;
   scrollContainers = new Map();
-  register(scrollable) {
-    if (!this.scrollContainers.has(scrollable)) {
-      this.scrollContainers.set(scrollable, scrollable.elementScrolled().subscribe(() => this._scrolled.next(scrollable)));
+  register(target) {
+    if (!this.scrollContainers.has(target)) {
+      this.scrollContainers.set(target, target.elementScrolled().subscribe(() => this._scrolled.next(target)));
     }
   }
-  deregister(scrollable) {
-    const scrollableReference = this.scrollContainers.get(scrollable);
-    if (scrollableReference) {
-      scrollableReference.unsubscribe();
-      this.scrollContainers.delete(scrollable);
+  deregister(target) {
+    const ref = this.scrollContainers.get(target);
+    if (ref) {
+      ref.unsubscribe();
+      this.scrollContainers.delete(target);
     }
   }
   scrolled(auditTimeInMs = DEFAULT_SCROLL_TIME) {
@@ -247,18 +247,18 @@ class ScrollDispatcher {
   }
   getAncestorScrollContainers(elementOrElementRef) {
     const scrollingContainers = [];
-    this.scrollContainers.forEach((_subscription, scrollable) => {
-      if (this._scrollableContainsElement(scrollable, elementOrElementRef)) {
-        scrollingContainers.push(scrollable);
+    this.scrollContainers.forEach((_, target) => {
+      if (this._targetContainsElement(target, elementOrElementRef)) {
+        scrollingContainers.push(target);
       }
     });
     return scrollingContainers;
   }
-  _scrollableContainsElement(scrollable, elementOrElementRef) {
+  _targetContainsElement(scrollable, elementOrElementRef) {
     let element = coerceElement(elementOrElementRef);
-    let scrollableElement = scrollable.getElementRef().nativeElement;
+    let targetElement = scrollable.getElementRef().nativeElement;
     do {
-      if (element == scrollableElement) {
+      if (element == targetElement) {
         return true;
       }
     } while (element = element.parentElement);
