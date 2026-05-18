@@ -2,7 +2,7 @@ import * as i0 from '@angular/core';
 import { OnDestroy, NgZone, EnvironmentInjector, Renderer2, ComponentRef, EmbeddedViewRef, ElementRef, Injector, OnChanges, EventEmitter, SimpleChanges, InjectionToken } from '@angular/core';
 import { Direction, Directionality, BidiModule } from './_bidi-module-chunk.js';
 import { PortalOutlet, ComponentPortal, TemplatePortal, PortalModule } from './_portal-directives-chunk.js';
-import { CdkScrollable, ScrollingModule } from './_scrolling-module-chunk.js';
+import { ScrollDispatcherTarget, ScrollingModule } from './_scrolling-module-chunk.js';
 import { Location } from '@angular/common';
 import { Subject, Observable } from 'rxjs';
 import { ViewportRuler } from './scrolling.js';
@@ -550,7 +550,7 @@ declare class FlexibleConnectedPositionStrategy implements PositionStrategy {
      * on reposition we can evaluate if it or the overlay has been clipped or outside view. Every
      * Scrollable must be an ancestor element of the strategy's origin element.
      */
-    withScrollableContainers(scrollables: CdkScrollable[]): this;
+    withScrollableContainers(scrollables: ScrollDispatcherTarget[]): this;
     /**
      * Adds new preferred positions.
      * @param positions List of positions options for this overlay.
