@@ -1538,6 +1538,9 @@ class CdkTable {
   _contentHeaderRowDefs;
   _contentFooterRowDefs;
   _noDataRow;
+  get renderedRows() {
+    return this._renderRows;
+  }
   constructor() {
     const role = inject(new HostAttributeToken('role'), {
       optional: true
