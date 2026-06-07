@@ -1,7 +1,7 @@
 import * as i0 from '@angular/core';
 import { inject, APP_ID, Service } from '@angular/core';
 
-const counters = {};
+const counters = new Map();
 class _IdGenerator {
   _appId = inject(APP_ID);
   static _infix = `a${Math.floor(Math.random() * 100000).toString()}`;
@@ -9,10 +9,14 @@ class _IdGenerator {
     if (this._appId !== 'ng') {
       prefix += this._appId;
     }
-    if (!counters.hasOwnProperty(prefix)) {
-      counters[prefix] = 0;
+    let count = counters.get(prefix);
+    if (count === undefined) {
+      count = 0;
+    } else {
+      count++;
     }
-    return `${prefix}${randomize ? _IdGenerator._infix + '-' : ''}${counters[prefix]++}`;
+    counters.set(prefix, count);
+    return `${prefix}${randomize ? _IdGenerator._infix + '-' : ''}${count}`;
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
