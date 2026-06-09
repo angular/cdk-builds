@@ -257,7 +257,7 @@ class CdkPortal extends TemplatePortal {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-rc.2",
+    version: "22.0.0",
     ngImport: i0,
     type: CdkPortal,
     deps: [],
@@ -265,7 +265,7 @@ class CdkPortal extends TemplatePortal {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "22.0.0-rc.2",
+    version: "22.0.0",
     type: CdkPortal,
     isStandalone: true,
     selector: "[cdkPortal]",
@@ -276,7 +276,7 @@ class CdkPortal extends TemplatePortal {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-rc.2",
+  version: "22.0.0",
   ngImport: i0,
   type: CdkPortal,
   decorators: [{
@@ -375,7 +375,7 @@ class CdkPortalOutlet extends BasePortalOutlet {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-rc.2",
+    version: "22.0.0",
     ngImport: i0,
     type: CdkPortalOutlet,
     deps: null,
@@ -383,7 +383,7 @@ class CdkPortalOutlet extends BasePortalOutlet {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "22.0.0-rc.2",
+    version: "22.0.0",
     type: CdkPortalOutlet,
     isStandalone: true,
     selector: "[cdkPortalOutlet]",
@@ -400,7 +400,7 @@ class CdkPortalOutlet extends BasePortalOutlet {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-rc.2",
+  version: "22.0.0",
   ngImport: i0,
   type: CdkPortalOutlet,
   decorators: [{
@@ -423,7 +423,7 @@ i0.ɵɵngDeclareClassMetadata({
 class PortalModule {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-rc.2",
+    version: "22.0.0",
     ngImport: i0,
     type: PortalModule,
     deps: [],
@@ -431,7 +431,7 @@ class PortalModule {
   });
   static ɵmod = i0.ɵɵngDeclareNgModule({
     minVersion: "14.0.0",
-    version: "22.0.0-rc.2",
+    version: "22.0.0",
     ngImport: i0,
     type: PortalModule,
     imports: [CdkPortal, CdkPortalOutlet],
@@ -439,14 +439,14 @@ class PortalModule {
   });
   static ɵinj = i0.ɵɵngDeclareInjector({
     minVersion: "12.0.0",
-    version: "22.0.0-rc.2",
+    version: "22.0.0",
     ngImport: i0,
     type: PortalModule
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-rc.2",
+  version: "22.0.0",
   ngImport: i0,
   type: PortalModule,
   decorators: [{
