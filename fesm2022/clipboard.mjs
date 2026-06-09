@@ -54,7 +54,7 @@ class Clipboard {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-rc.2",
+    version: "22.0.0",
     ngImport: i0,
     type: Clipboard,
     deps: [],
@@ -62,14 +62,14 @@ class Clipboard {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.0.0-rc.2",
+    version: "22.0.0",
     ngImport: i0,
     type: Clipboard
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-rc.2",
+  version: "22.0.0",
   ngImport: i0,
   type: Clipboard,
   decorators: [{
@@ -126,7 +126,7 @@ class CdkCopyToClipboard {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-rc.2",
+    version: "22.0.0",
     ngImport: i0,
     type: CdkCopyToClipboard,
     deps: [],
@@ -134,7 +134,7 @@ class CdkCopyToClipboard {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "22.0.0-rc.2",
+    version: "22.0.0",
     type: CdkCopyToClipboard,
     isStandalone: true,
     selector: "[cdkCopyToClipboard]",
@@ -155,7 +155,7 @@ class CdkCopyToClipboard {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-rc.2",
+  version: "22.0.0",
   ngImport: i0,
   type: CdkCopyToClipboard,
   decorators: [{
@@ -187,7 +187,7 @@ i0.ɵɵngDeclareClassMetadata({
 class ClipboardModule {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0-rc.2",
+    version: "22.0.0",
     ngImport: i0,
     type: ClipboardModule,
     deps: [],
@@ -195,7 +195,7 @@ class ClipboardModule {
   });
   static ɵmod = i0.ɵɵngDeclareNgModule({
     minVersion: "14.0.0",
-    version: "22.0.0-rc.2",
+    version: "22.0.0",
     ngImport: i0,
     type: ClipboardModule,
     imports: [CdkCopyToClipboard],
@@ -203,14 +203,14 @@ class ClipboardModule {
   });
   static ɵinj = i0.ɵɵngDeclareInjector({
     minVersion: "12.0.0",
-    version: "22.0.0-rc.2",
+    version: "22.0.0",
     ngImport: i0,
     type: ClipboardModule
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0-rc.2",
+  version: "22.0.0",
   ngImport: i0,
   type: ClipboardModule,
   decorators: [{
