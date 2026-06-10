@@ -68,7 +68,8 @@ declare class CdkCopyToClipboard implements OnDestroy {
     text: string;
     /**
      * How many times to attempt to copy the text. This may be necessary for longer text, because
-     * the browser needs time to fill an intermediate textarea element and copy the content.
+     * the browser needs time to fill an intermediate textarea element and copy the content. Attempts
+     * are cappted out at 50.
      */
     attempts: number;
     /**
