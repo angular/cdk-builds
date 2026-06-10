@@ -96,6 +96,7 @@ class CdkCopyToClipboard {
     }
   }
   copy(attempts = this.attempts) {
+    attempts = Math.min(attempts, 50);
     if (attempts > 1) {
       let remainingAttempts = attempts;
       const pending = this._clipboard.beginCopy(this.text);
