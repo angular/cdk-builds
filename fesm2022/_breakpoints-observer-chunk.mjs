@@ -61,7 +61,7 @@ function createEmptyStyleRule(query, nonce) {
       document.head.appendChild(mediaQueryStyleNode);
     }
     if (mediaQueryStyleNode.sheet) {
-      mediaQueryStyleNode.sheet.insertRule(`@media ${query} {body{ }}`, 0);
+      mediaQueryStyleNode.sheet.insertRule(`@media ${query.replace(/[{}]/g, '')} {body{ }}`, 0);
       mediaQueriesForWebkitCompatibility.add(query);
     }
   } catch (e) {
