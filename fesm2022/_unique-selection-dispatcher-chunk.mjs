@@ -21,7 +21,7 @@ class UniqueSelectionDispatcher {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0",
+    version: "22.0.1",
     ngImport: i0,
     type: UniqueSelectionDispatcher,
     deps: [],
@@ -29,14 +29,14 @@ class UniqueSelectionDispatcher {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.0.0",
+    version: "22.0.1",
     ngImport: i0,
     type: UniqueSelectionDispatcher
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0",
+  version: "22.0.1",
   ngImport: i0,
   type: UniqueSelectionDispatcher,
   decorators: [{

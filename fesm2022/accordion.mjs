@@ -27,7 +27,7 @@ class CdkAccordion {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0",
+    version: "22.0.1",
     ngImport: i0,
     type: CdkAccordion,
     deps: [],
@@ -35,7 +35,7 @@ class CdkAccordion {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "16.1.0",
-    version: "22.0.0",
+    version: "22.0.1",
     type: CdkAccordion,
     isStandalone: true,
     selector: "cdk-accordion, [cdkAccordion]",
@@ -53,7 +53,7 @@ class CdkAccordion {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0",
+  version: "22.0.1",
   ngImport: i0,
   type: CdkAccordion,
   decorators: [{
@@ -160,7 +160,7 @@ class CdkAccordionItem {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0",
+    version: "22.0.1",
     ngImport: i0,
     type: CdkAccordionItem,
     deps: [],
@@ -168,7 +168,7 @@ class CdkAccordionItem {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "16.1.0",
-    version: "22.0.0",
+    version: "22.0.1",
     type: CdkAccordionItem,
     isStandalone: true,
     selector: "cdk-accordion-item, [cdkAccordionItem]",
@@ -192,7 +192,7 @@ class CdkAccordionItem {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0",
+  version: "22.0.1",
   ngImport: i0,
   type: CdkAccordionItem,
   decorators: [{
@@ -237,7 +237,7 @@ i0.ɵɵngDeclareClassMetadata({
 class CdkAccordionModule {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0",
+    version: "22.0.1",
     ngImport: i0,
     type: CdkAccordionModule,
     deps: [],
@@ -245,7 +245,7 @@ class CdkAccordionModule {
   });
   static ɵmod = i0.ɵɵngDeclareNgModule({
     minVersion: "14.0.0",
-    version: "22.0.0",
+    version: "22.0.1",
     ngImport: i0,
     type: CdkAccordionModule,
     imports: [CdkAccordion, CdkAccordionItem],
@@ -253,14 +253,14 @@ class CdkAccordionModule {
   });
   static ɵinj = i0.ɵɵngDeclareInjector({
     minVersion: "12.0.0",
-    version: "22.0.0",
+    version: "22.0.1",
     ngImport: i0,
     type: CdkAccordionModule
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0",
+  version: "22.0.1",
   ngImport: i0,
   type: CdkAccordionModule,
   decorators: [{

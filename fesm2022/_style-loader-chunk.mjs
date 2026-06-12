@@ -29,7 +29,7 @@ class _CdkPrivateStyleLoader {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0",
+    version: "22.0.1",
     ngImport: i0,
     type: _CdkPrivateStyleLoader,
     deps: [],
@@ -37,14 +37,14 @@ class _CdkPrivateStyleLoader {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.0.0",
+    version: "22.0.1",
     ngImport: i0,
     type: _CdkPrivateStyleLoader
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0",
+  version: "22.0.1",
   ngImport: i0,
   type: _CdkPrivateStyleLoader,
   decorators: [{
