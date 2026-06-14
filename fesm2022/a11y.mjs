@@ -188,7 +188,7 @@ class AriaDescriber {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0",
+    version: "22.1.0-next.0",
     ngImport: i0,
     type: AriaDescriber,
     deps: [],
@@ -196,14 +196,14 @@ class AriaDescriber {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.0.0",
+    version: "22.1.0-next.0",
     ngImport: i0,
     type: AriaDescriber
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0",
+  version: "22.1.0-next.0",
   ngImport: i0,
   type: AriaDescriber,
   decorators: [{
@@ -331,7 +331,7 @@ class FocusTrapManager {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0",
+    version: "22.1.0-next.0",
     ngImport: i0,
     type: FocusTrapManager,
     deps: [],
@@ -339,14 +339,14 @@ class FocusTrapManager {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.0.0",
+    version: "22.1.0-next.0",
     ngImport: i0,
     type: FocusTrapManager
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0",
+  version: "22.1.0-next.0",
   ngImport: i0,
   type: FocusTrapManager,
   decorators: [{
@@ -374,7 +374,7 @@ class ConfigurableFocusTrapFactory {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.0",
+    version: "22.1.0-next.0",
     ngImport: i0,
     type: ConfigurableFocusTrapFactory,
     deps: [],
@@ -382,14 +382,14 @@ class ConfigurableFocusTrapFactory {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.0.0",
+    version: "22.1.0-next.0",
     ngImport: i0,
     type: ConfigurableFocusTrapFactory
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.0",
+  version: "22.1.0-next.0",
   ngImport: i0,
   type: ConfigurableFocusTrapFactory,
   decorators: [{
