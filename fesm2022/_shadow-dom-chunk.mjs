@@ -28,7 +28,12 @@ function _getFocusedElementPierceShadowDom() {
   return activeElement;
 }
 function _getEventTarget(event) {
-  return event.composedPath ? event.composedPath()[0] : event.target;
+  if (event.composedPath) {
+    try {
+      return event.composedPath()[0];
+    } catch {}
+  }
+  return event.target;
 }
 
 export { _getEventTarget, _getFocusedElementPierceShadowDom, _getShadowRoot, _supportsShadowDom };
