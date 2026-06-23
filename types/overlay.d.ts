@@ -263,6 +263,7 @@ declare class OverlayPositionBuilder {
 
 /** Object used to configure the default options for overlays. */
 interface OverlayDefaultConfig {
+    /** Whether overlays should be rendered inside popovers by default. */
     usePopover?: boolean;
 }
 /** Injection token used to configure the default options for CDK overlays. */
