@@ -19,6 +19,16 @@ declare class SelectionModel<T> {
     get selected(): T[];
     /** Event emitted when the value has changed. */
     readonly changed: Subject<SelectionChange<T>>;
+    /**
+     * Exposes selection/deselection methods that work on array of values and don't expect a spread.
+     * This is useful in the cases where you may have a large collection of items that can't be
+     * easily spread into the existing methods without hitting browser limits.
+     */
+    readonly bulk: Readonly<{
+        select: (values: T[]) => boolean;
+        deselect: (values: T[]) => boolean;
+        setSelection: (values: T[]) => boolean;
+    }>;
     constructor(_multiple?: boolean, initiallySelectedValues?: T[], _emitChanges?: boolean, compareWith?: ((o1: T, o2: T) => boolean) | undefined);
     /**
      * Selects a value or an array of values.
@@ -71,6 +81,12 @@ declare class SelectionModel<T> {
      * Gets whether multiple values can be selected.
      */
     isMultipleSelection(): boolean;
+    /** Selects an array of values. */
+    private _select;
+    /** Deselects an array of values. */
+    private _deselect;
+    /** Sets the current selection from an array of items. */
+    private _setSelection;
     /** Emits a change event and clears the records of selected and deselected values. */
     private _emitChangeEvent;
     /** Selects a value. */

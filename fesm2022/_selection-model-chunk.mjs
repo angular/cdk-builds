@@ -15,6 +15,11 @@ class SelectionModel {
     return this._selected;
   }
   changed = new Subject();
+  bulk = {
+    select: values => this._select(values),
+    deselect: values => this._deselect(values),
+    setSelection: values => this._setSelection(values)
+  };
   constructor(_multiple = false, initiallySelectedValues, _emitChanges = true, compareWith) {
     this._multiple = _multiple;
     this._emitChanges = _emitChanges;
@@ -29,28 +34,13 @@ class SelectionModel {
     }
   }
   select(...values) {
-    this._verifyValueAssignment(values);
-    values.forEach(value => this._markSelected(value));
-    const changed = this._hasQueuedChanges();
-    this._emitChangeEvent();
-    return changed;
+    return this._select(values);
   }
   deselect(...values) {
-    this._verifyValueAssignment(values);
-    values.forEach(value => this._unmarkSelected(value));
-    const changed = this._hasQueuedChanges();
-    this._emitChangeEvent();
-    return changed;
+    return this._deselect(values);
   }
   setSelection(...values) {
-    this._verifyValueAssignment(values);
-    const oldValues = this.selected;
-    const newSelectedSet = new Set(values.map(value => this._getConcreteValue(value)));
-    values.forEach(value => this._markSelected(value));
-    oldValues.filter(value => !newSelectedSet.has(this._getConcreteValue(value, newSelectedSet))).forEach(value => this._unmarkSelected(value));
-    const changed = this._hasQueuedChanges();
-    this._emitChangeEvent();
-    return changed;
+    return this._setSelection(values);
   }
   toggle(value) {
     return this.isSelected(value) ? this.deselect(value) : this.select(value);
@@ -79,6 +69,30 @@ class SelectionModel {
   }
   isMultipleSelection() {
     return this._multiple;
+  }
+  _select(values) {
+    this._verifyValueAssignment(values);
+    values.forEach(value => this._markSelected(value));
+    const changed = this._hasQueuedChanges();
+    this._emitChangeEvent();
+    return changed;
+  }
+  _deselect(values) {
+    this._verifyValueAssignment(values);
+    values.forEach(value => this._unmarkSelected(value));
+    const changed = this._hasQueuedChanges();
+    this._emitChangeEvent();
+    return changed;
+  }
+  _setSelection(values) {
+    this._verifyValueAssignment(values);
+    const oldValues = this.selected;
+    const newSelectedSet = new Set(values.map(value => this._getConcreteValue(value)));
+    values.forEach(value => this._markSelected(value));
+    oldValues.filter(value => !newSelectedSet.has(this._getConcreteValue(value, newSelectedSet))).forEach(value => this._unmarkSelected(value));
+    const changed = this._hasQueuedChanges();
+    this._emitChangeEvent();
+    return changed;
   }
   _emitChangeEvent() {
     this._selected = null;
