@@ -21,7 +21,7 @@ class Platform {
   SAFARI = this.isBrowser && /safari/i.test(navigator.userAgent) && this.WEBKIT;
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.0.4",
+    version: "22.0.5",
     ngImport: i0,
     type: Platform,
     deps: [],
@@ -29,14 +29,14 @@ class Platform {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.0.4",
+    version: "22.0.5",
     ngImport: i0,
     type: Platform
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.0.4",
+  version: "22.0.5",
   ngImport: i0,
   type: Platform,
   decorators: [{
