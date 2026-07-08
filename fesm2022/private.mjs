@@ -48,9 +48,13 @@ function getPolicy() {
     if (typeof window !== 'undefined') {
       const ttWindow = window;
       if (ttWindow.trustedTypes !== undefined) {
-        policy = ttWindow.trustedTypes.createPolicy('angular#components', {
-          createHTML: s => s
-        });
+        try {
+          policy = ttWindow.trustedTypes.createPolicy('angular#components', {
+            createHTML: s => s
+          });
+        } catch (error) {
+          console.error(error);
+        }
       }
     }
   }
