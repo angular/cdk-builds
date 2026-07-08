@@ -2047,7 +2047,7 @@ function createOverlayRef(injector, config) {
     optional: true
   })?.usePopover ?? true;
   overlayConfig.direction = overlayConfig.direction || directionality.value;
-  if (!('showPopover' in doc.body)) {
+  if (!doc.body || !('showPopover' in doc.body)) {
     overlayConfig.usePopover = false;
   } else {
     overlayConfig.usePopover = config?.usePopover ?? defaultUsePopover;
