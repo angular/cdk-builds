@@ -1,6 +1,7 @@
 import * as i0 from '@angular/core';
 import { ElementRef, TemplateRef, OnChanges, AfterContentInit, AfterViewInit, OnDestroy, QueryList, EventEmitter, InjectionToken } from '@angular/core';
 import { NgForm, FormGroupDirective, AbstractControl } from '@angular/forms';
+import { Field } from '@angular/forms/signals';
 import { Subject } from 'rxjs';
 import { FocusableOption } from './_focus-key-manager-chunk.js';
 import { BidiModule } from './_bidi-module-chunk.js';
@@ -28,6 +29,8 @@ declare class CdkStepLabel {
 type StepContentPositionState = 'previous' | 'current' | 'next';
 /** Possible orientation of a stepper. */
 type StepperOrientation = 'horizontal' | 'vertical';
+/** Possible controls that can be assigned to a step. */
+type StepControl = AbstractControl | Field<unknown>;
 /** Change event emitted on selection changes. */
 declare class StepperSelectionEvent {
     /** Index of the step now selected. */
@@ -75,7 +78,7 @@ declare class CdkStep implements OnChanges {
     /** Template for step content. */
     content: TemplateRef<any>;
     /** The top level abstract control of the step. */
-    stepControl: AbstractControl;
+    stepControl: StepControl;
     /** Whether user has attempted to move away from the step. */
     get interacted(): boolean;
     set interacted(value: boolean);
@@ -230,4 +233,4 @@ declare class CdkStepperModule {
 }
 
 export { CdkStep, CdkStepHeader, CdkStepLabel, CdkStepper, CdkStepperModule, CdkStepperNext, CdkStepperPrevious, STEPPER_GLOBAL_OPTIONS, STEP_STATE, StepperSelectionEvent };
-export type { StepContentPositionState, StepState, StepperOptions, StepperOrientation };
+export type { StepContentPositionState, StepControl, StepState, StepperOptions, StepperOrientation };

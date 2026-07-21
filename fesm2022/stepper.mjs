@@ -148,7 +148,7 @@ class CdkStep {
     if (override != null) {
       return override;
     }
-    return interacted && (!this.stepControl || this.stepControl.valid);
+    return interacted && (!this.stepControl || isValid(this.stepControl));
   }
   set completed(value) {
     this._completedOverride.set(value);
@@ -204,7 +204,7 @@ class CdkStep {
     debugName: "_customError"
   }] : []));
   _getDefaultError() {
-    return this.interacted && !!this.stepControl?.invalid;
+    return this.interacted && !!this.stepControl && isInvalid(this.stepControl);
   }
   constructor() {
     const stepperOptions = inject(STEPPER_GLOBAL_OPTIONS, {
@@ -226,7 +226,7 @@ class CdkStep {
     }
     if (this.stepControl) {
       this._childForms?.forEach(form => form.resetForm?.());
-      this.stepControl.reset();
+      reset(this.stepControl);
     }
   }
   ngOnChanges() {
@@ -542,7 +542,7 @@ class CdkStepper {
     if (this.linear && index >= 0) {
       return this.steps.toArray().slice(0, index).some(step => {
         const control = step.stepControl;
-        const isIncomplete = control ? control.invalid || control.pending || !step.interacted : !step.completed;
+        const isIncomplete = control ? isInvalid(control) || isPending(control) || !step.interacted : !step.completed;
         return isIncomplete && !step.optional && !step._completedOverride();
       });
     }
@@ -647,6 +647,25 @@ i0.ɵɵngDeclareClassMetadata({
     }]
   }
 });
+function isField(value) {
+  return typeof value === 'function';
+}
+function isValid(control) {
+  return isField(control) ? control().valid() : control.valid;
+}
+function isInvalid(control) {
+  return isField(control) ? control().invalid() : control.invalid;
+}
+function isPending(control) {
+  return isField(control) ? control().pending() : control.pending;
+}
+function reset(control) {
+  if (isField(control)) {
+    control().reset();
+  } else {
+    control.reset();
+  }
+}
 
 class CdkStepperNext {
   _stepper = inject(CdkStepper);
