@@ -1,9 +1,9 @@
 import * as i0 from '@angular/core';
 import { AfterContentInit, OnDestroy, QueryList, NgZone, ChangeDetectorRef } from '@angular/core';
-import { Highlightable, ActiveDescendantKeyManager } from './_activedescendant-key-manager-chunk.js';
-import { ListKeyManagerOption } from './_list-key-manager-chunk.js';
+import { Highlightable, ActiveDescendantKeyManager } from './a11y.js';
+import { ListKeyManagerOption } from './a11y.js';
 import { Subject } from 'rxjs';
-import { SelectionModel } from './_selection-model-chunk.js';
+import { SelectionModel } from './collections.js';
 import { ControlValueAccessor } from '@angular/forms';
 
 /**

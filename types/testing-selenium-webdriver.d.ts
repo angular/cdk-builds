@@ -1,5 +1,5 @@
 import * as webdriver from 'selenium-webdriver';
-import { TestElement, ModifierKeys, TestKey, TextOptions, ElementDimensions, EventData, HarnessEnvironment, HarnessLoader } from './_harness-environment-chunk.js';
+import { TestElement, ModifierKeys, TestKey, TextOptions, ElementDimensions, EventData, HarnessEnvironment, HarnessLoader } from './testing.js';
 
 /** A `TestElement` implementation for WebDriver. */
 declare class SeleniumWebDriverElement implements TestElement {

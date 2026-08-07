@@ -1,7 +1,7 @@
 import * as i0 from '@angular/core';
 import { OnDestroy, ElementRef, OnInit, EventEmitter, AfterViewInit, DoCheck } from '@angular/core';
 import { Observable } from 'rxjs';
-import { NumberInput } from './_number-property-chunk.js';
+import { NumberInput } from './coercion.js';
 
 /** An event that is emitted when the autofill state of an input changes. */
 type AutofillEvent = {

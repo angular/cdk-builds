@@ -1,4 +1,4 @@
-import { HarnessEnvironment, HarnessLoader, TestElement, ComponentHarness, ComponentHarnessConstructor, ModifierKeys, TestKey, TextOptions, ElementDimensions, EventData } from './_harness-environment-chunk.js';
+import { HarnessEnvironment, HarnessLoader, TestElement, ComponentHarness, ComponentHarnessConstructor, ModifierKeys, TestKey, TextOptions, ElementDimensions, EventData } from './testing.js';
 import { ComponentFixture } from '@angular/core/testing';
 
 /** Options to configure the environment. */

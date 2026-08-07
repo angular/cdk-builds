@@ -1,9 +1,9 @@
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
-import { SelectionModel } from './_selection-model-chunk.js';
+import { SelectionModel } from './collections.js';
 import * as i0 from '@angular/core';
 import { InjectionToken, ViewContainerRef, TemplateRef, OnDestroy, OnInit, ElementRef, AfterContentChecked, AfterContentInit, AfterViewInit, TrackByFunction, QueryList, IterableDiffer, EventEmitter, IterableDiffers } from '@angular/core';
-import { TreeKeyManagerItem, TreeKeyManagerStrategy } from './_tree-key-manager-strategy-chunk.js';
-import { CollectionViewer, DataSource } from './_data-source-chunk.js';
+import { TreeKeyManagerItem, TreeKeyManagerStrategy } from './a11y.js';
+import { CollectionViewer, DataSource } from './collections.js';
 
 /**
  * Tree control interface. User can implement TreeControl to expand/collapse dataNodes in the tree.

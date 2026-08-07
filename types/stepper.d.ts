@@ -3,8 +3,8 @@ import { ElementRef, TemplateRef, OnChanges, AfterContentInit, AfterViewInit, On
 import { NgForm, FormGroupDirective, AbstractControl } from '@angular/forms';
 import { Field } from '@angular/forms/signals';
 import { Subject } from 'rxjs';
-import { FocusableOption } from './_focus-key-manager-chunk.js';
-import { BidiModule } from './_bidi-module-chunk.js';
+import { FocusableOption } from './a11y.js';
+import { BidiModule } from './bidi.js';
 import './_list-key-manager-chunk.js';
 import './_focus-monitor-chunk.js';
 

@@ -1,12 +1,12 @@
 import * as i0 from '@angular/core';
 import { ElementRef, Renderer2, QueryList, InjectionToken, OnDestroy, Injector, ViewContainerRef, EventEmitter, TemplateRef, OnChanges, SimpleChanges, NgZone, AfterContentInit } from '@angular/core';
-import { ScrollStrategy, ConnectedPosition, OverlayRef, OverlayModule } from './_overlay-module-chunk.js';
+import { ScrollStrategy, ConnectedPosition, OverlayRef, OverlayModule } from './overlay.js';
 import * as rxjs from 'rxjs';
 import { Observable, Subject } from 'rxjs';
-import { FocusOrigin } from './_focus-monitor-chunk.js';
-import { FocusableOption, FocusKeyManager } from './_focus-key-manager-chunk.js';
-import { Directionality } from './_bidi-module-chunk.js';
-import { TemplatePortal } from './_portal-directives-chunk.js';
+import { FocusOrigin } from './a11y.js';
+import { FocusableOption, FocusKeyManager } from './a11y.js';
+import { Directionality } from './bidi.js';
+import { TemplatePortal } from './portal.js';
 import './_scrolling-module-chunk.js';
 import './_data-source-chunk.js';
 import './_number-property-chunk.js';

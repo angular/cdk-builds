@@ -1,10 +1,11 @@
-import { Directionality } from './_bidi-module-chunk.js';
+import { Directionality } from './bidi.js';
 import * as i0 from '@angular/core';
 import { TemplateRef, ElementRef, OnChanges, IterableDiffers, IterableDiffer, SimpleChanges, IterableChanges, OnDestroy, ViewContainerRef, InjectionToken, AfterContentInit, AfterContentChecked, OnInit, ChangeDetectorRef, TrackByFunction, EventEmitter, QueryList } from '@angular/core';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
-import { CollectionViewer, ListRange, DataSource } from './_data-source-chunk.js';
-import { _ViewRepeater } from './_view-repeater-chunk.js';
-import { ScrollingModule } from './_scrolling-module-chunk.js';
+import { DataSource } from './_data-source-chunk.js';
+import { CollectionViewer, ListRange } from './collections.js';
+import { _ViewRepeater } from './collections.js';
+import { ScrollingModule } from './scrolling.js';
 import './_number-property-chunk.js';
 
 /**
