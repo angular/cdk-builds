@@ -152,8 +152,18 @@ class FocusTrap {
   _startAnchor = null;
   _endAnchor = null;
   _hasAttached = false;
-  startAnchorListener = () => this.focusLastTabbableElement();
-  endAnchorListener = () => this.focusFirstTabbableElement();
+  startAnchorListener = () => {
+    const isSuccess = this.focusLastTabbableElement();
+    if (!isSuccess && this._checker.isFocusable(this._element)) {
+      this._element.focus();
+    }
+  };
+  endAnchorListener = () => {
+    const isSuccess = this.focusFirstTabbableElement();
+    if (!isSuccess && this._checker.isFocusable(this._element)) {
+      this._element.focus();
+    }
+  };
   get enabled() {
     return this._enabled;
   }
@@ -226,7 +236,7 @@ class FocusTrap {
     });
   }
   _getRegionBoundary(bound) {
-    const markers = this._element.querySelectorAll(`[cdk-focus-region-${bound}], ` + `[cdkFocusRegion${bound}], ` + `[cdk-focus-${bound}]`);
+    const markers = this._element.querySelectorAll(`[cdk-focus-region-${bound}], [cdkFocusRegion${bound}], [cdk-focus-${bound}]`);
     if (typeof ngDevMode === 'undefined' || ngDevMode) {
       for (let i = 0; i < markers.length; i++) {
         if (markers[i].hasAttribute(`cdk-focus-${bound}`)) {
