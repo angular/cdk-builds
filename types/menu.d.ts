@@ -151,7 +151,7 @@ declare class MenuStack {
     /** Whether the menu stack is associated with an inline menu. */
     hasInlineMenu(): boolean;
     /** The orientation of the associated inline menu. */
-    inlineMenuOrientation(): "vertical" | "horizontal" | null;
+    inlineMenuOrientation(): "horizontal" | "vertical" | null;
     /** Sets whether the menu stack contains the focused element. */
     setHasFocus(hasFocus: boolean): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<MenuStack, never>;
@@ -614,7 +614,7 @@ declare abstract class CdkMenuBase extends CdkMenuGroup implements Menu, AfterCo
      */
     setActiveMenuItem(item: number | CdkMenuItem): void;
     /** Gets the tabindex for this menu. */
-    _getTabIndex(): 0 | -1 | null;
+    _getTabIndex(): -1 | 0 | null;
     /**
      * Close the open menu if the current active item opened the requested MenuStackItem.
      * @param menu The menu requested to be closed.
