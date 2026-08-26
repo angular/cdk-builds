@@ -1890,7 +1890,7 @@ class CdkTable {
   _addStickyColumnStyles(rows, rowDef) {
     const columnDefs = Array.from(rowDef?.columns || []).map(columnName => {
       const columnDef = this._columnDefsByName.get(columnName);
-      if (!columnDef && (typeof ngDevMode === 'undefined' || ngDevMode)) {
+      if (!columnDef) {
         throw getTableUnknownColumnError(columnName);
       }
       return columnDef;
@@ -1973,7 +1973,7 @@ class CdkTable {
     }
     return Array.from(rowDef.columns, columnId => {
       const column = this._columnDefsByName.get(columnId);
-      if (!column && (typeof ngDevMode === 'undefined' || ngDevMode)) {
+      if (!column) {
         throw getTableUnknownColumnError(columnId);
       }
       return rowDef.extractCellTemplate(column);
