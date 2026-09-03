@@ -94,6 +94,8 @@ interface ScrollStrategy {
 type ImmutableObject<T> = {
     readonly [P in keyof T]: T[P];
 };
+/** Gets all overlays that are currently attached. */
+declare function getAttachedOverlays(): OverlayRef[];
 /**
  * Reference to an overlay that has been created with the Overlay service.
  * Used to manipulate or dispose of said overlay.
@@ -909,5 +911,5 @@ declare class OverlayModule {
     static ɵinj: i0.ɵɵInjectorDeclaration<OverlayModule>;
 }
 
-export { CDK_CONNECTED_OVERLAY_DEFAULT_CONFIG, CdkConnectedOverlay, CdkOverlayOrigin, ConnectedOverlayPositionChange, ConnectionPositionPair, FlexibleConnectedPositionStrategy, OverlayConfig, OverlayContainer, OverlayKeyboardDispatcher, OverlayModule, OverlayOutsideClickDispatcher, OverlayRef, STANDARD_DROPDOWN_ADJACENT_POSITIONS, STANDARD_DROPDOWN_BELOW_POSITIONS, ScrollingVisibility, createFlexibleConnectedPositionStrategy, validateHorizontalPosition, validateVerticalPosition };
+export { CDK_CONNECTED_OVERLAY_DEFAULT_CONFIG, CdkConnectedOverlay, CdkOverlayOrigin, ConnectedOverlayPositionChange, ConnectionPositionPair, FlexibleConnectedPositionStrategy, OverlayConfig, OverlayContainer, OverlayKeyboardDispatcher, OverlayModule, OverlayOutsideClickDispatcher, OverlayRef, STANDARD_DROPDOWN_ADJACENT_POSITIONS, STANDARD_DROPDOWN_BELOW_POSITIONS, ScrollingVisibility, createFlexibleConnectedPositionStrategy, getAttachedOverlays, validateHorizontalPosition, validateVerticalPosition };
 export type { CdkConnectedOverlayConfig, ConnectedPosition, FlexibleConnectedPositionStrategyOrigin, FlexibleOverlayPopoverLocation, HorizontalConnectionPos, OriginConnectionPosition, OverlayConnectionPosition, OverlaySizeConfig, PositionStrategy, ScrollStrategy, VerticalConnectionPos, ViewportMargin };
