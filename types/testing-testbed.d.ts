@@ -1,11 +1,13 @@
 import { HarnessEnvironment, HarnessLoader, TestElement, ComponentHarness, ComponentHarnessConstructor, ModifierKeys, TestKey, TextOptions, ElementDimensions, EventData } from './testing.js';
-import { ComponentFixture } from '@angular/core/testing';
+import { ComponentFixture, DirectiveFixture } from '@angular/core/testing';
 
 /** Options to configure the environment. */
 interface TestbedHarnessEnvironmentOptions {
     /** The query function used to find DOM elements. */
     queryFn: (selector: string, root: Element) => Iterable<Element> | ArrayLike<Element>;
 }
+/** Covers all fixtures supported by `TestBed`. */
+type Fixture<T = unknown> = ComponentFixture<T> | DirectiveFixture<T>;
 /** A `HarnessEnvironment` implementation for Angular's Testbed. */
 declare class TestbedHarnessEnvironment extends HarnessEnvironment<Element> {
     private _fixture;
@@ -17,14 +19,14 @@ declare class TestbedHarnessEnvironment extends HarnessEnvironment<Element> {
     private _options;
     /** Environment stabilization callback passed to the created test elements. */
     private _stabilizeCallback;
-    protected constructor(rawRootElement: Element, _fixture: ComponentFixture<unknown>, options?: TestbedHarnessEnvironmentOptions);
+    protected constructor(rawRootElement: Element, _fixture: Fixture, options?: TestbedHarnessEnvironmentOptions);
     /** Creates a `HarnessLoader` rooted at the given fixture's root element. */
-    static loader(fixture: ComponentFixture<unknown>, options?: TestbedHarnessEnvironmentOptions): HarnessLoader;
+    static loader(fixture: Fixture, options?: TestbedHarnessEnvironmentOptions): HarnessLoader;
     /**
      * Creates a `HarnessLoader` at the document root. This can be used if harnesses are
      * located outside of a fixture (e.g. overlays appended to the document body).
      */
-    static documentRootLoader(fixture: ComponentFixture<unknown>, options?: TestbedHarnessEnvironmentOptions): HarnessLoader;
+    static documentRootLoader(fixture: Fixture, options?: TestbedHarnessEnvironmentOptions): HarnessLoader;
     /** Gets the native DOM element corresponding to the given TestElement. */
     static getNativeElement(el: TestElement): Element;
     /**
@@ -33,7 +35,7 @@ declare class TestbedHarnessEnvironment extends HarnessEnvironment<Element> {
      * of a fixture, as components do not have the correct selector when they are created as the root
      * of the fixture.
      */
-    static harnessForFixture<T extends ComponentHarness>(fixture: ComponentFixture<unknown>, harnessType: ComponentHarnessConstructor<T>, options?: TestbedHarnessEnvironmentOptions): Promise<T>;
+    static harnessForFixture<T extends ComponentHarness>(fixture: Fixture, harnessType: ComponentHarnessConstructor<T>, options?: TestbedHarnessEnvironmentOptions): Promise<T>;
     /**
      * Flushes change detection and async tasks captured in the Angular zone.
      * In most cases it should not be necessary to call this manually. However, there may be some edge
@@ -157,4 +159,4 @@ declare class UnitTestElement implements TestElement {
 }
 
 export { TestbedHarnessEnvironment, UnitTestElement };
-export type { TestbedHarnessEnvironmentOptions };
+export type { Fixture, TestbedHarnessEnvironmentOptions };

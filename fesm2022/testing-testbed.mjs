@@ -1,8 +1,9 @@
-import { flush } from '@angular/core/testing';
+import { ComponentFixture, TestBed, flush } from '@angular/core/testing';
 import { takeWhile } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 import { getNoKeysSpecifiedError, _getTextWithExcludedElements, TestKey, HarnessEnvironment, handleAutoChangeDetectionStatus, stopHandlingAutoChangeDetectionStatus } from './testing.mjs';
 import { PERIOD, COMMA, META, F12, F11, F10, F9, F8, F7, F6, F5, F4, F3, F2, F1, DELETE, INSERT, DOWN_ARROW, RIGHT_ARROW, UP_ARROW, LEFT_ARROW, HOME, END, PAGE_DOWN, PAGE_UP, ESCAPE, ALT, CONTROL, SHIFT, ENTER, TAB, BACKSPACE } from './_keycodes-chunk.mjs';
+import { DestroyRef } from '@angular/core';
 
 const stateObservableSymbol = Symbol('ProxyZone_PATCHED#stateObservable');
 class TaskStateZoneInterceptor {
@@ -619,10 +620,15 @@ class TestbedHarnessEnvironment extends HarnessEnvironment {
     }
     this._stabilizeCallback = () => this.forceStabilize();
     installAutoChangeDetectionStatusHandler(_fixture);
-    _fixture.componentRef.onDestroy(() => {
+    const onDestroy = () => {
       uninstallAutoChangeDetectionStatusHandler(_fixture);
       this._destroyed = true;
-    });
+    };
+    if (_fixture instanceof ComponentFixture) {
+      _fixture.componentRef.onDestroy(onDestroy);
+    } else {
+      TestBed.inject(DestroyRef).onDestroy(onDestroy);
+    }
   }
   static loader(fixture, options) {
     return new TestbedHarnessEnvironment(fixture.nativeElement, fixture, options);
