@@ -873,7 +873,7 @@ declare class DragDropRegistry implements OnDestroy {
     /** Clears out the global event listeners from the `document`. */
     private _clearGlobalListeners;
     static ɵfac: i0.ɵɵFactoryDeclaration<DragDropRegistry, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<DragDropRegistry>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 /** Template that can be used to create a drag preview element. */
@@ -1352,7 +1352,7 @@ declare class DragDrop {
      */
     createDropList<T = any>(element: ElementRef<HTMLElement> | HTMLElement): DropListRef<T>;
     static ɵfac: i0.ɵɵFactoryDeclaration<DragDrop, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<DragDrop>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 /**

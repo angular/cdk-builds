@@ -399,7 +399,7 @@ declare class Dialog implements OnDestroy {
     private _hideNonDialogContentFromAssistiveTechnology;
     private _getAfterAllClosed;
     static ɵfac: i0.ɵɵFactoryDeclaration<Dialog, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<Dialog>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 declare class DialogModule {

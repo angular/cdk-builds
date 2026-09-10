@@ -29,7 +29,7 @@ declare abstract class BaseOverlayDispatcher implements OnDestroy {
     /** Determines whether an overlay is allowed to receive an event. */
     protected canReceiveEvent<T>(overlayRef: OverlayRef, event: Event, stream: Subject<T>): boolean;
     static ɵfac: i0.ɵɵFactoryDeclaration<BaseOverlayDispatcher, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<BaseOverlayDispatcher>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 /**
@@ -48,7 +48,7 @@ declare class OverlayKeyboardDispatcher extends BaseOverlayDispatcher {
     /** Keyboard event listener that will be attached to the body. */
     private _keydownListener;
     static ɵfac: i0.ɵɵFactoryDeclaration<OverlayKeyboardDispatcher, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<OverlayKeyboardDispatcher>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 /**
@@ -73,7 +73,7 @@ declare class OverlayOutsideClickDispatcher extends BaseOverlayDispatcher {
     /** Click event listener that will be attached to the body propagate phase. */
     private _clickListener;
     static ɵfac: i0.ɵɵFactoryDeclaration<OverlayOutsideClickDispatcher, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<OverlayOutsideClickDispatcher>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 /**
@@ -424,7 +424,7 @@ declare class OverlayContainer implements OnDestroy {
     /** Loads the structural styles necessary for the overlay to work. */
     protected _loadStyles(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<OverlayContainer, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<OverlayContainer>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 /** Possible values that can be set as the origin of a FlexibleConnectedPositionStrategy. */

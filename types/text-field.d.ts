@@ -45,7 +45,7 @@ declare class AutofillMonitor implements OnDestroy {
     stopMonitoring(element: ElementRef<Element>): void;
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<AutofillMonitor, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<AutofillMonitor>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 /** A directive that can be used to monitor the autofill state of an input. */
 declare class CdkAutofill implements OnDestroy, OnInit {

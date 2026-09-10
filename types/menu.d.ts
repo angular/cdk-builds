@@ -155,7 +155,7 @@ declare class MenuStack {
     /** Sets whether the menu stack contains the focused element. */
     setHasFocus(hasFocus: boolean): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<MenuStack, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<MenuStack>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 /** Injection token used to return classes implementing the Menu interface */
@@ -258,7 +258,7 @@ declare class TargetMenuAim implements MenuAim, OnDestroy {
     /** Subscribe to the root menus mouse move events and update the tracked mouse points. */
     private _subscribeToMouseMoves;
     static ɵfac: i0.ɵɵFactoryDeclaration<TargetMenuAim, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<TargetMenuAim>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 /**
  * CdkTargetMenuAim is a provider for the TargetMenuAim service. It can be added to an
@@ -291,7 +291,7 @@ declare class MenuTracker {
      */
     update(trigger: CdkMenuTriggerBase): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<MenuTracker, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<MenuTracker>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 /**
  * Abstract directive that implements shared logic common to all menu triggers.

@@ -146,7 +146,7 @@ declare class ScrollStrategyOptions {
      */
     reposition: (config?: RepositionScrollStrategyConfig) => RepositionScrollStrategy;
     static ɵfac: i0.ɵɵFactoryDeclaration<ScrollStrategyOptions, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<ScrollStrategyOptions>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 /**
@@ -258,7 +258,7 @@ declare class OverlayPositionBuilder {
      */
     flexibleConnectedTo(origin: FlexibleConnectedPositionStrategyOrigin): FlexibleConnectedPositionStrategy;
     static ɵfac: i0.ɵɵFactoryDeclaration<OverlayPositionBuilder, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<OverlayPositionBuilder>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 /** Object used to configure the default options for overlays. */
@@ -300,7 +300,7 @@ declare class Overlay {
      */
     position(): OverlayPositionBuilder;
     static ɵfac: i0.ɵɵFactoryDeclaration<Overlay, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<Overlay>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 /**
@@ -324,7 +324,7 @@ declare class FullscreenOverlayContainer extends OverlayContainer implements OnD
      */
     getFullscreenElement(): Element;
     static ɵfac: i0.ɵɵFactoryDeclaration<FullscreenOverlayContainer, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<FullscreenOverlayContainer>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 export { BlockScrollStrategy, CloseScrollStrategy, FlexibleConnectedPositionStrategy, FlexibleConnectedPositionStrategyOrigin, FullscreenOverlayContainer, GlobalPositionStrategy, NoopScrollStrategy, OVERLAY_DEFAULT_CONFIG, Overlay, OverlayConfig, OverlayContainer, OverlayPositionBuilder, OverlayRef, PositionStrategy, RepositionScrollStrategy, ScrollDispatcher, ScrollStrategy, ScrollStrategyOptions, ViewportRuler, createBlockScrollStrategy, createCloseScrollStrategy, createGlobalPositionStrategy, createNoopScrollStrategy, createOverlayRef, createRepositionScrollStrategy };

@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 declare class MutationObserverFactory {
     create(callback: MutationCallback): MutationObserver | null;
     static ɵfac: i0.ɵɵFactoryDeclaration<MutationObserverFactory, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<MutationObserverFactory>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 /** An injectable service that allows watching elements for changes to their content. */
 declare class ContentObserver implements OnDestroy {
@@ -42,7 +42,7 @@ declare class ContentObserver implements OnDestroy {
     /** Clean up the underlying MutationObserver for the specified element. */
     private _cleanupObserver;
     static ɵfac: i0.ɵɵFactoryDeclaration<ContentObserver, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<ContentObserver>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 /**
  * Directive that triggers a callback whenever the content of

@@ -81,7 +81,7 @@ declare class AriaDescriber implements OnDestroy {
     /** Checks whether a node is an Element node. */
     private _isElementNode;
     static ɵfac: i0.ɵɵFactoryDeclaration<AriaDescriber, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<AriaDescriber>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 /**
@@ -288,7 +288,7 @@ declare class FocusTrapManager {
      */
     deregister(focusTrap: ManagedFocusTrap): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<FocusTrapManager, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<FocusTrapManager>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 /**
@@ -329,7 +329,7 @@ declare class ConfigurableFocusTrapFactory {
      */
     create(element: HTMLElement, config?: ConfigurableFocusTrapConfig): ConfigurableFocusTrap;
     static ɵfac: i0.ɵɵFactoryDeclaration<ConfigurableFocusTrapFactory, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<ConfigurableFocusTrapFactory>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 /**
@@ -439,7 +439,7 @@ declare class InputModalityDetector implements OnDestroy {
     constructor();
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<InputModalityDetector, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<InputModalityDetector>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 /** Gets whether an event could be a faked `mousedown` event dispatched by a screen reader. */
@@ -480,7 +480,7 @@ declare class HighContrastModeDetector implements OnDestroy {
     /** Applies CSS classes indicating high-contrast mode to document body (browser-only). */
     _applyBodyHighContrastModeCssClasses(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<HighContrastModeDetector, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<HighContrastModeDetector>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 /** Service that generates unique IDs for DOM nodes. */
@@ -494,7 +494,7 @@ declare class _IdGenerator {
      */
     getId(prefix: string, randomize?: boolean): string;
     static ɵfac: i0.ɵɵFactoryDeclaration<_IdGenerator, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<_IdGenerator>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 export { AriaDescriber, ConfigurableFocusTrap, ConfigurableFocusTrapFactory, EventListenerFocusTrapInertStrategy, FOCUS_TRAP_INERT_STRATEGY, FocusTrap, HighContrastMode, HighContrastModeDetector, INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS, INPUT_MODALITY_DETECTOR_OPTIONS, InputModalityDetector, InteractivityChecker, NOOP_TREE_KEY_MANAGER_FACTORY_PROVIDER, NoopTreeKeyManager, TREE_KEY_MANAGER, TreeKeyManager, TreeKeyManagerFactory, TreeKeyManagerItem, TreeKeyManagerOptions, TreeKeyManagerStrategy, _IdGenerator, addAriaReferencedId, getAriaReferenceIds, isFakeMousedownFromScreenReader, isFakeTouchstartFromScreenReader, removeAriaReferencedId };

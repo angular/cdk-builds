@@ -46,7 +46,7 @@ declare class BreakpointObserver implements OnDestroy {
     /** Registers a specific query to be listened for. */
     private _registerQuery;
     static ɵfac: i0.ɵɵFactoryDeclaration<BreakpointObserver, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<BreakpointObserver>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 declare const Breakpoints: {
@@ -81,7 +81,7 @@ declare class MediaMatcher {
      */
     matchMedia(query: string): MediaQueryList;
     static ɵfac: i0.ɵɵFactoryDeclaration<MediaMatcher, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<MediaMatcher>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 export { BreakpointObserver, Breakpoints, LayoutModule, MediaMatcher };
