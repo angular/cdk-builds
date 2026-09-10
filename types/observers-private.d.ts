@@ -28,7 +28,7 @@ declare class SharedResizeObserver implements OnDestroy {
      */
     observe(target: Element, options?: ResizeObserverOptions): Observable<ResizeObserverEntry[]>;
     static ɵfac: i0.ɵɵFactoryDeclaration<SharedResizeObserver, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<SharedResizeObserver>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 export { SharedResizeObserver };

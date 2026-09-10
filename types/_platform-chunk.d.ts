@@ -25,7 +25,7 @@ declare class Platform {
     /** Whether the current browser is Safari. */
     SAFARI: boolean;
     static ɵfac: i0.ɵɵFactoryDeclaration<Platform, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<Platform>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 export { Platform };

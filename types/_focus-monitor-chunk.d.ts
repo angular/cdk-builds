@@ -179,7 +179,7 @@ declare class FocusMonitor implements OnDestroy {
      */
     private _isLastInteractionFromInputLabel;
     static ɵfac: i0.ɵɵFactoryDeclaration<FocusMonitor, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<FocusMonitor>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 /**
  * Directive that determines how a particular element was focused (via keyboard, mouse, touch, or

@@ -18,7 +18,7 @@ declare class Directionality implements OnDestroy {
     constructor();
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<Directionality, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<Directionality>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 /**

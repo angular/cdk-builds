@@ -52,7 +52,7 @@ declare class InteractivityChecker {
      */
     isFocusable(element: HTMLElement, config?: IsFocusableConfig): boolean;
     static ɵfac: i0.ɵɵFactoryDeclaration<InteractivityChecker, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<InteractivityChecker>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 /**
@@ -170,7 +170,7 @@ declare class FocusTrapFactory {
      */
     create(element: HTMLElement, deferCaptureElements?: boolean): FocusTrap;
     static ɵfac: i0.ɵɵFactoryDeclaration<FocusTrapFactory, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<FocusTrapFactory>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 /** Directive for trapping focus within a region. */
 declare class CdkTrapFocus implements OnDestroy, AfterContentInit, OnChanges, DoCheck {
@@ -272,7 +272,7 @@ declare class LiveAnnouncer implements OnDestroy {
      */
     private _exposeAnnouncerToModals;
     static ɵfac: i0.ɵɵFactoryDeclaration<LiveAnnouncer, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<LiveAnnouncer>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 /**
  * A directive that works similarly to aria-live, but uses the LiveAnnouncer to ensure compatibility

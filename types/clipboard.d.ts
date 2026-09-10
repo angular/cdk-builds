@@ -47,7 +47,7 @@ declare class Clipboard {
      */
     beginCopy(text: string): PendingCopy;
     static ɵfac: i0.ɵɵFactoryDeclaration<Clipboard, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<Clipboard>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 /** Object that can be used to configure the default options for `CdkCopyToClipboard`. */

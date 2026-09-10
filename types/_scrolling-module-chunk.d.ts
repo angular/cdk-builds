@@ -75,7 +75,7 @@ declare class ScrollDispatcher implements OnDestroy {
     /** Returns true if the element is contained within the provided Scrollable. */
     private _targetContainsElement;
     static ɵfac: i0.ɵɵFactoryDeclaration<ScrollDispatcher, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<ScrollDispatcher>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 type _Without<T> = {

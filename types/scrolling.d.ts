@@ -55,7 +55,7 @@ declare class ViewportRuler implements OnDestroy {
     /** Updates the cached viewport size. */
     private _updateViewportSize;
     static ɵfac: i0.ɵɵFactoryDeclaration<ViewportRuler, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<ViewportRuler>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 export { DEFAULT_RESIZE_TIME, ViewportRuler };
