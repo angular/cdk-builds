@@ -541,6 +541,11 @@ declare class CdkTable<T> implements AfterContentInit, AfterContentChecked, Coll
      * stored.
      */
     private _cachedRenderRowsMap;
+    /**
+     * Row definition used to create each rendered data-row view. Keying by the view keeps the
+     * association intact when the differ moves rows.
+     */
+    private _rowDefsByView;
     /** Whether the table is applied to a native `<table>`. */
     protected _isNativeHtmlTable: boolean;
     /**

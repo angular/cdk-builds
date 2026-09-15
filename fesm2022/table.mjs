@@ -1462,6 +1462,7 @@ class CdkTable {
   _stickyColumnStylesNeedReset = true;
   _forceRecalculateCellWidths = true;
   _cachedRenderRowsMap = new Map();
+  _rowDefsByView = new WeakMap();
   _isNativeHtmlTable;
   _stickyStyler;
   stickyCssClass = 'cdk-table-sticky';
@@ -1600,13 +1601,24 @@ class CdkTable {
     this._viewRepeater.applyChanges(changes, viewContainer, (record, _adjustedPreviousIndex, currentIndex) => this._getEmbeddedViewArgs(record.item, currentIndex), record => record.item.data, change => {
       if (change.operation === _ViewRepeaterOperation.INSERTED && change.context) {
         this._renderCellTemplateForItem(change.record.item.rowDef, change.context);
+        const rowView = viewContainer.get(change.record.currentIndex);
+        this._rowDefsByView.set(rowView, change.record.item.rowDef);
+      }
+    });
+    changes.forEachIdentityChange(record => {
+      const currentIndex = record.currentIndex;
+      const rowView = viewContainer.get(currentIndex);
+      if (this._rowDefsByView.get(rowView) !== record.item.rowDef) {
+        viewContainer.remove(currentIndex);
+        const newRowView = this._renderRow(this._rowOutlet, record.item.rowDef, currentIndex, {
+          $implicit: record.item.data
+        });
+        this._rowDefsByView.set(newRowView, record.item.rowDef);
+      } else {
+        rowView.context.$implicit = record.item.data;
       }
     });
     this._updateRowIndexContext();
-    changes.forEachIdentityChange(record => {
-      const rowView = viewContainer.get(record.currentIndex);
-      rowView.context.$implicit = record.item.data;
-    });
     this._updateNoDataRow();
     this.contentChanged.next();
     this.updateStickyColumnStyles();
