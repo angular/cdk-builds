@@ -186,7 +186,7 @@ function getRootNode(viewRef, _document) {
 
 function extendStyles(dest, source, importantProperties) {
   for (let key in source) {
-    if (source.hasOwnProperty(key)) {
+    if (Object.hasOwn(source, key)) {
       const value = source[key];
       if (value) {
         dest.setProperty(key, value, importantProperties?.has(key) ? 'important' : '');

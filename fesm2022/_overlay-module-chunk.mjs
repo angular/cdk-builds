@@ -1773,7 +1773,7 @@ class FlexibleConnectedPositionStrategy {
 }
 function extendStyles(destination, source) {
   for (let key in source) {
-    if (source.hasOwnProperty(key)) {
+    if (Object.hasOwn(source, key)) {
       destination[key] = source[key];
     }
   }
