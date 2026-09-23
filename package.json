@@ -1,6 +1,6 @@
 {
   "name": "@angular/cdk",
-  "version": "22.2.0-rc.0+sha-0f6e8d6",
+  "version": "22.2.0+sha-68d65c2",
   "description": "Angular Material Component Development Kit",
   "repository": {
     "type": "git",
@@ -158,10 +158,10 @@
     }
   },
   "peerDependencies": {
-    "@angular/core": "^22.0.0-0 || ^22.1.0-0 || ^22.2.0-0 || ^22.3.0-0 || ^23.0.0-0",
-    "@angular/common": "^22.0.0-0 || ^22.1.0-0 || ^22.2.0-0 || ^22.3.0-0 || ^23.0.0-0",
-    "@angular/forms": "^22.0.0-0 || ^22.1.0-0 || ^22.2.0-0 || ^22.3.0-0 || ^23.0.0-0",
-    "@angular/platform-browser": "^22.0.0-0 || ^22.1.0-0 || ^22.2.0-0 || ^22.3.0-0 || ^23.0.0-0",
+    "@angular/core": "^22.0.0 || ^23.0.0",
+    "@angular/common": "^22.0.0 || ^23.0.0",
+    "@angular/forms": "^22.0.0 || ^23.0.0",
+    "@angular/platform-browser": "^22.0.0 || ^23.0.0",
     "rxjs": "^6.5.3 || ^7.4.0"
   },
   "dependencies": {
