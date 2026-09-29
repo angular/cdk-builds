@@ -707,7 +707,7 @@ class OverlayRef {
   _detachments = new Subject();
   _positionStrategy;
   _scrollStrategy;
-  _locationChanges = Subscription.EMPTY;
+  _locationChanges;
   _backdropRef = null;
   _detachContentMutationObserver;
   _detachContentAfterRenderRef;
@@ -781,8 +781,11 @@ class OverlayRef {
     this._attachments.next();
     this._completeDetachContent();
     this._keyboardDispatcher.add(this);
-    if (this._config.disposeOnNavigation) {
-      this._locationChanges = this._location.subscribe(() => this.dispose());
+    if (this._config.disposeOnNavigation === true || this._config.disposeOnNavigation === 'pop-state') {
+      const subscription = this._location.subscribe(() => this.dispose());
+      this._locationChanges = () => subscription.unsubscribe();
+    } else if (this._config.disposeOnNavigation === 'url-change') {
+      this._locationChanges = this._location.onUrlChange(() => this.dispose());
     }
     this._outsideClickDispatcher.add(this);
     if (typeof attachResult?.onDestroy === 'function') {
@@ -811,7 +814,7 @@ class OverlayRef {
     this._completeDetachContent();
     this._keyboardDispatcher.remove(this);
     this._detachContentWhenEmpty();
-    this._locationChanges.unsubscribe();
+    this._locationChanges?.();
     this._outsideClickDispatcher.remove(this);
     untracked(() => {
       attachedOverlaysInternal.update(prev => prev.filter(o => o !== this));
@@ -828,7 +831,7 @@ class OverlayRef {
     }
     this._disposeScrollStrategy();
     this._backdropRef?.dispose();
-    this._locationChanges.unsubscribe();
+    this._locationChanges?.();
     this._keyboardDispatcher.remove(this);
     this._portalOutlet.dispose();
     this._attachments.complete();
@@ -2482,7 +2485,7 @@ class CdkConnectedOverlay {
       flexibleDimensions: ["cdkConnectedOverlayFlexibleDimensions", "flexibleDimensions", booleanAttribute],
       growAfterOpen: ["cdkConnectedOverlayGrowAfterOpen", "growAfterOpen", booleanAttribute],
       push: ["cdkConnectedOverlayPush", "push", booleanAttribute],
-      disposeOnNavigation: ["cdkConnectedOverlayDisposeOnNavigation", "disposeOnNavigation", booleanAttribute],
+      disposeOnNavigation: ["cdkConnectedOverlayDisposeOnNavigation", "disposeOnNavigation", value => value === 'url-change' || value === 'pop-state' ? value : booleanAttribute(value)],
       usePopover: ["cdkConnectedOverlayUsePopover", "usePopover"],
       matchWidth: ["cdkConnectedOverlayMatchWidth", "matchWidth", booleanAttribute],
       _config: ["cdkConnectedOverlay", "_config"]
@@ -2617,7 +2620,7 @@ i0.ɵɵngDeclareClassMetadata({
       type: Input,
       args: [{
         alias: 'cdkConnectedOverlayDisposeOnNavigation',
-        transform: booleanAttribute
+        transform: value => value === 'url-change' || value === 'pop-state' ? value : booleanAttribute(value)
       }]
     }],
     usePopover: [{

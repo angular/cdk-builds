@@ -247,6 +247,16 @@ interface PositionStrategy {
     };
 }
 
+/**
+ * Value that can be used to configure the behavior of `OverlayConfig.disposeOnNavigation`.
+ * The value correspond to the following:
+ * - `true` or `pop-state` - Overlay is only disposed when the back/forward browser buttons are
+ * pressed.
+ * - `false` - Overlay does nothing on navigations.
+ * - `url-change` - Overlay closes on any URL change. Note that this may close overlays opened
+ * from route resolvers immediately.
+ */
+type OverlayDisposeOnNavigation = boolean | 'url-change' | 'pop-state';
 /** Initial configuration used when creating an overlay. */
 declare class OverlayConfig {
     /** Strategy with which to position the overlay. */
@@ -278,12 +288,8 @@ declare class OverlayConfig {
      * is passed in, the overlay will handle changes to its value automatically.
      */
     direction?: Direction | Directionality;
-    /**
-     * Whether the overlay should be disposed of when the user goes backwards/forwards in history.
-     * Note that this usually doesn't include clicking on links (unless the user is using
-     * the `HashLocationStrategy`).
-     */
-    disposeOnNavigation?: boolean;
+    /** Whether the overlay should be disposed of when the user navigates. */
+    disposeOnNavigation?: OverlayDisposeOnNavigation;
     /**
      * Whether the overlay should be rendered as a native popover element,
      * rather than placing it inside of the overlay container.
@@ -780,7 +786,7 @@ interface CdkConnectedOverlayConfig {
     flexibleDimensions?: boolean;
     growAfterOpen?: boolean;
     push?: boolean;
-    disposeOnNavigation?: boolean;
+    disposeOnNavigation?: OverlayDisposeOnNavigation;
     usePopover?: FlexibleOverlayPopoverLocation | null;
     matchWidth?: boolean;
 }
@@ -850,7 +856,7 @@ declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     /** Whether the overlay can be pushed on-screen if none of the provided positions fit. */
     push: boolean;
     /** Whether the overlay should be disposed of when the user goes backwards/forwards in history. */
-    disposeOnNavigation: boolean;
+    disposeOnNavigation: OverlayDisposeOnNavigation;
     /** Whether the connected overlay should be rendered inside a popover element or the overlay container. */
     usePopover: FlexibleOverlayPopoverLocation | null;
     /** Whether the overlay should match the trigger's width. */
@@ -910,4 +916,4 @@ declare class OverlayModule {
 }
 
 export { CDK_CONNECTED_OVERLAY_DEFAULT_CONFIG, CdkConnectedOverlay, CdkOverlayOrigin, ConnectedOverlayPositionChange, ConnectionPositionPair, FlexibleConnectedPositionStrategy, OverlayConfig, OverlayContainer, OverlayKeyboardDispatcher, OverlayModule, OverlayOutsideClickDispatcher, OverlayRef, STANDARD_DROPDOWN_ADJACENT_POSITIONS, STANDARD_DROPDOWN_BELOW_POSITIONS, ScrollingVisibility, createFlexibleConnectedPositionStrategy, validateHorizontalPosition, validateVerticalPosition };
-export type { CdkConnectedOverlayConfig, ConnectedPosition, FlexibleConnectedPositionStrategyOrigin, FlexibleOverlayPopoverLocation, HorizontalConnectionPos, OriginConnectionPosition, OverlayConnectionPosition, OverlaySizeConfig, PositionStrategy, ScrollStrategy, VerticalConnectionPos, ViewportMargin };
+export type { CdkConnectedOverlayConfig, ConnectedPosition, FlexibleConnectedPositionStrategyOrigin, FlexibleOverlayPopoverLocation, HorizontalConnectionPos, OriginConnectionPosition, OverlayConnectionPosition, OverlayDisposeOnNavigation, OverlaySizeConfig, PositionStrategy, ScrollStrategy, VerticalConnectionPos, ViewportMargin };

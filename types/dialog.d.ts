@@ -8,7 +8,7 @@ import { ComponentType } from './overlay.js';
 import { BasePortalOutlet, ComponentPortal, TemplatePortal, DomPortal, PortalModule } from './portal.js';
 export { CdkPortal as ɵɵCdkPortal } from './_portal-directives-chunk.js';
 import { Direction } from './bidi.js';
-import { PositionStrategy, ScrollStrategy, OverlayRef, OverlayModule } from './overlay.js';
+import { PositionStrategy, ScrollStrategy, OverlayDisposeOnNavigation, OverlayRef, OverlayModule } from './overlay.js';
 import * as _angular_cdk_portal from '@angular/cdk/portal';
 import './observers.js';
 import './_number-property-chunk.js';
@@ -110,12 +110,8 @@ declare class DialogConfig<D = unknown, R = unknown, C extends DialogContainer =
      * the dialog responds to scrolling underneath the panel element.
      */
     scrollStrategy?: ScrollStrategy;
-    /**
-     * Whether the dialog should close when the user navigates backwards or forwards through browser
-     * history. This does not apply to navigation via anchor element unless using URL-hash based
-     * routing (`HashLocationStrategy` in the Angular router).
-     */
-    closeOnNavigation?: boolean;
+    /** Whether the dialog should be disposed of when the user navigates. */
+    closeOnNavigation?: OverlayDisposeOnNavigation;
     /**
      * Whether the dialog should close when the dialog service is destroyed. This is useful if
      * another service is wrapping the dialog and is managing the destruction instead.
