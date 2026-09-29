@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { DOCUMENT, NgZone, inject, Injector, Service, RendererFactory2, ViewEncapsulation, Component, afterNextRender, ElementRef, InjectionToken, ApplicationRef, Renderer2, ANIMATION_MODULE_TYPE, EnvironmentInjector, EventEmitter, TemplateRef, ViewContainerRef, booleanAttribute, Directive, Output, Input, NgModule } from '@angular/core';
+import { DOCUMENT, NgZone, inject, Injector, Service, RendererFactory2, ViewEncapsulation, Component, untracked, afterNextRender, signal, ElementRef, InjectionToken, ApplicationRef, Renderer2, ANIMATION_MODULE_TYPE, EnvironmentInjector, EventEmitter, TemplateRef, ViewContainerRef, booleanAttribute, Directive, Output, Input, NgModule } from '@angular/core';
 import { Location } from '@angular/common';
 import { Platform } from './_platform-chunk.mjs';
 import { _getEventTarget } from './_shadow-dom-chunk.mjs';
@@ -685,7 +685,10 @@ class BackdropRef {
 function isElement(value) {
   return value && value.nodeType === 1;
 }
-const attachedOverlays = new Set();
+const attachedOverlaysInternal = signal([], ...(ngDevMode ? [{
+  debugName: "attachedOverlaysInternal"
+}] : []));
+attachedOverlaysInternal.asReadonly();
 class OverlayRef {
   _portalOutlet;
   _host;
@@ -754,7 +757,9 @@ class OverlayRef {
     this._updateStackingOrder();
     this._updateElementSize();
     this._updateElementDirection();
-    attachedOverlays.add(this);
+    untracked(() => {
+      attachedOverlaysInternal.update(prev => prev.includes(this) ? prev : [...prev, this]);
+    });
     if (this._scrollStrategy) {
       this._scrollStrategy.enable();
     }
@@ -808,7 +813,9 @@ class OverlayRef {
     this._detachContentWhenEmpty();
     this._locationChanges.unsubscribe();
     this._outsideClickDispatcher.remove(this);
-    attachedOverlays.delete(this);
+    untracked(() => {
+      attachedOverlaysInternal.update(prev => prev.filter(o => o !== this));
+    });
     return detachmentResult;
   }
   dispose() {
@@ -838,7 +845,9 @@ class OverlayRef {
     this._detachments.complete();
     this._completeDetachContent();
     this._disposed = true;
-    attachedOverlays.delete(this);
+    untracked(() => {
+      attachedOverlaysInternal.update(prev => prev.filter(o => o !== this));
+    });
   }
   hasAttached() {
     return this._portalOutlet.hasAttached();
