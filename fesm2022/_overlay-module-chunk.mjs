@@ -244,7 +244,7 @@ class ScrollStrategyOptions {
   reposition = config => createRepositionScrollStrategy(this._injector, config);
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0",
+    version: "22.2.1",
     ngImport: i0,
     type: ScrollStrategyOptions,
     deps: [],
@@ -252,14 +252,14 @@ class ScrollStrategyOptions {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.2.0",
+    version: "22.2.1",
     ngImport: i0,
     type: ScrollStrategyOptions
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0",
+  version: "22.2.1",
   ngImport: i0,
   type: ScrollStrategyOptions,
   decorators: [{
@@ -370,7 +370,7 @@ class BaseOverlayDispatcher {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0",
+    version: "22.2.1",
     ngImport: i0,
     type: BaseOverlayDispatcher,
     deps: [],
@@ -378,14 +378,14 @@ class BaseOverlayDispatcher {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.2.0",
+    version: "22.2.1",
     ngImport: i0,
     type: BaseOverlayDispatcher
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0",
+  version: "22.2.1",
   ngImport: i0,
   type: BaseOverlayDispatcher,
   decorators: [{
@@ -424,7 +424,7 @@ class OverlayKeyboardDispatcher extends BaseOverlayDispatcher {
   };
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0",
+    version: "22.2.1",
     ngImport: i0,
     type: OverlayKeyboardDispatcher,
     deps: [],
@@ -432,14 +432,14 @@ class OverlayKeyboardDispatcher extends BaseOverlayDispatcher {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.2.0",
+    version: "22.2.1",
     ngImport: i0,
     type: OverlayKeyboardDispatcher
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0",
+  version: "22.2.1",
   ngImport: i0,
   type: OverlayKeyboardDispatcher,
   decorators: [{
@@ -509,7 +509,7 @@ class OverlayOutsideClickDispatcher extends BaseOverlayDispatcher {
   };
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0",
+    version: "22.2.1",
     ngImport: i0,
     type: OverlayOutsideClickDispatcher,
     deps: [],
@@ -517,14 +517,14 @@ class OverlayOutsideClickDispatcher extends BaseOverlayDispatcher {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.2.0",
+    version: "22.2.1",
     ngImport: i0,
     type: OverlayOutsideClickDispatcher
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0",
+  version: "22.2.1",
   ngImport: i0,
   type: OverlayOutsideClickDispatcher,
   decorators: [{
@@ -546,7 +546,7 @@ function containsPierceShadowDom(parent, child) {
 class _CdkOverlayStyleLoader {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0",
+    version: "22.2.1",
     ngImport: i0,
     type: _CdkOverlayStyleLoader,
     deps: [],
@@ -554,7 +554,7 @@ class _CdkOverlayStyleLoader {
   });
   static ɵcmp = i0.ɵɵngDeclareComponent({
     minVersion: "14.0.0",
-    version: "22.2.0",
+    version: "22.2.1",
     type: _CdkOverlayStyleLoader,
     isStandalone: true,
     selector: "ng-component",
@@ -572,7 +572,7 @@ class _CdkOverlayStyleLoader {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0",
+  version: "22.2.1",
   ngImport: i0,
   type: _CdkOverlayStyleLoader,
   decorators: [{
@@ -625,7 +625,7 @@ class OverlayContainer {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0",
+    version: "22.2.1",
     ngImport: i0,
     type: OverlayContainer,
     deps: [],
@@ -633,14 +633,14 @@ class OverlayContainer {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.2.0",
+    version: "22.2.1",
     ngImport: i0,
     type: OverlayContainer
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0",
+  version: "22.2.1",
   ngImport: i0,
   type: OverlayContainer,
   decorators: [{
@@ -2024,7 +2024,7 @@ class OverlayPositionBuilder {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0",
+    version: "22.2.1",
     ngImport: i0,
     type: OverlayPositionBuilder,
     deps: [],
@@ -2032,14 +2032,14 @@ class OverlayPositionBuilder {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.2.0",
+    version: "22.2.1",
     ngImport: i0,
     type: OverlayPositionBuilder
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0",
+  version: "22.2.1",
   ngImport: i0,
   type: OverlayPositionBuilder,
   decorators: [{
@@ -2101,7 +2101,7 @@ class Overlay {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0",
+    version: "22.2.1",
     ngImport: i0,
     type: Overlay,
     deps: [],
@@ -2109,14 +2109,14 @@ class Overlay {
   });
   static ɵprov = i0.ɵɵngDeclareService({
     minVersion: "22.0.0",
-    version: "22.2.0",
+    version: "22.2.1",
     ngImport: i0,
     type: Overlay
   });
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0",
+  version: "22.2.1",
   ngImport: i0,
   type: Overlay,
   decorators: [{
@@ -2156,7 +2156,7 @@ class CdkOverlayOrigin {
   elementRef = inject(ElementRef);
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0",
+    version: "22.2.1",
     ngImport: i0,
     type: CdkOverlayOrigin,
     deps: [],
@@ -2164,7 +2164,7 @@ class CdkOverlayOrigin {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "14.0.0",
-    version: "22.2.0",
+    version: "22.2.1",
     type: CdkOverlayOrigin,
     isStandalone: true,
     selector: "[cdk-overlay-origin], [overlay-origin], [cdkOverlayOrigin]",
@@ -2174,7 +2174,7 @@ class CdkOverlayOrigin {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0",
+  version: "22.2.1",
   ngImport: i0,
   type: CdkOverlayOrigin,
   decorators: [{
@@ -2451,7 +2451,7 @@ class CdkConnectedOverlay {
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0",
+    version: "22.2.1",
     ngImport: i0,
     type: CdkConnectedOverlay,
     deps: [],
@@ -2459,7 +2459,7 @@ class CdkConnectedOverlay {
   });
   static ɵdir = i0.ɵɵngDeclareDirective({
     minVersion: "16.1.0",
-    version: "22.2.0",
+    version: "22.2.1",
     type: CdkConnectedOverlay,
     isStandalone: true,
     selector: "[cdk-connected-overlay], [connected-overlay], [cdkConnectedOverlay]",
@@ -2505,7 +2505,7 @@ class CdkConnectedOverlay {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0",
+  version: "22.2.1",
   ngImport: i0,
   type: CdkConnectedOverlay,
   decorators: [{
@@ -2664,7 +2664,7 @@ i0.ɵɵngDeclareClassMetadata({
 class OverlayModule {
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
-    version: "22.2.0",
+    version: "22.2.1",
     ngImport: i0,
     type: OverlayModule,
     deps: [],
@@ -2672,7 +2672,7 @@ class OverlayModule {
   });
   static ɵmod = i0.ɵɵngDeclareNgModule({
     minVersion: "14.0.0",
-    version: "22.2.0",
+    version: "22.2.1",
     ngImport: i0,
     type: OverlayModule,
     imports: [BidiModule, PortalModule, ScrollingModule, CdkConnectedOverlay, CdkOverlayOrigin],
@@ -2680,7 +2680,7 @@ class OverlayModule {
   });
   static ɵinj = i0.ɵɵngDeclareInjector({
     minVersion: "12.0.0",
-    version: "22.2.0",
+    version: "22.2.1",
     ngImport: i0,
     type: OverlayModule,
     providers: [Overlay],
@@ -2689,7 +2689,7 @@ class OverlayModule {
 }
 i0.ɵɵngDeclareClassMetadata({
   minVersion: "12.0.0",
-  version: "22.2.0",
+  version: "22.2.1",
   ngImport: i0,
   type: OverlayModule,
   decorators: [{
