@@ -1397,7 +1397,7 @@ class DragRef {
     }
     if (previewContainer === 'global') {
       const documentRef = this._document;
-      return shadowRoot || documentRef.fullscreenElement || documentRef.webkitFullscreenElement || documentRef.mozFullScreenElement || documentRef.msFullscreenElement || documentRef.body;
+      return shadowRoot || documentRef.fullscreenElement || documentRef.webkitFullscreenElement || documentRef.body;
     }
     return coerceElement(previewContainer);
   }
