@@ -56,17 +56,13 @@ class FullscreenOverlayContainer extends OverlayContainer {
         this._fullScreenEventName = 'fullscreenchange';
       } else if (_document.webkitFullscreenEnabled) {
         this._fullScreenEventName = 'webkitfullscreenchange';
-      } else if (_document.mozFullScreenEnabled) {
-        this._fullScreenEventName = 'mozfullscreenchange';
-      } else if (_document.msFullscreenEnabled) {
-        this._fullScreenEventName = 'MSFullscreenChange';
       }
     }
     return this._fullScreenEventName;
   }
   getFullscreenElement() {
     const _document = this._document;
-    return _document.fullscreenElement || _document.webkitFullscreenElement || _document.mozFullScreenElement || _document.msFullscreenElement || null;
+    return _document.fullscreenElement || _document.webkitFullscreenElement || null;
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
