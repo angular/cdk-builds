@@ -1192,7 +1192,7 @@ class DragRef {
   }
   _getPointerPositionOnPage(event) {
     const scrollPosition = this._getViewportScrollPosition();
-    const point = isTouchEvent(event) ? event.touches[0] || event.changedTouches[0] || {
+    const point = isTouchEvent(event) ? event.targetTouches[0] || event.changedTouches[0] || {
       pageX: 0,
       pageY: 0
     } : event;
