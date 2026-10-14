@@ -11,6 +11,7 @@ import { ContentObserver, ObserversModule } from './observers.mjs';
 
 class IsFocusableConfig {
   ignoreVisibility = false;
+  ignoreInert = false;
 }
 class InteractivityChecker {
   _platform = inject(Platform);
@@ -62,7 +63,7 @@ class InteractivityChecker {
     return element.tabIndex >= 0;
   }
   isFocusable(element, config) {
-    return isPotentiallyFocusable(element) && !this.isDisabled(element) && (config?.ignoreVisibility || this.isVisible(element));
+    return isPotentiallyFocusable(element) && !this.isDisabled(element) && (config?.ignoreInert || !element.closest?.('[inert]')) && (config?.ignoreVisibility || this.isVisible(element));
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
