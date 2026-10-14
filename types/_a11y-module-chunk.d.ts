@@ -12,6 +12,10 @@ declare class IsFocusableConfig {
      * Whether to count an element as focusable even if it is not currently visible.
      */
     ignoreVisibility: boolean;
+    /**
+     * Whether to count an element as focusable even if it is inert or inside an inert subtree.
+     */
+    ignoreInert?: boolean;
 }
 /**
  * Utility for checking the interactivity of an element, such as whether it is focusable or
