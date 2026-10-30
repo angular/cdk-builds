@@ -157,7 +157,7 @@ function triggerFocusChange(element, event) {
   element[event]();
   element.removeEventListener(event, handler);
   if (!eventFired) {
-    dispatchFakeEvent(element, event);
+    dispatchFakeEvent(element, event, false);
   }
 }
 function triggerFocus(element) {
@@ -232,19 +232,19 @@ function typeInElement(element, ...modifiersAndKeys) {
     if (isInput && key.key && key.key.length === 1) {
       if (enterValueIncrementally) {
         element.value += key.key;
-        dispatchFakeEvent(element, 'input');
+        dispatchFakeEvent(element, 'input', true);
       }
     }
     dispatchKeyboardEvent(element, 'keyup', key.keyCode, key.key, modifiers, key.code);
   }
   if (!enterValueIncrementally) {
-    dispatchFakeEvent(element, 'input');
+    dispatchFakeEvent(element, 'input', true);
   }
 }
 function clearElement(element) {
   triggerFocus(element);
   element.value = '';
-  dispatchFakeEvent(element, 'input');
+  dispatchFakeEvent(element, 'input', true);
 }
 
 const keyMap = {
@@ -501,7 +501,7 @@ class UnitTestElement {
       option.selected = indexes.has(i);
       if (option.selected !== wasSelected) {
         hasChanged = true;
-        dispatchFakeEvent(this.element, 'change');
+        dispatchFakeEvent(this.element, 'change', true);
       }
     }
     if (hasChanged) {
