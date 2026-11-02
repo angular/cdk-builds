@@ -495,13 +495,16 @@ class UnitTestElement {
     let hasChanged = false;
     const options = this.element.querySelectorAll('option');
     const indexes = new Set(optionIndexes);
-    for (let i = 0; i < options.length; i++) {
-      const option = options[i];
-      const wasSelected = option.selected;
-      option.selected = indexes.has(i);
-      if (option.selected !== wasSelected) {
-        hasChanged = true;
-        dispatchFakeEvent(this.element, 'change', true);
+    if (options.length && indexes.size) {
+      for (let i = 0; i < options.length; i++) {
+        options[i].selected = false;
+      }
+      for (let i = 0; i < options.length; i++) {
+        if (indexes.has(i)) {
+          options[i].selected = true;
+          hasChanged = true;
+          dispatchFakeEvent(this.element, 'change', true);
+        }
       }
     }
     if (hasChanged) {
