@@ -1,7 +1,7 @@
 import * as i0 from '@angular/core';
 import { inject, NgZone, RendererFactory2, Service } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
-import { filter, shareReplay, takeUntil } from 'rxjs/operators';
+import { map, filter, shareReplay, takeUntil } from 'rxjs/operators';
 
 const loopLimitExceededErrorHandler = e => {
   if (e instanceof ErrorEvent && e.message === 'ResizeObserver loop limit exceeded') {
@@ -32,7 +32,7 @@ class SingleBoxSharedResizeObserver {
           subscription.unsubscribe();
           this._elementObservables.delete(target);
         };
-      }).pipe(filter(entries => entries.some(entry => entry.target === target)), shareReplay({
+      }).pipe(map(entries => entries.filter(entry => entry.target === target)), filter(entries => entries.length > 0), shareReplay({
         bufferSize: 1,
         refCount: true
       }), takeUntil(this._destroyed)));
