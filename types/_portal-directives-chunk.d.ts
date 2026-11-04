@@ -188,7 +188,7 @@ declare class CdkPortalOutlet extends BasePortalOutlet implements OnInit, OnDest
      */
     attachDomPortal: (portal: DomPortal) => void;
     /** Gets the root node of the portal outlet. */
-    private _getRootNode;
+    private _insertContent;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkPortalOutlet, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkPortalOutlet, "[cdkPortalOutlet]", ["cdkPortalOutlet"], { "portal": { "alias": "cdkPortalOutlet"; "required": false; }; }, { "attached": "attached"; }, never, never, true, never>;
 }

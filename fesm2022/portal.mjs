@@ -334,7 +334,7 @@ class CdkPortalOutlet extends BasePortalOutlet {
       directives: portal.directives || undefined
     });
     if (viewContainerRef !== this._viewContainerRef) {
-      this._getRootNode().appendChild(ref.hostView.rootNodes[0]);
+      this._insertContent(ref.hostView.rootNodes[0]);
     }
     super.setDisposeFn(() => ref.destroy());
     this._attachedPortal = portal;
@@ -361,17 +361,17 @@ class CdkPortalOutlet extends BasePortalOutlet {
     const anchorNode = this._document.createComment('dom-portal');
     portal.setAttachedHost(this);
     element.parentNode.insertBefore(anchorNode, element);
-    this._getRootNode().appendChild(element);
+    this._insertContent(element);
     this._attachedPortal = portal;
-    super.setDisposeFn(() => {
-      if (anchorNode.parentNode) {
-        anchorNode.parentNode.replaceChild(element, anchorNode);
-      }
-    });
+    super.setDisposeFn(() => anchorNode.parentNode?.replaceChild(element, anchorNode));
   };
-  _getRootNode() {
+  _insertContent(content) {
     const nativeElement = this._viewContainerRef.element.nativeElement;
-    return nativeElement.nodeType === nativeElement.ELEMENT_NODE ? nativeElement : nativeElement.parentNode;
+    if (nativeElement.nodeType === nativeElement.ELEMENT_NODE) {
+      nativeElement.appendChild(content);
+    } else {
+      nativeElement.parentNode?.insertBefore(content, nativeElement);
+    }
   }
   static ɵfac = i0.ɵɵngDeclareFactory({
     minVersion: "12.0.0",
