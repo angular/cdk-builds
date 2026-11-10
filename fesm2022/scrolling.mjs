@@ -1166,6 +1166,10 @@ class CdkVirtualForOf {
       cdkVirtualForTemplate: "cdkVirtualForTemplate",
       cdkVirtualForTemplateCacheSize: "cdkVirtualForTemplateCacheSize"
     },
+    providers: [{
+      provide: VIRTUAL_SCROLLABLE,
+      useValue: null
+    }],
     ngImport: i0
   });
 }
@@ -1177,7 +1181,11 @@ i0.ɵɵngDeclareClassMetadata({
   decorators: [{
     type: Directive,
     args: [{
-      selector: '[cdkVirtualFor][cdkVirtualForOf]'
+      selector: '[cdkVirtualFor][cdkVirtualForOf]',
+      providers: [{
+        provide: VIRTUAL_SCROLLABLE,
+        useValue: null
+      }]
     }]
   }],
   ctorParameters: () => [],
