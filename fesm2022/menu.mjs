@@ -290,7 +290,7 @@ class CdkMenuTriggerBase {
     this.childMenu = child;
   }
   getMenuContentPortal() {
-    const hasMenuContentChanged = this.menuTemplateRef !== this._menuPortal?.templateRef;
+    const hasMenuContentChanged = this.menuTemplateRef !== this._menuPortal?.templateRef || this.menuData !== this._menuPortal?.context;
     if (this.menuTemplateRef && (!this._menuPortal || hasMenuContentChanged)) {
       this._menuPortal = new TemplatePortal(this.menuTemplateRef, this.viewContainerRef, this.menuData, this._getChildMenuInjector());
     }
