@@ -1,6 +1,6 @@
 import { Version } from '@angular/core';
 
-const VERSION = new Version('22.3.0-next.5+sha-17b4f1f');
+const VERSION = new Version('22.3.0-next.5+sha-064a106');
 
 export { VERSION };
 //# sourceMappingURL=cdk.mjs.map
