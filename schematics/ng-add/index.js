@@ -26,6 +26,6 @@ function default_1() {
     // In order to align the CDK version with other Angular dependencies that are setup by
     // `@schematics/angular`, we use tilde instead of caret. This is default for Angular
     // dependencies in new CLI projects.
-    return (0, utility_1.addDependency)('@angular/cdk', `~22.3.0+sha-5c7b286`, { existing: utility_1.ExistingBehavior.Skip });
+    return (0, utility_1.addDependency)('@angular/cdk', `~22.3.0+sha-0c59612`, { existing: utility_1.ExistingBehavior.Skip });
 }
 //# sourceMappingURL=index.js.map
