@@ -6,7 +6,7 @@ export { CdkPortal as ɵɵCdkPortal } from './portal.mjs';
 import { FocusTrapFactory, InteractivityChecker, A11yModule } from './_a11y-module-chunk.mjs';
 import { FocusMonitor } from './_focus-monitor-chunk.mjs';
 import { Platform } from './_platform-chunk.mjs';
-import { _getFocusedElementPierceShadowDom } from './_shadow-dom-chunk.mjs';
+import { _getFocusedElementPierceShadowDom, _getShadowRoot } from './_shadow-dom-chunk.mjs';
 import { createBlockScrollStrategy, OverlayContainer, createOverlayRef, OverlayConfig, createGlobalPositionStrategy, OverlayRef, OverlayModule } from './_overlay-module-chunk.mjs';
 import { startWith, take } from 'rxjs/operators';
 import { ESCAPE } from './_keycodes-chunk.mjs';
@@ -631,11 +631,18 @@ class Dialog {
     }
   }
   _hideNonDialogContentFromAssistiveTechnology(overlayContainer) {
-    if (overlayContainer.parentElement) {
-      const siblings = overlayContainer.parentElement.children;
+    let target = overlayContainer;
+    if (!target.parentElement) {
+      const shadowHost = _getShadowRoot(overlayContainer)?.host;
+      if (shadowHost) {
+        target = shadowHost;
+      }
+    }
+    if (target.parentElement) {
+      const siblings = target.parentElement.children;
       for (let i = siblings.length - 1; i > -1; i--) {
         const sibling = siblings[i];
-        if (sibling !== overlayContainer && sibling.nodeName !== 'SCRIPT' && sibling.nodeName !== 'STYLE' && !sibling.hasAttribute('aria-live') && !sibling.hasAttribute('popover')) {
+        if (sibling !== target && sibling.nodeName !== 'SCRIPT' && sibling.nodeName !== 'STYLE' && !sibling.hasAttribute('aria-live') && !sibling.hasAttribute('popover')) {
           this._ariaHiddenElements.set(sibling, sibling.getAttribute('aria-hidden'));
           sibling.setAttribute('aria-hidden', 'true');
         }
