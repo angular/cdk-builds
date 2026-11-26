@@ -1169,6 +1169,9 @@ class CdkVirtualForOf {
     providers: [{
       provide: VIRTUAL_SCROLLABLE,
       useValue: null
+    }, {
+      provide: CDK_VIRTUAL_SCROLL_VIEWPORT,
+      useValue: null
     }],
     ngImport: i0
   });
@@ -1184,6 +1187,9 @@ i0.ɵɵngDeclareClassMetadata({
       selector: '[cdkVirtualFor][cdkVirtualForOf]',
       providers: [{
         provide: VIRTUAL_SCROLLABLE,
+        useValue: null
+      }, {
+        provide: CDK_VIRTUAL_SCROLL_VIEWPORT,
         useValue: null
       }]
     }]
